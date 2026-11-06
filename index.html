@@ -424,6 +424,10 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .bulkrow{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;width:100%;text-align:left}
 .bulkrow b{color:var(--text)}
 .godban{display:inline-block;font-size:13px;font-weight:1000;letter-spacing:.14em;color:#140f05;background:linear-gradient(90deg,#ff5fd2,#ffd36b,#6bffd8,#6bb5ff,#ff5fd2);background-size:200% 100%;animation:slidebg 1.4s linear infinite;padding:6px 12px;border-radius:7px;margin-bottom:6px}
+.pill.icon.nudge{width:auto;padding:0 11px;font-size:13px;color:var(--gold);border-color:#f5c45199;box-shadow:0 0 16px -6px var(--gold);animation:wiggle 4s ease-in-out infinite}
+@keyframes wiggle{0%,80%,100%{transform:rotate(0)}83%{transform:rotate(-10deg) scale(1.08)}86%{transform:rotate(9deg) scale(1.08)}89%{transform:rotate(-6deg)}92%{transform:rotate(4deg)}95%{transform:rotate(0)}}
+.daily.guest{border-color:#f5c45177;background:linear-gradient(90deg,#2a2210,#0f1724 70%)}
+.daily.guest button{background:var(--gold);color:#140f05}
 .togglechip{display:inline-flex;align-items:center;gap:6px}
 .toolbar-r{flex-wrap:wrap}
 @media(max-width:760px){
@@ -464,6 +468,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <h1 class="title">Pack Shop</h1>
  <p class="sub">Real cards, real market prices, fake money. Spend to level up and unlock bigger packs.</p>
  <div class="banner" id="apiBanner" hidden><span>Couldn't reach the card database, so you're ripping a small sample pool.</span><button class="smallbtn" data-action="retry">Retry</button></div>
+ <div id="guest"></div>
  <div id="feedWrap" hidden><div class="feed-head"><span class="eyebrow">🔥 Live pulls</span><span class="muted" id="kingLine"></span></div><div class="feed" id="feed"></div></div>
  <div class="stats" id="shopStats"></div>
  <div id="daily"></div>
@@ -687,7 +692,7 @@ function celebrate(lvl){if(lvl<3)return;Sound.hit(lvl);if(lvl>=4){flash(lvl>=5?.
 function countUp(el,to,ms){if(!el)return;const t0=performance.now();const f=t=>{const p=Math.min(1,(t-t0)/ms);el.textContent=money(to*(1-Math.pow(1-p,3)));if(p<1&&el.isConnected)requestAnimationFrame(f)};requestAnimationFrame(f)}
 
 /* ---------- card catalog ---------- */
-const catalog={sets:[],data:{},loading:new Set(),failed:new Set(),offline:false,ready:false};
+const catalog={sets:[],data:{},loading:new Set(),failed:new Set(),failReason:{},offline:false,ready:false};
 let selected=new Set(), caches={};
 const invalidatePool=()=>{caches={}};
 const cached=(k,fn)=>k in caches?caches[k]:(caches[k]=fn());
@@ -701,7 +706,13 @@ const groupDef=gid=>MASTER.find(m=>m.id===gid)||{id:gid,name:setName(gid),sets:[
 const groupLoaded=gid=>groupDef(gid).sets.every(s=>catalog.data[s]);
 function groupCards(gid){return cached('g:'+gid,()=>{const d=groupDef(gid),m=new Map();d.sets.forEach((s,si)=>{for(const c of catalog.data[s]||[])m.set(c.id,{c,si})});return[...m.values()].sort((a,b)=>{if(a.si!==b.si)return a.si-b.si;const x=numKey(a.c.num),y=numKey(b.c.num);return x[0]===y[0]?x[1]-y[1]:x[0].localeCompare(y[0])}).map(o=>o.c)})}
 const saveSelected=()=>{if(!catalog.offline)LS.set(SEL_KEY,[...selected])};
-async function getJSON(url,ms=30000){const ac=new AbortController(),t=setTimeout(()=>ac.abort(),ms);try{const r=await fetch(url,{signal:ac.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(t)}}
+// Card API is slow and rate limited: max 3 requests at once, user actions jump the line, retries with backoff.
+const NET={active:0,q:[],max:3};
+const netSlot=pri=>new Promise(r=>{if(NET.active<NET.max){NET.active++;r()}else pri?NET.q.unshift(r):NET.q.push(r)});
+const netDone=()=>{const n=NET.q.shift();if(n)n();else NET.active--};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function fetchJSON(url,ms){const ac=new AbortController(),t=setTimeout(()=>ac.abort(),ms);try{const r=await fetch(url,{signal:ac.signal});if(!r.ok){const e=new Error('HTTP '+r.status);e.status=r.status;throw e}return await r.json()}catch(e){if(e.name==='AbortError'){const x=new Error('timed out');x.status=0;throw x}throw e}finally{clearTimeout(t)}}
+async function getJSON(url,ms=60000,pri=false){await netSlot(pri);try{let last;for(let a=0;a<3;a++){try{return await fetchJSON(url,ms)}catch(e){last=e;if(e.status&&e.status<500&&e.status!==429)break;if(a<2)await sleep((e.status===429?5000:1500)*(a+1))}}throw last}finally{netDone()}}
 const priceOf=(p,keys)=>{for(const k of keys){const v=p[k];if(v&&(v.market||v.mid))return v.market||v.mid}return null};
 const anyPrice=p=>{for(const v of Object.values(p))if(v&&(v.market||v.mid))return v.market||v.mid;return null};
 function estimate(rarity){const r=String(rarity||'').toLowerCase();for(const[re,v]of[[/special illustration|hyper|secret|gold|rainbow/,25],[/illustration rare/,8],[/alt|gallery|shiny ultra|ultra|double|vmax|vstar|\bex\b|gx|\bv\b/,3],[/shiny|radiant|amazing|ace spec|prism/,2],[/holo|rare/,.4],[/uncommon/,.1],[/common/,.06]])if(re.test(r))return v;return .25}
@@ -716,16 +727,16 @@ function compact(r,setId,sn){const p=(r.tcgplayer&&r.tcgplayer.prices)||{},v=isV
 async function loadSetList(){const c=LS.get('pokerip-v3-setlist');if(c&&c.sets&&c.sets.length){catalog.sets=c.sets;if(Date.now()-c.at<LIST_TTL)return}
  try{const q=new URLSearchParams({pageSize:'250',orderBy:'-releaseDate',select:'id,name,series,releaseDate,total'});const b=await getJSON(`${API}/sets?${q}`);if(b.data&&b.data.length){catalog.sets=b.data;LS.set('pokerip-v3-setlist',{at:Date.now(),sets:b.data})}}catch(e){if(!catalog.sets.length)throw e}}
 const cacheKey=id=>'pokerip-v4-set-'+id;
-async function loadSet(id){const key=cacheKey(id),cached=LS.get(key);
+async function loadSet(id,pri=false){const key=cacheKey(id),cached=LS.get(key);
  if(cached&&cached.cards&&cached.cards.length){catalog.data[id]=cached.cards;invalidatePool();if(Date.now()-cached.at<SET_TTL)return}
- if(catalog.loading.has(id))return;catalog.loading.add(id);render();
+ if(catalog.loading.has(id)){while(catalog.loading.has(id))await sleep(300);if(catalog.data[id])return;throw new Error(catalog.failReason[id]||'load failed')}catalog.loading.add(id);render();
  try{const sn=setName(id);let page=1,all=[];
-  for(;;){const q=new URLSearchParams({q:`set.id:${id}`,pageSize:'250',page:String(page),select:'id,name,number,rarity,subtypes,supertype,images,tcgplayer'});const b=await getJSON(`${API}/cards?${q}`);const d=b.data||[];all.push(...d);if(d.length<250||all.length>=(b.totalCount||0)||page>=4)break;page++}
+  for(;;){const q=new URLSearchParams({q:`set.id:${id}`,pageSize:'250',page:String(page),select:'id,name,number,rarity,subtypes,supertype,images,tcgplayer'});const b=await getJSON(`${API}/cards?${q}`,60000,pri);const d=b.data||[];all.push(...d);if(d.length<250||all.length>=(b.totalCount||0)||page>=4)break;page++}
   const cards=all.filter(r=>r.images&&r.images.small&&!(r.supertype==='Energy'&&(r.subtypes||[]).includes('Basic'))).map(r=>compact(r,id,sn));
   if(!cards.length)throw new Error('No cards in set');
   catalog.data[id]=cards;catalog.failed.delete(id);invalidatePool();
   if(!LS.set(key,{at:Date.now(),cards})){pruneSetCache();LS.set(key,{at:Date.now(),cards})}
- }catch(e){if(!catalog.data[id]){catalog.failed.add(id);throw e}}
+ }catch(e){if(!catalog.data[id]){catalog.failed.add(id);catalog.failReason[id]=e.message;throw e}}
  finally{catalog.loading.delete(id);render()}}
 const extraSets=()=>[...new Set([...MASTER.flatMap(m=>m.sets),...VINTAGE_SETS,...TROPHIES.filter(t=>t.set).map(t=>t.set)])];
 function pruneSetCache(){const keep=new Set([...selected,...extraSets()]);try{for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(!k)continue;if(k.startsWith('pokerip-v3-set-'))localStorage.removeItem(k);else if(k.startsWith('pokerip-v4-set-')&&!keep.has(k.slice(15)))localStorage.removeItem(k)}}catch(e){}}
@@ -743,12 +754,14 @@ async function loadExtras(){if(catalog.offline)return;const valid=new Set(catalo
  const worker=async()=>{while(q.length){const id=q.shift();try{await loadSet(id)}catch(e){}}};await Promise.all([worker(),worker(),worker()]);render()}
 async function ensureGroup(gid){if(catalog.offline)return;for(const s of groupDef(gid).sets)if(!catalog.data[s]){try{await loadSet(s)}catch(e){toast(`Couldn't load ${setName(s)}.`)}}}
 async function addSet(id){if(catalog.offline){toast('The card database is offline right now.');return}if(selected.has(id))return;selected.add(id);saveSelected();invalidatePool();render();
- try{await loadSet(id);toast(`${setName(id)} added to the rotation`)}catch(e){selected.delete(id);catalog.failed.delete(id);saveSelected();toast(`Couldn't load ${setName(id)}. Try again.`)}invalidatePool();render()}
+ toast(`Loading ${setName(id)}… big sets can take a minute.`,4000);try{await loadSet(id,true);toast(`${setName(id)} added to the rotation`)}catch(e){toast(`Couldn't load ${setName(id)} (${e.message}). Tap its red chip to retry.`,5000)}invalidatePool();render()}
+async function retrySet(id){const v=await modal({icon:'⚠️',title:`${esc(setName(id))} didn't load`,html:`The card database said: ${esc(catalog.failReason[id]||'no response')}. It's slow sometimes. Try again, or remove the set.`,buttons:[{label:'Remove it',value:'rm'},{label:'Try again',primary:true,value:'retry'}]});
+ if(v==='rm'){catalog.failed.delete(id);removeSet(id)}else if(v==='retry'){catalog.failed.delete(id);render();try{await loadSet(id,true);toast(`${setName(id)} loaded`)}catch(e){toast(`Still couldn't load ${setName(id)} (${e.message}).`,4000)}invalidatePool();render()}}
 function removeSet(id){if(selected.size<=1){toast('Keep at least one set in the rotation.');return}selected.delete(id);saveSelected();invalidatePool();render()}
 async function resetSets(){if(catalog.offline)return;const valid=new Set(catalog.sets.map(s=>s.id));selected=new Set(DEFAULT_SETS.filter(id=>valid.has(id)));saveSelected();invalidatePool();render();await Promise.allSettled([...selected].map(id=>loadSet(id)));invalidatePool();render()}
 
 /* ---------- game state ---------- */
-const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,prestige:0,beat:false,bailouts:0,savedAt:0,owner:null});
+const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,prestige:0,beat:false,bailouts:0,bailDay:'',bailToday:0,savedAt:0,owner:null});
 const slim=c=>({id:c.id,name:c.name,value:c.value,img:c.img,slab:!!c.slab,grade:c.grade,first:!!c.first,setId:c.setId,setName:c.setName,num:c.num,rarity:c.rarity,raw:c.raw,est:c.est});
 function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.given==null)d.given=START*(1+(d.kyle||0));
  const f=fresh();for(const k in f)if(d[k]==null)d[k]=f[k];d.v=4;delete d.lastFree;
@@ -850,12 +863,13 @@ function go(v){if(location.hash!=='#'+v)location.hash=v;else route();window.scro
 const statHTML=items=>items.map(([l,v,h])=>`<div class="stat"><label>${l}</label><b>${v}</b>${h!=null?`<span class="hint">${h}</span>`:''}</div>`).join('');
 function render(){if(!game)return;renderHeader();({shop:renderShop,binder:renderBinder,collect:renderCollect,grab:renderGrab,stats:renderStats,history:renderHistory})[currentView]()}
 function renderHeader(){$('#cashTop').textContent=money(game.cash);$('#tixTop').textContent=game.tickets;const b=$('#tixBadge'),dot=(spinReady()?1:0)+game.tickets;b.hidden=!dot;b.textContent=spinReady()&&!game.tickets?'!':game.tickets;
- const a=$('#acctBtn');a.hidden=!Cloud.on;$('#soundBtn').hidden=Cloud.on;$('#soundBtn').textContent=Sound.on?'🔊':'🔇';if(Cloud.on){a.textContent=Cloud.s?Cloud.name.slice(0,1).toUpperCase():'👤';a.style.color=Cloud.s?(Cloud.err?'var(--red)':'var(--green)'):''}
+ const a=$('#acctBtn');a.hidden=!Cloud.on;$('#soundBtn').hidden=Cloud.on;$('#soundBtn').textContent=Sound.on?'🔊':'🔇';if(Cloud.on){a.textContent=Cloud.s?Cloud.name.slice(0,1).toUpperCase():'💾 Save';a.classList.toggle('nudge',!Cloud.s);a.style.color=Cloud.s?(Cloud.err?'var(--red)':'var(--green)'):''}
  const l=game.level,cur=XP_AT[l],nx=XP_AT[l+1];$('#lvl').textContent=`LV ${l}${game.prestige?' · ⭐'+game.prestige:''}`;
  if(nx==null){$('#xpFill').style.width='100%';$('#xpNext').textContent='Max level'}else{$('#xpFill').style.width=Math.max(2,Math.min(100,(game.xp-cur)/(nx-cur)*100))+'%';$('#xpNext').textContent=`${moneyS(Math.max(0,nx-game.xp))} to LV ${l+1}${UNLOCKS[l+1]?` · ${UNLOCKS[l+1]}`:''}`}}
 const qtySegHTML=()=>[1,5,10,15].map(n=>`<button data-action="qty" data-n="${n}" class="${ripQty===n?'on':''}">×${n}</button>`).join('');
 function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!catalog.offline;
  $('#shopStats').innerHTML=statHTML([['Cash',money(game.cash),'Virtual bankroll'],['Binder',money(collectionValue()),`${game.owned.length} card${game.owned.length===1?'':'s'}`],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,'Net worth vs. bankroll'],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,'The end goal']]);
+ $('#guest').innerHTML=Cloud.on&&!Cloud.s?`<div class="daily guest"><div><b>👻 You're playing as a guest</b><span>${game.opened?`${game.opened} pack${game.opened===1?'':'s'} ripped and none of it is backed up.`:'Make an account so your pulls are saved.'} Takes 10 seconds, no email.</span></div><button class="primary" data-action="account">Save my run</button></div>`:'';
  renderDaily();renderRewards();$('#qtySeg').innerHTML=qtySegHTML();
  const mod=TIERS.filter(t=>!t.vintage),vin=TIERS.filter(t=>t.vintage),next=TIERS.filter(t=>!unlocked(t)).sort((a,b)=>a.lvl-b.lvl)[0];
  $('#packs').innerHTML=mod.filter(unlocked).map(t=>packCard(t)).join('');
@@ -874,7 +888,7 @@ function renderRewards(){const v=game.vouchers,keys=[...TIERS.map(t=>t.id),'god'
  $('#rewards').innerHTML=keys.length?`<div class="rewards"><b>🎁 Rewards</b>${keys.map(k=>{const n=v[k];if(k==='god')return `<span class="rw">${n}× God Tier spin<button data-action="god-go">Spin</button></span>`;const q=Math.min(n,ripQty);return `<span class="rw">${n}× ${esc(vName(k))}<button data-action="open-voucher" data-tier="${k}" ${rip?'disabled':''}>Open${q>1?' '+q:''}</button></span>`}).join('')}</div>`:''}
 function renderRotation(){const pool=activePool(),nl=[...selected].filter(id=>catalog.loading.has(id)).length;
  $('#rotSummary').textContent=`${selected.size} set${selected.size===1?'':'s'} · ${pool.length.toLocaleString()} cards${nl?` · loading ${nl}…`:''}${catalog.offline?' · sample pool':''}`;
- $('#setChips').innerHTML=[...selected].map(id=>`<button class="chip${catalog.loading.has(id)?' loading':''}${catalog.failed.has(id)?' failed':''}" data-action="set-remove" data-id="${esc(id)}" aria-label="Remove ${esc(setName(id))}">${esc(setName(id))}<span aria-hidden="true">${catalog.loading.has(id)?'◌':'×'}</span></button>`).join('');
+ $('#setChips').innerHTML=[...selected].map(id=>`<button class="chip${catalog.loading.has(id)?' loading':''}${catalog.failed.has(id)?' failed':''}" data-action="${catalog.failed.has(id)?'set-retry':'set-remove'}" data-id="${esc(id)}" aria-label="${catalog.failed.has(id)?'Retry':'Remove'} ${esc(setName(id))}">${esc(setName(id))}<span aria-hidden="true">${catalog.loading.has(id)?'◌':catalog.failed.has(id)?'↻':'×'}</span></button>`).join('');
  if(pool.length){let mn=Infinity,mx=0;for(const c of pool){if(c.value<mn)mn=c.value;if(c.value>mx)mx=c.value}$('#rotRange').textContent=`Card values ${money(mn)} to ${money(mx)}`}else $('#rotRange').textContent='';
  const sel=$('#setPicker');if(document.activeElement!==sel){const groups=new Map();for(const s of catalog.sets){if(selected.has(s.id))continue;const g=s.series||'Other';if(!groups.has(g))groups.set(g,[]);groups.get(g).push(s)}
   sel.disabled=catalog.offline;sel.innerHTML='<option value="">Add a Pokémon set…</option>'+[...groups].map(([g,ss])=>`<optgroup label="${esc(g)}">${ss.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.releaseDate?` (${esc(String(s.releaseDate).slice(0,4))})`:''}</option>`).join('')}</optgroup>`).join('')}}
@@ -1040,10 +1054,11 @@ function ripEndActions(){const L=lastRip,t=tierById(L.id);let again='';
  else{const cost=t.price*L.qty,pending=rip?sum(rip.cards.filter(c=>rip.sell.has(c.uid)).map(c=>c.value)):0;again=`<button class="primary" data-action="rip-again" ${game.cash+pending+1e-9>=cost?'':'disabled'}>Rip again · ${money(cost)}</button>`}
  $('#ripActions').innerHTML=`<button class="secondary" data-action="rip-done">Done</button>${again}`}
 function quickSell(test){if(!rip)return;rip.cards.forEach(c=>{if(test(c))rip.sell.add(c.uid)});ripSummary()}
-function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}`)}
+function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}const all=n>1&&n===rip.cards.length&&Math.max(...rip.cards.map(c=>c.value))>=10;rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}${all?' Paper hands 🧻':''}`)}
 function singleChoose(sell){if(!rip||rip.phase!=='revealed')return;const c=rip.cards[0];if(sell)rip.sell.add(c.uid);finalizeRip();
  $('#ripInfo').insertAdjacentHTML('beforeend',`<div class="ri-done">${sell?`Sold for ${money(c.value)}`:'Added to your binder'}</div>`);ripEndActions()}
-function ripDone(){finalizeRip();hideOverlay('rip');checkBroke();flushNotes()}
+let nudged=false;
+function ripDone(){const best=lastCards.length?Math.max(...lastCards.map(c=>c.value)):0;finalizeRip();hideOverlay('rip');checkBroke();flushNotes();if(Cloud.on&&!Cloud.s&&!nudged&&(best>=25||game.opened>=5)){nudged=true;setTimeout(()=>toast(best>=25?`Nice pull. Shame if your browser deleted it. Tap 💾 Save up top.`:'Your run is not backed up. Tap 💾 Save up top.',4500),900)}}
 function ripAgain(){finalizeRip();const L=lastRip,t=tierById(L.id);
  if(L.voucher){const n=game.vouchers[L.id]||0;if(!n){hideOverlay('rip');return}startRip(L.id,{qty:Math.min(n,L.qty),voucher:true,group:L.gid});return}
  if(game.cash+1e-9<t.price*L.qty){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(L.id,{qty:L.qty,group:L.gid})}
@@ -1076,7 +1091,7 @@ function viewerStep(d){if(!V)return;const n=V.i+d;if(n<0||n>=V.list.length)retur
 async function okToLose(c,verb){
  if(c.value>=100){const ok=await modal({icon:'💸',title:`${verb} ${esc(c.name)}?`,html:verb==='Sell'?`You'll get ${money(c.value)} in cash${earnsTicket(c)?' plus a Slab Grab ticket':''}.`:`It's worth ${money(c.value)}.`,buttons:[{label:'Cancel',value:false},{label:`${verb} it`,primary:true,value:true}]});return!!ok}return true}
 async function viewerSell(){if(!V)return;const c=V.list[V.i];if(!await okToLose(c,'Sell')||!V)return;
- const r=sellCard(c.uid);if(!r)return;save();toast(`${c.name} sold for ${money(r.value)}${r.ticket?' · 🎟 +1 Slab Grab ticket!':''}`);if(r.ticket){Sound.hit(3);FX.burst(60,GOLDS)}
+ const r=sellCard(c.uid);if(!r)return;save();toast(r.value<.25?`Sold for ${money(r.value)}. Don't spend it all in one place.`:`${c.name} sold for ${money(r.value)}${r.ticket?' · 🎟 +1 Slab Grab ticket!':''}`);if(r.ticket){Sound.hit(3);FX.burst(60,GOLDS)}
  dropFromViewer();checkBroke()}
 function dropFromViewer(){V.list.splice(V.i,1);if(!V.list.length)closeViewer();else{V.i=Math.min(V.i,V.list.length-1);renderViewer()}}
 async function viewerTrade(){if(!V)return;const c=V.list[V.i];if(!game.owned.some(x=>x.uid===c.uid))return;const credit=r2(c.value*TRADE_BONUS);
@@ -1192,7 +1207,7 @@ async function accountModal(err='',user=''){if(!Cloud.on)return;
  if(!/^[a-z0-9_]{3,16}$/i.test(u))return accountModal('Pick a username with 3 to 16 letters, numbers or _.',u);
  if(p.length<6)return accountModal('Passwords need at least 6 characters.',u);
  try{if(v==='up')await Cloud.signUp(u,p);else await Cloud.signIn(u,p)}
- catch(e){const m=String(e.message||e);return accountModal(/invalid login/i.test(m)?'Wrong username or password.':/already registered|already exists/i.test(m)?'That username is taken. Try logging in.':/email/i.test(m)?'Sign-up is having trouble right now. Send Kyle a screenshot.':m,u)}
+ catch(e){const m=String(e.message||e);return accountModal(/invalid login/i.test(m)?'Wrong username or password.':/already registered|already exists/i.test(m)?'That username is taken. Try logging in.':/signups? (are )?(not allowed|disabled)|logins? (are )?disabled/i.test(m)?`Supabase says: "${m}". Turn the Email provider on in Supabase (Authentication → Sign In / Providers → Email).`:`Supabase says: "${m}"`,u)}
  await afterLogin(v==='up')}
 async function afterLogin(isNew){let cloud=null;try{cloud=await Cloud.pull()}catch(e){}
  if(cloud&&cloud.data&&cloud.data.v){const c=normalize(cloud.data);
@@ -1210,7 +1225,7 @@ async function checkBroke(){if(rip||brokeOpen||spinning)return;const cheapest=Ma
  if(collectionValue()+game.cash>=cheapest){toast('Low on cash. Sell a few cards from your binder.');return}
  brokeOpen=true;await modal({icon:'😅',title:'O no, you have a gambling problem!',html:'Time to alert Kyle you have a problem :)',buttons:[{label:'Fine, alert him',primary:true,value:1}]});
  game.cash=r2(game.cash+START);game.given=r2(game.given+START);game.kyle=(game.kyle||0)+1;save();
- await modal({icon:'😏',title:'He already knows ;)',html:`Kyle has been alerted${game.kyle>1?` (that's ${game.kyle} times now)`:''}. Your virtual bankroll got topped up by $100.`,buttons:[{label:'Back to the packs',primary:true,value:1}]});brokeOpen=false}
+ await modal({icon:'😏',title:pick(['He already knows ;)','Kyle has been notified.','Kyle sighed audibly.']),html:`Kyle has been alerted${game.kyle>1?` (that's ${game.kyle} times now)`:''}. Your virtual bankroll got topped up by $100.${game.kyle>=3?'<br>Your family has been cc\'d.':''}`,buttons:[{label:'Back to the packs',primary:true,value:1}]});brokeOpen=false}
 async function sellBulk(){const bulk=game.owned.filter(c=>!c.slab&&c.value<1);if(!bulk.length){toast('No bulk under $1 to sell.');return}const tot=sum(bulk.map(c=>c.value));
  const ok=await modal({icon:'🧹',title:'Sell all your bulk?',html:`Sell ${bulk.length} card${bulk.length>1?'s':''} under $1 for ${money(tot)}. They still count toward your sets.`,buttons:[{label:'Cancel',value:false},{label:'Sell bulk',primary:true,value:true}]});if(!ok)return;
  bulk.forEach(c=>sellCard(c.uid));save();toast(`Sold ${bulk.length} bulk cards for ${money(tot)}`)}
@@ -1220,12 +1235,15 @@ async function sellDupes(){const slabIds=new Set(game.owned.filter(c=>c.slab).ma
  const ok=await modal({icon:'🧹',title:'Sell your duplicates?',html:`Sell ${dupes.length} extra cop${dupes.length>1?'ies':'y'} for ${money(tot)}${tix?` (+${tix} 🎟)`:''}. You keep one of every card, and slabs are never sold.`,buttons:[{label:'Cancel',value:false},{label:'Sell dupes',primary:true,value:true}]});if(!ok)return;
  let t=0;dupes.forEach(c=>{const r=sellCard(c.uid);if(r&&r.ticket)t++});save();toast(`Sold ${dupes.length} duplicates for ${money(tot)}${t?` · 🎟 +${t}`:''}`)}
 function newRun(prestige){const keep={owner:game.owner,prestige},bank=START*(1+prestige);game=fresh();Object.assign(game,keep);game.cash=game.given=bank;$('#reelTrack').innerHTML='';save()}
-const BAILOUT_UNDER=25;
-async function bailout(){if(rip||spinning)return;
+const BAILOUT_UNDER=25, BAILOUT_DAILY=3;
+const BAIL_LINES=[['🙄','Fine, you socialist coward…',`Here's another ${moneyS(START)}. Enjoy!`],['😮‍💨','Again? Seriously?',`Another ${moneyS(START)}. Kyle is starting to notice.`],['🚨','Last one today.',`${moneyS(START)} more. Kyle is drafting an intervention.`]];
+async function bailout(){if(rip||spinning)return;const d=today();if(game.bailDay!==d){game.bailDay=d;game.bailToday=0}
  if(game.cash+1e-9>=BAILOUT_UNDER){modal({icon:'🧐',title:'Nice try.',html:`You have ${money(game.cash)}. Come back when you're actually broke.`,buttons:[{label:'Fine',primary:true}]});return}
+ if(game.bailToday>=BAILOUT_DAILY){modal({icon:'🌳',title:'Go outside.',html:`Three bailouts in one day. Touch grass. Get a hobby. Call your mom.<br><br>The money printer turns back on in ${untilMidnight()}.`,buttons:[{label:'Fine 😤',primary:true}]});return}
  const ok=await modal({icon:'🥺',title:'Really? Already poor?',html:`You're down to ${money(game.cash)}.${game.bailouts?` This would be bailout #${game.bailouts+1}.`:''}`,buttons:[{label:'Never mind',value:false},{label:'Yes, I\'m poor',primary:true,value:true}]});if(!ok)return;
- game.cash=r2(game.cash+START);game.given=r2(game.given+START);game.bailouts=(game.bailouts||0)+1;save();Sound.init();Sound.hit(2);
- await modal({icon:'🙄',title:'Fine, you socialist coward…',html:`Here's another ${moneyS(START)}. Enjoy!`,buttons:[{label:'Thanks, I guess',primary:true}]})}
+ const[ic,ti,bo]=BAIL_LINES[Math.min(game.bailToday,BAIL_LINES.length-1)];
+ game.cash=r2(game.cash+START);game.given=r2(game.given+START);game.bailouts=(game.bailouts||0)+1;game.bailToday++;save();Sound.init();Sound.hit(2);
+ await modal({icon:ic,title:ti,html:`${bo}<br><small>${BAILOUT_DAILY-game.bailToday} bailout${BAILOUT_DAILY-game.bailToday===1?'':'s'} left today.</small>`,buttons:[{label:'Thanks, I guess',primary:true}]})}
 async function prestigeRun(){if(!game.beat)return;const p=(game.prestige||0)+1,ok=await modal({icon:'⭐',title:`Prestige to ⭐${p}?`,html:`Start a brand new run with a ⭐${p} badge and a ${moneyS(START*(1+p))} bankroll. Your binder, trophies and levels reset.`,buttons:[{label:'Not yet',value:false},{label:'Prestige',primary:true,value:true}]});if(!ok)return;newRun(p);celebrate(5);toast(`⭐${p} unlocked. Good luck, legend.`,3500)}
 function showOdds(id){const t=tierById(id);if(!t)return;const pool=packPool(t);
  const table=(title,bands)=>`<div class="odds-t"><div class="odds-title">${title}</div>${bands.map(([a,b,w])=>{const n=pool.filter(c=>c.value>=a&&c.value<b).length;return `<div class="odds-row"><span>${bandLabel(a,b)}</span><span class="odds-bar"><i style="width:${Math.max(3,w)}%"></i></span><b>${w}%</b><small>${n.toLocaleString()} cards</small></div>`}).join('')}</div>`;
@@ -1249,6 +1267,7 @@ const ACTIONS={
  sound:()=>{Sound.on=!Sound.on;LS.set('pokerip-sound',Sound.on);if(Sound.on){Sound.init();Sound.flip()}render()},
  retry:()=>location.reload(),
  'set-remove':el=>removeSet(el.dataset.id),
+ 'set-retry':el=>retrySet(el.dataset.id),
  'set-reset':()=>resetSets(),
  'open-set':el=>go('collect/'+encodeURIComponent(el.dataset.g)),
  'set-filter':el=>{setFilter=el.dataset.f;renderCollect()},
@@ -1318,8 +1337,9 @@ let game=load();
 FX.init();route();
 {const lv=game.level;levelCheck();if(game.level!==lv)LS.set(SAVE_KEY,game)}
 if(Cloud.s&&game.owner!==Cloud.user){Cloud.ready=true}
+{const ls=LS.get('pokerip-seen',0);LS.set('pokerip-seen',Date.now());if(ls&&Date.now()-ls>20*36e5&&game.opened)setTimeout(()=>toast(pick(['Welcome back. The cards missed you. Kyle didn\'t.','Oh good, you\'re back. Your binder was getting lonely.','Back already? Respect the commitment.']),4000),1500)}
 cloudRefresh();
-initCatalog().then(()=>{checkBroke();loadExtras()});
+initCatalog().then(async()=>{checkBroke();await loadExtras();for(const id of[...selected].filter(id=>catalog.failed.has(id))){catalog.failed.delete(id);try{await loadSet(id)}catch(e){}}invalidatePool();render()});
 </script>
 </body>
 </html>
