@@ -181,8 +181,8 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .overlay{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:#05080d;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:calc(var(--st) + 14px) 16px calc(var(--sb) + 16px);animation:fadein .2s}
 .rip:before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 50% 40%,var(--accent,#a983ff),transparent 58%);opacity:.16;pointer-events:none}
 .rip-head{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.16em;color:var(--muted);font-weight:800;max-width:640px;width:100%;margin:0 auto;position:relative}
-.rip-stage{flex:1;min-height:300px;display:grid;place-items:center;position:relative;padding:18px 0;user-select:none;-webkit-user-select:none;cursor:pointer}
-.rip-info{text-align:center;min-height:92px;position:relative;max-width:560px;width:100%;margin:0 auto}
+.rip-stage{flex:1 0 auto;min-height:300px;display:grid;place-items:center;position:relative;padding:18px 0;user-select:none;-webkit-user-select:none;cursor:pointer}
+.rip-info{flex:none;text-align:center;min-height:92px;position:relative;max-width:560px;width:100%;margin:0 auto}
 .rip-actions{display:flex;gap:10px;justify-content:center;max-width:520px;width:100%;margin:0 auto;position:relative}
 .rip-actions button{flex:1}
 .hint{color:var(--muted);font-size:13px;letter-spacing:.04em;animation:breathe 1.6s ease-in-out infinite;padding-top:14px}
@@ -195,7 +195,7 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .gtag{display:inline-block;vertical-align:middle;font-size:10px;letter-spacing:.08em;background:#1b2436;color:var(--gold);border:1px solid #f5c45155;padding:2px 6px;border-radius:5px}
 
 /* sealed pack */
-.pack3d{position:relative;width:min(56vw,230px);aspect-ratio:5/8;animation:float 2.4s ease-in-out infinite;filter:drop-shadow(0 0 38px var(--accent))}
+.pack3d{touch-action:none;cursor:grab;position:relative;width:min(56vw,230px);aspect-ratio:5/8;animation:float 2.4s ease-in-out infinite;filter:drop-shadow(0 0 38px var(--accent))}
 @media(max-height:640px){.pack3d{width:min(44vw,180px)}}
 .pk-top,.pk-body{position:absolute;left:0;right:0;overflow:hidden;background:linear-gradient(155deg,var(--accent) 0%,#27305a 52%,#0b1020 100%);border:1px solid #ffffff40}
 .pk-top{top:0;height:16%;border-radius:12px 12px 0 0;background-size:100% 625%;background-position:0 0;border-bottom:2px dashed #ffffff80}
@@ -204,7 +204,6 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .pk-body:before{content:"";position:absolute;inset:-50%;background:linear-gradient(110deg,transparent 42%,#ffffff3a 50%,transparent 58%);animation:sheen 2.6s linear infinite}
 .pk-body:after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:repeating-linear-gradient(90deg,#ffffff50 0 4px,transparent 4px 8px)}
 .pk-logo{position:relative;font-weight:1000;font-size:clamp(26px,8vw,40px);letter-spacing:.08em;line-height:.95;text-align:center;text-shadow:0 4px 18px #000a}
-.pk-tearhere{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:9px;font-weight:900;letter-spacing:.2em;opacity:.75}
 .pk-burst{position:absolute;width:78%;aspect-ratio:1;border-radius:50%;background:repeating-conic-gradient(#ffffff18 0 6deg,transparent 6deg 18deg);-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%);animation:swirl 30s linear infinite}
 .pk-sub{position:absolute;top:63%;left:0;right:0;text-align:center;font-size:8px;letter-spacing:.24em;font-weight:800;opacity:.7}
 .pk-tier{position:absolute;bottom:11%;left:0;right:0;text-align:center;white-space:nowrap;font-size:clamp(8px,2.5vw,11px);letter-spacing:.18em;font-weight:900;opacity:.9}
@@ -218,6 +217,8 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .flip{position:absolute;inset:0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
 .flip.flipped{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:4.6%/3.3%;overflow:hidden;background:#0b1018}
+.face.back{transition:visibility 0s .32s}.flip.flipped .face.back{visibility:hidden}
+.face.front{visibility:hidden;transition:visibility 0s .32s}.flip.flipped .face.front{visibility:visible}
 .face.front{transform:rotateY(180deg);box-shadow:0 22px 50px #000c,inset 0 0 0 1px #ffffff1a}
 .persp{transition:transform .18s ease-out;--mx:50%;--my:50%}
 .revealed .face.front:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at var(--mx) var(--my),#ffffff30,transparent 45%)}
@@ -231,15 +232,16 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .flipwrap.charging{animation:shake .12s linear infinite}
 .flipwrap.charging .aura{opacity:1;animation:pulse .3s infinite}
 .flipwrap.leave{animation:leave .26s forwards}
-.cardback{position:absolute;inset:0;border-radius:inherit;background:#1b3f9c;padding:6.5%;overflow:hidden;box-shadow:inset 0 0 0 1px #0004}
-.cardback:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(125deg,transparent 35%,#ffffff22 48%,transparent 60%);pointer-events:none}
-.cb-in{position:relative;width:100%;height:100%;border-radius:5%/3.6%;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,#7fb4ff 0,#3c7ae0 16%,#1d4fb8 34%,#163c95 52%,#0f2c74 72%,#0a1f55 100%);box-shadow:inset 0 0 0 2px #0a1a4a,inset 0 0 26px #0008}
-.cb-in:before{content:"";position:absolute;inset:-60%;background:repeating-conic-gradient(from 0deg at 50% 50%,#ffffff14 0 8deg,transparent 8deg 22deg);animation:swirl 40s linear infinite}
-.cb-in:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 30%,#061540aa 100%)}
-.cb-emblem{position:relative;z-index:1;width:44%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7d6,#f5c451 35%,#c8901d 75%,#8a5a0a);box-shadow:0 0 0 3px #0a1a4a,0 0 0 6px #f5c45177,0 6px 22px #000a;display:grid;place-items:center}
-.cb-emblem span{width:74%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 40% 35%,#24499e,#0c1e52);display:grid;place-items:center;text-align:center;font-weight:1000;color:#fff;letter-spacing:.06em;font-size:clamp(10px,3.4vw,17px);line-height:1;box-shadow:inset 0 2px 6px #0008}
-.cb-word{position:absolute;z-index:1;left:0;right:0;text-align:center;font-weight:1000;font-style:italic;letter-spacing:.12em;color:#ffd34e;-webkit-text-stroke:1px #1b3f9c;text-shadow:0 2px 0 #0a1a4a,0 0 12px #000;font-size:clamp(11px,4vw,20px)}
-.cb-word.t{top:10%}.cb-word.b{bottom:10%;transform:rotate(180deg)}
+.cardback{position:absolute;inset:0;border-radius:inherit;padding:5.5%;overflow:hidden;background:linear-gradient(160deg,#3b5fc4,#1b3a8f 45%,#122a6b)}
+.cardback:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(125deg,transparent 30%,#ffffff26 45%,transparent 58%)}
+.cb-in{position:relative;width:100%;height:100%;border-radius:4%/3%;overflow:hidden;display:grid;place-items:center;
+ background:radial-gradient(ellipse 60% 40% at 25% 20%,#5d8ff0aa,transparent 70%),radial-gradient(ellipse 50% 45% at 80% 75%,#5d8ff099,transparent 70%),radial-gradient(ellipse 45% 35% at 75% 25%,#0b1d5299,transparent 70%),radial-gradient(ellipse 50% 40% at 20% 80%,#0b1d52aa,transparent 70%),radial-gradient(circle at 50% 50%,#3f73dd,#1a3f9e 55%,#0d2462);
+ box-shadow:inset 0 0 0 2px #9fc0ff55,inset 0 0 0 5px #0d2462,inset 0 0 30px #0009}
+.cb-in:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#ffffff06 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,#00000010 0 1px,transparent 1px 3px)}
+.cb-emblem{position:relative;z-index:1;width:46%;aspect-ratio:1;transform:rotate(45deg);border-radius:18%;background:linear-gradient(135deg,#fff6d2,#f5c451 30%,#b9821a 70%,#f5d77a);box-shadow:0 0 0 3px #0d2462,0 0 0 5px #f5c45188,0 8px 24px #000b;display:grid;place-items:center}
+.cb-emblem span{transform:rotate(-45deg);width:72%;aspect-ratio:1;border-radius:14%;background:radial-gradient(circle at 40% 30%,#2c59c0,#0d2462);display:grid;place-items:center;font-weight:1000;color:#f5d77a;letter-spacing:.04em;font-size:clamp(14px,5vw,26px);box-shadow:inset 0 2px 8px #000a}
+.cb-word{position:absolute;z-index:1;left:0;right:0;text-align:center;font-weight:900;letter-spacing:.32em;color:#cfe0ff;opacity:.85;font-size:clamp(8px,2.6vw,12px)}
+.cb-word.t{top:9%}.cb-word.b{bottom:9%;transform:rotate(180deg)}
 
 /* slab */
 .slab:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,transparent 30%,#ffffff55 42%,transparent 52%),linear-gradient(0deg,#ffffff10,#ffffff10);box-shadow:inset 0 0 0 3px #ffffff70,inset 0 0 0 5px #00000014}
@@ -697,8 +699,8 @@ function startRip(id,free=false){if(rip)return;const base=TIERS.find(x=>x.id===i
  lastCards=rip.cards;save();preload(cards);showOverlay('rip');ripSealed()}
 function ripSealed(){const t=rip.tier;$('#rip').style.setProperty('--accent',t.color);
  $('#ripLabel').textContent=t.free?'DAILY FREE PACK':`${t.name.toUpperCase()} · ${money(t.price)}`;$('#ripStep').textContent=t.kind==='pack'?`${rip.cards.length} CARDS`:'1 CARD';
- $('#ripStage').innerHTML=`<div class="pack3d" style="--accent:${t.color}"><div class="pk-top"><span class="pk-tearhere">✂ TEAR HERE</span></div><div class="pk-body"><div class="pk-burst"></div><div class="pk-logo">POKÉ<br>RIP</div><div class="pk-sub">TRADING CARD SIMULATOR</div><div class="pk-tier">${esc(t.tag)} · ${t.kind==='pack'?'5 CARDS':'1 CARD'}</div></div></div>`;
- $('#ripInfo').innerHTML='<div class="hint">Tap the pack to rip it open</div>';$('#ripActions').innerHTML='';rip.phase='sealed'}
+ $('#ripStage').innerHTML=`<div class="pack3d" style="--accent:${t.color}"><div class="pk-top"></div><div class="pk-body"><div class="pk-burst"></div><div class="pk-logo">POKÉ<br>RIP</div><div class="pk-sub">TRADING CARD SIMULATOR</div><div class="pk-tier">${esc(t.tag)} · ${t.kind==='pack'?'5 CARDS':'1 CARD'}</div></div></div>`;
+ $('#ripInfo').innerHTML='<div class="hint">Swipe across the top to rip it open</div>';$('#ripActions').innerHTML='';rip.phase='sealed'}
 function ripTear(){rip.phase='tearing';$('.pack3d').classList.add('torn');Sound.tear();buzz(25);flash(.35);$('#ripInfo').innerHTML='';setTimeout(ripNext,720)}
 function ripNext(){if(!rip)return;rip.i++;const c=rip.cards[rip.i],lvl=c.slab?Math.max(4,vt(c.value)):vt(c.value),pack=rip.tier.kind==='pack',last=rip.i===rip.cards.length-1;
  $('#ripStep').textContent=pack?`CARD ${rip.i+1} OF ${rip.cards.length}`:'YOUR PULL';
@@ -727,7 +729,8 @@ function singleChoose(sell){if(!rip||rip.phase!=='revealed')return;const c=rip.c
  $('#ripInfo').insertAdjacentHTML('beforeend',`<div class="ri-done">${sell?`Sold for ${money(c.value)}`:'Added to your binder'}</div>`);ripEndActions()}
 function ripDone(){finalizeRip();hideOverlay('rip');checkBroke()}
 function ripAgain(){finalizeRip();const t=lastTier;if(game.cash+1e-9<t.price){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(t.id)}
-function ripTap(){if(!rip)return;if(rip.phase==='sealed')ripTear();else if(rip.phase==='facedown')ripFlip();else if(rip.phase==='revealed')ripAdvance()}
+let swallowTap=false;const swallow=()=>{swallowTap=true;setTimeout(()=>{swallowTap=false},450)};
+function ripTap(){if(!rip)return;if(swallowTap){swallowTap=false;return}if(rip.phase==='sealed')ripTear();else if(rip.phase==='facedown')ripFlip();else if(rip.phase==='revealed')ripAdvance()}
 
 /* ---------- card viewer ---------- */
 let V=null;
@@ -860,6 +863,13 @@ document.addEventListener('keydown',e=>{if(!V||!$('#modal').hidden)return;if(e.k
  vb.addEventListener('touchend',e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)viewerStep(dx<0?1:-1)},{passive:true})})();
 (()=>{const st=$('#ripStage');st.addEventListener('pointermove',e=>{const w=st.querySelector('.flipwrap.revealed');if(!w||!rip)return;const p=w.querySelector('.persp'),r=w.getBoundingClientRect(),x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));p.style.transform=`perspective(900px) rotateY(${(x-.5)*22}deg) rotateX(${(.5-y)*22}deg)`;p.style.setProperty('--mx',x*100+'%');p.style.setProperty('--my',y*100+'%')});st.addEventListener('pointerleave',()=>{const p=st.querySelector('.revealed .persp');if(p)p.style.transform=''})})();
 setInterval(()=>{if(currentView==='shop'&&!rip)renderDaily()},60000);
+(()=>{const st=$('#ripStage');let sx=null,moved=0,ticks=0;
+ st.addEventListener('pointerdown',e=>{if(!rip||rip.phase!=='sealed'||!e.target.closest('.pack3d'))return;sx=e.clientX;moved=0;ticks=0;try{st.setPointerCapture(e.pointerId)}catch(_){}});
+ st.addEventListener('pointermove',e=>{if(sx==null||!rip||rip.phase!=='sealed')return;const pk=$('.pack3d'),top=pk&&pk.querySelector('.pk-top');if(!top)return;moved=Math.abs(e.clientX-sx);const p=Math.min(1,moved/(pk.offsetWidth*.75));
+  top.style.transform=`translate(${p*14*Math.sign(e.clientX-sx)}%,${-p*40}%) rotate(${p*10*Math.sign(e.clientX-sx)}deg)`;const t=Math.floor(p*8);if(t>ticks){ticks=t;Sound.init();Sound.noise(.05,.08);buzz(4)}
+  if(p>=1){sx=null;swallow();top.style.transform='';ripTear()}});
+ const end=()=>{if(sx==null)return;sx=null;const top=$('.pack3d .pk-top');if(moved>10){swallow();if(top){top.style.transition='transform .2s';top.style.transform='';setTimeout(()=>{if(top)top.style.transition=''},220)}}};
+ st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end)})();
 $('#setPicker').addEventListener('change',e=>{const id=e.target.value;e.target.value='';e.target.blur();if(id)addSet(id)});
 $('#binderSort').addEventListener('change',()=>renderBinder());
 addEventListener('hashchange',()=>{route();window.scrollTo(0,0)});
