@@ -409,6 +409,22 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .lvrow span:last-child{text-align:right}
 .lvrow.done{opacity:.45}.lvrow.cur{color:var(--gold)}
 .setrow{display:flex;gap:8px;flex-wrap:wrap}
+.feed-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;font-size:12px}
+.feed{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -14px 16px;padding:0 14px 2px;-webkit-overflow-scrolling:touch}
+.feed::-webkit-scrollbar{display:none}
+.fitem{flex:0 0 auto;display:flex;gap:9px;align-items:center;background:#0f1724;border:1px solid var(--line);border-radius:12px;padding:6px 12px 6px 6px;max-width:250px;text-align:left}
+.fitem.big{border-color:#f5c45188;box-shadow:0 0 18px -8px var(--gold)}
+.fitem .hthumb{width:30px;height:42px}
+.fitem b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.fitem small{display:block;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.fitem i{font-style:normal;color:var(--gold);font-weight:900}
+.nextup{width:100%;text-align:left;color:inherit}
+.roast{margin:8px auto 0;font-size:15px;font-weight:900;color:#ffd36b;max-width:520px}
+.roast.bad{color:#ff9b9b}
+.bulkrow{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;width:100%;text-align:left}
+.bulkrow b{color:var(--text)}
+.godban{display:inline-block;font-size:13px;font-weight:1000;letter-spacing:.14em;color:#140f05;background:linear-gradient(90deg,#ff5fd2,#ffd36b,#6bffd8,#6bb5ff,#ff5fd2);background-size:200% 100%;animation:slidebg 1.4s linear infinite;padding:6px 12px;border-radius:7px;margin-bottom:6px}
+.togglechip{display:inline-flex;align-items:center;gap:6px}
 .toolbar-r{flex-wrap:wrap}
 @media(max-width:760px){
  .xpbar{height:24px}
@@ -448,14 +464,16 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <h1 class="title">Pack Shop</h1>
  <p class="sub">Real cards, real market prices, fake money. Spend to level up and unlock bigger packs.</p>
  <div class="banner" id="apiBanner" hidden><span>Couldn't reach the card database, so you're ripping a small sample pool.</span><button class="smallbtn" data-action="retry">Retry</button></div>
+ <div id="feedWrap" hidden><div class="feed-head"><span class="eyebrow">🔥 Live pulls</span><span class="muted" id="kingLine"></span></div><div class="feed" id="feed"></div></div>
  <div class="stats" id="shopStats"></div>
  <div id="daily"></div>
  <div id="rewards"></div>
  <div class="qtyrow"><span class="muted">Packs per rip</span><div class="seg" id="qtySeg"></div></div>
  <div class="section-head"><h2>Modern packs</h2></div>
  <div class="packs" id="packs"></div>
- <div class="section-head"><h2>Vintage vault</h2><span class="muted" style="font-size:12px">WOTC era · 1999 to 2002</span></div>
+ <div class="section-head" id="vaultHead"><h2>Vintage vault</h2><span class="muted" style="font-size:12px">WOTC era · 1999 to 2002</span></div>
  <div class="packs" id="vault"></div>
+ <div id="nextUnlock" style="margin-top:12px"></div>
  <details class="rotation" id="rotation">
   <summary><div><b>Set rotation</b><span id="rotSummary">Loading sets…</span></div><span class="chev">▾</span></summary>
   <div class="rot-body">
@@ -517,7 +535,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <h1 class="title">Stats</h1>
  <p class="sub">Your bankroll, your luck, and how often Kyle has been alerted.</p>
  <div class="stats" id="statsGrid"></div>
- <div id="boardWrap" hidden><div class="section-head"><h2>Leaderboard</h2><button class="smallbtn" data-action="lb-refresh">Refresh</button></div><div class="panel rows" id="board"></div></div>
+ <div id="boardWrap" hidden><div class="section-head"><h2>Leaderboard</h2><button class="smallbtn" data-action="lb-refresh">Refresh</button></div><div class="seg grabseg" id="boardSeg"></div><div class="panel rows" id="board"></div></div>
  <div class="section-head"><h2>Best pulls</h2></div>
  <div class="best" id="bestPulls"></div>
  <div class="section-head"><h2>Recent rips</h2><button class="smallbtn" data-action="nav" data-view="history">View all</button></div>
@@ -578,6 +596,12 @@ const VRARE_BANDS=[[0,10,55],[10,30,25],[30,80,13],[80,250,5.5],[250,1e9,1.5]];
 const FRARE_BANDS=[[0,25,50],[25,80,27],[80,250,15],[250,1000,6],[1000,1e9,2]];
 const GRAB_BANDS=[[5,20,50],[20,60,30],[60,150,14],[150,400,5],[400,1e9,1]];
 const DECOY_BANDS=[[5,20,30],[20,60,28],[60,150,22],[150,400,13],[400,1e9,7]];
+const GOD_BANDS=[[5,15,50],[15,50,35],[50,200,12],[200,1e9,3]], GOD_ODDS=1/300, FEED_AT=100;
+const ROASTS={
+ awful:['Sucks to suck.','We call that… pulling a Johnny.',"Wendy's applications are free here.",'That pack was a donation.','Kyle felt that one.','Bulk city, population: you.','Have you considered a different hobby?','Even the energy cards feel bad for you.','Your binder just sighed.','Thoughts and prayers.','Straight to the shoebox.','That was a tax on hope.'],
+ meh:['Mid. Extremely mid.','Not a W. Not an L. Just sad.','Could have been worse. Not much worse.','Participation trophy pack.','The house thanks you.'],
+ good:['Okay, we see you.','Green pack. Screenshot it.','Profit? In this economy?','Somebody is cooking.'],
+ huge:['SOMEBODY CALL KYLE.','Go tell the group chat. Now.','Absolutely disgusting. Congrats.','Frame it. Insure it. Never speak to us again.','Johnny could never.']};
 const SLOTS={RARE:RARE_BANDS,BONUS:BONUS_BANDS,HIT:HIT_BANDS,VRARE:VRARE_BANDS,FRARE:FRARE_BANDS};
 const GRADE_MULT={modern:{8:1.15,9:1.4,10:2.5},vintage:{8:1.8,9:3.5,10:12}};
 const PACK_GRADES=[[9,70],[10,30]], GRAB_GRADES=[[8,30],[9,50],[10,20]], VINT_GRADES=[[8,50],[9,40],[10,10]];
@@ -724,12 +748,15 @@ function removeSet(id){if(selected.size<=1){toast('Keep at least one set in the 
 async function resetSets(){if(catalog.offline)return;const valid=new Set(catalog.sets.map(s=>s.id));selected=new Set(DEFAULT_SETS.filter(id=>valid.has(id)));saveSelected();invalidatePool();render();await Promise.allSettled([...selected].map(id=>loadSet(id)));invalidatePool();render()}
 
 /* ---------- game state ---------- */
-const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},tracked:['cz'],prestige:0,beat:false,savedAt:0,owner:null});
+const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,prestige:0,beat:false,bailouts:0,savedAt:0,owner:null});
 const slim=c=>({id:c.id,name:c.name,value:c.value,img:c.img,slab:!!c.slab,grade:c.grade,first:!!c.first,setId:c.setId,setName:c.setName,num:c.num,rarity:c.rarity,raw:c.raw,est:c.est});
 function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.given==null)d.given=START*(1+(d.kyle||0));
  const f=fresh();for(const k in f)if(d[k]==null)d[k]=f[k];d.v=4;delete d.lastFree;
  d.owned=d.owned.filter(c=>c&&c.uid&&typeof c.value==='number');d.history=d.history.filter(h=>h&&Array.isArray(h.cards));
- if(!Array.isArray(d.tracked))d.tracked=['cz'];if(typeof d.vouchers!=='object')d.vouchers={};return d}
+ if(typeof d.vouchers!=='object')d.vouchers={};delete d.tracked;
+ if(!Object.keys(d.dex).length){for(const c of d.owned)if(c.id)d.dex[c.id]=1;for(const h of d.history)for(const c of h.cards)if(c.id)d.dex[c.id]=1}
+ if(!d.best){let b=null;for(const c of[...d.owned,...d.history.flatMap(h=>h.cards)])if(!b||c.value>b.value)b=c;d.best=b?{value:b.value,name:fullName(b)}:{value:0,name:''}}
+ return d}
 function load(){const d=LS.get(SAVE_KEY);if(d&&(d.v===3||d.v===4)&&typeof d.cash==='number')return normalize(d);return fresh()}
 function save(){levelCheck();game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
  if(!LS.set(SAVE_KEY,game)){game.history.length=Math.min(game.history.length,40);pruneSetCache();LS.set(SAVE_KEY,game)}Cloud.queue();render()}
@@ -745,6 +772,8 @@ const spinReady=()=>game.lastSpin!==today();
 function untilMidnight(){const n=new Date(),m=new Date(n);m.setHours(24,0,0,0);const mins=Math.ceil((m-n)/60000);return `${Math.floor(mins/60)}h ${mins%60}m`}
 const histEntry=(tier,cost,cards)=>({id:uid(),tier,cost,value:r2(sum(cards.map(c=>c.value))),at:Date.now(),cards:cards.map(slim)});
 const ownSet=()=>new Set(game.owned.map(c=>c.id));
+const inDex=id=>!!game.dex[id];
+function collect(cards){for(const c of cards){game.dex[c.id]=1;if(!game.best||c.value>game.best.value)game.best={value:c.value,name:fullName(c)}}}
 function sellCard(u){const i=game.owned.findIndex(c=>c.uid===u);if(i<0)return null;const c=game.owned.splice(i,1)[0];game.cash=r2(game.cash+c.value);game.sold=r2((game.sold||0)+c.value);const ticket=earnsTicket(c);if(ticket)game.tickets++;return{card:c,value:c.value,ticket}}
 const NO_TICKET=new Set(['Slab Grab','Daily Spin','God Tier','Market','Trophy Dealer']);
 const earnsTicket=c=>c.value>=TICKET_AT&&!NO_TICKET.has(c.from);
@@ -770,18 +799,13 @@ function checkProgress(cards){
  for(const c of cards)for(const t of TROPHIES)if(t.card&&!game.trophies[t.id]&&c.id===t.card&&c.slab&&c.grade===10&&(!t.first||c.first))earnTrophy(t);
  const gs=new Set();for(const c of cards){const m=MASTER.find(m=>m.sets.includes(c.setId));gs.add(m?m.id:c.setId)}
  for(const g of gs)checkSet(g)}
-function checkSet(gid){if(game.sets[gid]&&game.sets[gid].done)return;if(!groupLoaded(gid))return;const cards=groupCards(gid);if(cards.length<5)return;const own=ownSet();if(!cards.every(c=>own.has(c.id)))return;
+function checkSet(gid){if(game.sets[gid]&&game.sets[gid].done)return;if(!groupLoaded(gid))return;const cards=groupCards(gid);if(cards.length<5)return;if(!cards.every(c=>inDex(c.id)))return;
  const d=groupDef(gid),r=setReward(gid);game.sets[gid]={done:Date.now()};grant(r);
  note({icon:'📚',fx:4,title:`${esc(d.name)} master set complete!`,html:`All ${cards.length} cards collected. Reward: <b style="color:var(--gold)">${rewardText(r)}</b>`,buttons:[{label:'Let\'s go',primary:true}]});
  const t=TROPHIES.find(x=>x.master===gid);if(t&&!game.trophies[t.id])earnTrophy(t)}
 function earnTrophy(t){game.trophies[t.id]=Date.now();
  note({icon:'🏆',fx:5,title:'Trophy unlocked!',html:`<b style="color:var(--text)">${esc(t.name)}</b> · ${esc(t.label)}<br>${trophyCount()} of ${TROPHIES.length} in your Trophy Case.`,buttons:[{label:'Nice',value:0},{label:'Trophy Case',primary:true,value:1}],then:v=>{if(v)go('collect')}});
  if(trophyCount()===TROPHIES.length&&!game.beat){game.beat=true;note({icon:'👑',fx:5,title:'You beat POKÉ RIP!',html:'All 10 trophies. Kyle is impressed and a little worried. You can prestige from the Stats tab: a fresh run with a ⭐ and a bigger bankroll.',buttons:[{label:'Legend',primary:true}]})}}
-// Your only copy of a card in a tracked set is protected from bulk sells.
-function protectedUids(){const need=new Set();for(const g of game.tracked)for(const c of groupCards(g))need.add(c.id);const keep=new Map();
- for(const c of game.owned){if(!need.has(c.id))continue;const k=keep.get(c.id);if(!k||(c.slab&&!k.slab)||(!!c.slab===!!k.slab&&c.value>k.value))keep.set(c.id,c)}return new Set([...keep.values()].map(c=>c.uid))}
-const trackedName=c=>{const g=game.tracked.find(g=>groupDef(g).sets.includes(c.setId));return g?groupDef(g).name:null};
-
 /* ---------- pull generation ---------- */
 function bandPick(pool,bands,used){const idx=wIndex(bands.map(b=>b[2])),order=[idx];
  for(let d=1;d<bands.length;d++){if(idx-d>=0)order.push(idx-d);if(idx+d<bands.length)order.push(idx+d)}
@@ -794,6 +818,7 @@ const eraOf=c=>isVintage(c.setId)?'vintage':'modern';
 function gradeIt(c,dist){const g=dist[wIndex(dist.map(x=>x[1]))][0];c.slab=true;c.grade=g;c.raw=c.value;c.value=r2(c.value*GRADE_MULT[eraOf(c)][g]);return c}
 function slabOf(c,g,raw,first){const x=inst(c);x.slab=true;x.grade=g;x.raw=r2(raw);x.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(first){x.first=true;x.est=c.fest??c.est}return x}
 function generate(t,pool){const used=new Set(),out=[],take=c=>{used.add(c.name);const x=inst(c);out.push(x);return x};
+ if(t.id==='booster'&&Math.random()<GOD_ODDS){for(let i=0;i<5;i++)take(bandPick(pool,GOD_BANDS,used));out.god=true;return out}
  if(t.kind==='pack'){const cap=t.first?8:t.vintage?3:1.5;for(let i=0;i<t.bulk;i++)take(pickBulk(pool,used,cap));for(const s of t.slots){const x=take(bandPick(pool,SLOTS[s],used));if(t.slabRare&&Math.random()<t.slabRare)gradeIt(x,t.vintage?VINT_GRADES:PACK_GRADES)}}
  else{const x=take(bandPick(pool,t.bands,used));if(Math.random()<t.slab)gradeIt(x,PACK_GRADES)}
  return out}
@@ -832,7 +857,12 @@ const qtySegHTML=()=>[1,5,10,15].map(n=>`<button data-action="qty" data-n="${n}"
 function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!catalog.offline;
  $('#shopStats').innerHTML=statHTML([['Cash',money(game.cash),'Virtual bankroll'],['Binder',money(collectionValue()),`${game.owned.length} card${game.owned.length===1?'':'s'}`],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,'Net worth vs. bankroll'],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,'The end goal']]);
  renderDaily();renderRewards();$('#qtySeg').innerHTML=qtySegHTML();
- $('#packs').innerHTML=TIERS.filter(t=>!t.vintage).map(t=>packCard(t)).join('');$('#vault').innerHTML=TIERS.filter(t=>t.vintage).map(t=>packCard(t)).join('');renderRotation()}
+ const mod=TIERS.filter(t=>!t.vintage),vin=TIERS.filter(t=>t.vintage),next=TIERS.filter(t=>!unlocked(t)).sort((a,b)=>a.lvl-b.lvl)[0];
+ $('#packs').innerHTML=mod.filter(unlocked).map(t=>packCard(t)).join('');
+ $('#vault').innerHTML=vin.filter(unlocked).map(t=>packCard(t)).join('');
+ $('#vaultHead').hidden=!vin.some(unlocked);
+ $('#nextUnlock').innerHTML=next?`<button class="daily nextup" data-action="levels"><div><b>🔒 Next unlock: ${esc(next.name)} at LV ${next.lvl}</b><span>${moneyS(Math.max(0,XP_AT[next.lvl]-game.xp))} more spent to get there. Tap to see every reward.</span></div><span class="chev">›</span></button>`:'';
+ renderFeed();renderRotation()}
 function ripLabel(t,gid,named){const lock=!unlocked(t),ready=poolReady(t,gid),cost=t.price*ripQty,afford=game.cash+1e-9>=cost;
  const label=lock?`🔒 Unlocks at LV ${t.lvl}`:!ready?(catalog.offline&&(t.vintage||gid)?'Offline right now':catalog.ready||t.vintage||gid?'Loading cards…':'Loading cards…'):!afford?`Need ${money(cost-game.cash)} more`:named?`Rip ${ripQty>1?ripQty+' ':''}${t.name}${ripQty>1?'s':''} · ${money(cost)}`:`Rip ${ripQty>1?'×'+ripQty+' · ':'it · '}${money(cost)}`;
  return{label,dis:lock||!ready||!afford||!!rip}}
@@ -859,32 +889,32 @@ function renderBinder(){const o=game.owned,hits=o.filter(c=>c.value>=10).length,
  $('#binderGrid').innerHTML=shown.length?shown.map((c,i)=>tile(c,i)).join('')+(binderCache.length>max?`<div class="empty" style="grid-column:1/-1">Showing ${max} of ${binderCache.length}. Sell some bulk to see the rest.</div>`:''):`<div class="empty" style="grid-column:1/-1">${o.length?'No cards match this filter.':'No cards yet. Rip a pack to start your binder.'}</div>`}
 
 /* ---------- collect: trophies + master sets ---------- */
-function progress(gid){if(!groupLoaded(gid))return null;const cards=groupCards(gid),own=ownSet(),have=cards.filter(c=>own.has(c.id)).length;return{have,total:cards.length,pct:cards.length?have/cards.length*100:0}}
+function progress(gid){if(!groupLoaded(gid))return null;const cards=groupCards(gid),have=cards.filter(c=>inDex(c.id)).length;return{have,total:cards.length,pct:cards.length?have/cards.length*100:0}}
 function renderCollect(){$('#collectMain').hidden=!!collectSet;$('#setDetail').hidden=!collectSet;collectSet?renderSetDetail():renderCollectMain()}
 function trophyTile(t,i){const got=game.trophies[t.id];
  if(t.type==='set'){const p=progress(t.master);return `<button class="tile troph ${got?'got':'off'}" data-action="trophy" data-i="${i}"><div class="tile-img"><span class="tile-tag">${got?'🏆 EARNED':'MASTER SET'}</span><img src="${esc(t.img)}" alt="${esc(t.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)"></div><div class="tile-name">${esc(t.name)}</div><div class="tile-foot"><span>${esc(t.label)}</span><b>${p?`${p.have}/${p.total}`:'…'}</b></div></button>`}
  const c=trophyCard(t);return `<button class="tile troph ${got?'got':'off'}" data-action="trophy" data-i="${i}"><div class="tile-img is-slab"><span class="tile-tag">${got?'🏆 EARNED':(t.first?'1ST ED · ':'')+'GEM MINT 10'}</span>${imgTag(c)}</div><div class="tile-name">${esc(t.name)}</div><div class="tile-foot"><span>${esc(t.label)}</span><b>${moneyS(c.value)}</b></div></button>`}
-function setRow(gid){const d=groupDef(gid),p=progress(gid),done=game.sets[gid]?.done,tr=game.tracked.includes(gid),loading=d.sets.some(s=>catalog.loading.has(s));
- return `<button class="srow" data-action="open-set" data-g="${esc(gid)}"><span><b>${esc(d.name)}</b><small>${p?`${p.have} / ${p.total}`:loading?'Loading…':catalog.offline?'Offline':'Tap to load'}${done?' · ✅ Complete':''}${tr?' · Tracking':''}</small></span><span class="prog"><i style="width:${p?p.pct:0}%"></i></span><span class="chev">›</span></button>`}
+function setRow(gid){const d=groupDef(gid),p=progress(gid),done=game.sets[gid]?.done,loading=d.sets.some(s=>catalog.loading.has(s));
+ return `<button class="srow" data-action="open-set" data-g="${esc(gid)}"><span><b>${esc(d.name)}</b><small>${p?`${p.have} / ${p.total}`:loading?'Loading…':catalog.offline?'Offline':'Tap to load'}${done?' · ✅ Complete':''}</small></span><span class="prog"><i style="width:${p?p.pct:0}%"></i></span><span class="chev">›</span></button>`}
 function renderCollectMain(){$('#trophyHead').textContent=`${trophyCount()} / ${TROPHIES.length}`;
  $('#trophyGrid').innerHTML=TROPHIES.map(trophyTile).join('');
  $('#featSets').innerHTML=MASTER.map(m=>{const p=progress(m.id),done=game.sets[m.id]?.done;return `<div class="panel feat"><div class="feat-top"><div><div class="eyebrow">Featured master set</div><b>${esc(m.name)}</b></div><span class="muted">${p?`${p.have} / ${p.total} cards`:'Loading…'}</span></div><div class="prog"><i style="width:${p?p.pct:0}%"></i></div><div class="muted" style="font-size:12px">${esc(m.note)}. Reward: ${rewardText(m.reward)} plus a trophy${done?' · ✅ Claimed':''}</div><div class="feat-actions"><button class="primary" data-action="open-set" data-g="${m.id}">Open set</button></div></div>`}).join('');
  $('#vintSets').innerHTML=VINTAGE_SETS.map(setRow).join('');
  const rot=[...selected].filter(id=>!MASTER.some(m=>m.sets.includes(id))&&!isVintage(id));
  $('#rotSets').innerHTML=rot.length?rot.map(setRow).join(''):'<div class="empty">Add sets in the Shop rotation to track them here.</div>'}
-function setTile(c,i,n){const lvl=vt(c.value);return `<button class="tile lvl${lvl}${n?'':' miss'}" data-action="view-set" data-i="${i}" style="--glow:${GLOW[lvl]}"><div class="tile-img">${n>1?`<span class="tile-cnt">×${n}</span>`:''}<span class="tile-tag"${n?'':' style="color:var(--muted)"'}>#${esc(c.num)}</span>${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${n?'Owned':'Missing'}</span><b>${n?money(c.value):'Buy '+moneyS(buyPrice(c))}</b></div></button>`}
+function setTile(c,i,n){const lvl=vt(c.value),got=inDex(c.id);return `<button class="tile lvl${lvl}${got?'':' miss'}" data-action="view-set" data-i="${i}" style="--glow:${GLOW[lvl]}"><div class="tile-img">${n>1?`<span class="tile-cnt">×${n}</span>`:''}<span class="tile-tag"${got?'':' style="color:var(--muted)"'}>${got?'✓ ':''}#${esc(c.num)}</span>${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${n?'Owned':got?'Pulled':'Missing'}</span><b>${got?money(c.value):'Buy '+moneyS(buyPrice(c))}</b></div></button>`}
 function renderSetDetail(){const gid=collectSet,d=groupDef(gid),el=$('#setDetail'),back='<button class="linkbtn" data-action="nav" data-view="collect">‹ All sets</button>';
  if(!groupLoaded(gid)){el.innerHTML=`${back}<div class="empty">${catalog.offline?'The card database is offline right now.':`Loading ${esc(d.name)}…`}</div>`;return}
  const cards=groupCards(gid),counts=new Map();for(const c of game.owned)counts.set(c.id,(counts.get(c.id)||0)+1);
- const have=cards.filter(c=>counts.has(c.id)).length,missing=cards.filter(c=>!counts.has(c.id)),done=game.sets[gid]?.done,tr=game.tracked.includes(gid),vint=d.sets.every(isVintage);
- setCache=cards.filter(c=>setFilter==='all'||(setFilter==='missing'?!counts.has(c.id):counts.has(c.id)));
+ const have=cards.filter(c=>inDex(c.id)).length,missing=cards.filter(c=>!inDex(c.id)),done=game.sets[gid]?.done,vint=d.sets.every(isVintage);
+ setCache=cards.filter(c=>setFilter==='all'||(setFilter==='missing'?!inDex(c.id):inDex(c.id)));
  const tiers=TIERS.filter(t=>vint?t.vintage:(t.id==='booster'||t.id==='hit'));
  el.innerHTML=`${back}<div class="eyebrow">Master set</div><h1 class="title">${esc(d.name)}</h1><p class="sub">${esc(d.note||(vint?'Every card in this WOTC set':'Every card in the set'))}. Finish it for ${rewardText(setReward(gid))}${MASTER.some(m=>m.id===gid)?' plus a trophy':''}.${done?' ✅ Claimed.':''}</p>
  <div class="panel feat"><div class="feat-top"><b>${have} / ${cards.length}</b><span class="muted">${missing.length?`${moneyS(sum(missing.map(buyPrice)))} to buy the rest`:'Complete!'}</span></div><div class="prog"><i style="width:${cards.length?have/cards.length*100:0}%"></i></div>
- <div class="feat-actions"><button class="smallbtn" data-action="track" data-g="${esc(gid)}">${tr?'✓ Tracking':'Track this set'}</button><span class="muted" style="font-size:12px;align-self:center">${tr?'Your only copy of each card is skipped by bulk sells.':'Tracking protects your copies from bulk sells.'}</span></div></div>
+ <div class="muted" style="font-size:12px">Every card you pull or buy counts forever, even if you sell it later.</div></div>
  <div class="section-head"><h2>Rip from this set</h2><div class="seg">${qtySegHTML()}</div></div>
  <div class="setrips">${tiers.map(t=>{const{label,dis}=ripLabel(t,gid,true);return `<button class="buy" style="--accent:${t.color};min-height:52px" data-action="buy" data-tier="${t.id}" data-g="${esc(gid)}" ${dis?'disabled':''}>${label}</button>`}).join('')}</div>
- <div class="toolbar" style="margin-top:18px"><div class="seg">${['all','missing','owned'].map(f=>`<button data-action="set-filter" data-f="${f}" class="${setFilter===f?'on':''}">${f[0].toUpperCase()+f.slice(1)}${f==='missing'?` (${missing.length})`:''}</button>`).join('')}</div></div>
+ <div class="toolbar" style="margin-top:18px"><div class="seg">${['all','missing','owned'].map(f=>`<button data-action="set-filter" data-f="${f}" class="${setFilter===f?'on':''}">${f==='owned'?'Collected':f[0].toUpperCase()+f.slice(1)}${f==='missing'?` (${missing.length})`:''}</button>`).join('')}</div></div>
  <div class="gridcards">${setCache.map((c,i)=>setTile(c,i,counts.get(c.id)||0)).join('')||`<div class="empty" style="grid-column:1/-1">${setFilter==='missing'?'Nothing missing. Nice.':'None yet.'}</div>`}</div>`}
 async function trophyModal(i){const t=TROPHIES[i],got=game.trophies[t.id];if(!t)return;
  if(t.type==='set'){const v=await modal({icon:'📚',title:`${esc(t.name)} master set`,html:`${got?`🏆 Earned ${ago(got)}.`:`Collect every card in Crown Zenith, Galarian Gallery included, to earn this trophy. Reward: ${rewardText(groupDef(t.master).reward)}.`}`,buttons:[{label:'Close',value:0},{label:'Open set',primary:true,value:1}]});if(v)go('collect/'+t.master);return}
@@ -892,8 +922,8 @@ async function trophyModal(i){const t=TROPHIES[i],got=game.trophies[t.id];if(!t)
  const html=`<div class="m-card">${slabHTML(c,true)}</div><b style="color:var(--text)">${esc(t.name)}</b> · ${esc(t.label)}<br>Worth <b style="color:var(--gold)">${money(c.value)}</b>${c.est?' (estimated)':''}<p style="margin-top:10px">${got?`🏆 Earned ${ago(got)}.`:`Pull it graded 10 from God Tier spins (${MODES.god.trophy*100}% trophy chance)${t.first?' or 1st Edition packs':''}, or buy it from the dealer for ${moneyS(price)}.`}</p>`;
  const v=await modal({title:got?'In your Trophy Case':'Trophy',html,buttons:got?[{label:'Close',primary:true}]:[{label:'Close',value:0},{label:can?`Buy · ${moneyS(price)}`:`Need ${moneyS(price-game.cash)} more`,primary:true,value:can?'buy':0}]});
  if(v==='buy')buyTrophy(t,price)}
-function buyTrophy(t,price){if(game.cash+1e-9<price||rip||spinning)return;const c=trophyCard(t);c.uid=uid();c.at=Date.now();c.from='Trophy Dealer';spend(price);game.owned.push(c);game.history.unshift(histEntry('buy',price,[c]));checkProgress([c]);save()}
-function buyCard(c){const p=buyPrice(c);if(game.cash+1e-9<p){toast(`Need ${money(p-game.cash)} more.`);return false}const x=inst(c);x.uid=uid();x.at=Date.now();x.from='Market';spend(p);game.owned.push(x);checkProgress([x]);save();toast(`Bought ${c.name} for ${money(p)}`);Sound.init();Sound.flip();flushNotes();return true}
+function buyTrophy(t,price){if(game.cash+1e-9<price||rip||spinning)return;const c=trophyCard(t);c.uid=uid();c.at=Date.now();c.from='Trophy Dealer';spend(price);game.owned.push(c);collect([c]);game.history.unshift(histEntry('buy',price,[c]));checkProgress([c]);save()}
+function buyCard(c){const p=buyPrice(c);if(game.cash+1e-9<p){toast(`Need ${money(p-game.cash)} more.`);return false}const x=inst(c);x.uid=uid();x.at=Date.now();x.from='Market';spend(p);game.owned.push(x);collect([x]);checkProgress([x]);save();toast(`Bought ${c.name} for ${money(p)}`);Sound.init();Sound.flip();flushNotes();return true}
 
 /* ---------- slab grab view ---------- */
 function godSpins(){return game.vouchers.god||0}
@@ -923,15 +953,20 @@ function allPulls(){const out=[];for(const h of game.history)for(const c of h.ca
 const paidPacks=()=>game.history.filter(h=>TIER_IDS.has(h.tier)&&h.cost>0);
 function renderStats(){const nw=networth(),pl=nw-game.given,pk=paidPacks(),cost=sum(pk.map(h=>h.cost)),ret=cost?Math.round(sum(pk.map(h=>h.value))/cost*100):0;
  const best=allPulls().sort((a,b)=>b.value-a.value);statsBest=best.slice(0,6);
- $('#statsGrid').innerHTML=statHTML([['Net worth',money(nw),'Cash + binder'],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,`vs. ${money(game.given)} given`],['Level',`LV ${game.level}${game.prestige?' ⭐'+game.prestige:''}`,`${moneyS(game.xp)} XP`],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,game.beat?'Beaten!':'Fill the case'],['Lifetime spent',money(game.spent),`${game.opened} packs`],['Return rate',ret+'%','Paid packs, last 150'],['Biggest pull',money(best[0]?.value||0),esc(best[0]?fullName(best[0]):'None yet')],['Cash from sales',money(game.sold||0),'Cards sold back'],['Slabs grabbed',game.slabsWon||0,`${money(game.grabSpent||0)} on spins`],['Kyle alerts',game.kyle||0,'Bankroll top-ups']]);
+ $('#statsGrid').innerHTML=statHTML([['Net worth',money(nw),'Cash + binder'],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,`vs. ${money(game.given)} given`],['Level',`LV ${game.level}${game.prestige?' ⭐'+game.prestige:''}`,`${moneyS(game.xp)} XP`],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,game.beat?'Beaten!':'Fill the case'],['Lifetime spent',money(game.spent),`${game.opened} packs`],['Return rate',ret+'%','Paid packs, last 150'],['Biggest pull',money(best[0]?.value||0),esc(best[0]?fullName(best[0]):'None yet')],['Cash from sales',money(game.sold||0),'Cards sold back'],['Slabs grabbed',game.slabsWon||0,`${money(game.grabSpent||0)} on spins`],['Kyle alerts',game.kyle||0,`${game.bailouts||0} bailout${game.bailouts===1?'':'s'} begged for`]]);
  $('#bestPulls').innerHTML=statsBest.length?statsBest.map((c,i)=>tile(c,i,'view-best')).join(''):'<div class="empty" style="grid-column:1/-1">Your best pulls will show up here.</div>';
  $('#recentRips').innerHTML=game.history.length?game.history.slice(0,5).map(histRow).join(''):'<div class="empty">Rip a pack and your pulls will show up here.</div>';
- $('#settings').innerHTML=`${Cloud.on?`<button class="smallbtn" data-action="account">${Cloud.s?`👤 ${esc(Cloud.name)} · Account`:'👤 Log in to save'}</button>`:''}<button class="smallbtn" data-action="sound">${Sound.on?'🔊 Sound on':'🔇 Sound off'}</button>${game.beat?'<button class="smallbtn" data-action="prestige" style="color:var(--gold)">⭐ Prestige</button>':''}<button class="smallbtn" data-action="reset">Reset my run</button>`;
- $('#boardWrap').hidden=!Cloud.on;if(Cloud.on)loadBoard()}
-async function loadBoard(force){const el=$('#board');if(!el)return;if(Cloud.lb)el.innerHTML=boardHTML(Cloud.lb);else el.innerHTML='<div class="empty">Loading…</div>';
- if(!force&&Date.now()-Cloud.lbAt<30000)return;Cloud.lbAt=Date.now();
- try{Cloud.lb=await Cloud.board();if(currentView==='stats')$('#board').innerHTML=boardHTML(Cloud.lb)}catch(e){if(!Cloud.lb)$('#board').innerHTML='<div class="empty">Couldn\'t load the leaderboard.</div>'}}
-const boardHTML=rows=>rows.length?rows.map((r,i)=>`<div class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}"><b>${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</b><span><b>${esc(r.username)}</b>${r.prestige?' ⭐'+r.prestige:''}<br><small>LV ${r.level||1} · 🏆 ${r.trophies||0}</small></span><b>${moneyS(r.networth||0)}</b></div>`).join(''):'<div class="empty">No one on the board yet. Log in to claim the top spot.</div>';
+ $('#settings').innerHTML=`${Cloud.on?`<button class="smallbtn" data-action="account">${Cloud.s?`👤 ${esc(Cloud.name)} · Account`:'👤 Log in to save'}</button>`:''}<button class="smallbtn" data-action="sound">${Sound.on?'🔊 Sound on':'🔇 Sound off'}</button>${game.beat?'<button class="smallbtn" data-action="prestige" style="color:var(--gold)">⭐ Prestige</button>':''}<button class="smallbtn" data-action="bailout">💸 I need more money</button>`;
+ $('#boardWrap').hidden=!Cloud.on;if(Cloud.on){$('#boardSeg').innerHTML=[['nw','💰 Net worth'],['best','🔥 Best pull'],['shame','🤡 Hall of Shame']].map(([k,l])=>`<button data-action="board-tab" data-t="${k}" class="${boardTab===k?'on':''}">${l}</button>`).join('');loadBoard()}}
+let boardTab='nw';
+async function loadBoard(force){const el=$('#board'),t=boardTab;if(!el)return;Cloud.lb=Cloud.lb||{};Cloud.lbAt=Cloud.lbAt||{};const have=Cloud.lb[t];el.innerHTML=have?boardHTML(have,t):'<div class="empty">Loading…</div>';
+ if(!force&&have&&Date.now()-(Cloud.lbAt[t]||0)<30000)return;Cloud.lbAt[t]=Date.now();
+ try{Feed.loadKing();const rows=await Cloud.board(t);Cloud.lb[t]=rows;if(currentView==='stats'&&boardTab===t)$('#board').innerHTML=boardHTML(rows,t)}catch(e){if(!have&&boardTab===t)$('#board').innerHTML='<div class="empty">Couldn\'t load the leaderboard.</div>'}}
+function boardHTML(rows,t){if(!rows.length)return `<div class="empty">${t==='shame'?'Nobody has begged for money yet. Give it time.':'No one on the board yet. Log in to claim the top spot.'}</div>`;
+ return rows.map((r,i)=>{const clown=t==='nw'&&rows.length>=3&&i===rows.length-1,king=Feed.king&&r.username===Feed.king,medal=t==='shame'?(i===0?'🤡':i+1):(i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1);
+  const sub=t==='best'?esc(r.best_name||'Nothing yet'):t==='shame'?`${r.shame} bailout${r.shame===1?'':'s'} · LV ${r.level||1}`:`LV ${r.level||1} · 🏆 ${r.trophies||0}`;
+  const val=t==='best'?moneyS(r.best_value||0):t==='shame'?`${moneyS((r.shame||0)*START)} begged`:moneyS(r.networth||0);
+  return `<div class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}"><b>${medal}</b><span><b>${esc(r.username)}</b>${king?' 👑':''}${clown?' 🤡':''}${r.prestige?' ⭐'+r.prestige:''}<br><small>${sub}</small></span><b>${val}</b></div>`}).join('')}
 function renderHistory(){const h=game.history,pk=paidPacks(),spent=sum(pk.map(x=>x.cost)),val=sum(pk.map(x=>x.value)),wins=pk.filter(x=>x.value>=x.cost).length;
  $('#histStats').innerHTML=statHTML([['Paid rips',pk.length,'Last 150 kept'],['Spent',money(spent),'In this history'],['Pulled',money(val),`${signed(val-spent)} net`],['Green rips',pk.length?Math.round(wins/pk.length*100)+'%':'0%',`${wins} beat the price`]]);
  $('#histList').innerHTML=h.length?h.map(histRow).join(''):'<div class="empty">Your first pack is waiting in the shop.</div>'}
@@ -956,45 +991,55 @@ function startRip(id,o={}){if(rip||spinning)return;const t=tierById(id);if(!t)re
  else if(!unlocked(t)){toast(`${t.name} unlocks at level ${t.lvl}.`);return}
  const cost=voucher?0:t.price*qty;if(game.cash+1e-9<cost){toast('Not enough cash for that.');return}
  if(!poolReady(t,gid)){toast(catalog.offline?'Those cards are offline right now.':'Still loading those cards. Try again in a sec.');return}
- Sound.init();const pool=packPool(t,gid),before=ownSet(),now=Date.now(),all=[],from=t.name+(gid?` · ${groupDef(gid).name}`:'');
- for(let i=0;i<qty;i++){const cards=generate(t,pool);cards.forEach(c=>{c.uid=uid();c.at=now;c.from=from});all.push(...cards);game.history.unshift(histEntry(t.id,voucher?0:t.price,cards))}
+ Sound.init();const pool=packPool(t,gid),now=Date.now(),all=[],from=t.name+(gid?` · ${groupDef(gid).name}`:'');let gods=0;
+ for(let i=0;i<qty;i++){const cards=generate(t,pool);if(cards.god)gods++;cards.forEach(c=>{c.uid=uid();c.at=now;c.from=cards.god?'GOD PACK':from});all.push(...cards);game.history.unshift(histEntry(t.id,voucher?0:t.price,cards))}
+ game.godPacks=(game.godPacks||0)+gods;
  if(voucher)game.vouchers[id]-=qty;else{spend(cost);game.spent=r2(game.spent+cost)}
  game.opened+=qty;game.owned.push(...all);
- const bulk=qty>1;rip={tier:t,qty,cost,voucher,gid,bulk,cards:[...all].sort((a,b)=>bulk?b.value-a.value:a.value-b.value),i:-1,sell:new Set(),fresh:new Set(all.filter(c=>!before.has(c.id)).map(c=>c.uid)),phase:'sealed'};
- lastRip={id,qty,gid,voucher};lastCards=rip.cards;checkProgress(all);save();preload(bulk?rip.cards.slice(0,3):all);showOverlay('rip');ripSealed()}
+ const bulk=qty>1;rip={tier:t,qty,cost,voucher,gid,bulk,cards:[...all].sort((a,b)=>bulk?b.value-a.value:a.value-b.value),i:-1,sell:new Set(),fresh:new Set(all.filter(c=>!inDex(c.id)).map(c=>c.uid)),god:gods,phase:'sealed'};collect(all);
+ lastRip={id,qty,gid,voucher};lastCards=rip.cards;checkProgress(all);save();Feed.post(all);preload(bulk?rip.cards.slice(0,3):all);showOverlay('rip');ripSealed()}
 function ripSealed(){const t=rip.tier;$('#rip').style.setProperty('--accent',t.color);
  $('#ripLabel').textContent=`${t.name.toUpperCase()}${rip.qty>1?' ×'+rip.qty:''} · ${rip.voucher?'REWARD':money(rip.cost)}`;$('#ripStep').textContent=`${rip.cards.length} CARD${rip.cards.length>1?'S':''}`;
  const sub=t.first?'1ST EDITION · WOTC ERA':t.vintage?'VINTAGE · WOTC ERA':rip.gid?esc(groupDef(rip.gid).name.toUpperCase()):'TRADING CARD SIMULATOR';
  $('#ripStage').innerHTML=`<div class="pack3d${rip.bulk?' stack':''}" style="--accent:${t.color}"><div class="pk-top"></div><div class="pk-body"><div class="pk-burst"></div><div class="pk-logo">POKÉ<br>RIP</div><div class="pk-sub">${sub}</div><div class="pk-tier">${esc(t.tag)} · ${rip.bulk?`×${rip.qty} PACKS`:t.kind==='pack'?`${t.bulk+t.slots.length} CARDS`:'1 CARD'}</div></div></div>`;
  $('#ripInfo').innerHTML=`<div class="hint">Swipe across the top to rip ${rip.bulk?'them all':'it'} open</div>`;$('#ripActions').innerHTML='';rip.phase='sealed'}
-function ripTear(){rip.phase='tearing';$('.pack3d').classList.add('torn');Sound.tear();buzz(25);flash(.35);$('#ripInfo').innerHTML='';setTimeout(ripNext,720)}
+function ripTear(){rip.phase='tearing';$('.pack3d').classList.add('torn');Sound.tear();buzz(25);flash(.35);if(rip.god)setTimeout(()=>{flash(.95);FX.burst(320,RAINBOW);Sound.hit(6);buzz([80,40,80,40,200])},350);$('#ripInfo').innerHTML='';setTimeout(ripNext,720)}
 function ripNext(){if(!rip)return;rip.i++;const c=rip.cards[rip.i],lvl=lvlOf(c),pack=rip.tier.kind==='pack'&&!rip.bulk,last=rip.i===rip.cards.length-1;
  $('#ripStep').textContent=rip.bulk?`BEST OF ${rip.cards.length} CARDS`:pack?`CARD ${rip.i+1} OF ${rip.cards.length}`:'YOUR PULL';
  $('#ripStage').innerHTML=`<div class="flipwrap enter lvl${lvl}${lvl>=3?' tease':''}" style="--glow:${GLOW[lvl]}"><div class="aura"></div><div class="persp"><div class="flip"><div class="face back">${BACK}</div><div class="face front${lvl>=3&&!c.slab?' holo':''}">${c.slab?slabHTML(c,true):imgTag(c,true,true)}</div></div></div></div>`;
- $('#ripInfo').innerHTML=`<div class="hint">${rip.bulk?'Your best pull is face down. Tap to flip':c.slab?'This one feels heavy… is that a slab?':lvl>=5?'It is glowing like crazy…':lvl>=4?'Something is glowing…':lvl>=3?'This one feels warm…':'Tap to flip'}</div>`;
- $('#ripActions').innerHTML=rip.bulk?'<button class="ghost" data-action="rip-skip">Skip to results</button>':pack&&!last?'<button class="ghost" data-action="rip-skip">Skip to results</button>':'';rip.phase='facedown'}
+ $('#ripInfo').innerHTML=(rip.god&&rip.i===0?`<div class="godban">🌈 GOD PACK${rip.god>1?' ×'+rip.god:''}!!</div>`:'')+`<div class="hint">${rip.god&&rip.i===0?'Every card in a god pack is a hit. Tap to flip':rip.bulk?'Your best pull is face down. Tap to flip':c.slab?'This one feels heavy… is that a slab?':lvl>=5?'It is glowing like crazy…':lvl>=4?'Something is glowing…':lvl>=3?'This one feels warm…':'Tap to flip'}</div>`;
+ $('#ripActions').innerHTML=rip.bulk?'<button class="ghost" data-action="rip-skip">⚡ Flip all</button>':pack&&!last?'<button class="ghost" data-action="rip-skip">⚡ Flip all</button>':'';rip.phase='facedown'}
 function ripFlip(){const c=rip.cards[rip.i],lvl=lvlOf(c),w=$('.flipwrap');rip.phase='flipping';
  const go=()=>{if(!rip)return;w.classList.remove('charging','tease');w.querySelector('.flip').classList.add('flipped');Sound.flip();buzz(10);
   setTimeout(()=>{if(!rip)return;w.classList.add('revealed');
-   $('#ripInfo').innerHTML=`${c.slab?`<div class="slab-banner">GRADED ${c.grade} SLAB PULL!</div>`:''}<div class="ri-name">${c.first?'<span class="gtag">1ST ED</span> ':''}${esc(c.name)}${c.slab?` <span class="gtag">GRADED ${c.grade}</span>`:''}</div><div class="ri-meta">${metaLine(c)}</div><div class="ri-val lvl${lvl}" id="riVal">$0.00</div>${lvl>=2?`<button class="linkbtn" data-action="share-pull" data-i="${rip.i}">Share this pull ↗</button>`:''}`;
+   $('#ripInfo').innerHTML=`${c.slab?`<div class="slab-banner">GRADED ${c.grade} SLAB PULL!</div>`:''}<div class="ri-name">${c.first?'<span class="gtag">1ST ED</span> ':''}${esc(c.name)}${c.slab?` <span class="gtag">GRADED ${c.grade}</span>`:''}</div><div class="ri-meta">${metaLine(c)}</div><div class="ri-val lvl${lvl}" id="riVal">$0.00</div>${!rip.bulk&&rip.tier.kind!=='pack'?roastHTML(c.value,rip.cost||rip.tier.price,c.value):''}${lvl>=2?`<button class="linkbtn" data-action="share-pull" data-i="${rip.i}">Share this pull ↗</button>`:''}`;
    countUp($('#riVal'),c.value,lvl>=3?1100:450);celebrate(lvl);rip.phase='revealed';ripRevealedActions()},420)};
  if(lvl>=4){w.classList.add('charging');Sound.charge();buzz([20,40,20,40,20]);setTimeout(go,950)}else go()}
 function ripRevealedActions(){const last=rip.i===rip.cards.length-1;
  if(rip.bulk)$('#ripActions').innerHTML=`<button class="primary" data-action="rip-next">See all ${rip.cards.length} cards</button>`;
- else if(rip.tier.kind==='pack')$('#ripActions').innerHTML=last?'<button class="primary" data-action="rip-next">See results</button>':'<button class="ghost" data-action="rip-skip">Skip</button><button class="primary" data-action="rip-next">Next card</button>';
+ else if(rip.tier.kind==='pack')$('#ripActions').innerHTML=last?'<button class="primary" data-action="rip-next">See results</button>':'<button class="ghost" data-action="rip-skip">⚡ Flip all</button><button class="primary" data-action="rip-next">Next card</button>';
  else{const c=rip.cards[0];$('#ripActions').innerHTML=`<button class="secondary" data-action="single-sell">Sell · ${money(c.value)}${earnsTicket(c)?' + 🎟':''}</button><button class="primary" data-action="single-keep">Keep it</button>`}}
 function ripAdvance(){if(!rip||rip.phase!=='revealed'||(!rip.bulk&&rip.tier.kind!=='pack'))return;const w=$('.flipwrap');rip.phase='leaving';w.classList.add('leave');setTimeout(()=>{if(!rip)return;rip.bulk||rip.i>=rip.cards.length-1?ripSummary():ripNext()},250)}
 function ripSkip(){if(!rip||(!rip.bulk&&rip.tier.kind!=='pack')||['summary','flipping','leaving','tearing'].includes(rip.phase))return;const rest=rip.cards.slice(rip.i+(rip.phase==='revealed'?1:0));ripSummary();celebrate(Math.max(0,...rest.map(lvlOf)))}
-function ripSummary(){rip.phase='summary';const t=rip.tier;$('#ripStep').textContent='RESULTS';
- $('#ripStage').innerHTML=`<div class="summary">${rip.cards.map((c,i)=>{const s=rip.sell.has(c.uid),lvl=vt(c.value);return `<div class="sum-card lvl${lvl}${s?' selling':''}" style="--glow:${GLOW[lvl]}"><button class="sum-img" data-action="view-rip" data-i="${i}" aria-label="View ${esc(c.name)}">${rip.fresh.has(c.uid)?'<span class="newtag">NEW</span>':''}${imgTag(c,false,true)}</button><div class="sum-name">${c.slab?`[${c.grade}] `:''}${esc(c.name)}</div><div class="sum-val">${money(c.value)}</div><div class="seg mini"><button data-action="rip-keep" data-uid="${c.uid}" class="${s?'':'on'}">Keep</button><button data-action="rip-sell" data-uid="${c.uid}" class="${s?'on sell':''}">Sell</button></div></div>`}).join('')}</div>`;
- const total=sum(rip.cards.map(c=>c.value)),sel=rip.cards.filter(c=>rip.sell.has(c.uid)),st=sum(sel.map(c=>c.value)),tix=sel.filter(earnsTicket).length,nw=rip.cards.filter(c=>rip.fresh.has(c.uid)).length;
- $('#ripInfo').innerHTML=`<div class="sum-total"><span class="muted">${rip.bulk?`${rip.qty} packs`:'Pack value'}</span><b>${money(total)}</b><span class="${total>=rip.cost?'pos':'neg'}">${rip.voucher?'Reward!':`${signed(total-rip.cost)} vs. ${money(rip.cost)}`}</span></div><div class="muted" style="font-size:12px">${sel.length?`Selling ${sel.length} for ${money(st)}${tix?` · earns ${tix} 🎟`:''}`:'Keeping everything'}${nw?` · ${nw} new to your collection`:''}</div><div class="sum-quick"><button class="smallbtn" data-action="share-best">Share best ↗</button><button class="smallbtn" data-action="rip-sellall">Sell all</button><button class="smallbtn" data-action="rip-sellbulk">Sell under $1</button><button class="smallbtn" data-action="rip-keepall">Keep all</button></div>`;
+let autoBulk=LS.get('pokerip-autobulk',false)===true;
+function roastFor(value,cost,top){const r=cost?value/cost:9;const k=(r>=3||(top>=200&&r>=1.5))?'huge':r>=1?'good':r>=.5?'meh':'awful';return{k,line:pick(ROASTS[k])}}
+const roastHTML=(value,cost,top)=>{const{k,line}=roastFor(value,cost,top);return `<div class="roast${k==='awful'||k==='meh'?' bad':''}">${esc(line)}</div>`};
+function sumCard(c,i){const s=rip.sell.has(c.uid),lvl=vt(c.value);return `<div class="sum-card lvl${lvl}${s?' selling':''}" style="--glow:${GLOW[lvl]}"><button class="sum-img" data-action="view-rip" data-i="${i}" aria-label="View ${esc(c.name)}">${rip.fresh.has(c.uid)?'<span class="newtag">NEW</span>':''}${imgTag(c,false,true)}</button><div class="sum-name">${c.slab?`[${c.grade}] `:''}${c.first?'1st ':''}${esc(c.name)}</div><div class="sum-val">${money(c.value)}</div><div class="seg mini"><button data-action="rip-keep" data-uid="${c.uid}" class="${s?'':'on'}">Keep</button><button data-action="rip-sell" data-uid="${c.uid}" class="${s?'on sell':''}">Sell</button></div></div>`}
+const isBulk=c=>c.value<1&&!c.slab;
+function ripSummary(){const first=rip.phase!=='summary';rip.phase='summary';const t=rip.tier;$('#ripStep').textContent='RESULTS';
+ const idx=rip.cards.map((c,i)=>[c,i]);let feat=idx.filter(([c])=>!isBulk(c)),bulk=idx.filter(([c])=>isBulk(c));if(!feat.length&&bulk.length)feat=[bulk.shift()];
+ if(first&&!rip.summed){rip.summed=true;if(autoBulk)bulk.forEach(([c])=>rip.sell.add(c.uid))}
+ const bv=sum(bulk.map(([c])=>c.value)),bSell=bulk.length&&bulk.every(([c])=>rip.sell.has(c.uid));
+ $('#ripStage').innerHTML=`<div class="summary">${feat.map(([c,i])=>sumCard(c,i)).join('')}${bulk.length?`<button class="bulkrow" data-action="bulk-toggle"><span>+ ${bulk.length} bulk card${bulk.length>1?'s':''} under $1 · <b>${money(bv)}</b>${bSell?' · selling':''}</span><span>${rip.showBulk?'Hide':'Show'}</span></button>${rip.showBulk?bulk.map(([c,i])=>sumCard(c,i)).join(''):''}`:''}</div>`;
+ const total=sum(rip.cards.map(c=>c.value)),sel=rip.cards.filter(c=>rip.sell.has(c.uid)),st=sum(sel.map(c=>c.value)),tix=sel.filter(earnsTicket).length,nw=rip.cards.filter(c=>rip.fresh.has(c.uid)).length,top=Math.max(...rip.cards.map(c=>c.value));
+ if(first)rip.roast=roastHTML(total,rip.cost||t.price*rip.qty,top);
+ $('#ripInfo').innerHTML=`${rip.god?`<div class="godban">🌈 GOD PACK${rip.god>1?' ×'+rip.god:''}!!</div>`:''}<div class="sum-total"><span class="muted">${rip.bulk?`${rip.qty} packs`:'Pack value'}</span><b>${money(total)}</b><span class="${total>=rip.cost?'pos':'neg'}">${rip.voucher?'Reward!':`${signed(total-rip.cost)} vs. ${money(rip.cost)}`}</span></div>${rip.roast}<div class="muted" style="font-size:12px;margin-top:6px">${sel.length?`Selling ${sel.length} for ${money(st)}${tix?` · earns ${tix} 🎟`:''}`:'Keeping everything'}${nw?` · ${nw} new for your sets`:''}</div><div class="sum-quick"><button class="smallbtn" data-action="rip-sellbulk">Sell bulk</button><button class="smallbtn" data-action="rip-sellall">Sell all</button><button class="smallbtn" data-action="rip-keepall">Keep all</button><button class="smallbtn" data-action="auto-bulk" style="${autoBulk?'color:var(--green);border-color:#54d69a66':''}">${autoBulk?'✓ ':''}Auto-sell bulk</button><button class="smallbtn" data-action="share-best">Share best ↗</button></div>`;
  ripEndActions()}
 function ripEndActions(){const L=lastRip,t=tierById(L.id);let again='';
  if(L.voucher){const n=game.vouchers[L.id]||0;if(n)again=`<button class="primary" data-action="rip-again">Open ${Math.min(n,L.qty)} more</button>`}
  else{const cost=t.price*L.qty,pending=rip?sum(rip.cards.filter(c=>rip.sell.has(c.uid)).map(c=>c.value)):0;again=`<button class="primary" data-action="rip-again" ${game.cash+pending+1e-9>=cost?'':'disabled'}>Rip again · ${money(cost)}</button>`}
  $('#ripActions').innerHTML=`<button class="secondary" data-action="rip-done">Done</button>${again}`}
-function quickSell(test){if(!rip)return;const prot=protectedUids();let skipped=0;rip.cards.forEach(c=>{if(!test(c))return;if(prot.has(c.uid)){skipped++;return}rip.sell.add(c.uid)});ripSummary();if(skipped)toast(`Kept ${skipped} card${skipped>1?'s':''} you need for a tracked set.`)}
+function quickSell(test){if(!rip)return;rip.cards.forEach(c=>{if(test(c))rip.sell.add(c.uid)});ripSummary()}
 function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}`)}
 function singleChoose(sell){if(!rip||rip.phase!=='revealed')return;const c=rip.cards[0];if(sell)rip.sell.add(c.uid);finalizeRip();
  $('#ripInfo').insertAdjacentHTML('beforeend',`<div class="ri-done">${sell?`Sold for ${money(c.value)}`:'Added to your binder'}</div>`);ripEndActions()}
@@ -1013,7 +1058,7 @@ function closeViewer(){V=null;hideOverlay('viewer')}
 function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lvl=vt(c.value),owned=V.mode==='owned'&&game.owned.some(x=>x.uid===c.uid),have=V.mode==='set'?game.owned.filter(x=>x.id===c.id).length:0;
  let acts=`<button class="secondary" data-action="v-share">Share ↗</button>`;
  if(owned)acts+=`<button class="secondary" data-action="v-trade">Trade</button><button class="primary" data-action="v-sell">Sell · ${money(c.value)}${earnsTicket(c)?' + 🎟':''}</button>`;
- else if(V.mode==='set')acts+=have?`<button class="primary" data-action="v-close">Owned ×${have}</button>`:`<button class="primary" data-action="v-buy" ${game.cash+1e-9>=buyPrice(c)?'':'disabled'}>Buy · ${money(buyPrice(c))}</button>`;
+ else if(V.mode==='set')acts+=have?`<button class="primary" data-action="v-close">Owned ×${have}</button>`:inDex(c.id)?`<button class="secondary" data-action="v-buy" ${game.cash+1e-9>=buyPrice(c)?'':'disabled'}>Buy again · ${money(buyPrice(c))}</button><button class="primary" data-action="v-close">✓ Collected</button>`:`<button class="primary" data-action="v-buy" ${game.cash+1e-9>=buyPrice(c)?'':'disabled'}>Buy · ${money(buyPrice(c))}</button>`;
  else acts+=`<button class="primary" data-action="v-close">Close</button>`;
  $('#viewerBody').innerHTML=`<div class="v-count">${V.i+1} / ${V.list.length}</div>
  <div class="v-stage"><button class="v-nav" data-action="v-prev" ${V.i===0?'disabled':''} aria-label="Previous card">‹</button>
@@ -1028,7 +1073,7 @@ function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lv
  const reset=()=>{tilt.style.transform='';tilt.style.setProperty('--mx','50%');tilt.style.setProperty('--my','50%')};
  card.addEventListener('pointermove',move);card.addEventListener('pointerdown',move);['pointerleave','pointerup','pointercancel'].forEach(ev=>card.addEventListener(ev,reset))}
 function viewerStep(d){if(!V)return;const n=V.i+d;if(n<0||n>=V.list.length)return;V.i=n;renderViewer()}
-async function okToLose(c,verb){const need=protectedUids().has(c.uid)&&trackedName(c);if(need){const ok=await modal({icon:'📚',title:`${verb} your only copy?`,html:`This is your only ${esc(c.name)} for your ${esc(need)} set.`,buttons:[{label:'Keep it',value:false},{label:verb,primary:true,value:true}]});return!!ok}
+async function okToLose(c,verb){
  if(c.value>=100){const ok=await modal({icon:'💸',title:`${verb} ${esc(c.name)}?`,html:verb==='Sell'?`You'll get ${money(c.value)} in cash${earnsTicket(c)?' plus a Slab Grab ticket':''}.`:`It's worth ${money(c.value)}.`,buttons:[{label:'Cancel',value:false},{label:`${verb} it`,primary:true,value:true}]});return!!ok}return true}
 async function viewerSell(){if(!V)return;const c=V.list[V.i];if(!await okToLose(c,'Sell')||!V)return;
  const r=sellCard(c.uid);if(!r)return;save();toast(`${c.name} sold for ${money(r.value)}${r.ticket?' · 🎟 +1 Slab Grab ticket!':''}`);if(r.ticket){Sound.hit(3);FX.burst(60,GOLDS)}
@@ -1060,7 +1105,7 @@ function spin(){if(spinning)return;const mode=grabMode,m=MODES[mode];if(activePo
  if(mode==='god'&&!free){if(game.level<m.lvl){toast(`God Tier unlocks at level ${m.lvl}.`);return}if(game.cash+1e-9<m.cost){toast(`A God Tier spin costs ${money(m.cost)}.`);return}}
  Sound.init();const prize=prizeFor(mode);prize.uid=uid();prize.at=Date.now();prize.from=m.name;
  if(mode==='daily')game.lastSpin=today();else if(mode==='std'){game.tickets--;spend(m.cost);game.grabSpent=r2((game.grabSpent||0)+m.cost)}else if(free)game.vouchers.god--;else{spend(m.cost);game.grabSpent=r2((game.grabSpent||0)+m.cost)}
- const tier=mode==='std'?'grab':mode;game.slabsWon=(game.slabsWon||0)+1;game.owned.push(prize);game.history.unshift(histEntry(tier,mode==='daily'||free?0:m.cost,[prize]));spinning=true;checkProgress([prize]);save();
+ const tier=mode==='std'?'grab':mode;game.slabsWon=(game.slabsWon||0)+1;game.owned.push(prize);collect([prize]);game.history.unshift(histEntry(tier,mode==='daily'||free?0:m.cost,[prize]));spinning=true;checkProgress([prize]);save();Feed.post([prize]);
  const N=48,P=41,items=Array.from({length:N},(_,i)=>i===P?prize:decoyFor(mode)),track=$('#reelTrack'),reel=$('#reel');
  track.style.transform='translate3d(0,0,0)';track.dataset.mode=mode;track.innerHTML=items.map(reelItem).join('');
  const cs=getComputedStyle(track),gap=parseFloat(cs.columnGap)||10,pad=parseFloat(cs.paddingLeft)||0,iw=track.children[0].getBoundingClientRect().width,w=iw+gap,view=reel.clientWidth;
@@ -1104,7 +1149,7 @@ async function shareCard(c){if(!c)return;toast('Making your share image…');con
 /* ---------- cloud saves (Supabase REST, no SDK) ---------- */
 const Cloud={on:!!(SUPA_URL&&SUPA_KEY),s:LS.get(SESSION_KEY),timer:null,busy:false,again:false,err:false,ready:false,lb:null,lbAt:0,
  get user(){return this.s&&this.s.user},get name(){return(this.s&&this.s.username)||''},
- email:u=>`${u.toLowerCase()}@pokerip.app`,
+ email:u=>`pokerip.${u.toLowerCase()}@brandfueled.com`,
  async req(path,opt={},auth=true){const h={apikey:SUPA_KEY,'Content-Type':'application/json',...(opt.headers||{})};if(auth&&this.s){await this.refresh();if(this.s)h.Authorization='Bearer '+this.s.access_token}
   const r=await fetch(SUPA_URL.replace(/\/$/,'')+path,{...opt,headers:h}),txt=await r.text();let j=null;try{j=txt?JSON.parse(txt):null}catch(e){}
   if(!r.ok){const e=new Error((j&&(j.msg||j.message||j.error_description||j.error))||'HTTP '+r.status);e.status=r.status;throw e}return j},
@@ -1116,9 +1161,26 @@ const Cloud={on:!!(SUPA_URL&&SUPA_KEY),s:LS.get(SESSION_KEY),timer:null,busy:fal
  async pull(){const r=await this.req(`/rest/v1/saves?user_id=eq.${this.user}&select=data,updated_at`);return(r&&r[0])||null},
  queue(){if(!this.on||!this.s||!this.ready||game.owner!==this.user)return;clearTimeout(this.timer);this.timer=setTimeout(()=>this.push(),1500)},
  async push(){if(!this.s)return;if(this.busy){this.again=true;return}this.busy=true;clearTimeout(this.timer);const was=this.err;
-  try{await this.req('/rest/v1/saves?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:this.user,username:this.name,data:game,networth:r2(networth()),level:game.level,trophies:trophyCount(),prestige:game.prestige||0,updated_at:new Date().toISOString()})});this.err=false}
+  const row={user_id:this.user,username:this.name,data:game,networth:r2(networth()),level:game.level,trophies:trophyCount(),prestige:game.prestige||0,updated_at:new Date().toISOString()};
+  if(!this.lite)Object.assign(row,{best_value:r2(game.best?.value||0),best_name:game.best?.name||'',shame:(game.kyle||0)+(game.bailouts||0)});
+  const send=()=>this.req('/rest/v1/saves?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(row)});
+  try{try{await send()}catch(e){if(!this.lite&&/column|best_|shame|schema/i.test(e.message)){this.lite=true;delete row.best_value;delete row.best_name;delete row.shame;await send()}else throw e}this.err=false}
   catch(e){this.err=true;console.warn('Cloud save failed',e)}finally{this.busy=false;if(was!==this.err)renderHeader();if(this.again){this.again=false;this.queue()}}},
- async board(){return await this.req('/rest/v1/saves?select=username,networth,level,trophies,prestige&order=networth.desc&limit=25',{},false)||[]}};
+ async board(t='nw'){const base='username,networth,level,trophies,prestige';
+  if(t==='best')return await this.req(`/rest/v1/saves?select=${base},best_value,best_name&order=best_value.desc.nullslast&limit=25`,{},false)||[];
+  if(t==='shame')return await this.req(`/rest/v1/saves?select=${base},shame&shame=gt.0&order=shame.desc&limit=25`,{},false)||[];
+  return await this.req(`/rest/v1/saves?select=${base}&order=networth.desc&limit=25`,{},false)||[]}};
+// Live pull feed: big pulls from everyone.
+const Feed={items:[],at:0,king:null,kingAt:0,
+ async post(cards){if(!Cloud.on||!Cloud.s)return;const big=cards.filter(c=>c.value>=FEED_AT).sort((a,b)=>b.value-a.value).slice(0,3);if(!big.length)return;
+  try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(big.map(c=>({user_id:Cloud.user,username:Cloud.name,name:fullName(c),value:r2(c.value),img:c.img||'',grade:c.grade||null,first:!!c.first,source:c.from||''})))});this.at=0;if(currentView==='shop')this.load(true)}catch(e){console.warn('Feed post failed',e)}},
+ async load(force){if(!Cloud.on)return;if(!force&&Date.now()-this.at<45000)return;this.at=Date.now();
+  try{this.items=await Cloud.req('/rest/v1/pulls?select=username,name,value,img,source,created_at&order=created_at.desc&limit=20',{},false)||[];this.loadKing();if(currentView==='shop')renderFeed()}catch(e){}},
+ async loadKing(){if(!Cloud.on||Date.now()-this.kingAt<60000)return;this.kingAt=Date.now();
+  try{const since=new Date(Date.now()-7*864e5).toISOString(),r=await Cloud.req(`/rest/v1/pulls?select=username,name,value&created_at=gte.${since}&order=value.desc&limit=1`,{},false);const k=r&&r[0];this.king=k?k.username:null;this.kingPull=k||null;if(currentView==='shop')renderFeed();if(currentView==='stats'&&Cloud.lb&&Cloud.lb[boardTab])$('#board').innerHTML=boardHTML(Cloud.lb[boardTab],boardTab)}catch(e){}}};
+function renderFeed(){const w=$('#feedWrap');if(!w)return;Feed.load();const it=Feed.items;w.hidden=!Cloud.on||!it.length;if(w.hidden)return;
+ $('#kingLine').textContent=Feed.kingPull?`👑 Week's best: ${Feed.kingPull.username} · ${moneyS(Feed.kingPull.value)}`:'';
+ $('#feed').innerHTML=it.map(p=>`<div class="fitem${p.value>=1000?' big':''}"><span class="hthumb">${p.img?`<img src="${esc(p.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:''}</span><span><b>${esc(p.username)}${p.username===Feed.king?' 👑':''} · <i>${moneyS(p.value)}</i></b><small>${esc(p.name)}${p.source==='GOD PACK'?' · 🌈 GOD PACK':''} · ${ago(Date.parse(p.created_at)||Date.now())}</small></span></div>`).join('')}
 async function cloudRefresh(){if(!Cloud.on||!Cloud.s){Cloud.ready=true;return}if(rip||spinning)return;
  try{const r=await Cloud.pull();if(r&&r.data&&r.data.v&&(r.data.savedAt||0)>(game.savedAt||0)+1000&&!rip&&!spinning){game=normalize(r.data);game.owner=Cloud.user;LS.set(SAVE_KEY,game);render()}}catch(e){console.warn('Cloud pull failed',e)}
  Cloud.ready=true}
@@ -1130,7 +1192,7 @@ async function accountModal(err='',user=''){if(!Cloud.on)return;
  if(!/^[a-z0-9_]{3,16}$/i.test(u))return accountModal('Pick a username with 3 to 16 letters, numbers or _.',u);
  if(p.length<6)return accountModal('Passwords need at least 6 characters.',u);
  try{if(v==='up')await Cloud.signUp(u,p);else await Cloud.signIn(u,p)}
- catch(e){const m=String(e.message||e);return accountModal(/invalid login/i.test(m)?'Wrong username or password.':/already registered|already exists/i.test(m)?'That username is taken. Try logging in.':m,u)}
+ catch(e){const m=String(e.message||e);return accountModal(/invalid login/i.test(m)?'Wrong username or password.':/already registered|already exists/i.test(m)?'That username is taken. Try logging in.':/email/i.test(m)?'Sign-up is having trouble right now. Send Kyle a screenshot.':m,u)}
  await afterLogin(v==='up')}
 async function afterLogin(isNew){let cloud=null;try{cloud=await Cloud.pull()}catch(e){}
  if(cloud&&cloud.data&&cloud.data.v){const c=normalize(cloud.data);
@@ -1149,16 +1211,21 @@ async function checkBroke(){if(rip||brokeOpen||spinning)return;const cheapest=Ma
  brokeOpen=true;await modal({icon:'😅',title:'O no, you have a gambling problem!',html:'Time to alert Kyle you have a problem :)',buttons:[{label:'Fine, alert him',primary:true,value:1}]});
  game.cash=r2(game.cash+START);game.given=r2(game.given+START);game.kyle=(game.kyle||0)+1;save();
  await modal({icon:'😏',title:'He already knows ;)',html:`Kyle has been alerted${game.kyle>1?` (that's ${game.kyle} times now)`:''}. Your virtual bankroll got topped up by $100.`,buttons:[{label:'Back to the packs',primary:true,value:1}]});brokeOpen=false}
-async function sellBulk(){const prot=protectedUids(),bulk=game.owned.filter(c=>!c.slab&&c.value<1&&!prot.has(c.uid));if(!bulk.length){toast('No bulk under $1 to sell.');return}const tot=sum(bulk.map(c=>c.value));
- const ok=await modal({icon:'🧹',title:'Sell all your bulk?',html:`Sell ${bulk.length} card${bulk.length>1?'s':''} under $1 for ${money(tot)}. Your only copies for tracked sets are kept.`,buttons:[{label:'Cancel',value:false},{label:'Sell bulk',primary:true,value:true}]});if(!ok)return;
+async function sellBulk(){const bulk=game.owned.filter(c=>!c.slab&&c.value<1);if(!bulk.length){toast('No bulk under $1 to sell.');return}const tot=sum(bulk.map(c=>c.value));
+ const ok=await modal({icon:'🧹',title:'Sell all your bulk?',html:`Sell ${bulk.length} card${bulk.length>1?'s':''} under $1 for ${money(tot)}. They still count toward your sets.`,buttons:[{label:'Cancel',value:false},{label:'Sell bulk',primary:true,value:true}]});if(!ok)return;
  bulk.forEach(c=>sellCard(c.uid));save();toast(`Sold ${bulk.length} bulk cards for ${money(tot)}`)}
 async function sellDupes(){const slabIds=new Set(game.owned.filter(c=>c.slab).map(c=>c.id)),best=new Map();
  for(const c of game.owned){if(c.slab)continue;const k=c.id,b=best.get(k);if(!b||c.value>b.value)best.set(k,c)}
  const dupes=game.owned.filter(c=>!c.slab&&(slabIds.has(c.id)||best.get(c.id)!==c));if(!dupes.length){toast('No duplicates to sell.');return}const tot=sum(dupes.map(c=>c.value)),tix=dupes.filter(earnsTicket).length;
  const ok=await modal({icon:'🧹',title:'Sell your duplicates?',html:`Sell ${dupes.length} extra cop${dupes.length>1?'ies':'y'} for ${money(tot)}${tix?` (+${tix} 🎟)`:''}. You keep one of every card, and slabs are never sold.`,buttons:[{label:'Cancel',value:false},{label:'Sell dupes',primary:true,value:true}]});if(!ok)return;
  let t=0;dupes.forEach(c=>{const r=sellCard(c.uid);if(r&&r.ticket)t++});save();toast(`Sold ${dupes.length} duplicates for ${money(tot)}${t?` · 🎟 +${t}`:''}`)}
-function newRun(prestige){const keep={owner:game.owner,tracked:game.tracked,prestige},bank=START*(1+prestige);game=fresh();Object.assign(game,keep);game.cash=game.given=bank;$('#reelTrack').innerHTML='';save()}
-async function resetGame(){const ok=await modal({icon:'⚠️',title:'Reset your run?',html:`This wipes your cash, binder, levels, trophies and history${Cloud.s?', here and in the cloud':''}. Your set rotation stays.`,buttons:[{label:'Cancel',value:false},{label:'Reset',primary:true,danger:true,value:true}]});if(!ok)return;newRun(game.prestige||0);toast(`Fresh start: ${moneyS(game.cash)} and one Slab Grab ticket.`)}
+function newRun(prestige){const keep={owner:game.owner,prestige},bank=START*(1+prestige);game=fresh();Object.assign(game,keep);game.cash=game.given=bank;$('#reelTrack').innerHTML='';save()}
+const BAILOUT_UNDER=25;
+async function bailout(){if(rip||spinning)return;
+ if(game.cash+1e-9>=BAILOUT_UNDER){modal({icon:'🧐',title:'Nice try.',html:`You have ${money(game.cash)}. Come back when you're actually broke.`,buttons:[{label:'Fine',primary:true}]});return}
+ const ok=await modal({icon:'🥺',title:'Really? Already poor?',html:`You're down to ${money(game.cash)}.${game.bailouts?` This would be bailout #${game.bailouts+1}.`:''}`,buttons:[{label:'Never mind',value:false},{label:'Yes, I\'m poor',primary:true,value:true}]});if(!ok)return;
+ game.cash=r2(game.cash+START);game.given=r2(game.given+START);game.bailouts=(game.bailouts||0)+1;save();Sound.init();Sound.hit(2);
+ await modal({icon:'🙄',title:'Fine, you socialist coward…',html:`Here's another ${moneyS(START)}. Enjoy!`,buttons:[{label:'Thanks, I guess',primary:true}]})}
 async function prestigeRun(){if(!game.beat)return;const p=(game.prestige||0)+1,ok=await modal({icon:'⭐',title:`Prestige to ⭐${p}?`,html:`Start a brand new run with a ⭐${p} badge and a ${moneyS(START*(1+p))} bankroll. Your binder, trophies and levels reset.`,buttons:[{label:'Not yet',value:false},{label:'Prestige',primary:true,value:true}]});if(!ok)return;newRun(p);celebrate(5);toast(`⭐${p} unlocked. Good luck, legend.`,3500)}
 function showOdds(id){const t=tierById(id);if(!t)return;const pool=packPool(t);
  const table=(title,bands)=>`<div class="odds-t"><div class="odds-title">${title}</div>${bands.map(([a,b,w])=>{const n=pool.filter(c=>c.value>=a&&c.value<b).length;return `<div class="odds-row"><span>${bandLabel(a,b)}</span><span class="odds-bar"><i style="width:${Math.max(3,w)}%"></i></span><b>${w}%</b><small>${n.toLocaleString()} cards</small></div>`}).join('')}</div>`;
@@ -1185,7 +1252,6 @@ const ACTIONS={
  'set-reset':()=>resetSets(),
  'open-set':el=>go('collect/'+encodeURIComponent(el.dataset.g)),
  'set-filter':el=>{setFilter=el.dataset.f;renderCollect()},
- track:el=>{const g=el.dataset.g,i=game.tracked.indexOf(g);if(i<0){game.tracked.push(g);toast(`Tracking ${groupDef(g).name}. Bulk sells will skip your only copies.`,3500)}else game.tracked.splice(i,1);save()},
  trophy:el=>trophyModal(+el.dataset.i),
  'view-set':el=>openViewer(setCache.slice(),+el.dataset.i,'set'),
  'v-buy':()=>{if(V&&buyCard(V.list[V.i])&&V)renderViewer()},
@@ -1198,7 +1264,7 @@ const ACTIONS={
  'rip-skip':()=>ripSkip(),
  'rip-keep':el=>{rip&&(rip.sell.delete(el.dataset.uid),ripSummary())},
  'rip-sell':el=>{rip&&(rip.sell.add(el.dataset.uid),ripSummary())},
- 'rip-sellbulk':()=>quickSell(c=>c.value<1&&!c.slab),
+ 'rip-sellbulk':()=>quickSell(isBulk),
  'rip-keepall':()=>{rip&&(rip.sell.clear(),ripSummary())},
  'rip-sellall':()=>quickSell(()=>true),
  'rip-done':()=>ripDone(),
@@ -1220,7 +1286,10 @@ const ACTIONS={
  'v-share':()=>V&&shareCard(V.list[V.i]),
  'lb-refresh':()=>loadBoard(true),
  prestige:()=>prestigeRun(),
- reset:()=>resetGame()};
+ bailout:()=>bailout(),
+ 'board-tab':el=>{boardTab=el.dataset.t;renderStats()},
+ 'bulk-toggle':()=>{if(rip){rip.showBulk=!rip.showBulk;ripSummary()}},
+ 'auto-bulk':()=>{autoBulk=!autoBulk;LS.set('pokerip-autobulk',autoBulk);if(rip&&autoBulk)rip.cards.forEach(c=>{if(isBulk(c))rip.sell.add(c.uid)});rip&&ripSummary();toast(autoBulk?'Bulk under $1 now auto-sells after every rip.':'Auto-sell bulk is off.')}};
 document.addEventListener('click',e=>{const el=e.target.closest('[data-action]');if(!el||el.disabled)return;const fn=ACTIONS[el.dataset.action];if(fn)fn(el,e)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(modalClose)modalClose(null);else if(V)closeViewer();return}
  if(!$('#modal').hidden||V)return;if(rip&&(e.key===' '||e.key==='Enter')&&!e.target.closest('button')){e.preventDefault();ripTap()}});
