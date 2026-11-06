@@ -1,83 +1,809 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080c13"><title>POKÉ RIP — Pack Opening Simulator</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="POKÉ RIP">
+<meta name="description" content="Virtual Pokémon TCG pack opening simulator. Real cards, real market prices, fake money.">
+<title>POKÉ RIP · Pack Opening Simulator</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🃏</text></svg>">
 <style>
-:root{--bg:#080c13;--panel:#111824;--panel2:#151f2e;--line:#263245;--muted:#91a0b5;--text:#f3f6fb;--gold:#f5c451;--cyan:#57d6d0;--pink:#c58cff;--green:#54d69a;--red:#ff777b}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -15%,#172845 0,transparent 43%),var(--bg);color:var(--text);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}.shell{max-width:1280px;margin:auto;padding:0 24px}.top{height:76px;border-bottom:1px solid #1d2837;display:flex;align-items:center;justify-content:space-between}.brand{font-size:19px;font-weight:900;letter-spacing:.11em}.brand span{color:var(--gold)}.brand small{font-size:9px;color:var(--muted);display:block;letter-spacing:.2em;font-weight:700}.wallet{border:1px solid var(--line);background:#101824;padding:10px 15px;border-radius:12px;font-weight:800;color:var(--green)}.wallet small{font-size:10px;color:var(--muted);display:block;letter-spacing:.12em}.layout{display:grid;grid-template-columns:220px 1fr;gap:30px;padding:28px 0 60px}.sidebar{display:flex;flex-direction:column;gap:6px}.nav{border:0;background:transparent;color:var(--muted);padding:13px 14px;text-align:left;border-radius:10px;font-weight:650}.nav:hover,.nav.active{background:#172234;color:white}.nav.active{box-shadow:inset 3px 0 var(--gold)}.side-note{margin-top:auto;border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--muted);font-size:11px}.side-note strong{color:#dce5f1;display:block;margin-bottom:6px}.mobile-nav{display:none}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--cyan);font-weight:800}.title{font-size:30px;letter-spacing:-.04em;margin:6px 0}.sub{color:var(--muted);margin:0 0 24px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}.stat,.panel{background:linear-gradient(145deg,#131d2a,#0f1722);border:1px solid var(--line);border-radius:15px}.stat{padding:15px}.stat label{display:block;color:var(--muted);font-size:11px;margin-bottom:8px}.stat b{font-size:21px;letter-spacing:-.03em}.stat .hint{display:block;color:var(--muted);font-size:10px;margin-top:4px}.section-head{display:flex;align-items:end;justify-content:space-between;margin:24px 0 13px}.section-head h2{margin:0;font-size:18px}.packs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.pack{position:relative;overflow:hidden;padding:16px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(145deg,#182538,#101723);min-height:260px}.pack:before{content:"";position:absolute;width:165px;height:165px;border-radius:50%;filter:blur(30px);opacity:.18;right:-60px;top:-60px;background:var(--accent)}.packtop{display:flex;justify-content:space-between;align-items:center;position:relative}.tier{font-size:10px;font-weight:900;letter-spacing:.15em;color:var(--accent)}.price{font-weight:900;font-size:18px}.pack-art{height:92px;display:grid;place-items:center;position:relative}.wrapper{width:61px;height:79px;border:1px solid #ffffff42;border-radius:7px;background:linear-gradient(150deg,var(--accent),#1b2340 58%,#090e18);box-shadow:0 12px 30px #0008;transform:rotate(-7deg);display:grid;place-items:center;font-size:28px}.wrapper:after{content:"POKÉ\A RIP";white-space:pre;text-align:center;line-height:1.05;font-size:9px;font-weight:1000;letter-spacing:.1em;color:white}.pack h3{margin:0 0 4px;font-size:18px}.pack p{margin:0;color:var(--muted);font-size:11px}.odds{display:flex;gap:5px;margin:11px 0 13px}.odds i{height:5px;border-radius:4px;background:var(--tone);flex:var(--w)}.buy{width:100%;border:0;border-radius:9px;padding:10px;background:var(--accent);color:#09111c;font-size:12px;font-weight:900}.buy:disabled{opacity:.4;cursor:not-allowed}.packdesc{display:flex;justify-content:space-between;color:var(--muted);font-size:9px;margin-top:5px}.content-view{display:none}.content-view.active{display:block}.gridcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:13px}.carditem{border:1px solid var(--line);background:#101824;border-radius:13px;padding:10px;position:relative}.carditem img{width:100%;aspect-ratio:2.5/3.5;object-fit:contain;background:linear-gradient(145deg,#19273a,#0b111a);border-radius:8px}.carditem h3{font-size:12px;margin:9px 0 2px}.carditem .meta{color:var(--muted);font-size:10px}.cardfoot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-weight:800;font-size:12px}.sell{background:#20382f;border:1px solid #345c4a;color:#8becb9;border-radius:7px;padding:5px 9px;font-size:10px}.tag{position:absolute;top:15px;left:15px;background:#101824dd;border:1px solid #fff2;padding:4px 6px;border-radius:5px;font-size:8px;color:var(--gold);font-weight:800}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{padding:12px 9px;border-bottom:1px solid var(--line);text-align:left}.table th{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}.historybox{overflow:auto}.empty{padding:45px 15px;text-align:center;color:var(--muted)}.opening{position:fixed;inset:0;z-index:10;background:#05080df2;backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:22px}.opening.show{display:flex}.openbox{width:min(600px,100%);text-align:center}.openhead{color:var(--muted);font-size:11px;letter-spacing:.15em;text-transform:uppercase}.openbox h2{margin:5px 0 18px;font-size:28px}.stage{min-height:345px;display:grid;place-items:center}.sealed{width:170px;height:240px;border-radius:18px;background:linear-gradient(145deg,var(--accent,#a684ff),#192442 48%,#090d17);border:2px solid #ffffff36;box-shadow:0 0 70px #9a73ff44;display:grid;place-items:center;animation:float 2s ease-in-out infinite;cursor:pointer}.sealed span{font-size:28px;font-weight:1000;letter-spacing:.1em;text-shadow:0 3px 14px #000}.ripline{position:absolute;height:3px;width:140px;background:var(--gold);transform:rotate(-25deg);box-shadow:0 0 22px var(--gold);opacity:0}.sealed.ripping{animation:tear .7s forwards}.sealed.ripping .ripline{opacity:1}.reveal{width:210px;max-height:330px;object-fit:contain;filter:drop-shadow(0 0 24px var(--glow,#fff));animation:flip .65s cubic-bezier(.2,.8,.2,1)}.reveal-info{margin:10px 0 16px}.reveal-info strong{font-size:18px}.reveal-info small{display:block;color:var(--muted)}.open-actions{display:flex;justify-content:center;gap:9px}.primary,.secondary{border-radius:9px;padding:12px 18px;font-weight:800;border:1px solid var(--line);background:#172235}.primary{background:var(--gold);color:#15100a;border:0}.meter{height:4px;background:#1c283a;border-radius:5px;margin:18px 0}.meter span{height:100%;display:block;background:var(--gold);border-radius:5px;transition:width .3s}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;background:#1b2e28;border:1px solid #3a7259;color:#bbf4d3;padding:11px 16px;border-radius:9px;z-index:30;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}.note{border:1px solid #27384d;background:#101b29;padding:12px 14px;border-radius:11px;color:#9eacc0;font-size:11px;margin-top:18px}.image-missing{display:grid;place-items:center;aspect-ratio:2.5/3.5;border-radius:8px;background:radial-gradient(circle at 50% 35%,#2a3b55,#101824 70%);color:#9eacc0;text-align:center;padding:16px;font-size:12px;font-weight:800}.image-missing span{display:block;color:#64758e;font-size:9px;margin-top:8px;letter-spacing:.12em}.set-rotation{border:1px solid var(--line);background:#101824;border-radius:13px;padding:13px;margin:-3px 0 22px}.set-add{display:flex;gap:8px}.set-add select{min-width:0;flex:1;background:#172235;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px 10px;font:inherit;font-size:12px}.set-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.set-chip{min-height:34px;border:1px solid #354459;background:#182538;color:#dce7f4;border-radius:999px;padding:6px 10px;font-size:10px;cursor:pointer}.set-chip span{color:var(--gold);margin-left:7px;font-weight:900}.set-help{color:var(--muted);font-size:10px;margin-top:9px}.filter{display:flex;gap:8px}.filter button{background:#131e2c;border:1px solid var(--line);padding:7px 11px;border-radius:8px;color:var(--muted);font-size:11px}.filter button.active{color:white;border-color:#64758e}.smallbtn{background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--muted);padding:7px 10px;font-size:10px}
-.broke-modal{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:#05080df2;backdrop-filter:blur(12px)}.broke-modal.show{display:flex}.broke-box{width:min(430px,100%);padding:28px 24px;text-align:center;border:1px solid #3a4558;border-radius:18px;background:linear-gradient(145deg,#172235,#0c121c);box-shadow:0 24px 80px #000a}.broke-icon{font-size:36px;margin-bottom:8px}.broke-box h2{margin:0 0 9px;font-size:23px}.broke-box p{color:var(--muted);margin:0 0 20px}.broke-box .primary{width:100%;padding:13px}
-@keyframes float{50%{transform:translateY(-8px) rotate(1deg)}}@keyframes tear{to{transform:scale(1.08) rotate(8deg);opacity:0}}@keyframes flip{from{transform:rotateY(90deg) scale(.8);opacity:0}to{transform:rotateY(0) scale(1);opacity:1}}
-@media(max-width:900px){.layout{grid-template-columns:1fr;gap:0;padding-top:20px}.sidebar{display:none}.mobile-nav{display:flex;position:sticky;top:0;z-index:5;background:#090e16ed;backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:7px 8px;gap:3px;overflow:auto}.mobile-nav .nav{white-space:nowrap;padding:9px 11px;font-size:11px}.mobile-nav .nav.active{box-shadow:inset 0 -2px var(--gold)}.shell{padding:0 15px}.top{height:66px}.stats{grid-template-columns:repeat(2,1fr);gap:8px}.stat{padding:12px}.stat b{font-size:18px}.packs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.pack{padding:12px;min-height:250px}.pack-art{height:80px}.title{font-size:26px}.section-head{margin-top:18px}.gridcards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.carditem{padding:8px}.carditem h3{font-size:11px}.opening{padding:16px}.stage{min-height:300px}.reveal{width:185px}.table th,.table td{white-space:nowrap}}
-@media(max-width:380px){.packs{grid-template-columns:1fr}.pack{min-height:0}.pack-art{height:70px}}
-</style></head><body>
-<div class="shell"><header class="top"><div class="brand">POKÉ <span>RIP</span><small>VIRTUAL PACK SIMULATOR</small></div><div class="wallet"><small>AVAILABLE CASH</small><span id="cashTop">$100.00</span></div></header>
-<nav class="mobile-nav"><button class="nav active" data-view="shop">Pack Shop</button><button class="nav" data-view="collection">Collection</button><button class="nav" data-view="dashboard">Dashboard</button><button class="nav" data-view="history">History</button></nav>
-<div class="layout"><aside class="sidebar"><button class="nav active" data-view="shop">▦ &nbsp; Pack Shop</button><button class="nav" data-view="collection">▣ &nbsp; Collection</button><button class="nav" data-view="dashboard">◈ &nbsp; Dashboard</button><button class="nav" data-view="history">◷ &nbsp; History</button><div class="side-note"><strong>SIMULATED GAME</strong>Cash, card values and pulls are virtual. No purchases, cash-outs or real prizes.</div></aside><main>
-<section class="content-view active" id="shop"><div class="eyebrow">Choose your next rip</div><h1 class="title">Pack Shop</h1><p class="sub">Mix any Pokémon TCG sets into your rotation. Five unique cards per pack.</p><div class="stats" id="shopStats"></div><div class="section-head"><h2>Pack set rotation</h2><span class="eyebrow" id="rotationCount">Loading sets…</span></div><div class="set-rotation"><div class="set-add"><select id="setPicker" aria-label="Choose a set to add"><option value="">Add a Pokémon set…</option></select><button class="smallbtn" onclick="addChosenSet()">ADD SET</button></div><div id="selectedSets" class="set-chips"></div><div class="set-help">Selected sets are mixed into one pool. Each pack pulls five different cards.</div></div><div class="section-head"><h2>Available packs</h2><span class="eyebrow">ODDS ARE SIMULATED</span></div><div class="packs" id="packs"></div><div class="note">Pull odds are design assumptions, not official Pokémon product odds. Card names, set details, collector numbers and artwork are reconciled against the Pokémon TCG API. Values are simulated game values and are not live market prices.</div></section>
-<section class="content-view" id="collection"><div class="eyebrow">Your binder</div><h1 class="title">Collection</h1><p class="sub">Cards you keep stay here. Sell any card for its simulated value.</p><div class="stats" id="collectionStats"></div><div class="section-head"><h2>Owned cards</h2><div class="filter"><button class="active" data-filter="all">All</button><button data-filter="slab">Slabs</button></div></div><div id="cards" class="gridcards"></div></section>
-<section class="content-view" id="dashboard"><div class="eyebrow">Your run so far</div><h1 class="title">Dashboard</h1><p class="sub">A snapshot of your bankroll, pulls and overall position.</p><div class="stats" id="dashStats"></div><div class="panel" style="padding:18px"><div class="section-head" style="margin:0 0 9px"><h2>Recent pulls</h2><button class="smallbtn" data-goto="history">View history →</button></div><div id="recent"></div></div><div class="note">Net worth is available cash plus the simulated value of cards currently in your collection. Profit / loss compares net worth against your $100 starting bankroll.</div></section>
-<section class="content-view" id="history"><div class="eyebrow">Every rip, recorded</div><h1 class="title">Opening History</h1><p class="sub">Review what you spent and what came out.</p><div class="panel historybox"><table class="table"><thead><tr><th>Pack</th><th>Cards</th><th>Spent</th><th>Value</th><th>Net</th></tr></thead><tbody id="historyRows"></tbody></table><div id="historyEmpty" class="empty" style="display:none">Your first pack is waiting in the shop.</div></div></section>
-</main></div></div>
-<div class="opening" id="opening"><div class="openbox"><div class="openhead" id="openStep">READY TO RIP</div><h2 id="openTitle">Your pack is sealed</h2><div class="stage" id="stage"></div><div class="reveal-info" id="revealInfo"></div><div class="meter"><span id="meter" style="width:0%"></span></div><div class="open-actions" id="openActions"></div></div></div><div class="broke-modal" id="brokeModal" role="dialog" aria-modal="true" aria-labelledby="brokeTitle"><div class="broke-box"><div class="broke-icon">😅</div><h2 id="brokeTitle">O no, you have a gambling problem!</h2><p id="brokeMessage">Time to alert Kyle you have a problem :)</p><button class="primary" id="brokeButton">Fine, alert him</button></div></div><div class="toast" id="toast"></div>
+:root{--bg:#070b12;--panel:#0f1622;--line:#233044;--muted:#8d9bb0;--text:#f3f6fb;--gold:#f5c451;--cyan:#57d6d0;--purple:#a983ff;--orange:#ff9b65;--green:#54d69a;--red:#ff6f74;--sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px);--cw:min(68vw,310px)}
+@media(max-height:760px){:root{--cw:min(60vw,270px)}}
+@media(max-height:640px){:root{--cw:min(50vw,220px)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% -10%,#172845 0,transparent 45%),var(--bg);background-attachment:fixed;color:var(--text);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overscroll-behavior-y:none}
+body.locked{overflow:hidden}
+button,select{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;border:0;background:none;padding:0}
+button:disabled{cursor:not-allowed}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.shell{max-width:1180px;margin:0 auto;padding:0 20px}
+.pos{color:var(--green)}.neg{color:var(--red)}.muted{color:var(--muted)}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:#070b12e8;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #1a2433;padding-top:var(--st)}
+.top-in{height:62px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{font-size:19px;font-weight:900;letter-spacing:.11em;white-space:nowrap;line-height:1.1}
+.brand span{color:var(--gold)}
+.brand small{font-size:9px;color:var(--muted);display:block;letter-spacing:.2em;font-weight:700}
+.pills{display:flex;gap:7px;align-items:center}
+.pill{display:flex;align-items:center;gap:6px;height:40px;padding:0 12px;border:1px solid var(--line);background:#0f1724;border-radius:12px;font-weight:800;font-size:14px;white-space:nowrap}
+.pill.cash{color:var(--green)}.pill.tix{color:var(--gold)}
+.pill.icon{width:40px;justify-content:center;padding:0;font-size:16px}
+
+/* tabs */
+.tabs{display:flex;gap:4px;padding:14px 0 0}
+.tab{position:relative;display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;color:var(--muted);font-weight:700;font-size:14px}
+.tab svg{width:19px;height:19px;flex:none}
+.tab:hover{color:#fff}
+.tab.active{background:#162133;color:#fff;box-shadow:inset 0 -2px var(--gold)}
+.badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--gold);color:#140f05;font-size:10px;font-weight:900;display:grid;place-items:center}
+main{padding:22px 0 60px}
+
+/* common */
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--cyan);font-weight:800}
+.title{font-size:30px;letter-spacing:-.03em;margin:4px 0 4px;line-height:1.1}
+.sub{color:var(--muted);margin:0 0 18px;max-width:640px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.stat,.panel{background:linear-gradient(145deg,#131d2a,#0f1722);border:1px solid var(--line);border-radius:15px}
+.stat{padding:13px 14px;min-width:0}
+.stat label{display:block;color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:5px}
+.stat b{font-size:20px;letter-spacing:-.02em;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat .hint{display:block;color:var(--muted);font-size:11px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:26px 0 12px}
+.section-head h2{margin:0;font-size:18px}
+.note{border:1px solid #27384d;background:#101b29;padding:12px 14px;border-radius:11px;color:#9eacc0;font-size:12px;margin-top:20px}
+.empty{padding:40px 15px;text-align:center;color:var(--muted)}
+.banner{border:1px solid #6b4b1f;background:#2a1e0d;color:#f5d9a6;padding:11px 14px;border-radius:11px;font-size:13px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.primary,.secondary,.ghost{border-radius:11px;padding:12px 18px;font-weight:800;min-height:48px;font-size:14px}
+.primary{background:var(--gold);color:#15100a}
+.primary:disabled{opacity:.45}
+.secondary{background:#172235;border:1px solid var(--line)}
+.ghost{color:var(--muted);border:1px solid transparent}
+.danger{background:var(--red)!important;color:#1a0507!important}
+.smallbtn{border:1px solid var(--line);border-radius:9px;color:#c7d2e0;padding:0 12px;min-height:38px;font-size:12px;font-weight:700;background:#111a27}
+.linkbtn{color:var(--cyan);font-size:12px;font-weight:700;min-height:36px}
+.seg{display:inline-flex;background:#0e1520;border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg button{padding:0 12px;min-height:34px;border-radius:7px;color:var(--muted);font-size:12px;font-weight:700}
+.seg button.on{background:#1d2a3e;color:#fff}
+select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min-height:38px;padding:0 10px;font-size:16px;color:var(--text);max-width:100%}
+
+/* packs */
+.packs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pack{position:relative;overflow:hidden;padding:14px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(145deg,#182538,#101723);display:flex;flex-direction:column}
+.pack:before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;filter:blur(34px);opacity:.2;right:-60px;top:-60px;background:var(--accent);pointer-events:none}
+.pack-head{display:flex;justify-content:space-between;align-items:center;position:relative}
+.tier{font-size:10px;font-weight:900;letter-spacing:.14em;color:var(--accent)}
+.odds-btn{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:0 9px;min-height:30px}
+.pack-art{height:104px;display:grid;place-items:center;position:relative}
+.mini-pack{width:62px;height:96px;border-radius:7px;border:1px solid #ffffff42;background:linear-gradient(155deg,var(--accent),#27305a 55%,#0b1020);box-shadow:0 12px 28px #0009,0 0 26px -6px var(--accent);transform:rotate(-7deg);display:grid;place-items:center;position:relative;overflow:hidden;transition:transform .25s}
+.mini-pack:before{content:"";position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 42%,#ffffff45 50%,transparent 58%);animation:sheen 3.2s linear infinite}
+.mini-pack span{font-size:10px;font-weight:1000;letter-spacing:.1em;line-height:1.05;text-align:center;position:relative}
+.pack:hover .mini-pack{transform:rotate(-2deg) scale(1.06)}
+.pack h3{margin:2px 0 3px;font-size:18px}
+.pack p{margin:0;color:var(--muted);font-size:12px;flex:1}
+.pack-price{font-size:22px;font-weight:900;margin:10px 0 9px;letter-spacing:-.02em}
+.buy{width:100%;border-radius:10px;min-height:46px;background:var(--accent);color:#09111c;font-size:13px;font-weight:900}
+.buy:disabled{opacity:.42}
+
+/* rotation */
+.rotation{margin-top:18px;border:1px solid var(--line);background:#0f1724;border-radius:14px}
+.rotation summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;cursor:pointer;min-height:54px}
+.rotation summary::-webkit-details-marker{display:none}
+.rotation summary b{display:block;font-size:14px}
+.rotation summary span{color:var(--muted);font-size:12px}
+.chev{transition:transform .2s;color:var(--muted)}
+.rotation[open] .chev{transform:rotate(180deg)}
+.rot-body{padding:0 15px 15px}
+.rot-body select{width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.chip{min-height:36px;border:1px solid #354459;background:#182538;color:#dce7f4;border-radius:999px;padding:0 12px;font-size:12px;display:inline-flex;align-items:center;gap:8px}
+.chip span{color:var(--gold);font-weight:900;font-size:14px}
+.chip.loading{opacity:.6}.chip.loading span{animation:spin 1s linear infinite;display:inline-block}
+.chip.failed{border-color:#7a3a3d}
+.rot-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;color:var(--muted);font-size:12px}
+
+/* binder */
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 14px;flex-wrap:wrap}
+.toolbar-r{display:flex;gap:8px;align-items:center}
+.gridcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.tile{text-align:left;border:1px solid var(--line);background:#101824;border-radius:13px;padding:9px;position:relative;transition:transform .15s,border-color .15s;min-width:0}
+.tile:hover{transform:translateY(-2px);border-color:#3a4b63}
+.tile.lvl3,.tile.lvl4,.tile.lvl5{border-color:color-mix(in srgb,var(--glow) 45%,var(--line))}
+.tile-img{position:relative;aspect-ratio:63/88;border-radius:7px;overflow:hidden;background:linear-gradient(145deg,#19273a,#0b111a)}
+.tile-img img{width:100%;height:100%;object-fit:contain}
+.tile-img.is-slab{background:linear-gradient(160deg,#dfe6ef,#aab6c6);padding:6px}
+.tile-img.is-slab img{border-radius:3px;background:#0b1018}
+.tile-tag{position:absolute;top:6px;left:6px;z-index:1;background:#0b1220e6;border:1px solid #fff3;padding:3px 6px;border-radius:5px;font-size:9px;color:var(--gold);font-weight:900;letter-spacing:.06em}
+.tile-name{font-size:12px;font-weight:700;margin:8px 0 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile-foot{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:10px;color:var(--muted)}
+.tile-foot span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile-foot b{font-size:13px;color:var(--text)}
+.lvl3 .tile-foot b{color:var(--purple)}.lvl4 .tile-foot b{color:var(--gold)}.lvl5 .tile-foot b{color:#ff8be0}
+.img-missing{width:100%;height:100%;display:grid;place-items:center;text-align:center;padding:10px;background:radial-gradient(circle at 50% 35%,#2a3b55,#101824 70%);color:#9eacc0;font-size:11px;font-weight:800}
+.img-missing span{display:block;color:#64758e;font-size:8px;margin-top:6px;letter-spacing:.12em}
+
+/* grab */
+.grab{padding:16px}
+.grab-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.grab-tix{font-size:15px;font-weight:800}
+.grab-tix b{color:var(--gold);font-size:22px}
+.reel{position:relative;overflow:hidden;border-radius:14px;background:#0a0f18;border:1px solid var(--line);height:220px;margin:14px 0}
+.reel:before,.reel:after{content:"";position:absolute;top:0;bottom:0;width:16%;z-index:2;pointer-events:none}
+.reel:before{left:0;background:linear-gradient(90deg,#0a0f18,transparent)}
+.reel:after{right:0;background:linear-gradient(-90deg,#0a0f18,transparent)}
+.reel-marker{position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--gold);box-shadow:0 0 16px var(--gold);z-index:3}
+.reel-marker:before,.reel-marker:after{content:"";position:absolute;left:50%;margin-left:-8px;border:8px solid transparent}
+.reel-marker:before{top:0;border-top-color:var(--gold)}.reel-marker:after{bottom:0;border-bottom-color:var(--gold)}
+.reel-track{display:flex;gap:10px;padding:14px 10px;height:100%;will-change:transform}
+.ritem{flex:0 0 118px;height:100%;border-radius:10px;background:linear-gradient(160deg,#e3e9f1,#aeb9c8);padding:5px;display:flex;flex-direction:column;gap:4px;box-shadow:0 0 0 2px var(--glow);transition:transform .3s,box-shadow .3s}
+.ritem img,.ritem .img-missing{flex:1;min-height:0;width:100%;height:auto;object-fit:contain;background:#0b1018;border-radius:4px}
+.ritem-label{background:#141c2c;color:var(--gold);font-weight:900;font-size:10px;border-radius:4px;padding:2px 6px;display:flex;justify-content:space-between}
+.ritem-val{background:#141c2c;color:#fff;font-weight:800;font-size:11px;border-radius:4px;padding:2px 6px;text-align:center}
+.ritem.won{box-shadow:0 0 0 3px var(--gold),0 0 34px var(--gold);transform:scale(1.07)}
+.spin-btn{width:100%;font-size:16px;min-height:54px}
+.grab-odds{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}
+.grab-odds div{background:#0e1520;border:1px solid var(--line);border-radius:9px;padding:7px;text-align:center;font-size:11px;color:var(--muted)}
+.grab-odds b{display:block;color:var(--text);font-size:13px}
+
+/* lists */
+.rows{display:flex;flex-direction:column}
+.hrow{display:grid;grid-template-columns:8px 38px 1fr auto;align-items:center;gap:11px;padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;width:100%}
+.hrow:last-child{border-bottom:0}
+.hrow:hover{background:#ffffff05}
+.hdot{width:8px;height:8px;border-radius:50%}
+.hthumb{width:38px;height:53px;border-radius:4px;overflow:hidden;background:#0b111a}
+.hthumb img{width:100%;height:100%;object-fit:cover}
+.hmain{min-width:0}
+.hmain b{display:block;font-size:13px}
+.hmain small{display:block;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hnums{text-align:right}
+.hnums b{display:block;font-size:13px}
+.hnums small{font-size:11px;font-weight:700}
+.best{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+
+/* overlays */
+.overlay{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;background:#05080d;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:calc(var(--st) + 14px) 16px calc(var(--sb) + 16px);animation:fadein .2s}
+.rip:before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 50% 40%,var(--accent,#a983ff),transparent 58%);opacity:.16;pointer-events:none}
+.rip-head{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.16em;color:var(--muted);font-weight:800;max-width:640px;width:100%;margin:0 auto;position:relative}
+.rip-stage{flex:1;min-height:300px;display:grid;place-items:center;position:relative;padding:18px 0;user-select:none;-webkit-user-select:none;cursor:pointer}
+.rip-info{text-align:center;min-height:92px;position:relative;max-width:560px;width:100%;margin:0 auto}
+.rip-actions{display:flex;gap:10px;justify-content:center;max-width:520px;width:100%;margin:0 auto;position:relative}
+.rip-actions button{flex:1}
+.hint{color:var(--muted);font-size:13px;letter-spacing:.04em;animation:breathe 1.6s ease-in-out infinite;padding-top:14px}
+.ri-name{font-size:20px;font-weight:900;letter-spacing:-.01em}
+.ri-meta{color:var(--muted);font-size:12px;margin-top:2px}
+.ri-val{font-size:30px;font-weight:1000;letter-spacing:-.02em;margin-top:4px}
+.ri-val.lvl2{color:var(--cyan)}.ri-val.lvl3{color:var(--purple)}.ri-val.lvl4{color:var(--gold)}
+.ri-val.lvl5{background:linear-gradient(90deg,#ff6bd5,#ffd36b,#6bffd8,#6bb5ff,#ff6bd5);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:slidebg 2s linear infinite}
+.ri-done{color:var(--green);font-weight:800;font-size:13px;margin-top:4px}
+.gtag{display:inline-block;vertical-align:middle;font-size:10px;letter-spacing:.08em;background:#1b2436;color:var(--gold);border:1px solid #f5c45155;padding:2px 6px;border-radius:5px}
+
+/* sealed pack */
+.pack3d{position:relative;width:min(56vw,230px);aspect-ratio:5/8;animation:float 2.4s ease-in-out infinite;filter:drop-shadow(0 0 38px var(--accent))}
+@media(max-height:640px){.pack3d{width:min(44vw,180px)}}
+.pk-top,.pk-body{position:absolute;left:0;right:0;overflow:hidden;background:linear-gradient(155deg,var(--accent) 0%,#27305a 52%,#0b1020 100%);border:1px solid #ffffff40}
+.pk-top{top:0;height:16%;border-radius:12px 12px 0 0;background-size:100% 625%;background-position:0 0;border-bottom:2px dashed #ffffff80}
+.pk-body{bottom:0;height:84%;border-radius:0 0 12px 12px;border-top:0;background-size:100% 119.05%;background-position:0 100%;display:grid;place-items:center}
+.pk-top:before{content:"";position:absolute;left:0;right:0;top:0;height:7px;background:repeating-linear-gradient(90deg,#ffffff50 0 4px,transparent 4px 8px)}
+.pk-body:before{content:"";position:absolute;inset:-50%;background:linear-gradient(110deg,transparent 42%,#ffffff3a 50%,transparent 58%);animation:sheen 2.6s linear infinite}
+.pk-body:after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:repeating-linear-gradient(90deg,#ffffff50 0 4px,transparent 4px 8px)}
+.pk-logo{position:relative;font-weight:1000;font-size:clamp(26px,8vw,40px);letter-spacing:.08em;line-height:.95;text-align:center;text-shadow:0 4px 18px #000a}
+.pk-tier{position:absolute;bottom:11%;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.3em;font-weight:900;opacity:.9}
+.pack3d.torn{animation:none}
+.pack3d.torn .pk-top{animation:tearoff .55s cubic-bezier(.3,.7,.4,1) forwards}
+.pack3d.torn .pk-body{animation:packdrop .45s .25s ease-in forwards}
+
+/* flip card */
+.flipwrap{position:relative;width:var(--cw);aspect-ratio:63/88}
+.persp{position:absolute;inset:0;perspective:1400px;-webkit-perspective:1400px}
+.flip{position:absolute;inset:0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.flip.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:4.6%/3.3%;overflow:hidden;background:#0b1018}
+.face.front{transform:rotateY(180deg)}
+.face.front>img,.face.front>.img-missing{width:100%;height:100%;object-fit:contain}
+.face.holo:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,#ffffff40 44%,#ff9be855 50%,#8be8ff55 56%,transparent 70%);background-size:260% 260%;animation:holo 3s linear infinite;pointer-events:none;opacity:.7}
+.aura{position:absolute;inset:-10%;border-radius:24px;background:radial-gradient(closest-side,var(--glow),transparent);opacity:0;filter:blur(16px);transition:opacity .4s;pointer-events:none}
+.lvl5 .aura{background:conic-gradient(#ff5fd2,#ffd36b,#6bffd8,#6bb5ff,#ff5fd2);border-radius:50%;filter:blur(28px)}
+.tease .aura{opacity:.5;animation:pulse 1.3s ease-in-out infinite}
+.revealed.lvl3 .aura,.revealed.lvl4 .aura,.revealed.lvl5 .aura{opacity:.8;animation:pulse 2.2s ease-in-out infinite}
+.flipwrap.enter{animation:rise .45s cubic-bezier(.2,.9,.3,1.2)}
+.flipwrap.charging{animation:shake .12s linear infinite}
+.flipwrap.charging .aura{opacity:1;animation:pulse .3s infinite}
+.flipwrap.leave{animation:leave .26s forwards}
+.cardback{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#2b3f7a 0,#141d3d 55%,#0a0f22 100%);border:clamp(5px,1.8vw,8px) solid #e8ecf5;border-radius:inherit;display:grid;place-items:center;overflow:hidden}
+.cardback:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,#ffffff08 0 6px,transparent 6px 14px)}
+.cb-ring{position:relative;width:60%;aspect-ratio:1;border-radius:50%;background:conic-gradient(from 200deg,var(--gold),var(--orange),var(--purple),var(--cyan),var(--gold));display:grid;place-items:center;box-shadow:0 0 30px #a983ff66}
+.cb-ring span{width:84%;aspect-ratio:1;border-radius:50%;background:#0d1430;display:grid;place-items:center;text-align:center;font-weight:1000;letter-spacing:.08em;font-size:clamp(13px,4.6vw,22px);line-height:1}
+
+/* slab */
+.slab{position:absolute;inset:0;border-radius:5%/3.6%;background:linear-gradient(160deg,#eef2f7,#b6c1cf 45%,#e2e8f0);padding:5.5%;display:flex;flex-direction:column;gap:4%;box-shadow:inset 0 0 0 2px #ffffffa0}
+.slab-label{background:linear-gradient(180deg,#1d2740,#10172a);color:#fff;border-radius:4px;padding:4% 5%;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:6px;font-size:clamp(7px,2.3vw,11px);line-height:1.2;border:1px solid #f5c45166}
+.slab-label span{font-weight:900;letter-spacing:.1em;color:var(--gold);font-size:.85em}
+.slab-label small{grid-column:1;font-size:.9em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#cfd8e6}
+.slab-label b{grid-row:1/3;grid-column:2;font-size:2.5em;font-weight:1000;color:var(--gold);line-height:1}
+.slab-win{flex:1;min-height:0;background:#0b1018;border-radius:3px;overflow:hidden;box-shadow:inset 0 0 0 1px #0005}
+.slab-win img,.slab-win .img-missing{width:100%;height:100%;object-fit:contain}
+
+/* summary */
+.summary{width:100%;max-width:680px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;cursor:default}
+.sum-card{background:#0f1724;border:1px solid var(--line);border-radius:12px;padding:7px;text-align:center;transition:opacity .2s,border-color .2s;min-width:0}
+.sum-card.lvl3,.sum-card.lvl4,.sum-card.lvl5{border-color:var(--glow);box-shadow:0 0 18px -6px var(--glow)}
+.sum-card.selling{opacity:.55}
+.sum-img{display:block;width:100%;aspect-ratio:63/88;border-radius:6px;overflow:hidden;background:#0b1018}
+.sum-img img{width:100%;height:100%;object-fit:contain}
+.sum-name{font-size:11px;font-weight:700;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sum-val{font-size:13px;font-weight:900}
+.lvl3 .sum-val{color:var(--purple)}.lvl4 .sum-val{color:var(--gold)}.lvl5 .sum-val{color:#ff8be0}
+.seg.mini{display:flex;margin-top:6px;padding:2px}
+.seg.mini button{flex:1;padding:0;min-height:30px;font-size:11px}
+.seg.mini button.on.sell{background:#3a2326;color:#ffb3b6}
+.sum-total{display:flex;justify-content:center;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:6px}
+.sum-total b{font-size:26px}
+.sum-quick{display:flex;justify-content:center;gap:8px;margin:10px 0 12px;flex-wrap:wrap}
+
+/* viewer */
+.viewer{align-items:center}
+.vclose{position:fixed;top:calc(var(--st) + 10px);right:12px;z-index:2;width:44px;height:44px;border-radius:50%;background:#172235;border:1px solid var(--line);font-size:18px}
+.viewer-body{width:100%;max-width:560px;margin:auto;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:30px}
+.v-count{color:var(--muted);font-size:11px;letter-spacing:.16em;font-weight:800}
+.v-stage{display:flex;align-items:center;gap:8px;width:100%;justify-content:center}
+.v-nav{width:42px;height:64px;border-radius:12px;font-size:30px;color:#c7d2e0;background:#111a27;border:1px solid var(--line);flex:none}
+.v-nav:disabled{opacity:.2}
+.v-card{position:relative;width:min(66vw,340px);aspect-ratio:63/88;perspective:1000px;touch-action:none}
+@media(max-height:700px){.v-card{width:min(54vw,260px)}}
+.v-tilt{position:absolute;inset:0;transition:transform .15s ease-out;transform-style:preserve-3d;--mx:50%;--my:50%}
+.v-face{position:absolute;inset:0;border-radius:4.6%/3.3%;overflow:hidden;background:#0b1018;box-shadow:0 20px 50px #000b,0 0 40px -10px var(--glow)}
+.v-face img{width:100%;height:100%;object-fit:contain}
+.shine{position:absolute;inset:0;border-radius:4.6%/3.3%;pointer-events:none;background:radial-gradient(circle at var(--mx) var(--my),#ffffff38,transparent 45%)}
+.shine.holo{background:radial-gradient(circle at var(--mx) var(--my),#ffffff50,transparent 40%),linear-gradient(115deg,transparent 30%,#ff9be830 45%,#8be8ff30 55%,transparent 70%)}
+.v-info{text-align:center}
+.v-info h2{margin:0;font-size:22px}
+.v-meta{color:var(--muted);font-size:12px;margin-top:3px}
+.v-val{font-size:28px;font-weight:1000;margin-top:6px}
+.v-val.lvl3{color:var(--purple)}.v-val.lvl4{color:var(--gold)}.v-val.lvl5{color:#ff8be0}
+.v-src{color:var(--muted);font-size:11px;margin-top:2px}
+.v-actions{display:flex;gap:10px;width:100%;max-width:420px}
+.v-actions button{flex:1}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:#05080de6;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:fadein .15s}
+.modal-box{width:min(440px,100%);max-height:calc(100vh - 40px);overflow:auto;padding:24px 20px 20px;text-align:center;border:1px solid #3a4558;border-radius:18px;background:linear-gradient(145deg,#172235,#0c121c);box-shadow:0 24px 80px #000a;animation:pop .25s cubic-bezier(.2,.9,.3,1.3)}
+.m-icon{font-size:38px;margin-bottom:6px}
+.modal-box h2{margin:0 0 8px;font-size:21px}
+.m-body{color:var(--muted);margin:0 0 18px;font-size:14px}
+.m-body p{margin:0 0 10px}
+.m-actions{display:flex;gap:9px}
+.m-actions button{flex:1}
+.m-card{position:relative;width:min(52vw,200px);aspect-ratio:63/88;margin:4px auto 12px}
+.odds-t{text-align:left;margin:12px 0}
+.odds-title{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text);font-weight:800;margin-bottom:6px}
+.odds-row{display:grid;grid-template-columns:82px 1fr 46px 62px;align-items:center;gap:8px;font-size:12px;padding:5px 0;border-bottom:1px solid #ffffff0d}
+.odds-row b{text-align:right;color:var(--text)}
+.odds-row small{text-align:right;font-size:10px}
+.odds-bar{height:6px;background:#1c283a;border-radius:4px;overflow:hidden}
+.odds-bar i{display:block;height:100%;background:var(--gold);border-radius:4px}
+.odds-note{font-size:12px;text-align:left}
+
+/* fx */
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:70;pointer-events:none}
+.flash{position:fixed;inset:0;z-index:69;background:#fff;opacity:0;pointer-events:none}
+.flash.go{animation:flash .55s ease-out}
+.toast{position:fixed;left:50%;bottom:calc(var(--sb) + 20px);transform:translate(-50%,20px);opacity:0;background:#1b2e28;border:1px solid #3a7259;color:#bbf4d3;padding:11px 16px;border-radius:10px;z-index:80;transition:.25s;pointer-events:none;font-size:13px;font-weight:600;width:max-content;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
+
+@keyframes float{50%{transform:translateY(-9px) rotate(1deg)}}
+@keyframes sheen{from{transform:translateX(-30%)}to{transform:translateX(30%)}}
+@keyframes slidebg{to{background-position:200% 0}}
+@keyframes holo{from{background-position:0% 0%}to{background-position:100% 100%}}
+@keyframes tearoff{to{transform:translate(60%,-170%) rotate(32deg);opacity:0}}
+@keyframes packdrop{to{transform:translateY(60%) scale(.92);opacity:0}}
+@keyframes rise{from{transform:translateY(50px) scale(.85);opacity:0}}
+@keyframes leave{to{transform:translateX(-120%) rotate(-14deg);opacity:0}}
+@keyframes shake{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(-3px,1px) rotate(-1.5deg)}50%{transform:translate(3px,-1px) rotate(1.5deg)}75%{transform:translate(-2px,-1px) rotate(-1deg)}}
+@keyframes pulse{50%{opacity:.95;transform:scale(1.06)}}
+@keyframes breathe{50%{opacity:.45}}
+@keyframes flash{from{opacity:var(--o,.6)}to{opacity:0}}
+@keyframes fadein{from{opacity:0}}
+@keyframes pop{from{transform:scale(.9);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:900px){.packs{grid-template-columns:repeat(2,minmax(0,1fr))}.best{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){
+ .shell{padding:0 14px}
+ .top-in{height:56px}
+ .brand{font-size:17px}
+ .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:5px 4px calc(5px + var(--sb));background:#0a0f18f5;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);justify-content:space-around;gap:0}
+ .tab{flex:1;flex-direction:column;gap:3px;font-size:10px;padding:6px 2px;min-height:52px;justify-content:center}
+ .tab.active{background:none;box-shadow:none;color:var(--gold)}
+ .tab .badge{position:absolute;top:3px;left:calc(50% + 6px)}
+ main{padding:16px 0 calc(90px + var(--sb))}
+ .toast{bottom:calc(var(--sb) + 78px)}
+ .title{font-size:25px}
+ .sub{font-size:13px;margin-bottom:14px}
+ .stats{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+ .stat{padding:11px 12px}.stat b{font-size:18px}
+ .packs{gap:10px}
+ .pack{padding:12px}
+ .pack-art{height:88px}.mini-pack{width:52px;height:80px}
+ .pack h3{font-size:16px}.pack p{font-size:11px}
+ .pack-price{font-size:19px;margin:8px 0 8px}
+ .gridcards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .tile{padding:7px}
+ .summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .reel{height:186px}.ritem{flex-basis:98px}
+ .grab-odds{grid-template-columns:repeat(3,1fr)}
+ .toolbar{flex-direction:column;align-items:stretch}
+ .toolbar-r{justify-content:space-between}
+ .seg{display:flex}.seg button{flex:1}
+}
+@media(min-width:420px) and (max-width:760px){.gridcards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:400px){.brand small{display:none}.pill{padding:0 9px;font-size:13px}.odds-row{grid-template-columns:70px 1fr 40px 54px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="shell top-in">
+ <a class="brand" href="#shop">POKÉ <span>RIP</span><small>VIRTUAL PACK SIMULATOR</small></a>
+ <div class="pills">
+  <button class="pill tix" data-action="nav" data-view="grab" aria-label="Slab Grab tickets">🎟 <span id="tixTop">0</span></button>
+  <button class="pill cash" data-action="nav" data-view="stats" aria-label="Available cash"><span id="cashTop">$100.00</span></button>
+  <button class="pill icon" data-action="sound" id="soundBtn" aria-label="Toggle sound">🔊</button>
+ </div>
+</div></header>
+
+<div class="shell">
+<nav class="tabs" aria-label="Sections">
+ <button class="tab" data-action="nav" data-view="shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M5 7h14M9 13h6"/></svg>Shop</button>
+ <button class="tab" data-action="nav" data-view="binder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="12" rx="1.5"/><rect x="13" y="4" width="8" height="12" rx="1.5"/><path d="M3 20h18"/></svg>Binder</button>
+ <button class="tab" data-action="nav" data-view="grab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11"/></svg>Slab Grab<span class="badge" id="tixBadge" hidden></span></button>
+ <button class="tab" data-action="nav" data-view="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 16v-5M11 16V5M16 16v-8M21 16v-3"/></svg>Stats</button>
+ <button class="tab" data-action="nav" data-view="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>History</button>
+</nav>
+
+<main>
+<section class="view" id="v-shop">
+ <div class="eyebrow">Choose your next rip</div>
+ <h1 class="title">Pack Shop</h1>
+ <p class="sub">Real cards, real market prices, fake money. Rip packs, keep the hits, sell the rest.</p>
+ <div class="banner" id="apiBanner" hidden><span>Couldn't reach the card database, so you're ripping a small sample pool.</span><button class="smallbtn" data-action="retry">Retry</button></div>
+ <div class="stats" id="shopStats"></div>
+ <div class="packs" id="packs"></div>
+ <details class="rotation" id="rotation">
+  <summary><div><b>Set rotation</b><span id="rotSummary">Loading sets…</span></div><span class="chev">▾</span></summary>
+  <div class="rot-body">
+   <select class="sel" id="setPicker" aria-label="Add a set to the rotation"><option value="">Add a Pokémon set…</option></select>
+   <div class="chips" id="setChips"></div>
+   <div class="rot-foot"><span id="rotRange"></span><button class="linkbtn" data-action="set-reset">Reset to defaults</button></div>
+  </div>
+ </details>
+ <p class="note">Pack designs and odds are made up for this game, not official Pokémon product odds. Card data, artwork and TCGplayer market prices come from the Pokémon TCG API and can lag the live market. All money is virtual. No purchases, cash-outs or real prizes.</p>
+</section>
+
+<section class="view" id="v-binder" hidden>
+ <div class="eyebrow">Your binder</div>
+ <h1 class="title">Collection</h1>
+ <p class="sub">Tap any card to inspect it up close or sell it. Selling a card worth $50+ earns a Slab Grab ticket.</p>
+ <div class="stats" id="binderStats"></div>
+ <div class="toolbar">
+  <div class="seg" id="binderFilter"><button data-action="filter" data-f="all" class="on">All</button><button data-action="filter" data-f="hits">Hits $10+</button><button data-action="filter" data-f="slabs">Slabs</button></div>
+  <div class="toolbar-r"><select class="sel" id="binderSort" aria-label="Sort cards"><option value="new">Newest first</option><option value="value">Highest value</option><option value="name">Name A to Z</option></select><button class="smallbtn" data-action="sell-bulk">Sell bulk under $1</button></div>
+ </div>
+ <div class="gridcards" id="binderGrid"></div>
+</section>
+
+<section class="view" id="v-grab" hidden>
+ <div class="eyebrow">Bonus round</div>
+ <h1 class="title">Slab Grab</h1>
+ <p class="sub">Sell any card worth $50 or more to earn a ticket. Each ticket spins the reel for a free graded slab. Slab Grab prizes don't earn new tickets.</p>
+ <div class="panel grab">
+  <div class="grab-top"><div class="grab-tix">🎟 <b id="grabTix">0</b> ticket<span id="grabTixS">s</span></div><span class="eyebrow" style="color:var(--gold)">Graded 8 · 9 · 10</span></div>
+  <div class="reel" id="reel"><div class="reel-marker"></div><div class="reel-track" id="reelTrack"></div></div>
+  <button class="primary spin-btn" id="spinBtn" data-action="spin">Spin · use 1 ticket</button>
+  <div class="grab-odds" id="grabOdds"></div>
+ </div>
+ <div class="section-head"><h2>Recent slab wins</h2></div>
+ <div class="panel rows" id="grabWins"></div>
+</section>
+
+<section class="view" id="v-stats" hidden>
+ <div class="eyebrow">Your run so far</div>
+ <h1 class="title">Stats</h1>
+ <p class="sub">Your bankroll, your luck, and how often Kyle has been alerted.</p>
+ <div class="stats" id="statsGrid"></div>
+ <div class="section-head"><h2>Best pulls</h2></div>
+ <div class="best" id="bestPulls"></div>
+ <div class="section-head"><h2>Recent rips</h2><button class="smallbtn" data-action="nav" data-view="history">View all</button></div>
+ <div class="panel rows" id="recentRips"></div>
+ <div class="section-head"><h2>Start over</h2></div>
+ <button class="smallbtn" data-action="reset">Reset my run</button>
+ <p class="note">Net worth is cash plus the market value of cards in your binder. Profit / loss compares net worth against every dollar you've been given ($100 start plus each Kyle top-up).</p>
+</section>
+
+<section class="view" id="v-history" hidden>
+ <div class="eyebrow">Every rip, recorded</div>
+ <h1 class="title">History</h1>
+ <p class="sub">Tap any rip to see every card that came out of it.</p>
+ <div class="stats" id="histStats"></div>
+ <div class="panel rows" id="histList"></div>
+</section>
+</main>
+</div>
+
+<div class="overlay rip" id="rip" hidden role="dialog" aria-modal="true" aria-label="Pack opening">
+ <div class="rip-head"><span id="ripLabel"></span><span id="ripStep"></span></div>
+ <div class="rip-stage" id="ripStage" data-action="rip-tap"></div>
+ <div class="rip-info" id="ripInfo"></div>
+ <div class="rip-actions" id="ripActions"></div>
+</div>
+<div class="overlay viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Card details">
+ <button class="vclose" data-action="v-close" aria-label="Close">✕</button>
+ <div class="viewer-body" id="viewerBody"></div>
+</div>
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true"><div class="modal-box" id="modalBox"></div></div>
+<canvas id="fx"></canvas>
+<div class="flash" id="flash"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-const START=100;
-const tiers=[
-{id:'starter',name:'Starter',price:5,color:'#55d6cf',odds:[75,18,6,1],names:['BASIC RIP','5 CARDS']},
-{id:'premium',name:'Premium',price:15,color:'#9887ff',odds:[60,25,12,3],names:['PREMIUM RIP','5 CARDS']},
-{id:'elite',name:'Elite',price:30,color:'#ff9b65',odds:[45,30,20,5],names:['ELITE RIP','5 CARDS']},
-{id:'grail',name:'Grail',price:60,color:'#f5c451',odds:[25,35,30,10],names:['GRAIL RIP','5 CARDS']}
+'use strict';
+/* ---------- config ---------- */
+const START=100, TICKET_AT=50, MIN_POOL=20;
+const API='https://api.pokemontcg.io/v2', IMG='https://images.pokemontcg.io';
+const SET_TTL=3*864e5, LIST_TTL=7*864e5, SAVE_KEY='pokerip-save-v3', SEL_KEY='pokerip-v3-selected';
+const DEFAULT_SETS=['sv3pt5','sv8pt5','sv4pt5','sv8','sv3','sv2','swsh7','swsh12pt5'];
+// value bands: [min, max, weight %]
+const RARE_BANDS=[[0,1.5,62],[1.5,5,24],[5,15,10],[15,50,3.3],[50,1e9,.7]];
+const BONUS_BANDS=[[0,1.5,75],[1.5,5,20],[5,15,5]];
+const HIT_BANDS=[[3,8,64],[8,20,26],[20,60,8.5],[60,1e9,1.5]];
+const CHASE_BANDS=[[8,20,60],[20,40,28],[40,90,9],[90,200,2.6],[200,1e9,.4]];
+const GRAIL_BANDS=[[18,40,58],[40,80,28],[80,180,10],[180,400,3.3],[400,1e9,.7]];
+const GRAB_BANDS=[[5,20,50],[20,60,30],[60,150,14],[150,400,5],[400,1e9,1]];
+const DECOY_BANDS=[[5,20,30],[20,60,28],[60,150,22],[150,400,13],[400,1e9,7]];
+const SLOTS={RARE:RARE_BANDS,BONUS:BONUS_BANDS,HIT:HIT_BANDS};
+const PACK_GRADES=[{grade:9,mult:1.4,w:70},{grade:10,mult:2.5,w:30}];
+const GRAB_GRADES=[{grade:8,mult:1.15,w:30},{grade:9,mult:1.4,w:50},{grade:10,mult:2.5,w:20}];
+const GRADE_NAME={8:'NM-MT',9:'MINT',10:'GEM MINT'};
+const TIERS=[
+ {id:'booster',name:'Booster',tag:'BOOSTER PACK',price:5,color:'#55d6cf',kind:'pack',bulk:4,slots:['RARE'],blurb:'5 cards · 1 rare slot that can hit big',desc:'Works like a real booster: 4 bulk cards plus one rare slot.'},
+ {id:'hit',name:'Hit Pack',tag:'HIT PACK',price:15,color:'#9887ff',kind:'pack',bulk:3,slots:['BONUS','HIT'],blurb:'5 cards · guaranteed $3+ hit',desc:'3 bulk cards, a bonus rare slot, and one guaranteed hit worth $3 or more.'},
+ {id:'chase',name:'Chase',tag:'CHASE PULL',price:30,color:'#ff9b65',kind:'single',bands:CHASE_BANDS,slab:.06,blurb:'1 card · $8 floor · 6% graded',desc:'One card, no bulk. Every pull is worth at least $8.'},
+ {id:'grail',name:'Grail',tag:'GRAIL PULL',price:60,color:'#f5c451',kind:'single',bands:GRAIL_BANDS,slab:.1,blurb:'1 card · $18 floor · 10% graded',desc:'One card from the top of the market. Every pull is worth at least $18.'}
 ];
-// Real TCG card entries; artwork loads from the public Pokémon TCG CDN. Prices are local simulated values.
-let cards=[
-['sv1','1','Sprigatito','Paldea Evolved','Common',0.15],['sv1','2','Floragato','Paldea Evolved','Uncommon',0.2],['sv1','3','Meowscarada','Paldea Evolved','Rare',0.55],['sv1','4','Toedscool','Paldea Evolved','Common',0.1],['sv1','5','Toedscruel','Paldea Evolved','Rare',0.3],['sv1','6','Capsakid','Paldea Evolved','Common',0.1],['sv1','29','Scovillain','Scarlet & Violet','Uncommon',0.18],['sv1','8','Tarountula','Paldea Evolved','Common',0.1],['sv1','9','Spidops','Paldea Evolved','Rare',0.35],['sv1','10','Pineco','Paldea Evolved','Common',0.12],['sv1','11','Heracross','Paldea Evolved','Uncommon',0.2],['sv1','12','Tropius','Paldea Evolved','Uncommon',0.18],['sv1','13','Hoppip','Paldea Evolved','Common',0.12],['sv1','14','Skiploom','Paldea Evolved','Uncommon',0.15],['sv1','15','Jumpluff','Paldea Evolved','Rare',0.35],
-['sv1','193','Pikachu','Paldea Evolved','Illustration Rare',22],['sv1','203','Magikarp','Paldea Evolved','Illustration Rare',95],['sv1','205','Raichu','Paldea Evolved','Illustration Rare',30],['sv1','226','Tyranitar ex','Paldea Evolved','Special Illustration Rare',55],['sv1','228','Iono','Paldea Evolved','Special Illustration Rare',90],['sv1','258','Magikarp','Paldea Evolved','Illustration Rare',95],
-['sv3','125','Charizard ex','Obsidian Flames','Double Rare',8],['sv3','223','Charizard ex','Obsidian Flames','Special Illustration Rare',115],['sv3','215','Pidgeot ex','Obsidian Flames','Special Illustration Rare',22],['sv3','217','Ninetales','Obsidian Flames','Illustration Rare',14],['sv3','228','Pidgey','Obsidian Flames','Illustration Rare',12],['sv3','234','Charizard ex','Obsidian Flames','Hyper Rare',65],
-['sv4pt5','25','Mew ex','Paldean Fates','Double Rare',8],['sv4pt5','232','Mew ex','Paldean Fates','Special Illustration Rare',100],['sv4pt5','234','Charizard ex','Paldean Fates','Special Illustration Rare',150],['sv4pt5','239','Pikachu','Paldean Fates','Shiny Rare',18],['sv4pt5','98','Gardevoir ex','Paldean Fates','Shiny Ultra Rare',12],
-['swsh12','186','Giratina V','Lost Origin','Alternate Art',280],['swsh12','212','Pikachu V','Lost Origin','Trainer Gallery',18],['swsh12','220','Pikachu VMAX','Lost Origin','Trainer Gallery',35],['swsh12','GG69','Giratina VSTAR','Lost Origin','Galarian Gallery',125],['swsh12','GG70','Arceus VSTAR','Lost Origin','Galarian Gallery',65],['swsh12','GG40','Gengar','Lost Origin','Galarian Gallery',16],
-['swsh7','215','Umbreon VMAX','Evolving Skies','Alternate Art',650],['swsh7','189','Umbreon V','Evolving Skies','Alternate Art',120],['swsh7','215','Umbreon VMAX','Evolving Skies','Alternate Art',650],['swsh7','205','Rayquaza VMAX','Evolving Skies','Alternate Art',260],['swsh7','203','Sylveon VMAX','Evolving Skies','Alternate Art',115],
-['swsh8','271','Gengar VMAX','Fusion Strike','Alternate Art',180],['swsh8','280','Mew VMAX','Fusion Strike','Alternate Art',50],['swsh8','269','Espeon VMAX','Fusion Strike','Alternate Art',110],
-['sv2','246','Mew ex','151','Special Illustration Rare',105],['sv2','173','Charizard ex','151','Special Illustration Rare',110],['sv2','160','Blastoise ex','151','Special Illustration Rare',35],['sv2','151','Mew ex','151','Ultra Rare',12],['sv2','199','Venusaur ex','151','Special Illustration Rare',36],
-['swsh3','203','Charizard V','Champion’s Path','Special Art',140],['swsh3','74','Gardevoir V','Champion’s Path','Ultra Rare',1.5]
-].map((c,i)=>{const set={'Paldea Evolved':'sv2','Lost Origin':'swsh11','151':'sv3pt5'}[c[3]]||c[0],setName=c[1].startsWith('GG')?'Crown Zenith':c[3];return{id:`${set}-${c[1]}-${i}`,set,num:c[1],name:c[2],setName,rarity:c[4],value:c[5],img:`https://images.pokemontcg.io/${set}/${c[1]}.png`}});
-const seedCards=cards;
-// Card data is loaded from the Pokémon TCG catalog. All displayed values remain simulated.
-const DEFAULT_SET_IDS=['sv1','sv2','sv3','sv3pt5','sv4pt5','swsh3','swsh7','swsh8','swsh11','swsh12pt5'];
-let catalogReady=false,tcgRecords=[],setCatalog=[],setCardCache={},selectedSetIds=new Set();
-function rarityMatches(a,r){const x=String(a||'').toLowerCase(),base=typeof r==='string'?r:String(r?.rarity||''),y=typeof r==='string'?r.toLowerCase():`${r?.rarity||''} ${(r?.subtypes||[]).join(' ')}`.toLowerCase();return x===base.toLowerCase()||x===y||((x==='alternate art'||x==='galarian gallery'||x==='trainer gallery')&&new RegExp(x.replace(' ','\\s*'),'i').test(y))}
-function resolveTcgCard(c){return tcgRecords.find(r=>r.tcgId===c.tcgId)||tcgRecords.find(r=>r.name.toLowerCase()===String(c.name).toLowerCase()&&r.setName===c.setName&&String(r.num)===String(c.num))||tcgRecords.find(r=>r.name.toLowerCase()===String(c.name).toLowerCase()&&r.setName===c.setName)||null}
-function applyTcgCard(c){const r=resolveTcgCard(c);if(r){c.tcgId=r.tcgId;c.img=r.img;c.set=r.set;c.num=r.num;c.setName=r.setName;c.actualRarity=r.rarity}return c}
-function normalizeCard(c){return applyTcgCard(c)}
-function estimatedValue(r){const exact=seedCards.find(c=>c.set===r.set&&String(c.num)===String(r.num)&&c.name===r.name);if(exact)return exact.value;const q=String(r.rarity||'').toLowerCase();let base=.15;if(/common/.test(q))base=.08;else if(/uncommon/.test(q))base=.14;else if(/special illustration|alternate art|secret|hyper|rainbow|shiny rare|illustration rare|gallery/.test(q))base=18;else if(/double rare|ultra rare/.test(q))base=2.5;else if(/vmax|vstar/.test(q))base=5;else if(/rare holo v|rare holo ex|rare holo gx/.test(q))base=3;else if(/rare/.test(q))base=.45;const nm=r.name.toLowerCase();if(/charizard|pikachu|umbreon|giratina|gengar|mew/.test(nm)&&base>=3)base*=2;const hash=[...String(r.tcgId||r.id)].reduce((a,c)=>a+c.charCodeAt(0),0);return Math.round(base*(.72+(hash%57)/100)*100)/100}
-function toCard(r){return{tcgId:r.id,name:r.name,set:r.set.id,setName:r.set.name,num:String(r.number),rarity:r.rarity||'Unknown',subtypes:r.subtypes||[],value:estimatedValue({tcgId:r.id,name:r.name,set:r.set.id,num:String(r.number),rarity:r.rarity}),img:r.images?.small||'',slab:false}}
-function cardKey(c){return c.tcgId||`${c.set}-${c.num}-${c.name}`}
-function uniqueCards(list){return [...new Map(list.map(c=>[cardKey(c),c])).values()]}
-function selectedCards(){return uniqueCards(cards.filter(c=>selectedSetIds.has(c.set)))}
-function esc(s){return String(s||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
-async function fetchSetCards(id){if(setCardCache[id])return setCardCache[id];const u=new URL('https://api.pokemontcg.io/v2/cards');u.searchParams.set('q',`set.id:${id}`);u.searchParams.set('pageSize','250');u.searchParams.set('select','id,name,set,number,rarity,subtypes,images');const res=await fetch(u);if(!res.ok)throw new Error('Could not load that set');const body=await res.json();const out=(body.data||[]).filter(r=>r.images?.small).map(toCard);setCardCache[id]=out;try{localStorage.setItem('pokerip-set-cache-v2',JSON.stringify(setCardCache))}catch(e){console.warn('Set cache could not be saved',e)}return out}
-function refreshCardPool(){const loaded=Object.values(setCardCache).flat();cards=uniqueCards(loaded.length?loaded:seedCards);tcgRecords=cards}
-async function hydrateCatalog(){try{let savedSets=[];try{setCardCache=JSON.parse(localStorage.getItem('pokerip-set-cache-v2')||'{}');savedSets=JSON.parse(localStorage.getItem('pokerip-selected-set-ids')||'[]')}catch(e){}const cachedSets=JSON.parse(localStorage.getItem('pokerip-set-list-v1')||'null');if(cachedSets?.savedAt>Date.now()-30*86400000)setCatalog=cachedSets.sets;else{const u=new URL('https://api.pokemontcg.io/v2/sets');u.searchParams.set('pageSize','250');u.searchParams.set('orderBy','-releaseDate');u.searchParams.set('select','id,name,series,releaseDate,total');const res=await fetch(u);if(!res.ok)throw new Error('Set list unavailable');const body=await res.json();setCatalog=body.data||[];try{localStorage.setItem('pokerip-set-list-v1',JSON.stringify({savedAt:Date.now(),sets:setCatalog}))}catch(e){}}if(!setCatalog.length)throw new Error('No sets returned');const validIds=new Set(setCatalog.map(x=>x.id));selectedSetIds=new Set((savedSets.length?savedSets:DEFAULT_SET_IDS).filter(id=>validIds.has(id)));if(!selectedSetIds.size)selectedSetIds.add(DEFAULT_SET_IDS[0]);for(const id of [...selectedSetIds]){try{await fetchSetCards(id)}catch(e){console.warn('Could not load set',id,e)}}refreshCardPool();game.owned=(game.owned||[]).map(normalizeCard);game.history=(game.history||[]).map(h=>({...h,cards:(h.cards||[]).map(normalizeCard)}));try{localStorage.setItem('pokerip-selected-set-ids',JSON.stringify([...selectedSetIds]))}catch(e){}}catch(e){console.warn('Pokémon TCG catalog unavailable; using bundled sample cards.',e);cards=seedCards;if(!setCatalog.length)setCatalog=[...new Map(seedCards.map(c=>[c.set,{id:c.set,name:c.setName,series:'Sample sets'}])).values()];try{const saved=JSON.parse(localStorage.getItem('pokerip-selected-set-ids')||'[]');selectedSetIds=new Set(saved.length?saved:seedCards.map(c=>c.set))}catch(e){selectedSetIds=new Set(seedCards.map(c=>c.set))}}finally{tcgRecords=cards;catalogReady=true;render()}}
-let game=load();function load(){try{let d=JSON.parse(localStorage.getItem('pokerip-save'));if(d&&typeof d.cash==='number'){d.owned=(d.owned||[]).map(normalizeCard);d.history=(d.history||[]).map(h=>({...h,cards:(h.cards||[]).map(normalizeCard)}));return d}}catch(e){}return{cash:100,spent:0,opened:0,owned:[],history:[],biggest:0}}
-function save(){localStorage.setItem('pokerip-save',JSON.stringify(game));render()}
-function renderSetPicker(){const chosenIds=[...selectedSetIds];const info=new Map(setCatalog.map(x=>[x.id,x]));cards.forEach(c=>{if(!info.has(c.set))info.set(c.set,{id:c.set,name:c.setName,series:'Pokémon TCG'})});const chosen=chosenIds.map(id=>info.get(id)||{id,name:id});const options=[...info.values()].filter(x=>!selectedSetIds.has(x.id)).sort((a,b)=>String(b.releaseDate||'').localeCompare(String(a.releaseDate||'')));const select=document.getElementById('setPicker');if(!select)return;select.innerHTML='<option value="">Add a Pokémon set…</option>'+options.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}${x.series?' · '+esc(x.series):''}</option>`).join('');document.getElementById('selectedSets').innerHTML=chosen.map(x=>`<button class="set-chip" onclick="removeSet('${esc(x.id)}')">${esc(x.name)}<span>×</span></button>`).join('')||'<span class="set-help">Add at least one set to build a pack pool.</span>';document.getElementById('rotationCount').textContent=`${chosenIds.length} sets · ${selectedCards().length.toLocaleString()} cards`}
-function removeSet(id){if(selectedSetIds.size<=1){toast('Keep at least one set selected.');return}selectedSetIds.delete(id);localStorage.setItem('pokerip-selected-set-ids',JSON.stringify([...selectedSetIds]));render()}
-async function addChosenSet(){const select=document.getElementById('setPicker'),id=select.value;if(!id)return;const button=select.nextElementSibling;button.disabled=true;button.textContent='LOADING…';try{await fetchSetCards(id);selectedSetIds.add(id);localStorage.setItem('pokerip-selected-set-ids',JSON.stringify([...selectedSetIds]));refreshCardPool();render();toast('Set added to the pack rotation.')}catch(e){toast('Could not load that set. Try again.')}finally{button.disabled=false;button.textContent='ADD SET'}}
-function money(value){return '$'+Number(value||0).toFixed(2)}function sum(values){return values.reduce((total,value)=>total+(Number(value)||0),0)}function collectionValue(){return sum(game.owned.map(card=>card.value))}function networth(){return game.cash+collectionValue()}
-function stats(items){return items.map(([l,v,h])=>`<div class="stat"><label>${l}</label><b>${v}</b><span class="hint">${h||''}</span></div>`).join('')}
-function render(){document.getElementById('cashTop').textContent=money(game.cash);renderSetPicker();document.getElementById('shopStats').innerHTML=stats([['AVAILABLE CASH',money(game.cash),'Virtual bankroll'],['COLLECTION VALUE',money(collectionValue()),`${game.owned.length} cards owned`],['PACKS OPENED',game.opened,'Five cards per pack'],['NET WORTH',money(networth()),`${money(networth()-START)} vs. $100 start`]]);
-document.getElementById('packs').innerHTML=tiers.map(t=>`<article class="pack" style="--accent:${t.color}"><div class="packtop"><span class="tier">${t.name.toUpperCase()} PACK</span><span class="price">${money(t.price)}</span></div><div class="pack-art"><div class="wrapper"></div></div><h3>${t.name} Rip</h3><p>${t.names[0]} · ${t.names[1]} · No guaranteed return</p><div class="odds">${t.odds.map((v,i)=>`<i style="--w:${v};--tone:${['#53657a','#56cdaa','#a87cff','#ffca55'][i]}"></i>`).join('')}</div><div class="packdesc"><span>Bulk ${t.odds[0]}% · Hit ${t.odds[1]}%</span><span>Chase ${t.odds[2]}% · Slab ${t.odds[3]}%</span></div><button class="buy" ${game.cash<t.price||!catalogReady||selectedCards().length<5?'disabled':''} onclick="buy('${t.id}')">${!catalogReady?'LOADING CARD DATA…':selectedCards().length<5?'SELECT A SET WITH 5+ CARDS':game.cash<t.price?'NOT ENOUGH CASH':'BUY & OPEN · '+money(t.price)}</button></article>`).join('');
-document.getElementById('collectionStats').innerHTML=stats([['CARDS',game.owned.length,'Owned inventory'],['COLLECTION VALUE',money(collectionValue()),'Simulated values'],['AVAILABLE CASH',money(game.cash),'Sell cards to add cash'],['NET WORTH',money(networth()),`${money(networth()-START)} vs. start`]]);
-renderCards('all');document.getElementById('dashStats').innerHTML=stats([['CASH',money(game.cash),'Available virtual money'],['COLLECTION',money(collectionValue()),`${game.owned.length} cards`],['NET WORTH',money(networth()),`${money(networth()-START)} profit / loss`],['LIFETIME SPENT',money(game.spent),`${game.opened} packs opened`],['BIGGEST PULL',money(game.biggest),'Single card value'],['AVERAGE PACK VALUE',game.opened?money(sum(game.history.map(h=>h.value))/game.opened):'$0.00','Value pulled per pack'],['CARDS PULLED',game.history.reduce((a,h)=>a+h.cards.length,0),'Kept and sold'],['PACKS OPENED',game.opened,'All tiers']]);
-const rh=game.history.slice(0,5);document.getElementById('recent').innerHTML=rh.length?`<div class="historybox"><table class="table"><thead><tr><th>Pack</th><th>Value</th><th>Outcome</th></tr></thead><tbody>${rh.map(h=>`<tr><td>${h.tier} · ${h.cards.length} cards</td><td>${money(h.value)}</td><td style="color:${h.value>=h.cost?'var(--green)':'var(--red)'}">${h.value>=h.cost?'+':''}${money(h.value-h.cost)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Open a pack and your pulls will show here.</div>';
-document.getElementById('historyRows').innerHTML=game.history.map(h=>`<tr><td>${h.tier}</td><td>${h.cards.length}</td><td>${money(h.cost)}</td><td>${money(h.value)}</td><td style="color:${h.value>=h.cost?'var(--green)':'var(--red)'}">${h.value>=h.cost?'+':''}${money(h.value-h.cost)}</td></tr>`).join('');document.getElementById('historyEmpty').style.display=game.history.length?'none':'block';}
-function imageFailed(img){const d=document.createElement('div');d.className='image-missing';d.innerHTML=`<div>${img.alt||'Pokémon card'}<span>ARTWORK UNAVAILABLE</span></div>`;img.replaceWith(d)}
-function renderCards(filter){const arr=filter==='slab'?game.owned.filter(c=>c.slab):game.owned;document.getElementById('cards').innerHTML=arr.length?arr.slice().reverse().map(c=>`<article class="carditem"><span class="tag">${c.slab?'PSA '+c.grade+' SLAB':c.rarity.toUpperCase()}</span><img loading="lazy" referrerpolicy="no-referrer" src="${c.img}" alt="${c.name}" onerror="imageFailed(this)"><h3>${c.name}${c.slab?' · PSA '+c.grade:''}</h3><div class="meta">${c.setName} · ${c.num}</div><div class="cardfoot"><span>${money(c.value)}</span><button class="sell" onclick="sell('${c.uid}')">SELL</button></div></article>`).join(''):'<div class="empty" style="grid-column:1/-1">No cards here yet. Open a pack to start your collection.</div>'}
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>switchView(b.dataset.view));document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>switchView(b.dataset.goto));function switchView(v){document.querySelectorAll('.content-view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.view===v));window.scrollTo({top:0,behavior:'smooth'})}document.querySelectorAll('.filter button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderCards(b.dataset.filter)});
-function pick(a){return a[Math.floor(Math.random()*a.length)]}function weighted(odds){let n=Math.random()*100;for(let i=0;i<odds.length;i++){if(n<odds[i])return i;n-=odds[i]}return 0}
-function cardCategory(c){const r=`${c.rarity||''} ${(c.subtypes||[]).join(' ')}`.toLowerCase();if(/common|uncommon/.test(r))return 0;if(/illustration|special|hyper|secret|rainbow|shiny|gallery|alternate art/.test(r))return 2;if(/rare|holo|double|ultra|ex|vmax|vstar|gx/.test(r))return 1;return 0}
-function generate(t){let remaining=selectedCards().slice();if(remaining.length<5)throw new Error('Choose a set rotation with at least five unique cards.');let result=[];for(let i=0;i<5;i++){let category=i===4?weighted(t.odds):Math.random()<.72?0:weighted(t.odds);let pool=category===0?remaining.filter(c=>cardCategory(c)===0):category===1?remaining.filter(c=>cardCategory(c)===1):category===2?remaining.filter(c=>cardCategory(c)===2):remaining.filter(c=>c.value>=50);if(!pool.length&&category===3)pool=remaining.filter(c=>cardCategory(c)===2);if(!pool.length)pool=remaining;let card={...pick(pool)},key=cardKey(card);remaining=remaining.filter(c=>cardKey(c)!==key);card.uid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);card.slab=false;if(category===3&&Math.random()<.55){card.slab=true;card.grade=Math.random()<.72?9:10;card.value=Math.round(card.value*(card.grade===10?3.2:1.7)*100)/100;card.rarity='PSA '+card.grade+' Slab'}result.push(card)}return result}
-let openingPack=null,pulls=[],index=0,retained=[];function buy(id){let t=tiers.find(x=>x.id===id);if(!t||game.cash<t.price)return;if(selectedCards().length<5){toast('Choose a set rotation with at least five cards.');return;}game.cash-=t.price;game.spent+=t.price;openingPack=t;pulls=generate(t);index=-1;retained=[];document.getElementById('opening').classList.add('show');document.getElementById('openTitle').textContent=t.name+' pack';document.getElementById('openStep').textContent='PACK PURCHASED · '+money(t.price);document.getElementById('revealInfo').innerHTML='';document.getElementById('meter').style.width='0%';document.getElementById('stage').innerHTML=`<div class="sealed" style="--accent:${t.color}" onclick="tearPack()"><span>POKÉ<br>RIP</span><i class="ripline"></i></div>`;document.getElementById('openActions').innerHTML='<button class="primary" onclick="tearPack()">TAP TO RIP</button>';render()}
-function tearPack(){let s=document.querySelector('.sealed');if(!s)return;s.classList.add('ripping');document.getElementById('openActions').innerHTML='';setTimeout(()=>showNext(),550)}
-function showNext(){index++;if(index>=pulls.length){finishOpening();return}let c=pulls[index],glow=c.slab?'#ffc54d':['Special Illustration Rare','Alternate Art','Hyper Rare','Illustration Rare','Galarian Gallery'].includes(c.rarity)?'#bc8cff':'#54d6d0';document.getElementById('openTitle').textContent=index===pulls.length-1?'FINAL CARD':'Card '+(index+1)+' of '+pulls.length;document.getElementById('openStep').textContent=c.slab?'GRADED SLAB PULL':c.rarity.toUpperCase();document.getElementById('stage').innerHTML=`<img class="reveal" referrerpolicy="no-referrer" src="${c.img}" alt="${c.name}" style="--glow:${glow}" onerror="imageFailed(this)">`;document.getElementById('revealInfo').innerHTML=`<strong>${c.name}${c.slab?' · PSA '+c.grade:''}</strong><small>${c.setName} · ${c.actualRarity||c.rarity} · simulated ${money(c.value)}</small>`;document.getElementById('meter').style.width=((index+1)/pulls.length*100)+'%';document.getElementById('openActions').innerHTML=`<button class="secondary" onclick="discardPull()">SELL · ${money(c.value)}</button><button class="primary" onclick="keepPull()">KEEP CARD</button><button class="secondary" onclick="showNext()">NEXT</button>`}
-function keepPull(){retained.push(pulls[index]);showNext()}function discardPull(){game.cash+=pulls[index].value;showNext()}
-function finishOpening(){game.opened++;let val=sum(pulls.map(c=>c.value));game.biggest=Math.max(game.biggest,...pulls.map(c=>c.value));game.owned.push(...retained);game.history.unshift({tier:openingPack.name,cost:openingPack.price,value:val,cards:pulls,kept:retained.map(c=>c.uid),date:new Date().toISOString()});document.getElementById('openTitle').textContent='Rip complete';document.getElementById('openStep').textContent='PACK VALUE · '+money(val);document.getElementById('stage').innerHTML=`<div style="font-size:58px;filter:drop-shadow(0 0 25px #f5c451)">${pulls.some(c=>c.value>30)?'✨':'🃏'}</div>`;document.getElementById('revealInfo').innerHTML=`<strong>${pulls.length} cards pulled · ${money(val)} total value</strong><small>${retained.length} kept · ${pulls.length-retained.length} sold back</small>`;document.getElementById('openActions').innerHTML='<button class="primary" onclick="closeOpening()">BACK TO SHOP</button><button class="secondary" onclick="switchView(\'collection\');closeOpening()">VIEW COLLECTION</button>';save()}
-function checkBroke(){if(game.cash<5&&!document.getElementById('opening').classList.contains('show')){const modal=document.getElementById('brokeModal');if(!modal.classList.contains('show')){document.getElementById('brokeTitle').textContent='O no, you have a gambling problem!';document.getElementById('brokeMessage').textContent='Time to alert Kyle you have a problem :)';const button=document.getElementById('brokeButton');button.textContent='Fine, alert him';button.onclick=alertKyle;modal.classList.add('show')}}}function alertKyle(){game.cash=START;save();document.getElementById('brokeTitle').textContent='He already knows ;)';document.getElementById('brokeMessage').textContent='Kyle has been alerted. Your virtual bankroll is back to $100.';const button=document.getElementById('brokeButton');button.textContent='Back to the packs';button.onclick=dismissBroke}function dismissBroke(){document.getElementById('brokeModal').classList.remove('show')}function closeOpening(){document.getElementById('opening').classList.remove('show');checkBroke()}function sell(uid){let i=game.owned.findIndex(c=>c.uid===uid);if(i<0)return;let c=game.owned.splice(i,1)[0];game.cash+=c.value;save();toast(`${c.name} sold for ${money(c.value)}`);checkBroke()}function toast(s){let e=document.getElementById('toast');e.textContent=s;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}render();hydrateCatalog().then(checkBroke);
-</script></body></html>
+const LEGACY_TIERS={Starter:'booster',Premium:'hit',Elite:'chase',Grail:'grail'};
+const GLOW={1:'#8fa2ba',2:'#57d6d0',3:'#a983ff',4:'#f5c451',5:'#ff5fd2'};
+const RAINBOW=['#ff5fd2','#ffd36b','#6bffd8','#6bb5ff','#ffffff','#a983ff'], GOLDS=['#f5c451','#fff3c4','#ffb347','#ffffff'];
+// Offline fallback: a small sample pool with estimated values.
+const SEED_SETS={sv3pt5:'151',swsh7:'Evolving Skies',swsh8:'Fusion Strike',sv4pt5:'Paldean Fates',sv3:'Obsidian Flames'};
+const SEED=[['sv3pt5',1,'Bulbasaur','Common',.12],['sv3pt5',2,'Ivysaur','Uncommon',.15],['sv3pt5',4,'Charmander','Common',.35],['sv3pt5',5,'Charmeleon','Uncommon',.2],['sv3pt5',7,'Squirtle','Common',.25],['sv3pt5',8,'Wartortle','Uncommon',.15],['sv3pt5',10,'Caterpie','Common',.08],['sv3pt5',11,'Metapod','Common',.08],['sv3pt5',13,'Weedle','Common',.08],['sv3pt5',16,'Pidgey','Common',.1],['sv3pt5',19,'Rattata','Common',.08],['sv3pt5',23,'Ekans','Common',.08],['sv3pt5',25,'Pikachu','Common',.45],['sv3pt5',35,'Clefairy','Common',.12],['sv3pt5',37,'Vulpix','Common',.12],['sv3pt5',39,'Jigglypuff','Common',.15],['sv3pt5',43,'Oddish','Common',.08],['sv3pt5',52,'Meowth','Common',.1],['sv3pt5',54,'Psyduck','Common',.15],['sv3pt5',58,'Growlithe','Common',.1],['sv3pt5',63,'Abra','Common',.1],['sv3pt5',66,'Machop','Common',.08],['sv3pt5',74,'Geodude','Common',.08],['sv3pt5',79,'Slowpoke','Common',.1],['sv3pt5',92,'Gastly','Common',.15],['sv3pt5',129,'Magikarp','Common',.2],['sv3pt5',133,'Eevee','Common',.3],['sv3pt5',3,'Venusaur ex','Double Rare',2],['sv3pt5',6,'Charizard ex','Double Rare',5],['sv3pt5',9,'Blastoise ex','Double Rare',2.5],['sv3pt5',24,'Arbok ex','Double Rare',1],['sv3pt5',65,'Alakazam ex','Double Rare',1.5],['sv3pt5',145,'Zapdos ex','Double Rare',1.5],['sv3pt5',151,'Mew ex','Double Rare',3],['sv3pt5',166,'Bulbasaur','Illustration Rare',9],['sv3pt5',168,'Charmander','Illustration Rare',14],['sv3pt5',170,'Squirtle','Illustration Rare',10],['sv3pt5',173,'Pikachu','Illustration Rare',12],['sv3pt5',198,'Venusaur ex','Special Illustration Rare',40],['sv3pt5',199,'Charizard ex','Special Illustration Rare',160],['sv3pt5',200,'Blastoise ex','Special Illustration Rare',45],['sv3pt5',201,'Alakazam ex','Special Illustration Rare',30],['sv3pt5',202,'Zapdos ex','Special Illustration Rare',22],['sv3pt5',205,'Mew ex','Hyper Rare',22],['swsh7',215,'Umbreon VMAX','Alternate Art',950],['swsh7',218,'Rayquaza VMAX','Alternate Art',340],['swsh7',212,'Sylveon VMAX','Alternate Art',110],['swsh7',189,'Umbreon V','Alternate Art',150],['swsh8',271,'Gengar VMAX','Alternate Art',260],['swsh8',269,'Mew VMAX','Alternate Art',55],['sv4pt5',234,'Charizard ex','Special Illustration Rare',120],['sv4pt5',232,'Mew ex','Special Illustration Rare',80],['sv3',223,'Charizard ex','Special Illustration Rare',75],['sv3',125,'Charizard ex','Double Rare',4]];
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const r2=n=>Math.round((Number(n)||0)*100)/100;
+const sum=a=>a.reduce((t,v)=>t+(Number(v)||0),0);
+const money=n=>{n=r2(n);return(n<0?'-$':'$')+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})};
+const signed=n=>(r2(n)>0?'+':'')+money(n);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const wIndex=ws=>{let n=Math.random()*sum(ws);for(let i=0;i<ws.length;i++){if((n-=ws[i])<0)return i}return ws.length-1};
+const vt=v=>v>=200?5:v>=50?4:v>=10?3:v>=1.5?2:1;
+const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+const bandLabel=(a,b)=>b>=1e9?`${money(a).replace('.00','')}+`:`${money(a).replace('.00','')} to ${money(b).replace('.00','')}`;
+const large=u=>/images\.pokemontcg\.io/.test(u||'')&&!/_hires/.test(u)?u.replace(/\.png$/,'_hires.png'):u;
+function ago(ts){const s=(Date.now()-ts)/1000;if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';if(s<604800)return Math.floor(s/86400)+'d ago';return new Date(ts).toLocaleDateString()}
+const LS={get(k,d=null){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+
+/* ---------- sound + fx ---------- */
+const Sound={on:LS.get('pokerip-sound',true)!==false,ctx:null,
+ init(){try{if(!this.ctx){const A=window.AudioContext||window.webkitAudioContext;if(A)this.ctx=new A()}if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume()}catch(e){}},
+ tone(f,d=.1,type='sine',v=.12,delay=0,f2){if(!this.on||!this.ctx)return;const c=this.ctx,t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.03)},
+ noise(d=.3,v=.15){if(!this.on||!this.ctx)return;const c=this.ctx,b=c.createBuffer(1,Math.floor(c.sampleRate*d),c.sampleRate),ch=b.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=(Math.random()*2-1)*(1-i/ch.length);const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type='highpass';f.frequency.value=1400;g.gain.value=v;s.connect(f);f.connect(g);g.connect(c.destination);s.start()},
+ tear(){this.noise(.35,.22);this.tone(320,.25,'sawtooth',.035,0,90)},
+ flip(){this.tone(520,.07,'triangle',.1);this.tone(780,.06,'triangle',.06,.05)},
+ tick(){this.tone(1150,.025,'square',.025)},
+ charge(){this.tone(180,.85,'sawtooth',.03,0,950)},
+ hit(lvl){const n=[523,659,784,1047,1319,1568,2093],k=Math.min(n.length,lvl+2);for(let i=0;i<k;i++)this.tone(n[i],.4,'triangle',.08,i*.075)}};
+const FX={c:null,ctx:null,parts:[],run:false,
+ size(){if(!this.c)return;const d=Math.min(2,window.devicePixelRatio||1);this.c.width=innerWidth*d;this.c.height=innerHeight*d;this.ctx.setTransform(d,0,0,d,0,0)},
+ init(){this.c=$('#fx');this.ctx=this.c.getContext('2d');this.size();addEventListener('resize',()=>this.size())},
+ burst(n,colors){if(!this.ctx||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const x=innerWidth/2,y=innerHeight*.42;for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=3+Math.random()*10;this.parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,g:.17+Math.random()*.1,r:3+Math.random()*4,rot:Math.random()*6,vr:(Math.random()-.5)*.3,c:colors[i%colors.length],life:1})}if(!this.run){this.run=true;requestAnimationFrame(()=>this.tick())}},
+ tick(){const ctx=this.ctx;ctx.clearRect(0,0,innerWidth,innerHeight);this.parts=this.parts.filter(p=>p.life>0&&p.y<innerHeight+30);for(const p of this.parts){p.vx*=.985;p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life-=.0075;ctx.save();ctx.globalAlpha=Math.max(0,Math.min(1,p.life*1.6));ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.c;ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);ctx.restore()}if(this.parts.length)requestAnimationFrame(()=>this.tick());else{this.run=false;ctx.clearRect(0,0,innerWidth,innerHeight)}}};
+function flash(o=.6){const f=$('#flash');f.style.setProperty('--o',o);f.classList.remove('go');void f.offsetWidth;f.classList.add('go')}
+function celebrate(lvl){if(lvl<3)return;Sound.hit(lvl);if(lvl>=4){flash(lvl>=5?.85:.55);FX.burst(lvl>=5?280:150,lvl>=5?RAINBOW:GOLDS);buzz([60,40,140])}else{FX.burst(55,['#a983ff','#57d6d0','#ffffff']);buzz(30)}}
+function countUp(el,to,ms){if(!el)return;const t0=performance.now();const f=t=>{const p=Math.min(1,(t-t0)/ms);el.textContent=money(to*(1-Math.pow(1-p,3)));if(p<1&&el.isConnected)requestAnimationFrame(f)};requestAnimationFrame(f)}
+
+/* ---------- card catalog ---------- */
+const catalog={sets:[],data:{},loading:new Set(),failed:new Set(),offline:false,ready:false};
+let selected=new Set(), poolCache=null;
+function activePool(){if(poolCache)return poolCache;const m=new Map();for(const id of selected)for(const c of catalog.data[id]||[])m.set(c.id,c);poolCache=[...m.values()];return poolCache}
+const invalidatePool=()=>{poolCache=null};
+const setName=id=>catalog.sets.find(s=>s.id===id)?.name||SEED_SETS[id]||id;
+const saveSelected=()=>{if(!catalog.offline)LS.set(SEL_KEY,[...selected])};
+async function getJSON(url,ms=30000){const ac=new AbortController(),t=setTimeout(()=>ac.abort(),ms);try{const r=await fetch(url,{signal:ac.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(t)}}
+function marketPrice(t){const p=t&&t.prices;if(!p)return null;for(const k of['holofoil','normal','1stEditionHolofoil','unlimitedHolofoil','reverseHolofoil','1stEditionNormal','unlimited']){const v=p[k];if(v&&(v.market||v.mid))return v.market||v.mid}for(const v of Object.values(p))if(v&&(v.market||v.mid))return v.market||v.mid;return null}
+function estimate(rarity){const r=String(rarity||'').toLowerCase();for(const[re,v]of[[/special illustration|hyper|secret|gold|rainbow/,25],[/illustration rare/,8],[/alt|gallery|shiny ultra|ultra|double|vmax|vstar|\bex\b|gx|\bv\b/,3],[/shiny|radiant|amazing|ace spec|prism/,2],[/holo|rare/,.4],[/uncommon/,.1],[/common/,.06]])if(re.test(r))return v;return .25}
+function compact(r,setId,sn){const p=marketPrice(r.tcgplayer);return{id:r.id,name:r.name,setId,setName:sn,num:String(r.number),rarity:r.rarity||'Promo',value:p!=null?Math.max(.05,r2(p)):estimate(r.rarity),est:p==null,img:r.images.small}}
+async function loadSetList(){const c=LS.get('pokerip-v3-setlist');if(c&&c.sets&&c.sets.length){catalog.sets=c.sets;if(Date.now()-c.at<LIST_TTL)return}
+ try{const q=new URLSearchParams({pageSize:'250',orderBy:'-releaseDate',select:'id,name,series,releaseDate,total'});const b=await getJSON(`${API}/sets?${q}`);if(b.data&&b.data.length){catalog.sets=b.data;LS.set('pokerip-v3-setlist',{at:Date.now(),sets:b.data})}}catch(e){if(!catalog.sets.length)throw e}}
+async function loadSet(id){const key='pokerip-v3-set-'+id,cached=LS.get(key);
+ if(cached&&cached.cards&&cached.cards.length){catalog.data[id]=cached.cards;invalidatePool();if(Date.now()-cached.at<SET_TTL)return}
+ catalog.loading.add(id);render();
+ try{const sn=setName(id);let page=1,all=[];
+  for(;;){const q=new URLSearchParams({q:`set.id:${id}`,pageSize:'250',page:String(page),select:'id,name,number,rarity,subtypes,supertype,images,tcgplayer'});const b=await getJSON(`${API}/cards?${q}`);const d=b.data||[];all.push(...d);if(d.length<250||all.length>=(b.totalCount||0)||page>=4)break;page++}
+  const cards=all.filter(r=>r.images&&r.images.small&&!(r.supertype==='Energy'&&(r.subtypes||[]).includes('Basic'))).map(r=>compact(r,id,sn));
+  if(!cards.length)throw new Error('No cards in set');
+  catalog.data[id]=cards;catalog.failed.delete(id);invalidatePool();
+  if(!LS.set(key,{at:Date.now(),cards})){pruneSetCache();LS.set(key,{at:Date.now(),cards})}
+ }catch(e){if(!catalog.data[id]){catalog.failed.add(id);throw e}}
+ finally{catalog.loading.delete(id);render()}}
+function pruneSetCache(){try{for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(k&&k.startsWith('pokerip-v3-set-')&&!selected.has(k.slice(15)))localStorage.removeItem(k)}}catch(e){}}
+function useSeed(){catalog.offline=true;catalog.data={};for(const[s,num,name,rar,val]of SEED){(catalog.data[s]=catalog.data[s]||[]).push({id:`${s}-${num}`,name,setId:s,setName:SEED_SETS[s],num:String(num),rarity:rar,value:val,est:true,img:`${IMG}/${s}/${num}.png`})}
+ if(!catalog.sets.length)catalog.sets=Object.keys(SEED_SETS).map(id=>({id,name:SEED_SETS[id],series:'Sample'}));selected=new Set(Object.keys(SEED_SETS));invalidatePool();catalog.ready=true;render()}
+async function initCatalog(){
+ try{await loadSetList()}catch(e){console.warn('Card API unreachable, using sample pool',e);useSeed();return}
+ const valid=new Set(catalog.sets.map(s=>s.id)),saved=LS.get(SEL_KEY,[]);
+ let ids=(Array.isArray(saved)?saved:[]).filter(id=>valid.has(id));if(!ids.length)ids=DEFAULT_SETS.filter(id=>valid.has(id));if(!ids.length)ids=[catalog.sets[0].id];
+ selected=new Set(ids);saveSelected();invalidatePool();render();
+ await Promise.allSettled(ids.map(id=>loadSet(id)));
+ if(activePool().length<MIN_POOL){useSeed();return}
+ catalog.ready=true;render()}
+async function addSet(id){if(catalog.offline){toast('The card database is offline right now.');return}if(selected.has(id))return;selected.add(id);saveSelected();invalidatePool();render();
+ try{await loadSet(id);toast(`${setName(id)} added to the rotation`)}catch(e){selected.delete(id);catalog.failed.delete(id);saveSelected();toast(`Couldn't load ${setName(id)}. Try again.`)}invalidatePool();render()}
+function removeSet(id){if(selected.size<=1){toast('Keep at least one set in the rotation.');return}selected.delete(id);saveSelected();invalidatePool();render()}
+async function resetSets(){if(catalog.offline)return;const valid=new Set(catalog.sets.map(s=>s.id));selected=new Set(DEFAULT_SETS.filter(id=>valid.has(id)));saveSelected();invalidatePool();render();await Promise.allSettled([...selected].map(id=>loadSet(id)));invalidatePool();render()}
+
+/* ---------- game state ---------- */
+const fresh=()=>({v:3,cash:START,spent:0,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0});
+const slim=c=>({name:c.name,value:c.value,img:c.img,slab:!!c.slab,grade:c.grade,setName:c.setName,num:c.num,rarity:c.rarity,raw:c.raw,est:c.est});
+function migrateCard(c,i,len){const v=Number(c.value)||0;return{id:c.tcgId||c.id||uid(),name:c.name||'Card',setId:c.set||c.setId||'',setName:c.setName||'',num:String(c.num||''),rarity:c.slab?(c.actualRarity||'Graded'):(c.rarity||''),value:v,est:true,img:c.img||'',slab:!!c.slab,grade:c.grade,raw:c.slab?r2(v/(c.grade===10?3.2:1.7)):undefined,uid:c.uid||uid(),at:c.at||Date.now()-(len-i)*1000,from:c.from||''}}
+function normalize(d){const f=fresh();for(const k in f)if(d[k]==null)d[k]=f[k];d.owned=d.owned.filter(c=>c&&c.uid&&typeof c.value==='number');d.history=d.history.filter(h=>h&&Array.isArray(h.cards));return d}
+function load(){const d=LS.get(SAVE_KEY);if(d&&d.v===3&&typeof d.cash==='number')return normalize(d);
+ const old=LS.get('pokerip-save');if(old&&typeof old.cash==='number'){const owned=old.owned||[];return normalize({...fresh(),cash:r2(old.cash),spent:old.spent||0,opened:old.opened||0,owned:owned.map((c,i)=>migrateCard(c,i,owned.length)),history:(old.history||[]).slice(0,150).map(h=>({id:uid(),tier:LEGACY_TIERS[h.tier]||'booster',cost:Number(h.cost)||0,value:Number(h.value)||0,at:Date.parse(h.date)||Date.now(),cards:(h.cards||[]).map((c,i)=>slim(migrateCard(c,i,1)))}))})}
+ return fresh()}
+function save(){game.history.length=Math.min(game.history.length,150);if(!LS.set(SAVE_KEY,game)){game.history.length=Math.min(game.history.length,40);pruneSetCache();LS.set(SAVE_KEY,game)}render()}
+const collectionValue=()=>sum(game.owned.map(c=>c.value));
+const networth=()=>game.cash+collectionValue();
+const bankrollGiven=()=>START*(1+(game.kyle||0));
+const tierInfo=id=>TIERS.find(t=>t.id===id)||(id==='grab'?{id,name:'Slab Grab',color:'#f5c451'}:{id,name:id,color:'#8d9bb0'});
+const histEntry=(tier,cost,cards)=>({id:uid(),tier,cost,value:r2(sum(cards.map(c=>c.value))),at:Date.now(),cards:cards.map(slim)});
+function sellCard(u){const i=game.owned.findIndex(c=>c.uid===u);if(i<0)return null;const c=game.owned.splice(i,1)[0];game.cash=r2(game.cash+c.value);game.sold=r2((game.sold||0)+c.value);const ticket=c.value>=TICKET_AT&&c.from!=='Slab Grab';if(ticket)game.tickets++;return{card:c,value:c.value,ticket}}
+
+/* ---------- pull generation ---------- */
+function bandPick(pool,bands,used){const idx=wIndex(bands.map(b=>b[2])),order=[idx];
+ for(let d=1;d<bands.length;d++){if(idx-d>=0)order.push(idx-d);if(idx+d<bands.length)order.push(idx+d)}
+ for(const k of order){const[mn,mx]=bands[k],c=pool.filter(x=>x.value>=mn&&x.value<mx&&!used.has(x.name));if(c.length)return mx>=1e9?c[wIndex(c.map(x=>mn/x.value))]:pick(c)}
+ const rest=pool.filter(x=>!used.has(x.name)).sort((a,b)=>b.value-a.value);return pick(rest.slice(0,10).length?rest.slice(0,10):pool)}
+function pickBulk(pool,used){let c=pool.filter(x=>/^(common|uncommon)$/i.test(x.rarity)&&x.value<1.5&&!used.has(x.name));if(!c.length)c=pool.filter(x=>x.value<1&&!used.has(x.name));if(!c.length)c=pool.filter(x=>!used.has(x.name));return pick(c.length?c:pool)}
+const inst=c=>({...c,slab:false,grade:undefined,raw:undefined});
+function gradeIt(c,dist){const g=dist[wIndex(dist.map(x=>x.w))];c.slab=true;c.grade=g.grade;c.raw=c.value;c.value=r2(c.value*g.mult);return c}
+function generate(t,pool){const used=new Set(),out=[],take=c=>{used.add(c.name);const x=inst(c);out.push(x);return x};
+ if(t.kind==='pack'){for(let i=0;i<t.bulk;i++)take(pickBulk(pool,used));for(const s of t.slots)take(bandPick(pool,SLOTS[s],used))}
+ else{const x=take(bandPick(pool,t.bands,used));if(Math.random()<t.slab)gradeIt(x,PACK_GRADES)}
+ return out}
+
+/* ---------- image helpers ---------- */
+function imgTag(c,hi=false,eager=false){const lo=c.img||'';return `<img src="${esc(hi?large(lo):lo)}" data-lo="${esc(lo)}" alt="${esc(c.name)}" ${eager?'':'loading="lazy"'} decoding="async" referrerpolicy="no-referrer" draggable="false" onerror="imgFail(this)">`}
+window.imgFail=function(img){const lo=img.dataset.lo;if(lo&&img.getAttribute('src')!==lo){img.src=lo;return}const d=document.createElement('div');d.className='img-missing';d.innerHTML=`<div>${esc(img.alt||'Pokémon card')}<span>ARTWORK UNAVAILABLE</span></div>`;img.replaceWith(d)};
+const slabHTML=(c,hi)=>`<div class="slab"><div class="slab-label"><span>POKÉ RIP GRADED</span><b>${c.grade}</b><small>${esc(c.name)} · ${GRADE_NAME[c.grade]||''}</small></div><div class="slab-win">${imgTag(c,hi,true)}</div></div>`;
+const BACK='<div class="cardback"><div class="cb-ring"><span>POKÉ<br>RIP</span></div></div>';
+function preload(cards){for(const c of cards){const i=new Image();i.referrerPolicy='no-referrer';i.src=large(c.img)}}
+const metaLine=c=>[c.setName,c.num?'#'+c.num:'',c.slab?'':c.rarity].filter(Boolean).map(esc).join(' · ');
+
+/* ---------- views ---------- */
+const VIEWS=['shop','binder','grab','stats','history'];let currentView='shop',binderFilter='all',binderCache=[];
+function route(){let v=location.hash.slice(1);if(v==='collection')v='binder';if(v==='dashboard')v='stats';currentView=VIEWS.includes(v)?v:'shop';$$('.view').forEach(s=>s.hidden=s.id!=='v-'+currentView);$$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===currentView));render()}
+function go(v){if(location.hash!=='#'+v)location.hash=v;else route();window.scrollTo(0,0)}
+const statHTML=items=>items.map(([l,v,h])=>`<div class="stat"><label>${l}</label><b>${v}</b>${h!=null?`<span class="hint">${h}</span>`:''}</div>`).join('');
+function render(){if(!game)return;renderHeader();({shop:renderShop,binder:renderBinder,grab:renderGrab,stats:renderStats,history:renderHistory})[currentView]()}
+function renderHeader(){$('#cashTop').textContent=money(game.cash);$('#tixTop').textContent=game.tickets;const b=$('#tixBadge');b.hidden=!game.tickets;b.textContent=game.tickets;$('#soundBtn').textContent=Sound.on?'🔊':'🔇'}
+function renderShop(){const pl=networth()-bankrollGiven();$('#apiBanner').hidden=!catalog.offline;
+ $('#shopStats').innerHTML=statHTML([['Cash',money(game.cash),'Virtual bankroll'],['Binder',money(collectionValue()),`${game.owned.length} card${game.owned.length===1?'':'s'}`],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,'Net worth vs. bankroll'],['Slab tickets','🎟 '+game.tickets,'Sell a $50+ card to earn']]);
+ const ready=activePool().length>=MIN_POOL;
+ $('#packs').innerHTML=TIERS.map(t=>{const afford=game.cash+1e-9>=t.price,dis=!ready||!afford||!!rip;const label=!ready?(catalog.loading.size||!catalog.ready?'Loading cards…':'Add more sets'):!afford?`Need ${money(t.price-game.cash)} more`:`Rip it · ${money(t.price)}`;
+  return `<article class="pack" style="--accent:${t.color}"><div class="pack-head"><span class="tier">${t.tag}</span><button class="odds-btn" data-action="odds" data-tier="${t.id}">Odds</button></div><div class="pack-art"><div class="mini-pack"><span>POKÉ<br>RIP</span></div></div><h3>${t.name}</h3><p>${t.blurb}</p><div class="pack-price">${money(t.price)}</div><button class="buy" data-action="buy" data-tier="${t.id}" ${dis?'disabled':''}>${label}</button></article>`}).join('');
+ renderRotation()}
+function renderRotation(){const pool=activePool(),nl=catalog.loading.size;
+ $('#rotSummary').textContent=`${selected.size} set${selected.size===1?'':'s'} · ${pool.length.toLocaleString()} cards${nl?` · loading ${nl}…`:''}${catalog.offline?' · sample pool':''}`;
+ $('#setChips').innerHTML=[...selected].map(id=>`<button class="chip${catalog.loading.has(id)?' loading':''}${catalog.failed.has(id)?' failed':''}" data-action="set-remove" data-id="${esc(id)}" aria-label="Remove ${esc(setName(id))}">${esc(setName(id))}<span aria-hidden="true">${catalog.loading.has(id)?'◌':'×'}</span></button>`).join('');
+ if(pool.length){const vs=pool.map(c=>c.value);$('#rotRange').textContent=`Card values ${money(Math.min(...vs))} to ${money(Math.max(...vs))}`}else $('#rotRange').textContent='';
+ const sel=$('#setPicker');if(document.activeElement!==sel){const groups=new Map();for(const s of catalog.sets){if(selected.has(s.id))continue;const g=s.series||'Other';if(!groups.has(g))groups.set(g,[]);groups.get(g).push(s)}
+  sel.disabled=catalog.offline;sel.innerHTML='<option value="">Add a Pokémon set…</option>'+[...groups].map(([g,ss])=>`<optgroup label="${esc(g)}">${ss.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.releaseDate?` (${esc(String(s.releaseDate).slice(0,4))})`:''}</option>`).join('')}</optgroup>`).join('')}}
+function binderList(){let a=game.owned.slice();if(binderFilter==='hits')a=a.filter(c=>c.value>=10);if(binderFilter==='slabs')a=a.filter(c=>c.slab);const s=$('#binderSort').value;if(s==='value')a.sort((x,y)=>y.value-x.value);else if(s==='name')a.sort((x,y)=>x.name.localeCompare(y.name));else a.sort((x,y)=>(y.at||0)-(x.at||0));return a}
+function tile(c,i,action='view-card'){const lvl=vt(c.value);return `<button class="tile lvl${lvl}" data-action="${action}" data-i="${i}" style="--glow:${GLOW[lvl]}"><div class="tile-img${c.slab?' is-slab':''}">${c.slab?`<span class="tile-tag">GRADED ${c.grade}</span>`:lvl>=3?'<span class="tile-tag">HIT</span>':''}${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(c.setName||'')}</span><b>${money(c.value)}</b></div></button>`}
+function renderBinder(){const o=game.owned,hits=o.filter(c=>c.value>=10).length,top=o.reduce((m,c)=>c.value>m.value?c:m,{value:0,name:'None yet'});
+ $('#binderStats').innerHTML=statHTML([['Cards',o.length,`${hits} hit${hits===1?'':'s'} · ${o.filter(c=>c.slab).length} slabs`],['Binder value',money(collectionValue()),'TCGplayer market'],['Top card',money(top.value),esc(top.name)],['Cash',money(game.cash),'Sell cards to add cash']]);
+ $$('#binderFilter button').forEach(b=>b.classList.toggle('on',b.dataset.f===binderFilter));
+ binderCache=binderList();
+ $('#binderGrid').innerHTML=binderCache.length?binderCache.map((c,i)=>tile(c,i)).join(''):`<div class="empty" style="grid-column:1/-1">${o.length?'No cards match this filter.':'No cards yet. Rip a pack to start your binder.'}</div>`}
+function renderGrab(){const t=game.tickets,ready=activePool().length>=MIN_POOL;$('#grabTix').textContent=t;$('#grabTixS').textContent=t===1?'':'s';
+ const b=$('#spinBtn');b.disabled=spinning||t<1||!ready;b.textContent=spinning?'Spinning…':!ready?'Loading cards…':t<1?'No tickets · sell a $50+ card':'Spin · use 1 ticket';
+ $('#grabOdds').innerHTML=GRAB_BANDS.map(([a,bb,w])=>`<div><b>${w}%</b>${bandLabel(a,bb)}</div>`).join('');
+ const wins=game.history.filter(h=>h.tier==='grab').slice(spinning?1:0,spinning?9:8);
+ $('#grabWins').innerHTML=wins.length?wins.map(h=>histRow(h)).join(''):'<div class="empty">No slabs grabbed yet. Your first spin is on the house.</div>';
+ if(ready&&!spinning&&!$('#reelTrack').children.length)idleReel()}
+function histRow(h){const t=tierInfo(h.tier),best=[...h.cards].sort((a,b)=>b.value-a.value)[0],net=h.value-h.cost;
+ return `<button class="hrow" data-action="hist" data-id="${h.id}"><span class="hdot" style="background:${t.color}"></span><span class="hthumb">${best?imgTag(best):''}</span><span class="hmain"><b>${esc(t.name)}${h.cards.length>1?` · ${h.cards.length} cards`:''}</b><small>${best?esc(best.name)+(best.slab?` (Graded ${best.grade})`:'')+' · ':''}${ago(h.at)}</small></span><span class="hnums"><b>${money(h.value)}</b><small class="${h.tier==='grab'?'muted':net>=0?'pos':'neg'}">${h.tier==='grab'?'Free spin':signed(net)}</small></span></button>`}
+function allPulls(){const out=[];for(const h of game.history)for(const c of h.cards)out.push({...c,from:tierInfo(h.tier).name,at:h.at});return out}
+function renderStats(){const nw=networth(),given=bankrollGiven(),pl=nw-given,packs=game.history.filter(h=>h.tier!=='grab'),pulled=sum(packs.map(h=>h.value)),ret=game.spent?Math.round(pulled/game.spent*100):0;
+ const best=allPulls().sort((a,b)=>b.value-a.value);statsBest=best.slice(0,6);
+ $('#statsGrid').innerHTML=statHTML([['Net worth',money(nw),'Cash + binder'],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,`vs. ${money(given)} given`],['Lifetime spent',money(game.spent),`${game.opened} rips`],['Return rate',ret+'%','Pulled value / spent'],['Biggest pull',money(best[0]?.value||0),esc(best[0]?.name||'None yet')],['Cash from sales',money(game.sold||0),'Cards sold back'],['Slabs grabbed',game.slabsWon||0,`${game.tickets} ticket${game.tickets===1?'':'s'} left`],['Kyle alerts',game.kyle||0,'Bankroll top-ups']]);
+ $('#bestPulls').innerHTML=statsBest.length?statsBest.map((c,i)=>tile(c,i,'view-best')).join(''):'<div class="empty" style="grid-column:1/-1">Your best pulls will show up here.</div>';
+ $('#recentRips').innerHTML=game.history.length?game.history.slice(0,5).map(histRow).join(''):'<div class="empty">Rip a pack and your pulls will show up here.</div>'}
+function renderHistory(){const h=game.history,packs=h.filter(x=>x.tier!=='grab'),spent=sum(packs.map(x=>x.cost)),val=sum(packs.map(x=>x.value)),wins=packs.filter(x=>x.value>=x.cost).length;
+ $('#histStats').innerHTML=statHTML([['Rips',packs.length,'Last 150 kept'],['Spent',money(spent),'In this history'],['Pulled',money(val),`${signed(val-spent)} net`],['Green rips',packs.length?Math.round(wins/packs.length*100)+'%':'0%',`${wins} beat the price`]]);
+ $('#histList').innerHTML=h.length?h.map(histRow).join(''):'<div class="empty">Your first pack is waiting in the shop.</div>'}
+let statsBest=[];
+
+/* ---------- overlays, modal, toast ---------- */
+let lockCount=0;
+const lock=()=>{lockCount++;document.body.classList.add('locked')}, unlock=()=>{lockCount=Math.max(0,lockCount-1);if(!lockCount)document.body.classList.remove('locked')};
+function showOverlay(id){const el=$('#'+id);if(el.hidden){el.hidden=false;lock()}}
+function hideOverlay(id){const el=$('#'+id);if(!el.hidden){el.hidden=true;unlock()}}
+let modalClose=null;
+function modal({icon='',title,html='',buttons=[{label:'OK',primary:true}]}){if(modalClose)modalClose(null);return new Promise(res=>{const m=$('#modal');
+ $('#modalBox').innerHTML=`${icon?`<div class="m-icon">${icon}</div>`:''}<h2>${title}</h2><div class="m-body">${html}</div><div class="m-actions">${buttons.map((b,i)=>`<button class="${b.primary?'primary':'secondary'}${b.danger?' danger':''}" data-m="${i}">${b.label}</button>`).join('')}</div>`;
+ m.hidden=false;lock();const close=v=>{m.hidden=true;m.onclick=null;modalClose=null;unlock();res(v)};modalClose=close;
+ m.onclick=e=>{const b=e.target.closest('[data-m]');if(b)close(buttons[+b.dataset.m].value);else if(e.target===m)close(null)};
+ setTimeout(()=>{const p=m.querySelector('.primary');p&&p.focus()},50)})}
+let toastTimer;function toast(s){const e=$('#toast');e.textContent=s;e.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove('show'),2600)}
+
+/* ---------- ripping ---------- */
+let rip=null,lastTier=null;
+function startRip(id){if(rip)return;const t=TIERS.find(x=>x.id===id);if(!t)return;
+ if(game.cash+1e-9<t.price){toast('Not enough cash for that one.');return}
+ const pool=activePool();if(pool.length<MIN_POOL){toast('Add more sets to the rotation first.');return}
+ Sound.init();lastTier=t;
+ const cards=generate(t,pool),now=Date.now();cards.forEach(c=>{c.uid=uid();c.at=now;c.from=t.name});
+ game.cash=r2(game.cash-t.price);game.spent=r2(game.spent+t.price);game.opened++;
+ game.owned.push(...cards);game.history.unshift(histEntry(t.id,t.price,cards));
+ rip={tier:t,cards:[...cards].sort((a,b)=>a.value-b.value),i:-1,sell:new Set(),phase:'sealed'};
+ save();preload(cards);showOverlay('rip');ripSealed()}
+function ripSealed(){const t=rip.tier;$('#rip').style.setProperty('--accent',t.color);
+ $('#ripLabel').textContent=`${t.name.toUpperCase()} · ${money(t.price)}`;$('#ripStep').textContent=t.kind==='pack'?`${rip.cards.length} CARDS`:'1 CARD';
+ $('#ripStage').innerHTML=`<div class="pack3d" style="--accent:${t.color}"><div class="pk-top"></div><div class="pk-body"><div class="pk-logo">POKÉ<br>RIP</div><div class="pk-tier">${esc(t.tag)}</div></div></div>`;
+ $('#ripInfo').innerHTML='<div class="hint">Tap the pack to rip it open</div>';$('#ripActions').innerHTML='';rip.phase='sealed'}
+function ripTear(){rip.phase='tearing';$('.pack3d').classList.add('torn');Sound.tear();buzz(25);flash(.35);$('#ripInfo').innerHTML='';setTimeout(ripNext,720)}
+function ripNext(){if(!rip)return;rip.i++;const c=rip.cards[rip.i],lvl=vt(c.value),pack=rip.tier.kind==='pack',last=rip.i===rip.cards.length-1;
+ $('#ripStep').textContent=pack?`CARD ${rip.i+1} OF ${rip.cards.length}`:'YOUR PULL';
+ $('#ripStage').innerHTML=`<div class="flipwrap enter lvl${lvl}${lvl>=3?' tease':''}" style="--glow:${GLOW[lvl]}"><div class="aura"></div><div class="persp"><div class="flip"><div class="face back">${BACK}</div><div class="face front${lvl>=3&&!c.slab?' holo':''}">${c.slab?slabHTML(c,true):imgTag(c,true,true)}</div></div></div></div>`;
+ $('#ripInfo').innerHTML=`<div class="hint">${lvl>=5?'It is glowing like crazy…':lvl>=4?'Something is glowing…':lvl>=3?'This one feels warm…':'Tap to flip'}</div>`;
+ $('#ripActions').innerHTML=pack&&!last?'<button class="ghost" data-action="rip-skip">Skip to results</button>':'';rip.phase='facedown'}
+function ripFlip(){const c=rip.cards[rip.i],lvl=vt(c.value),w=$('.flipwrap');rip.phase='flipping';
+ const go=()=>{if(!rip)return;w.classList.remove('charging','tease');w.querySelector('.flip').classList.add('flipped');Sound.flip();buzz(10);
+  setTimeout(()=>{if(!rip)return;w.classList.add('revealed');
+   $('#ripInfo').innerHTML=`<div class="ri-name">${esc(c.name)}${c.slab?` <span class="gtag">GRADED ${c.grade}</span>`:''}</div><div class="ri-meta">${metaLine(c)}</div><div class="ri-val lvl${lvl}" id="riVal">$0.00</div>`;
+   countUp($('#riVal'),c.value,lvl>=3?1100:450);celebrate(lvl);rip.phase='revealed';ripRevealedActions()},420)};
+ if(lvl>=4){w.classList.add('charging');Sound.charge();buzz([20,40,20,40,20]);setTimeout(go,950)}else go()}
+function ripRevealedActions(){const last=rip.i===rip.cards.length-1;
+ if(rip.tier.kind==='pack')$('#ripActions').innerHTML=last?'<button class="primary" data-action="rip-next">See results</button>':'<button class="ghost" data-action="rip-skip">Skip</button><button class="primary" data-action="rip-next">Next card</button>';
+ else{const c=rip.cards[0];$('#ripActions').innerHTML=`<button class="secondary" data-action="single-sell">Sell · ${money(c.value)}${c.value>=TICKET_AT?' + 🎟':''}</button><button class="primary" data-action="single-keep">Keep it</button>`}}
+function ripAdvance(){if(!rip||rip.phase!=='revealed'||rip.tier.kind!=='pack')return;const w=$('.flipwrap');rip.phase='leaving';w.classList.add('leave');setTimeout(()=>{if(!rip)return;rip.i>=rip.cards.length-1?ripSummary():ripNext()},250)}
+function ripSkip(){if(!rip||rip.tier.kind!=='pack'||['summary','flipping','leaving','tearing'].includes(rip.phase))return;const rest=rip.cards.slice(rip.i+(rip.phase==='revealed'?1:0));ripSummary();const top=Math.max(0,...rest.map(c=>vt(c.value)));celebrate(top)}
+function ripSummary(){rip.phase='summary';const t=rip.tier;$('#ripStep').textContent='RESULTS';
+ $('#ripStage').innerHTML=`<div class="summary">${rip.cards.map((c,i)=>{const s=rip.sell.has(c.uid),lvl=vt(c.value);return `<div class="sum-card lvl${lvl}${s?' selling':''}" style="--glow:${GLOW[lvl]}"><button class="sum-img" data-action="view-rip" data-i="${i}" aria-label="View ${esc(c.name)}">${imgTag(c,false,true)}</button><div class="sum-name">${esc(c.name)}</div><div class="sum-val">${money(c.value)}</div><div class="seg mini"><button data-action="rip-keep" data-uid="${c.uid}" class="${s?'':'on'}">Keep</button><button data-action="rip-sell" data-uid="${c.uid}" class="${s?'on sell':''}">Sell</button></div></div>`}).join('')}</div>`;
+ const total=sum(rip.cards.map(c=>c.value)),sel=rip.cards.filter(c=>rip.sell.has(c.uid)),st=sum(sel.map(c=>c.value)),tix=sel.filter(c=>c.value>=TICKET_AT).length;
+ $('#ripInfo').innerHTML=`<div class="sum-total"><span class="muted">Pack value</span><b>${money(total)}</b><span class="${total>=t.price?'pos':'neg'}">${signed(total-t.price)} vs. ${money(t.price)}</span></div><div class="muted" style="font-size:12px">${sel.length?`Selling ${sel.length} for ${money(st)}${tix?` · earns ${tix} 🎟`:''}`:'Keeping everything'}</div><div class="sum-quick"><button class="smallbtn" data-action="rip-sellbulk">Sell everything under $1</button><button class="smallbtn" data-action="rip-keepall">Keep all</button></div>`;
+ ripEndActions()}
+function ripEndActions(){const t=lastTier;$('#ripActions').innerHTML=`<button class="secondary" data-action="rip-done">Done</button><button class="primary" data-action="rip-again" ${game.cash+1e-9>=t.price-(rip?sum(rip.cards.filter(c=>rip.sell.has(c.uid)).map(c=>c.value)):0)?'':'disabled'}>Rip again · ${money(t.price)}</button>`}
+function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}`)}
+function singleChoose(sell){if(!rip||rip.phase!=='revealed')return;const c=rip.cards[0];if(sell)rip.sell.add(c.uid);finalizeRip();
+ $('#ripInfo').insertAdjacentHTML('beforeend',`<div class="ri-done">${sell?`Sold for ${money(c.value)}`:'Added to your binder'}</div>`);ripEndActions()}
+function ripDone(){finalizeRip();hideOverlay('rip');checkBroke()}
+function ripAgain(){finalizeRip();const t=lastTier;if(game.cash+1e-9<t.price){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(t.id)}
+function ripTap(){if(!rip)return;if(rip.phase==='sealed')ripTear();else if(rip.phase==='facedown')ripFlip();else if(rip.phase==='revealed')ripAdvance()}
+
+/* ---------- card viewer ---------- */
+let V=null;
+function openViewer(list,i,sellable){if(!list[i])return;V={list,i,sellable};renderViewer();showOverlay('viewer')}
+function closeViewer(){V=null;hideOverlay('viewer')}
+function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lvl=vt(c.value),owned=V.sellable&&game.owned.some(x=>x.uid===c.uid);
+ $('#viewerBody').innerHTML=`<div class="v-count">${V.i+1} / ${V.list.length}</div>
+ <div class="v-stage"><button class="v-nav" data-action="v-prev" ${V.i===0?'disabled':''} aria-label="Previous card">‹</button>
+ <div class="v-card" id="vCard" style="--glow:${GLOW[lvl]}"><div class="v-tilt" id="vTilt">${c.slab?slabHTML(c,true):`<div class="v-face">${imgTag(c,true,true)}</div>`}<div class="shine${lvl>=3?' holo':''}"></div></div></div>
+ <button class="v-nav" data-action="v-next" ${V.i>=V.list.length-1?'disabled':''} aria-label="Next card">›</button></div>
+ <div class="v-info"><h2>${esc(c.name)}${c.slab?` <span class="gtag">GRADED ${c.grade} · ${GRADE_NAME[c.grade]||''}</span>`:''}</h2><div class="v-meta">${metaLine(c)}</div>
+ <div class="v-val lvl${lvl}">${money(c.value)}</div><div class="v-src">${c.est?'Estimated value':'TCGplayer market price'}${c.slab&&c.raw?` · ${money(c.raw)} raw plus grade bonus`:''}</div>
+ ${c.at?`<div class="v-src">Pulled ${ago(c.at)}${c.from?` from ${esc(c.from)}`:''}</div>`:''}</div>
+ <div class="v-actions">${owned?`<button class="secondary" data-action="v-sell">Sell · ${money(c.value)}${c.value>=TICKET_AT&&c.from!=='Slab Grab'?' + 🎟':''}</button>`:''}<button class="primary" data-action="v-close">Close</button></div>`;
+ const card=$('#vCard'),tilt=$('#vTilt');
+ const move=e=>{const r=card.getBoundingClientRect(),x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));tilt.style.transform=`rotateY(${(x-.5)*26}deg) rotateX(${(.5-y)*26}deg) scale(1.03)`;tilt.style.setProperty('--mx',x*100+'%');tilt.style.setProperty('--my',y*100+'%')};
+ const reset=()=>{tilt.style.transform='';tilt.style.setProperty('--mx','50%');tilt.style.setProperty('--my','50%')};
+ card.addEventListener('pointermove',move);card.addEventListener('pointerdown',move);['pointerleave','pointerup','pointercancel'].forEach(ev=>card.addEventListener(ev,reset))}
+function viewerStep(d){if(!V)return;const n=V.i+d;if(n<0||n>=V.list.length)return;V.i=n;renderViewer()}
+async function viewerSell(){if(!V)return;const c=V.list[V.i];if(c.value>=100){const ok=await modal({icon:'💸',title:`Sell ${esc(c.name)}?`,html:`You'll get ${money(c.value)} in cash${c.value>=TICKET_AT&&c.from!=='Slab Grab'?' plus a Slab Grab ticket':''}.`,buttons:[{label:'Cancel',value:false},{label:'Sell it',primary:true,value:true}]});if(!ok||!V)return}
+ const r=sellCard(c.uid);if(!r)return;save();toast(`${c.name} sold for ${money(r.value)}${r.ticket?' · 🎟 +1 Slab Grab ticket!':''}`);if(r.ticket){Sound.hit(3);FX.burst(60,GOLDS)}
+ V.list.splice(V.i,1);if(!V.list.length)closeViewer();else{V.i=Math.min(V.i,V.list.length-1);renderViewer()}checkBroke()}
+
+/* ---------- slab grab ---------- */
+let spinning=false;
+const decoy=pool=>gradeIt(inst(bandPick(pool,DECOY_BANDS,new Set())),GRAB_GRADES);
+const reelItem=c=>{const lvl=vt(c.value);return `<div class="ritem" style="--glow:${GLOW[lvl]}"><div class="ritem-label"><span>GRADED</span><span>${c.grade}</span></div>${imgTag(c,false,true)}<div class="ritem-val">${money(c.value)}</div></div>`};
+function idleReel(){const pool=activePool();$('#reelTrack').innerHTML=Array.from({length:14},()=>reelItem(decoy(pool))).join('');$('#reelTrack').style.transform='translate3d(-40px,0,0)'}
+function spin(){if(spinning||game.tickets<1)return;const pool=activePool();if(pool.length<MIN_POOL)return;Sound.init();
+ const prize=gradeIt(inst(bandPick(pool,GRAB_BANDS,new Set())),GRAB_GRADES);prize.uid=uid();prize.at=Date.now();prize.from='Slab Grab';
+ game.tickets--;game.slabsWon=(game.slabsWon||0)+1;game.owned.push(prize);game.history.unshift(histEntry('grab',0,[prize]));spinning=true;save();
+ const N=48,P=41,items=Array.from({length:N},(_,i)=>i===P?prize:decoy(pool)),track=$('#reelTrack'),reel=$('#reel');
+ track.style.transform='translate3d(0,0,0)';track.innerHTML=items.map(reelItem).join('');
+ const cs=getComputedStyle(track),gap=parseFloat(cs.columnGap)||10,pad=parseFloat(cs.paddingLeft)||0,iw=track.children[0].getBoundingClientRect().width,w=iw+gap,view=reel.clientWidth;
+ const target=pad+P*w+iw/2-view/2+(Math.random()-.5)*iw*.7,dur=6400,t0=performance.now(),ease=p=>1-Math.pow(1-p,4);let last=-1;
+ const step=now=>{const p=Math.min(1,(now-t0)/dur),x=target*ease(p);track.style.transform=`translate3d(${-x}px,0,0)`;const idx=Math.floor((x+view/2-pad)/w);if(idx!==last){last=idx;Sound.tick();if(p<.8)buzz(3)}if(p<1)requestAnimationFrame(step);else land()};
+ requestAnimationFrame(step);
+ function land(){spinning=false;const el=track.children[P];el&&el.classList.add('won');const lvl=vt(prize.value);celebrate(Math.max(3,lvl));render();
+  setTimeout(()=>modal({icon:'🏆',title:`You grabbed a Graded ${prize.grade}!`,html:`<div class="m-card">${slabHTML(prize,true)}</div><b style="color:var(--text)">${esc(prize.name)}</b><br>${esc(prize.setName)} · worth <b class="${lvl>=4?'':'pos'}" style="${lvl>=4?'color:var(--gold)':''}">${money(prize.value)}</b>`,buttons:[{label:'Nice',value:0},{label:'See binder',primary:true,value:1}]}).then(v=>{if(v)go('binder')}),650)}}
+
+/* ---------- money trouble + reset ---------- */
+let brokeOpen=false;
+async function checkBroke(){if(rip||brokeOpen||spinning)return;const cheapest=Math.min(...TIERS.map(t=>t.price));if(game.cash+1e-9>=cheapest)return;
+ if(collectionValue()+game.cash>=cheapest){toast('Low on cash. Sell a few cards from your binder.');return}
+ if(game.tickets>0){toast('Out of cash, but you still have a Slab Grab ticket!');return}
+ brokeOpen=true;await modal({icon:'😅',title:'O no, you have a gambling problem!',html:'Time to alert Kyle you have a problem :)',buttons:[{label:'Fine, alert him',primary:true,value:1}]});
+ game.cash=r2(game.cash+START);game.kyle=(game.kyle||0)+1;save();
+ await modal({icon:'😏',title:'He already knows ;)',html:`Kyle has been alerted${game.kyle>1?` (that's ${game.kyle} times now)`:''}. Your virtual bankroll got topped up by $100.`,buttons:[{label:'Back to the packs',primary:true,value:1}]});brokeOpen=false}
+async function sellBulk(){const bulk=game.owned.filter(c=>!c.slab&&c.value<1);if(!bulk.length){toast('No bulk under $1 to sell.');return}const tot=sum(bulk.map(c=>c.value));
+ const ok=await modal({icon:'🧹',title:'Sell all your bulk?',html:`Sell ${bulk.length} card${bulk.length>1?'s':''} under $1 for ${money(tot)}.`,buttons:[{label:'Cancel',value:false},{label:'Sell bulk',primary:true,value:true}]});if(!ok)return;
+ bulk.forEach(c=>sellCard(c.uid));save();toast(`Sold ${bulk.length} bulk cards for ${money(tot)}`)}
+async function resetGame(){const ok=await modal({icon:'⚠️',title:'Reset your run?',html:'This wipes your cash, binder, tickets and history. Your set rotation stays.',buttons:[{label:'Cancel',value:false},{label:'Reset',primary:true,danger:true,value:true}]});if(!ok)return;game=fresh();$('#reelTrack').innerHTML='';save();toast('Fresh start: $100 and one Slab Grab ticket.')}
+function showOdds(id){const t=TIERS.find(x=>x.id===id);if(!t)return;const pool=activePool();
+ const table=(title,bands)=>`<div class="odds-t"><div class="odds-title">${title}</div>${bands.map(([a,b,w])=>{const n=pool.filter(c=>c.value>=a&&c.value<b).length;return `<div class="odds-row"><span>${bandLabel(a,b)}</span><span class="odds-bar"><i style="width:${Math.max(3,w)}%"></i></span><b>${w}%</b><small>${n.toLocaleString()} cards</small></div>`}).join('')}</div>`;
+ let html=`<p>${t.desc}</p>`;html+=t.kind==='pack'?(t.id==='hit'?table('Guaranteed hit',HIT_BANDS)+table('Bonus slot',BONUS_BANDS):table('Rare slot',RARE_BANDS)):table('Card value',t.bands)+`<p class="odds-note">${Math.round(t.slab*100)}% chance the card comes graded (9 or 10) with a value bonus.</p>`;
+ html+='<p class="odds-note">"Cards" is how many cards in your current rotation fall in that range. Empty ranges roll to the nearest range that has cards.</p>';
+ modal({title:`${t.name} odds`,html,buttons:[{label:'Got it',primary:true}]})}
+
+/* ---------- events ---------- */
+const ACTIONS={
+ nav:el=>go(el.dataset.view),
+ buy:el=>startRip(el.dataset.tier),
+ odds:el=>showOdds(el.dataset.tier),
+ sound:()=>{Sound.on=!Sound.on;LS.set('pokerip-sound',Sound.on);if(Sound.on){Sound.init();Sound.flip()}renderHeader()},
+ retry:()=>location.reload(),
+ 'set-remove':el=>removeSet(el.dataset.id),
+ 'set-reset':()=>resetSets(),
+ 'rip-tap':()=>ripTap(),
+ 'rip-next':()=>ripAdvance(),
+ 'rip-skip':()=>ripSkip(),
+ 'rip-keep':el=>{rip&&(rip.sell.delete(el.dataset.uid),ripSummary())},
+ 'rip-sell':el=>{rip&&(rip.sell.add(el.dataset.uid),ripSummary())},
+ 'rip-sellbulk':()=>{if(!rip)return;rip.cards.forEach(c=>{if(c.value<1)rip.sell.add(c.uid)});ripSummary()},
+ 'rip-keepall':()=>{rip&&(rip.sell.clear(),ripSummary())},
+ 'rip-done':()=>ripDone(),
+ 'rip-again':()=>ripAgain(),
+ 'single-keep':()=>singleChoose(false),
+ 'single-sell':()=>singleChoose(true),
+ 'view-rip':el=>rip&&openViewer(rip.cards,+el.dataset.i,false),
+ 'view-card':el=>openViewer(binderCache.slice(),+el.dataset.i,true),
+ 'view-best':el=>openViewer(statsBest.slice(),+el.dataset.i,false),
+ hist:el=>{const h=game.history.find(x=>x.id===el.dataset.id);if(h)openViewer(h.cards.map(c=>({...c,from:tierInfo(h.tier).name,at:h.at})).sort((a,b)=>b.value-a.value),0,false)},
+ 'v-prev':()=>viewerStep(-1),'v-next':()=>viewerStep(1),'v-close':()=>closeViewer(),'v-sell':()=>viewerSell(),
+ filter:el=>{binderFilter=el.dataset.f;renderBinder()},
+ 'sell-bulk':()=>sellBulk(),
+ spin:()=>spin(),
+ reset:()=>resetGame()};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-action]');if(!el||el.disabled)return;const fn=ACTIONS[el.dataset.action];if(fn)fn(el,e)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(modalClose)modalClose(null);else if(V)closeViewer();return}
+ if(!$('#modal').hidden||V)return;if(rip&&(e.key===' '||e.key==='Enter')&&!e.target.closest('button')){e.preventDefault();ripTap()}});
+document.addEventListener('keydown',e=>{if(!V||!$('#modal').hidden)return;if(e.key==='ArrowLeft')viewerStep(-1);if(e.key==='ArrowRight')viewerStep(1)});
+(()=>{let sx=null,sy=0;const vb=$('#viewer');vb.addEventListener('touchstart',e=>{if(e.target.closest('.v-card')){sx=null;return}sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+ vb.addEventListener('touchend',e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)viewerStep(dx<0?1:-1)},{passive:true})})();
+$('#setPicker').addEventListener('change',e=>{const id=e.target.value;e.target.value='';e.target.blur();if(id)addSet(id)});
+$('#binderSort').addEventListener('change',()=>renderBinder());
+addEventListener('hashchange',()=>{route();window.scrollTo(0,0)});
+addEventListener('storage',e=>{if(e.key===SAVE_KEY&&!rip&&!spinning){game=load();render()}});
+
+/* ---------- boot ---------- */
+['pokerip-set-cache-v2','pokerip-set-list-v1'].forEach(k=>LS.del(k));
+let game=load();
+FX.init();route();initCatalog().then(checkBroke);
+</script>
+</body>
+</html>
