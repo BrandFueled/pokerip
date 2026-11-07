@@ -517,6 +517,10 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .badge{padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1622;opacity:.5}
 .badge.got{opacity:1;border-color:#f5c45166;background:linear-gradient(160deg,#241e0c,#0f1622)}
 .badge span{font-size:22px}.badge b{display:block;font-size:12px;margin-top:4px}.badge small{display:block;font-size:11px;color:var(--muted)}
+.guide{display:grid;gap:9px;text-align:left;max-height:56vh;overflow:auto}
+.guide div{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.guide span{font-size:19px;line-height:1.2;text-align:center}
+.guide p{margin:0;font-size:13px;line-height:1.4}.guide b{color:var(--text)}
 .togglechip{display:inline-flex;align-items:center;gap:6px}
 .toolbar-r{flex-wrap:wrap}
 @media(max-width:760px){
@@ -555,7 +559,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 <section class="view" id="v-shop">
  <div class="eyebrow">Choose your next rip</div>
  <h1 class="title">Pack Shop</h1>
- <p class="sub">Real cards, real market prices, fake money. Spend to level up and unlock bigger packs.</p>
+ <p class="sub">Real cards, real market prices, fake money. Spend to level up and unlock bigger packs. <button class="linkbtn" data-action="guide" style="display:inline">📖 How to play</button></p>
  <div class="banner" id="apiBanner" hidden><span>Couldn't reach the card database, so you're ripping a small sample pool.</span><button class="smallbtn" data-action="retry">Retry</button></div>
  <div id="guest"></div>
  <div id="feedWrap" hidden><div class="feed-head"><span class="eyebrow">🔥 Live pulls</span><span class="muted" id="kingLine"></span></div><div class="feed" id="feed"></div></div>
@@ -1223,7 +1227,7 @@ function renderStats(){const nw=networth(),pl=nw-game.given,pk=paidPacks(),cost=
  $('#badges').innerHTML=MILESTONES.map(m=>{const got=game.miles[m.id];return `<div class="badge${got?' got':''}"><span>${got?m.icon:'🔒'}</span><b>${esc(m.name)}</b><small>${esc(m.desc)}</small></div>`}).join('');
  $('#bestPulls').innerHTML=statsBest.length?statsBest.map((c,i)=>tile(c,i,'view-best')).join(''):'<div class="empty" style="grid-column:1/-1">Your best pulls will show up here.</div>';
  $('#recentRips').innerHTML=game.history.length?game.history.slice(0,5).map(histRow).join(''):'<div class="empty">Rip a pack and your pulls will show up here.</div>';
- $('#settings').innerHTML=`${Cloud.on?`<button class="smallbtn" data-action="account">${Cloud.s?`👤 ${esc(Cloud.name)} · Account`:'👤 Log in to save'}</button>`:''}<button class="smallbtn" data-action="sound">${Sound.on?'🔊 Sound on':'🔇 Sound off'}</button>${game.beat?'<button class="smallbtn" data-action="prestige" style="color:var(--gold)">⭐ Prestige</button>':''}<button class="smallbtn" data-action="bailout">💸 I need more money</button>`;
+ $('#settings').innerHTML=`${Cloud.on?`<button class="smallbtn" data-action="account">${Cloud.s?`👤 ${esc(Cloud.name)} · Account`:'👤 Log in to save'}</button>`:''}<button class="smallbtn" data-action="guide">📖 How to play</button><button class="smallbtn" data-action="sound">${Sound.on?'🔊 Sound on':'🔇 Sound off'}</button>${game.beat?'<button class="smallbtn" data-action="prestige" style="color:var(--gold)">⭐ Prestige</button>':''}<button class="smallbtn" data-action="bailout">💸 I need more money</button>`;
  $('#boardWrap').hidden=!Cloud.on;if(Cloud.on){$('#boardSeg').innerHTML=[['nw','💰 Net worth'],['best','🔥 Best pull'],['shame','🤡 Hall of Shame']].map(([k,l])=>`<button data-action="board-tab" data-t="${k}" class="${boardTab===k?'on':''}">${l}</button>`).join('');loadBoard()}}
 let boardTab='nw';
 async function loadBoard(force){const el=$('#board'),t=boardTab;if(!el)return;Cloud.lb=Cloud.lb||{};Cloud.lbAt=Cloud.lbAt||{};const have=Cloud.lb[t];el.innerHTML=have?boardHTML(have,t):'<div class="empty">Loading…</div>';
@@ -1519,6 +1523,20 @@ function showOdds(id){const t=tierById(id);if(!t)return;const pool=packPool(t);
  if(t.slabRare)html+=`<p class="odds-note">${Math.round(t.slabRare*100)}% chance the rare comes graded 8, 9 or 10. Vintage grades pay 1.8x, 3.5x and 12x raw.</p>`;
  html+=`<p class="odds-note">"Cards" is how many cards in ${t.vintage?'the vintage vault':'your current rotation'} fall in that range. Empty ranges roll to the nearest range that has cards.${t.lvl>1?` Unlocks at level ${t.lvl}.`:''}</p>`;
  modal({title:`${t.name} odds`,html,buttons:[{label:'Got it',primary:true}]})}
+const GUIDE=[
+ ['🃏','Rip packs','Swipe across a pack to tear it open (or tap). Single pulls just flip. Keep the hits, sell the bulk.'],
+ ['⭐','Levels','Every $1 you spend is 1 XP. Levels pay out free packs and unlock bigger ones.'],
+ ['🎰','Slab Grab','One free spin a day. The classic reel costs a ticket + $50 (sell a $50+ card for a free ticket). God Tier is the big gamble.'],
+ ['🔬','Grading','Send a raw card for $25, back in an hour. Most come back 7 or 8. A 10 pays big. A 7 hurts.'],
+ ['★','Vault','Lock up to 15 favorites. They can\'t be sold, and friends can see them.'],
+ ['🌟','Grail Quest','Pick a dream card. Ripping fills the meter. Full meter = a shot at it, and every miss raises your odds.'],
+ ['🎯',"Kyle's Bounties",'3 new targets every Monday. Finish all 3 for a bonus God Tier spin.'],
+ ['📚','Master sets','Every card you\'ve ever pulled counts, even if you sold it. Finish a set for rewards.'],
+ ['🏆','Trophy Case','10 legendary slabs. Collect them all to beat the game, then prestige.'],
+ ['🔁','Trade-ins','Swap a card for packs worth 10% more than selling it.'],
+ ['💸','Broke?','Hit "I need more money" on Stats. Under $25 only, 3 a day. Kyle will judge you.'],
+ ['💾','Save','Log in (no email) so your run follows you to any device.']];
+function guideModal(){LS.set('pokerip-guide',1);modal({icon:'📖',title:'How to play',html:`<div class="guide">${GUIDE.map(([i,t,d])=>`<div><span>${i}</span><p><b>${t}</b> ${d}</p></div>`).join('')}</div>`,buttons:[{label:"Let's rip",primary:true}]})}
 function levelsModal(){const rows=[];for(let l=2;l<=MAX_LVL;l++)rows.push(`<div class="lvrow${l<=game.level?' done':''}${l===game.level+1?' cur':''}"><span><b>LV ${l}</b> · ${moneyS(XP_AT[l])}</span><span>${UNLOCKS[l]?`🔓 ${UNLOCKS[l]} · `:''}${rewardText(lvlReward(l))}</span></div>`);
  modal({icon:'⭐',title:`Level ${game.level}`,html:`<p>You earn 1 XP for every dollar you spend on packs, spins and cards. Every level pays out rewards, and some unlock new packs.</p><div style="max-height:44vh;overflow:auto">${rows.join('')}</div>`,buttons:[{label:'Got it',primary:true}]})}
 
@@ -1529,6 +1547,7 @@ const ACTIONS={
  odds:el=>showOdds(el.dataset.tier),
  qty:el=>{ripQty=+el.dataset.n;LS.set('pokerip-qty',ripQty);render()},
  levels:()=>levelsModal(),
+ guide:()=>guideModal(),
  account:()=>accountModal(),
  sound:()=>{Sound.on=!Sound.on;LS.set('pokerip-sound',Sound.on);if(Sound.on){Sound.init();Sound.flip()}render()},
  retry:()=>location.reload(),
@@ -1630,6 +1649,7 @@ FX.init();route();
 if(Cloud.s&&game.owner!==Cloud.user){Cloud.ready=true}
 {const ls=LS.get('pokerip-seen',0);LS.set('pokerip-seen',Date.now());if(ls&&Date.now()-ls>20*36e5&&game.opened)setTimeout(()=>toast(pick(['Welcome back. The cards missed you. Kyle didn\'t.','Oh good, you\'re back. Your binder was getting lonely.','Back already? Respect the commitment.']),4000),1500)}
 cloudRefresh();
+if(!LS.get('pokerip-guide',0)&&!game.opened)setTimeout(guideModal,700);
 initCatalog().then(async()=>{checkBroke();await loadExtras();for(const id of[...selected].filter(id=>catalog.failed.has(id))){catalog.failed.delete(id);try{await loadSet(id)}catch(e){}}invalidatePool();render()});
 </script>
 </body>
