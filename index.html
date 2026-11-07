@@ -195,6 +195,7 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .gtag{display:inline-block;vertical-align:middle;font-size:10px;letter-spacing:.08em;background:#1b2436;color:var(--gold);border:1px solid #f5c45155;padding:2px 6px;border-radius:5px}
 
 /* sealed pack */
+.rip-stage.sealing,.rip:has(.sealing){touch-action:none}
 .pack3d{touch-action:none;cursor:grab;position:relative;width:min(56vw,230px);aspect-ratio:5/8;animation:float 2.4s ease-in-out infinite;filter:drop-shadow(0 0 38px var(--accent))}
 @media(max-height:640px){.pack3d{width:min(44vw,180px)}}
 .pk-top,.pk-body{position:absolute;left:0;right:0;overflow:hidden;background:linear-gradient(155deg,var(--accent) 0%,#27305a 52%,#0b1020 100%);border:1px solid #ffffff40}
@@ -209,7 +210,17 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .pk-tier{position:absolute;bottom:11%;left:0;right:0;text-align:center;white-space:nowrap;font-size:clamp(8px,2.5vw,11px);letter-spacing:.18em;font-weight:900;opacity:.9}
 .pack3d.torn{animation:none}
 .pack3d.torn .pk-top{animation:tearoff .55s cubic-bezier(.3,.7,.4,1) forwards}
-.pack3d.torn .pk-body{animation:packdrop .45s .25s ease-in forwards}
+.pack3d.torn .pk-tear{opacity:0;transition:opacity .2s}
+.pack3d.torn .pk-body{animation:shake .12s 3,packdrop .45s .75s ease-in forwards}
+.pack3d.torn .pk-peek{animation:peek .55s .2s cubic-bezier(.2,.9,.3,1.1) forwards,packdrop .4s .8s ease-in forwards}
+.pack3d.dragging{animation:none}
+.pk-top{z-index:3}.pk-body{z-index:2}
+.pk-peek{position:absolute;left:9%;right:9%;top:17%;aspect-ratio:63/88;z-index:1;opacity:0;border-radius:6px;overflow:hidden;box-shadow:0 0 24px var(--accent)}
+.pk-peek .cardback{position:absolute;inset:0}
+.pk-tear{position:absolute;left:0;right:0;top:calc(16% - 2px);height:4px;z-index:4;transform:scaleX(0);transform-origin:left;pointer-events:none;border-radius:2px;background:#fff;box-shadow:0 0 10px 3px var(--accent),0 0 3px 1px #fff}
+.pk-tear.r{transform-origin:right}
+.pk-guide{position:absolute;top:calc(16% - 13px);left:0;width:26px;height:26px;z-index:5;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fff 0 25%,#ffffff55 45%,transparent 70%);animation:guide 1.7s ease-in-out infinite}
+.pack3d.dragging .pk-guide,.pack3d.torn .pk-guide{display:none}
 
 /* flip card */
 .flipwrap{position:relative;width:var(--cw);aspect-ratio:63/88}
@@ -237,13 +248,20 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .cardback:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(125deg,transparent 30%,#ffffff26 45%,transparent 58%)}
 
 /* slab */
-.slab:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,transparent 30%,#ffffff55 42%,transparent 52%),linear-gradient(0deg,#ffffff10,#ffffff10);box-shadow:inset 0 0 0 3px #ffffff70,inset 0 0 0 5px #00000014}
-.slab{position:absolute;inset:0;border-radius:5%/3.6%;background:linear-gradient(160deg,#eef2f7,#b6c1cf 45%,#e2e8f0);padding:5.5%;display:flex;flex-direction:column;gap:4%;box-shadow:inset 0 0 0 2px #ffffffa0}
-.slab-label{background:linear-gradient(180deg,#1d2740,#10172a);color:#fff;border-radius:4px;padding:4% 5%;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:6px;font-size:clamp(7px,2.3vw,11px);line-height:1.2;border:1px solid #f5c45166}
+.slab{position:absolute;inset:0;border-radius:5%/3.6%;background:linear-gradient(160deg,#f4f7fb 0%,#c3ccd8 38%,#eef2f7 55%,#aeb9c8 100%);padding:5.5% 6% 4%;display:flex;flex-direction:column;gap:3%;box-shadow:inset 0 0 0 2px #ffffffd0,inset 0 0 0 5px #b9c3d0,inset 0 0 0 6px #ffffff80,inset 0 0 22px #ffffffa0,0 14px 34px #0009}
+.slab:before{content:"";position:absolute;top:22%;bottom:12%;left:1.6%;width:2.2%;border-radius:3px;background:repeating-linear-gradient(0deg,#00000022 0 2px,#ffffff66 2px 5px);box-shadow:calc(var(--sw,1px) * 0) 0 0 #0000;pointer-events:none}
+.slab:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,transparent 28%,#ffffff70 40%,transparent 50%),linear-gradient(300deg,transparent 70%,#ffffff40 78%,transparent 84%),repeating-linear-gradient(0deg,transparent 0 3px,transparent 3px 6px);box-shadow:inset 0 0 0 3px #ffffff80}
+.slab-label{position:relative;background:linear-gradient(180deg,#1f2a45,#0e1526);color:#fff;border-radius:4px;padding:4% 5% 5%;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:6px;font-size:clamp(7px,2.3vw,11px);line-height:1.25;border:1.5px solid #f5c451aa;overflow:hidden}
+.slab-label:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#ff5fd2,#ffd36b,#6bffd8,#6bb5ff,#a983ff,#ff5fd2)}
 .slab-label span{font-weight:900;letter-spacing:.1em;color:var(--gold);font-size:.85em}
-.slab-label small{grid-column:1;font-size:.9em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#cfd8e6}
-.slab-label b{grid-row:1/3;grid-column:2;font-size:2.5em;font-weight:1000;color:var(--gold);line-height:1}
-.slab-win{flex:1;min-height:0;background:#0b1018;border-radius:3px;overflow:hidden;box-shadow:inset 0 0 0 1px #0005}
+.slab-label small{grid-column:1;font-size:.95em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#eef2f8}
+.slab-label em{grid-column:1;font-style:normal;font-size:.75em;letter-spacing:.06em;color:#9fb0c8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slab-label b{grid-row:1/4;grid-column:2;font-size:2.7em;font-weight:1000;color:var(--gold);line-height:1;text-shadow:0 0 10px #f5c45166}
+.slab.g9 .slab-label{border-color:#cfd8e6aa}.slab.g9 .slab-label b,.slab.g9 .slab-label span{color:#e3e9f2;text-shadow:0 0 10px #ffffff44}
+.slab.g8 .slab-label{border-color:#e0a46b99}.slab.g8 .slab-label b,.slab.g8 .slab-label span{color:#e9ac72;text-shadow:none}
+.slab-win{position:relative;flex:1;min-height:0;background:#0b1018;border-radius:3px;overflow:hidden;box-shadow:inset 0 0 0 1px #0006,0 0 0 2px #ffffff90,0 0 0 4px #9aa6b6}
+.slab-foot{display:flex;align-items:center;justify-content:center;gap:5px;height:5%;min-height:9px;font-size:clamp(5px,1.5vw,8px);font-weight:900;letter-spacing:.14em;color:#5d6b80;white-space:nowrap;overflow:hidden}
+.slab-foot i{width:1.6em;height:1.6em;flex:0 0 auto;border-radius:50%;background:conic-gradient(#ff5fd2,#ffd36b,#6bffd8,#6bb5ff,#a983ff,#ff5fd2);box-shadow:0 0 0 1px #fff}
 .slab-win img,.slab-win .img-missing{width:100%;height:100%;object-fit:contain}
 
 /* summary */
@@ -320,6 +338,8 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 @keyframes slidebg{to{background-position:200% 0}}
 @keyframes holo{from{background-position:0% 0%}to{background-position:100% 100%}}
 @keyframes tearoff{to{transform:translate(60%,-170%) rotate(32deg);opacity:0}}
+@keyframes peek{0%{opacity:1;transform:translateY(12%)}100%{opacity:1;transform:translateY(-62%) rotate(-3deg)}}
+@keyframes guide{0%{left:-6%;opacity:0}15%,80%{opacity:1}100%{left:92%;opacity:0}}
 @keyframes packdrop{to{transform:translateY(60%) scale(.92);opacity:0}}
 @keyframes rise{from{transform:translateY(50px) scale(.85);opacity:0}}
 @keyframes leave{to{transform:translateX(-120%) rotate(-14deg);opacity:0}}
@@ -337,7 +357,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  .shell{padding:0 14px}
  .top-in{height:56px}
  .brand{font-size:17px}
- .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:5px 4px calc(5px + var(--sb));background:#0a0f18f5;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);justify-content:space-around;gap:0}
+ .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:5px 4px calc(5px + var(--sb));background:#0a0f18;transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0);will-change:transform;border-top:1px solid var(--line);justify-content:space-around;gap:0}
  .tab{flex:1;flex-direction:column;gap:3px;font-size:10px;padding:6px 2px;min-height:52px;justify-content:center}
  .tab.active{background:none;box-shadow:none;color:var(--gold)}
  .tab .badge{position:absolute;top:3px;left:calc(50% + 6px)}
@@ -428,6 +448,55 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 @keyframes wiggle{0%,80%,100%{transform:rotate(0)}83%{transform:rotate(-10deg) scale(1.08)}86%{transform:rotate(9deg) scale(1.08)}89%{transform:rotate(-6deg)}92%{transform:rotate(4deg)}95%{transform:rotate(0)}}
 .daily.guest{border-color:#f5c45177;background:linear-gradient(90deg,#2a2210,#0f1724 70%)}
 .daily.guest button{background:var(--gold);color:#140f05}
+.vstar{position:fixed;top:calc(var(--st) + 10px);left:12px;z-index:2;height:44px;padding:0 14px;border-radius:22px;background:#172235;border:1px solid var(--line);font-weight:900;font-size:14px;color:var(--text)}
+.vstar.on{color:#140f05;background:var(--gold);border-color:var(--gold)}
+.tile.vaulted{border-color:#f5c45199}
+.tile.vaulted .tile-cnt{color:var(--gold);right:auto;left:6px;top:auto;bottom:6px}
+.vaultrow{margin-bottom:16px}
+.vcard{flex:0 0 auto;width:96px;display:grid;gap:3px;text-align:left}
+.vcard .tile-img{display:block;border-radius:8px;overflow:hidden;border:1px solid #f5c45166}
+.vcard img{width:100%;display:block}
+.vcard small{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vcard b{font-size:12px;color:var(--gold)}
+.showgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;text-align:left}
+.showgrid div{font-size:10px;color:var(--muted)}
+.showgrid img{width:100%;border-radius:6px;display:block;margin-bottom:3px}
+.showgrid b{display:block;color:var(--gold);font-size:11px}
+.lrow{cursor:pointer;width:100%;text-align:left;color:inherit}
+.bounty{padding:0;margin-bottom:12px;border-color:#ff9b6555;background:linear-gradient(160deg,#24170f,#0f1622 60%)}
+.b-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;list-style:none;font-size:12px}
+.b-head::-webkit-details-marker{display:none}
+.b-head b{font-size:15px}
+.bounty:not([open]) .chev{display:inline-block;transform:rotate(-90deg)}
+.brow{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid #ffffff10}
+.brow.done{opacity:.55}
+.brow .hthumb{width:40px;height:56px}
+.bicon{width:40px;height:40px;display:grid;place-items:center;font-size:22px;background:#141e2d;border-radius:10px}
+.bmain b{display:block;font-size:13px}.bmain small{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
+.breward{text-align:right;font-weight:900;font-size:13px}.breward small{display:block;font-size:10px;color:var(--gold);font-weight:700;max-width:110px}
+.bfoot{padding:8px 14px 12px;font-size:11px;color:var(--muted)}
+/* pack art */
+.mini-art{position:relative;height:100px;aspect-ratio:var(--ar);filter:var(--tint) drop-shadow(0 10px 16px #000a) drop-shadow(0 0 12px color-mix(in srgb,var(--accent) 45%,transparent));transition:transform .2s}
+.mini-art.single{height:92px}
+.mini-art img{width:100%;height:100%;display:block}
+.pack:hover .mini-art{transform:rotate(-3deg) scale(1.06)}
+.pack.locked .mini-art{filter:grayscale(.9) brightness(.6)}
+.pk-stamp{position:absolute;left:50%;top:76%;transform:translate(-50%,-50%) rotate(-8deg);z-index:3;white-space:nowrap;font-weight:1000;letter-spacing:.12em;font-size:9px;padding:3px 7px;border-radius:4px;color:#fff;background:#000c;border:1.5px solid #fff;box-shadow:0 0 12px #000}
+.pk-stamp.q{top:50%;font-size:42px;padding:0 14px;border-radius:12px;letter-spacing:0;background:#2a0a3acc;border-color:#e2b6ff;color:#fff;text-shadow:0 0 14px #c86bff;transform:translate(-50%,-50%) rotate(-8deg)}
+.pack3d .pk-stamp{font-size:clamp(11px,3.4vw,15px);padding:5px 11px;border-width:2px}
+.pack3d .pk-stamp.q{font-size:clamp(70px,22vw,110px)}
+.pack3d.art{aspect-ratio:var(--ar);width:min(62vw,260px);filter:var(--tint) drop-shadow(0 0 34px var(--accent))}
+@media(max-height:640px){.pack3d.art{width:min(46vw,190px)}}
+.pack3d.art .pk-top,.pack3d.art .pk-body{border:0;border-radius:0;background-color:transparent;background-image:var(--img);background-repeat:no-repeat}
+.pack3d.art .pk-top{height:calc(var(--seam) * 100%);background-size:100% calc(100% / var(--seam));background-position:0 0}
+.pack3d.art .pk-body{height:calc((1 - var(--seam)) * 100%);background-size:100% calc(100% / (1 - var(--seam)));background-position:0 100%;display:block}
+.pack3d.art .pk-top:before,.pack3d.art .pk-body:after{display:none}
+.pack3d.art .pk-body:before{inset:0 -60%;opacity:.7}
+.pack3d.art .pk-tear{top:calc(var(--seam) * 100% - 2px)}
+.pack3d.art .pk-guide{top:calc(var(--seam) * 100% - 13px)}
+.pack3d.art .pk-peek{top:calc(var(--seam) * 100% + 2%)}
+.pack3d.art .pk-tier{bottom:9%;left:50%;right:auto;transform:translateX(-50%);background:#000b;padding:4px 10px;border-radius:999px;font-size:clamp(8px,2.4vw,10px)}
+.pack3d.art.stack .pk-body{box-shadow:none;filter:drop-shadow(7px 7px 0 #ffffff22) drop-shadow(7px 7px 0 #ffffff14)}
 .togglechip{display:inline-flex;align-items:center;gap:6px}
 .toolbar-r{flex-wrap:wrap}
 @media(max-width:760px){
@@ -473,10 +542,11 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <div class="stats" id="shopStats"></div>
  <div id="daily"></div>
  <div id="rewards"></div>
+ <div id="bounties"></div>
  <div class="qtyrow"><span class="muted">Packs per rip</span><div class="seg" id="qtySeg"></div></div>
  <div class="section-head"><h2>Modern packs</h2></div>
  <div class="packs" id="packs"></div>
- <div class="section-head" id="vaultHead"><h2>Vintage vault</h2><span class="muted" style="font-size:12px">WOTC era · 1999 to 2002</span></div>
+ <div class="section-head" id="vaultHead"><h2>The good stuff</h2><span class="muted" style="font-size:12px">Mystery · Vintage · 1st Edition</span></div>
  <div class="packs" id="vault"></div>
  <div id="nextUnlock" style="margin-top:12px"></div>
  <details class="rotation" id="rotation">
@@ -495,8 +565,9 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <h1 class="title">Collection</h1>
  <p class="sub">Tap any card to inspect it, sell it, or trade it in for packs. Selling a card worth $50+ earns a Slab Grab ticket.</p>
  <div class="stats" id="binderStats"></div>
+ <div id="vaultStrip"></div>
  <div class="toolbar">
-  <div class="seg" id="binderFilter"><button data-action="filter" data-f="all" class="on">All</button><button data-action="filter" data-f="hits">Hits $10+</button><button data-action="filter" data-f="slabs">Slabs</button><button data-action="filter" data-f="vintage">Vintage</button></div>
+  <div class="seg" id="binderFilter"><button data-action="filter" data-f="all" class="on">All</button><button data-action="filter" data-f="hits">Hits</button><button data-action="filter" data-f="slabs">Slabs</button><button data-action="filter" data-f="vintage">Vintage</button><button data-action="filter" data-f="vault">★</button></div>
   <div class="toolbar-r"><select class="sel" id="binderSort" aria-label="Sort cards"><option value="new">Newest first</option><option value="value">Highest value</option><option value="name">Name A to Z</option></select><button class="smallbtn" data-action="sell-bulk">Sell under $1</button><button class="smallbtn" data-action="sell-dupes">Sell dupes</button></div>
  </div>
  <div class="gridcards" id="binderGrid"></div>
@@ -569,6 +640,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 </div>
 <div class="overlay viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Card details">
  <button class="vclose" data-action="v-close" aria-label="Close">✕</button>
+ <button class="vstar" id="vStar" data-action="v-vault" hidden>☆ Vault</button>
  <div class="viewer-body" id="viewerBody"></div>
 </div>
 <div class="modal" id="modal" hidden role="dialog" aria-modal="true"><div class="modal-box" id="modalBox"></div></div>
@@ -582,6 +654,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 // Cloud saves + logins (Supabase). Paste your Project URL and anon/publishable key. Blank = local-only.
 const SUPA_URL='https://ouudywhxruebzpuiixdj.supabase.co', SUPA_KEY='sb_publishable_dVV37ZzhXeRDvYid-ypbUA_vlAjPCkB';
 const START=100, TICKET_AT=50, TICKET_PRICE=25, MIN_POOL=20, VMIN_POOL=10;
+const VAULT_MAX=15;
 const BUY_MARKUP=1.3, TROPHY_MARKUP=1.25, TRADE_BONUS=1.1;
 const API='https://api.pokemontcg.io/v2', IMG='https://images.pokemontcg.io';
 const SET_TTL=3*864e5, LIST_TTL=7*864e5, SAVE_KEY='pokerip-save-v3', SEL_KEY='pokerip-v3-selected', SESSION_KEY='pokerip-session';
@@ -620,6 +693,12 @@ const TIERS=[
  {id:'vintage',name:'Vintage Pack',tag:'VINTAGE PACK',price:40,color:'#d9a066',kind:'pack',vintage:true,bulk:6,slots:['VRARE'],slabRare:.04,lvl:5,blurb:'7 cards · Base Set to Neo Destiny',desc:'Unlimited WOTC era cards. 6 commons and uncommons plus a rare slot. 4% chance the rare comes graded, and vintage gem mints are worth up to 12x raw.'},
  {id:'first',name:'1st Edition Pack',tag:'1ST EDITION',price:150,color:'#ff6f74',kind:'pack',vintage:true,first:true,bulk:6,slots:['FRARE'],slabRare:.06,lvl:7,blurb:'7 cards · every one is 1st Edition',desc:'Every card is a 1st Edition WOTC print. 6 commons and uncommons plus a rare slot. 6% chance the rare comes graded. This is where trophy Charizards live.'}
 ];
+TIERS.splice(5,0,{id:'mystery',name:'Mystery Pack',tag:'MYSTERY PACK',price:110,color:'#c86bff',kind:'mystery',lvl:4,blurb:'1 card · only the cool stuff',desc:'One card, and it is always something good: a graded Crown Zenith pull, a vintage holo, a 1st Edition hit, a graded vintage slab, or a 3% JACKPOT shot at a trophy card.'});
+const MYSTERY=[{w:30,label:'Crown Zenith slab',src:'cz'},{w:27,label:'Vintage holo',src:'vh'},{w:20,label:'1st Edition hit',src:'fh'},{w:20,label:'Graded vintage',src:'vg'},{w:3,label:'JACKPOT',src:'jp'}];
+const ART={pack:{src:'pack.webp',ar:'480/706',seam:.085},single:{src:'single.webp',ar:'420/612',seam:.115}};
+const tierArt=t=>t.kind==='single'?ART.single:ART.pack;
+const tierTint=t=>t.id==='vintage'?'sepia(.6) saturate(.8) contrast(1.05)':t.first?'sepia(.3) saturate(1.2)':t.kind==='mystery'?'hue-rotate(250deg) saturate(1.3)':'saturate(1)';
+const tierStamp=t=>({vintage:'VINTAGE',first:'1ST EDITION',mystery:'?',chase:'CHASE',grail:'GRAIL',slab:'GRADED'})[t.id]||'';
 const TIER_IDS=new Set(TIERS.map(t=>t.id));
 const MODES={
  daily:{name:'Daily Spin',cost:0,lvl:1,src:'rot',bands:[[4,12,62],[12,30,27],[30,80,9],[80,1e9,2]],decoy:[[4,12,35],[12,30,30],[30,80,22],[80,1e9,13]],desc:'One free spin every day. Smaller slabs, zero risk.'},
@@ -643,8 +722,8 @@ const TROPHIES=[
 // XP = dollars spent. XP_AT[level] = XP needed.
 const XP_AT=[0,0,50,150,400,800,1500,2500,4000,6500,10000,15000,22000,32000,45000,65000,90000,120000,160000,210000,275000];
 const MAX_LVL=XP_AT.length-1;
-const LVL_REWARDS={2:{booster:2},3:{slab:1},4:{hit:2},5:{vintage:3},6:{chase:2},7:{first:1},8:{god:1},9:{grail:2},10:{first:2,god:1},11:{slab:2},12:{god:1},13:{first:2},14:{vintage:10},15:{god:2},16:{first:3},17:{god:2},18:{first:4},19:{god:3},20:{god:5,first:5}};
-const UNLOCKS={3:'Slab Pack',5:'Vintage Pack',7:'1st Edition Pack',8:'God Tier spins'};
+const LVL_REWARDS={2:{booster:2},3:{slab:1},4:{hit:2,mystery:1},5:{vintage:3},6:{chase:2},7:{first:1},8:{god:1},9:{grail:2},10:{first:2,god:1},11:{slab:2},12:{god:1},13:{first:2},14:{vintage:10},15:{god:2},16:{first:3},17:{god:2},18:{first:4},19:{god:3},20:{god:5,first:5}};
+const UNLOCKS={3:'Slab Pack',4:'Mystery Pack',5:'Vintage Pack',7:'1st Edition Pack',8:'God Tier spins'};
 const GLOW={1:'#8fa2ba',2:'#57d6d0',3:'#a983ff',4:'#f5c451',5:'#ff5fd2'};
 const RAINBOW=['#ff5fd2','#ffd36b','#6bffd8','#6bb5ff','#ffffff','#a983ff'], GOLDS=['#f5c451','#fff3c4','#ffb347','#ffffff'];
 // Offline fallback: a small sample pool with estimated values.
@@ -677,7 +756,8 @@ const Sound={on:LS.get('pokerip-sound',true)!==false,ctx:null,
  init(){try{if(!this.ctx){const A=window.AudioContext||window.webkitAudioContext;if(A)this.ctx=new A()}if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume()}catch(e){}},
  tone(f,d=.1,type='sine',v=.12,delay=0,f2){if(!this.on||!this.ctx)return;const c=this.ctx,t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.03)},
  noise(d=.3,v=.15){if(!this.on||!this.ctx)return;const c=this.ctx,b=c.createBuffer(1,Math.floor(c.sampleRate*d),c.sampleRate),ch=b.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=(Math.random()*2-1)*(1-i/ch.length);const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type='highpass';f.frequency.value=1400;g.gain.value=v;s.connect(f);f.connect(g);g.connect(c.destination);s.start()},
- tear(){this.noise(.35,.22);this.tone(320,.25,'sawtooth',.035,0,90)},
+ tear(){this.noise(.45,.26);this.tone(320,.3,'sawtooth',.04,0,70);this.noise(.2,.12)},
+ crinkle(v){this.noise(.045,.05+v*.11);this.tone(280+v*900,.03,'square',.012)},
  flip(){this.tone(520,.07,'triangle',.1);this.tone(780,.06,'triangle',.06,.05)},
  tick(){this.tone(1150,.025,'square',.025)},
  charge(){this.tone(180,.85,'sawtooth',.03,0,950)},
@@ -686,6 +766,7 @@ const FX={c:null,ctx:null,parts:[],run:false,
  size(){if(!this.c)return;const d=Math.min(2,window.devicePixelRatio||1);this.c.width=innerWidth*d;this.c.height=innerHeight*d;this.ctx.setTransform(d,0,0,d,0,0)},
  init(){this.c=$('#fx');this.ctx=this.c.getContext('2d');this.size();addEventListener('resize',()=>this.size())},
  burst(n,colors){if(!this.ctx||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const x=innerWidth/2,y=innerHeight*.42;for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=3+Math.random()*10;this.parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-5,g:.17+Math.random()*.1,r:3+Math.random()*4,rot:Math.random()*6,vr:(Math.random()-.5)*.3,c:colors[i%colors.length],life:1})}if(!this.run){this.run=true;requestAnimationFrame(()=>this.tick())}},
+ spawn(x,y,n,colors,sp=4){if(!this.ctx||matchMedia('(prefers-reduced-motion: reduce)').matches)return;for(let i=0;i<n;i++){const a=-Math.PI*Math.random(),s=1+Math.random()*sp;this.parts.push({x:x+(Math.random()-.5)*20,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1.5,g:.16+Math.random()*.08,r:1.5+Math.random()*3.5,rot:Math.random()*6,vr:(Math.random()-.5)*.5,c:colors[i%colors.length],life:.75})}if(!this.run){this.run=true;requestAnimationFrame(()=>this.tick())}},
  tick(){const ctx=this.ctx;ctx.clearRect(0,0,innerWidth,innerHeight);this.parts=this.parts.filter(p=>p.life>0&&p.y<innerHeight+30);for(const p of this.parts){p.vx*=.985;p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life-=.0075;ctx.save();ctx.globalAlpha=Math.max(0,Math.min(1,p.life*1.6));ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.c;ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);ctx.restore()}if(this.parts.length)requestAnimationFrame(()=>this.tick());else{this.run=false;ctx.clearRect(0,0,innerWidth,innerHeight)}}};
 function flash(o=.6){const f=$('#flash');f.style.setProperty('--o',o);f.classList.remove('go');void f.offsetWidth;f.classList.add('go')}
 function celebrate(lvl){if(lvl<3)return;Sound.hit(lvl);if(lvl>=4){flash(lvl>=5?.85:.55);FX.burst(lvl>=5?280:150,lvl>=5?RAINBOW:GOLDS);buzz([60,40,140])}else{FX.burst(55,['#a983ff','#57d6d0','#ffffff']);buzz(30)}}
@@ -771,10 +852,12 @@ function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.
  if(!d.best){let b=null;for(const c of[...d.owned,...d.history.flatMap(h=>h.cards)])if(!b||c.value>b.value)b=c;d.best=b?{value:b.value,name:fullName(b)}:{value:0,name:''}}
  return d}
 function load(){const d=LS.get(SAVE_KEY);if(d&&(d.v===3||d.v===4)&&typeof d.cash==='number')return normalize(d);return fresh()}
-function save(){levelCheck();game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
+function save(){levelCheck();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
  if(!LS.set(SAVE_KEY,game)){game.history.length=Math.min(game.history.length,40);pruneSetCache();LS.set(SAVE_KEY,game)}Cloud.queue();render()}
 const networthOf=d=>(d.cash||0)+sum((d.owned||[]).map(c=>c.value));
 const collectionValue=()=>sum(game.owned.map(c=>c.value));
+const sellableValue=()=>sum(game.owned.filter(c=>!c.vault).map(c=>c.value));
+const vaultCards=()=>game.owned.filter(c=>c.vault);
 const networth=()=>networthOf(game);
 const trophyCount=()=>TROPHIES.filter(t=>game.trophies[t.id]).length;
 const tierById=id=>TIERS.find(t=>t.id===id);
@@ -787,7 +870,7 @@ const histEntry=(tier,cost,cards)=>({id:uid(),tier,cost,value:r2(sum(cards.map(c
 const ownSet=()=>new Set(game.owned.map(c=>c.id));
 const inDex=id=>!!game.dex[id];
 function collect(cards){for(const c of cards){game.dex[c.id]=1;if(!game.best||c.value>game.best.value)game.best={value:c.value,name:fullName(c)}}}
-function sellCard(u){const i=game.owned.findIndex(c=>c.uid===u);if(i<0)return null;const c=game.owned.splice(i,1)[0];game.cash=r2(game.cash+c.value);game.sold=r2((game.sold||0)+c.value);const ticket=earnsTicket(c);if(ticket)game.tickets++;return{card:c,value:c.value,ticket}}
+function sellCard(u){const i=game.owned.findIndex(c=>c.uid===u);if(i<0||game.owned[i].vault)return null;const c=game.owned.splice(i,1)[0];game.cash=r2(game.cash+c.value);game.sold=r2((game.sold||0)+c.value);const ticket=earnsTicket(c);if(ticket)game.tickets++;return{card:c,value:c.value,ticket}}
 const NO_TICKET=new Set(['Slab Grab','Daily Spin','God Tier','Market','Trophy Dealer']);
 const earnsTicket=c=>c.value>=TICKET_AT&&!NO_TICKET.has(c.from);
 const spend=n=>{game.cash=r2(game.cash-n);game.xp=r2(game.xp+n)};
@@ -800,7 +883,7 @@ const rewardText=r=>Object.entries(r).map(([k,n])=>k==='tickets'?`+${n} 🎟`:k=
 function grant(r){for(const[k,n]of Object.entries(r)){if(k==='tickets')game.tickets+=n;else if(k==='cash')game.cash=r2(game.cash+n);else game.vouchers[k]=(game.vouchers[k]||0)+n}}
 function levelCheck(){const l=levelFor(game.xp);if(l<=game.level)return;const gained=[];for(let n=game.level+1;n<=l;n++){grant(lvlReward(n));gained.push(n)}game.level=l;
  const un=gained.filter(n=>UNLOCKS[n]).map(n=>UNLOCKS[n]);
- setTimeout(()=>{toast(`⭐ Level ${l}! ${gained.map(n=>rewardText(lvlReward(n))).join(', ')}${un.length?` · ${un.join(' and ')} unlocked`:''}`,5000);Sound.init();Sound.hit(3);FX.burst(90,GOLDS)},500)}
+ setTimeout(()=>{toast(`⭐ Level ${l}! ${gained.map(n=>rewardText(lvlReward(n))).join(', ')}${un.length?` · Unlocked: ${un.join(', ')}`:''}`,5000);Sound.init();Sound.hit(3);FX.burst(90,GOLDS)},500)}
 const setReward=gid=>groupDef(gid).reward||(isVintage(gid)?{first:1,tickets:2}:{slab:1,tickets:2});
 
 /* ---------- notices queue (trophies, set completions) ---------- */
@@ -819,6 +902,27 @@ function checkSet(gid){if(game.sets[gid]&&game.sets[gid].done)return;if(!groupLo
 function earnTrophy(t){game.trophies[t.id]=Date.now();
  note({icon:'🏆',fx:5,title:'Trophy unlocked!',html:`<b style="color:var(--text)">${esc(t.name)}</b> · ${esc(t.label)}<br>${trophyCount()} of ${TROPHIES.length} in your Trophy Case.`,buttons:[{label:'Nice',value:0},{label:'Trophy Case',primary:true,value:1}],then:v=>{if(v)go('collect')}});
  if(trophyCount()===TROPHIES.length&&!game.beat){game.beat=true;note({icon:'👑',fx:5,title:'You beat POKÉ RIP!',html:'All 10 trophies. Kyle is impressed and a little worried. You can prestige from the Stats tab: a fresh run with a ⭐ and a bigger bankroll.',buttons:[{label:'Legend',primary:true}]})}}
+/* ---------- Kyle's Bounties: 3 targets a week ---------- */
+const weekStart=(off=0)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7)+off*7);return d};
+const weekKey=()=>{const d=weekStart();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`};
+function untilWeek(){const m=Math.ceil((weekStart(1)-new Date())/60000),d=Math.floor(m/1440),h=Math.floor(m%1440/60);return d?`${d}d ${h}h`:`${h}h ${m%60}m`}
+function makeBounties(){const pool=activePool();if(pool.length<MIN_POOL)return null;const list=[];
+ const wanted=pool.filter(c=>c.value>=12&&c.value<=150),w=pick(wanted.length?wanted:[...pool].sort((a,b)=>b.value-a.value).slice(0,30));
+ list.push({id:'wanted',type:'card',card:w.id,name:w.name,img:w.img,need:1,have:0,reward:w.value>=60?{god:1}:{grail:2,tickets:1},title:`WANTED: ${w.name}`,sub:`${w.setName} #${w.num}. Kyle wants it for his binder. Dead or alive.`});
+ const counts={};for(const c of pool){const n=c.name.split(' ')[0];if(n.length>2)counts[n]=(counts[n]||0)+1}
+ const names=Object.entries(counts).filter(([,k])=>k>=4).map(([n])=>n),nm=pick(names.length?names:['Pikachu']);
+ list.push({id:'theme',type:'name',match:nm,need:3,have:0,reward:{hit:3,tickets:1},title:`Pull 3 ${nm} cards`,sub:`Any version, any pack. Kyle is building a ${nm} deck and won't explain why.`});
+ const third=pick([{type:'value',min:50,title:'Pull a $50+ card',sub:'One card. Fifty bucks. Make Kyle proud for once.',reward:{chase:2,tickets:1}},{type:'value',min:100,title:'Pull a $100+ card',sub:"Go big or go to Wendy's.",reward:{god:1}},{type:'slab10',title:'Pull a Gem Mint 10',sub:'Packs or Slab Grab. Any 10 counts. No 9s, coward.',reward:{slab:2,tickets:1}}]);
+ list.push({id:'big',need:1,have:0,...third});return{week:weekKey(),list}}
+function ensureBounties(){if(game.bounty&&game.bounty.week===weekKey())return;const b=makeBounties();if(!b)return;const fresh=!!game.bounty;game.bounty=b;setTimeout(()=>{save();if(fresh)toast("🎯 Kyle posted new bounties.",3500)},0)}
+function bountyCheck(cards){const B=game.bounty;if(!B||B.week!==weekKey())return;for(const b of B.list){if(b.done)continue;
+  if(b.type==='card')b.have=cards.some(c=>c.id===b.card)?1:b.have;
+  else if(b.type==='name')b.have=Math.min(b.need,b.have+cards.filter(c=>c.name.split(' ')[0]===b.match||c.name.startsWith(b.match+' ')||c.name===b.match).length);
+  else if(b.type==='value')b.have=cards.some(c=>c.value>=b.min)?1:b.have;
+  else if(b.type==='slab10')b.have=cards.some(c=>c.slab&&c.grade===10)?1:b.have;
+  if(b.have>=b.need){b.done=Date.now();grant(b.reward);note({icon:'🎯',fx:4,title:'Bounty complete!',html:`<b style="color:var(--text)">${esc(b.title)}</b><br>${pick(['Kyle is pleased. Rare.','Kyle nodded approvingly.','Kyle would like to know your secret.','Kyle says "about time."'])}<br>Reward: <b style="color:var(--gold)">${rewardText(b.reward)}</b>`,buttons:[{label:'Collect',primary:true}]})}}
+ if(B.list.every(b=>b.done)&&!B.allDone){B.allDone=1;grant({god:1});note({icon:'🤠',fx:5,title:'Bounty hunter!',html:`All 3 bounties done this week. Kyle throws in a bonus <b style="color:var(--gold)">God Tier spin</b>.`,buttons:[{label:'Yeehaw',primary:true}]})}}
+
 /* ---------- pull generation ---------- */
 function bandPick(pool,bands,used){const idx=wIndex(bands.map(b=>b[2])),order=[idx];
  for(let d=1;d<bands.length;d++){if(idx-d>=0)order.push(idx-d);if(idx+d<bands.length)order.push(idx+d)}
@@ -831,12 +935,20 @@ const eraOf=c=>isVintage(c.setId)?'vintage':'modern';
 function gradeIt(c,dist){const g=dist[wIndex(dist.map(x=>x[1]))][0];c.slab=true;c.grade=g;c.raw=c.value;c.value=r2(c.value*GRADE_MULT[eraOf(c)][g]);return c}
 function slabOf(c,g,raw,first){const x=inst(c);x.slab=true;x.grade=g;x.raw=r2(raw);x.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(first){x.first=true;x.est=c.fest??c.est}return x}
 function generate(t,pool){const used=new Set(),out=[],take=c=>{used.add(c.name);const x=inst(c);out.push(x);return x};
+ if(t.kind==='mystery'){out.push(mysteryPull());return out}
  if(t.id==='booster'&&Math.random()<GOD_ODDS){for(let i=0;i<5;i++)take(bandPick(pool,GOD_BANDS,used));out.god=true;return out}
  if(t.kind==='pack'){const cap=t.first?8:t.vintage?3:1.5;for(let i=0;i<t.bulk;i++)take(pickBulk(pool,used,cap));for(const s of t.slots){const x=take(bandPick(pool,SLOTS[s],used));if(t.slabRare&&Math.random()<t.slabRare)gradeIt(x,t.vintage?VINT_GRADES:PACK_GRADES)}}
  else{const x=take(bandPick(pool,t.bands,used));if(Math.random()<t.slab)gradeIt(x,PACK_GRADES)}
  return out}
+function mysteryPull(){const m=MYSTERY[wIndex(MYSTERY.map(x=>x.w))],holo=vintagePool().filter(x=>/rare/i.test(x.rarity)),none=new Set();let c;
+ if(m.src==='cz')c=gradeIt(inst(bandPick(groupCards('cz').filter(x=>x.value>=3),[[3,12,55],[12,40,32],[40,1e9,13]],none)),[[8,30],[9,45],[10,25]]);
+ else if(m.src==='vh')c=inst(bandPick(holo,[[15,50,60],[50,150,30],[150,1e9,10]],none));
+ else if(m.src==='fh')c=inst(bandPick(cached('firstHolo',()=>holo.map(asFirst)),[[25,80,60],[80,250,30],[250,1e9,10]],none));
+ else if(m.src==='vg')c=gradeIt(inst(bandPick(holo,[[8,30,60],[30,100,30],[100,1e9,10]],none)),VINT_GRADES);
+ else{const t=pick(TROPHIES.filter(t=>t.card&&t.id!=='t-zard1')),tc=cardById(t.card);c=tc?inst(t.first?asFirst(tc):tc):{id:t.card,name:t.name,setId:t.set,setName:setName(t.set),num:t.num,rarity:'Rare Holo',value:t.raw,est:true,img:`${IMG}/${t.set}/${t.num}.png`,first:!!t.first,slab:false}}
+ c.mystery=m.label;return c}
 function packPool(t,gid){const base=gid?groupCards(gid):t.vintage?vintagePool():activePool();return t.first?cached('first:'+(gid||'all'),()=>base.map(asFirst)):base}
-const poolReady=(t,gid)=>packPool(t,gid).length>=(t.vintage||gid?VMIN_POOL:MIN_POOL);
+const poolReady=(t,gid)=>t.kind==='mystery'?vintagePool().length>=VMIN_POOL&&groupLoaded('cz')&&groupCards('cz').length>0:packPool(t,gid).length>=(t.vintage||gid?VMIN_POOL:MIN_POOL);
 function gradedPool(src){return cached('gp:'+src,()=>{const out=[];for(const c of src==='all'?allCards():activePool()){if(c.value>=1)for(const g of[8,9,10])out.push(slabOf(c,g,c.value,false));if(c.fv>=1)for(const g of[8,9,10])out.push(slabOf(c,g,c.fv,true))}return out})}
 function trophyCard(t){const c=cardById(t.card),base=c||{id:t.card,name:t.name,setId:t.set,setName:setName(t.set),num:t.num,rarity:'Rare Holo',value:t.raw,est:true,img:`${IMG}/${t.set}/${t.num}.png`};
  const raw=c?(t.first?(c.fv||t.raw):c.value):t.raw;const x=slabOf(base,10,raw,!!t.first);if(!c)x.est=true;return x}
@@ -845,7 +957,8 @@ const buyPrice=c=>r2(Math.max(1,c.value*BUY_MARKUP));
 /* ---------- image helpers ---------- */
 function imgTag(c,hi=false,eager=false){const lo=c.img||'';return `<img src="${esc(hi?large(lo):lo)}" data-lo="${esc(lo)}" alt="${esc(c.name)}" ${eager?'':'loading="lazy"'} decoding="async" referrerpolicy="no-referrer" draggable="false" onerror="imgFail(this)">`}
 window.imgFail=function(img){const lo=img.dataset.lo;if(lo&&img.getAttribute('src')!==lo){img.src=lo;return}const d=document.createElement('div');d.className='img-missing';d.innerHTML=`<div>${esc(img.alt||'Pokémon card')}<span>ARTWORK UNAVAILABLE</span></div>`;img.replaceWith(d)};
-const slabHTML=(c,hi)=>`<div class="slab"><div class="slab-label"><span>POKÉ RIP GRADED</span><b>${c.grade}</b><small>${esc(c.name)} · ${c.first?'1st Ed · ':''}${GRADE_NAME[c.grade]||''}</small></div><div class="slab-win">${imgTag(c,hi,true)}</div></div>`;
+const certNo=c=>{let h=7;for(const ch of String(c.uid||c.id||c.name))h=(h*31+ch.charCodeAt(0))>>>0;return String(10000000+h%89999999)};
+const slabHTML=(c,hi)=>`<div class="slab g${c.grade}"><div class="slab-label"><span>POKÉ RIP GRADED</span><b>${c.grade}</b><small>${esc(c.name)}${c.first?' · 1st Ed':''}</small><em>${GRADE_NAME[c.grade]||''} · #${certNo(c)}</em></div><div class="slab-win">${imgTag(c,hi,true)}</div><div class="slab-foot"><i></i><span>AUTHENTIC · ${esc((c.setName||'').toUpperCase())}</span></div></div>`;
 const CARD_BACK='card-back.webp';
 const BACK=`<div class="cardback img"><img src="${CARD_BACK}" alt="" draggable="false" onerror="this.remove()"></div>`;
 (()=>{const i=new Image();i.src=CARD_BACK})();
@@ -870,8 +983,8 @@ const qtySegHTML=()=>[1,5,10,15].map(n=>`<button data-action="qty" data-n="${n}"
 function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!catalog.offline;
  $('#shopStats').innerHTML=statHTML([['Cash',money(game.cash),'Virtual bankroll'],['Binder',money(collectionValue()),`${game.owned.length} card${game.owned.length===1?'':'s'}`],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,'Net worth vs. bankroll'],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,'The end goal']]);
  $('#guest').innerHTML=Cloud.on&&!Cloud.s?`<div class="daily guest"><div><b>👻 You're playing as a guest</b><span>${game.opened?`${game.opened} pack${game.opened===1?'':'s'} ripped and none of it is backed up.`:'Make an account so your pulls are saved.'} Takes 10 seconds, no email.</span></div><button class="primary" data-action="account">Save my run</button></div>`:'';
- renderDaily();renderRewards();$('#qtySeg').innerHTML=qtySegHTML();
- const mod=TIERS.filter(t=>!t.vintage),vin=TIERS.filter(t=>t.vintage),next=TIERS.filter(t=>!unlocked(t)).sort((a,b)=>a.lvl-b.lvl)[0];
+ renderDaily();renderRewards();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
+ const isVault=t=>t.vintage||t.kind==='mystery',mod=TIERS.filter(t=>!isVault(t)),vin=TIERS.filter(isVault),next=TIERS.filter(t=>!unlocked(t)).sort((a,b)=>a.lvl-b.lvl)[0];
  $('#packs').innerHTML=mod.filter(unlocked).map(t=>packCard(t)).join('');
  $('#vault').innerHTML=vin.filter(unlocked).map(t=>packCard(t)).join('');
  $('#vaultHead').hidden=!vin.some(unlocked);
@@ -880,9 +993,13 @@ function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!cat
 function ripLabel(t,gid,named){const lock=!unlocked(t),ready=poolReady(t,gid),cost=t.price*ripQty,afford=game.cash+1e-9>=cost;
  const label=lock?`🔒 Unlocks at LV ${t.lvl}`:!ready?(catalog.offline&&(t.vintage||gid)?'Offline right now':catalog.ready||t.vintage||gid?'Loading cards…':'Loading cards…'):!afford?`Need ${money(cost-game.cash)} more`:named?`Rip ${ripQty>1?ripQty+' ':''}${t.name}${ripQty>1?'s':''} · ${money(cost)}`:`Rip ${ripQty>1?'×'+ripQty+' · ':'it · '}${money(cost)}`;
  return{label,dis:lock||!ready||!afford||!!rip}}
+const miniArt=t=>{const a=tierArt(t),st=tierStamp(t);return `<div class="mini-art${t.kind==='single'?' single':''}" style="--ar:${a.ar};--tint:${tierTint(t)}"><img src="${a.src}" alt="" draggable="false">${st?`<span class="pk-stamp${st==='?'?' q':''}">${st}</span>`:''}</div>`};
 function packCard(t){const{label,dis}=ripLabel(t),lock=!unlocked(t);
  const chip=t.slab===1?'🏅 ALWAYS GRADED':t.slab?`🏅 ${Math.round(t.slab*100)}% SLAB CHANCE`:t.slabRare?`🏅 ${Math.round(t.slabRare*100)}% SLAB CHANCE`:'';
- return `<article class="pack${lock?' locked':''}" style="--accent:${t.color}"><div class="pack-head"><span class="tier">${t.tag}</span><button class="odds-btn" data-action="odds" data-tier="${t.id}">Odds</button></div><div class="pack-art"><div class="mini-pack"><span>${t.first?'1ST<br>EDITION':t.vintage?'VIN<br>TAGE':'POKÉ<br>RIP'}</span></div></div><h3>${t.name}</h3><p>${t.blurb}</p>${chip?`<span class="slab-chip">${chip}</span>`:''}<div class="pack-price">${money(t.price)}</div><button class="buy" data-action="buy" data-tier="${t.id}" ${dis?'disabled':''}>${label}</button></article>`}
+ return `<article class="pack${lock?' locked':''}" style="--accent:${t.color}"><div class="pack-head"><span class="tier">${t.tag}</span><button class="odds-btn" data-action="odds" data-tier="${t.id}">Odds</button></div><div class="pack-art">${miniArt(t)}</div><h3>${t.name}</h3><p>${t.blurb}</p>${chip?`<span class="slab-chip">${chip}</span>`:''}<div class="pack-price">${money(t.price)}</div><button class="buy" data-action="buy" data-tier="${t.id}" ${dis?'disabled':''}>${label}</button></article>`}
+let bountyOpen=LS.get('pokerip-bounty-open',null);
+function renderBounties(){const el=$('#bounties');if(!el)return;ensureBounties();const B=game.bounty;if(!B||B.week!==weekKey()){el.innerHTML='';return}const left=B.list.filter(b=>!b.done).length;
+ el.innerHTML=`<details class="panel bounty"${(bountyOpen??left>0)?' open':''}><summary class="b-head"><b>🎯 Kyle's Bounties</b><span class="muted">${left?`${3-left}/3 done · `:'All done · '}new in ${untilWeek()} <span class="chev">▾</span></span></summary>${B.list.map(b=>`<div class="brow${b.done?' done':''}">${b.img?`<span class="hthumb">${imgTag(b)}</span>`:`<span class="bicon">${b.type==='name'?'🔎':b.type==='slab10'?'💎':'💰'}</span>`}<span class="bmain"><b>${esc(b.title)}</b><small>${esc(b.sub)}</small>${b.need>1&&!b.done?`<span class="prog"><i style="width:${b.have/b.need*100}%"></i></span>`:''}</span><span class="breward">${b.done?'✅':`${b.have}/${b.need}`}<small>${b.done?'Paid':rewardText(b.reward)}</small></span></div>`).join('')}${B.list.every(b=>b.done)?'':'<div class="bfoot">Finish all 3 for a bonus God Tier spin. Market buys don\'t count.</div>'}</details>`}
 function renderDaily(){const el=$('#daily');if(!el)return;el.innerHTML=spinReady()?`<div class="daily ready"><div><b>🎰 Daily free slab spin is ready</b><span>One free Slab Grab spin every day. Resets at midnight.</span></div><button class="primary" data-action="daily-go">Spin it</button></div>`:`<div class="daily"><div><b>🎰 Free spin used</b><span>Next free spin in ${untilMidnight()}</span></div></div>`}
 function renderRewards(){const v=game.vouchers,keys=[...TIERS.map(t=>t.id),'god'].filter(k=>v[k]>0);
  $('#rewards').innerHTML=keys.length?`<div class="rewards"><b>🎁 Rewards</b>${keys.map(k=>{const n=v[k];if(k==='god')return `<span class="rw">${n}× God Tier spin<button data-action="god-go">Spin</button></span>`;const q=Math.min(n,ripQty);return `<span class="rw">${n}× ${esc(vName(k))}<button data-action="open-voucher" data-tier="${k}" ${rip?'disabled':''}>Open${q>1?' '+q:''}</button></span>`}).join('')}</div>`:''}
@@ -892,12 +1009,14 @@ function renderRotation(){const pool=activePool(),nl=[...selected].filter(id=>ca
  if(pool.length){let mn=Infinity,mx=0;for(const c of pool){if(c.value<mn)mn=c.value;if(c.value>mx)mx=c.value}$('#rotRange').textContent=`Card values ${money(mn)} to ${money(mx)}`}else $('#rotRange').textContent='';
  const sel=$('#setPicker');if(document.activeElement!==sel){const groups=new Map();for(const s of catalog.sets){if(selected.has(s.id))continue;const g=s.series||'Other';if(!groups.has(g))groups.set(g,[]);groups.get(g).push(s)}
   sel.disabled=catalog.offline;sel.innerHTML='<option value="">Add a Pokémon set…</option>'+[...groups].map(([g,ss])=>`<optgroup label="${esc(g)}">${ss.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.releaseDate?` (${esc(String(s.releaseDate).slice(0,4))})`:''}</option>`).join('')}</optgroup>`).join('')}}
-function binderList(){let a=game.owned.slice();if(binderFilter==='hits')a=a.filter(c=>c.value>=10);if(binderFilter==='slabs')a=a.filter(c=>c.slab);if(binderFilter==='vintage')a=a.filter(c=>isVintage(c.setId));const s=$('#binderSort').value;if(s==='value')a.sort((x,y)=>y.value-x.value);else if(s==='name')a.sort((x,y)=>x.name.localeCompare(y.name));else a.sort((x,y)=>(y.at||0)-(x.at||0));return a}
+function binderList(){let a=game.owned.slice();if(binderFilter==='hits')a=a.filter(c=>c.value>=10);if(binderFilter==='slabs')a=a.filter(c=>c.slab);if(binderFilter==='vintage')a=a.filter(c=>isVintage(c.setId));if(binderFilter==='vault')a=a.filter(c=>c.vault);const s=$('#binderSort').value;if(s==='value')a.sort((x,y)=>y.value-x.value);else if(s==='name')a.sort((x,y)=>x.name.localeCompare(y.name));else a.sort((x,y)=>(y.at||0)-(x.at||0));return a}
 function tile(c,i,action='view-card'){const lvl=vt(c.value),tag=c.slab?`${c.first?'1ST ED · ':''}GRADED ${c.grade}`:c.first?'1ST EDITION':lvl>=3?'HIT':'';
- return `<button class="tile lvl${lvl}" data-action="${action}" data-i="${i}" style="--glow:${GLOW[lvl]}"><div class="tile-img${c.slab?' is-slab':''}">${tag?`<span class="tile-tag">${tag}</span>`:''}${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(c.setName||'')}</span><b>${money(c.value)}</b></div></button>`}
+ return `<button class="tile lvl${lvl}${c.vault?' vaulted':''}" data-action="${action}" data-i="${i}" style="--glow:${GLOW[lvl]}"><div class="tile-img${c.slab?' is-slab':''}">${c.vault?'<span class="tile-cnt">★</span>':''}${tag?`<span class="tile-tag">${tag}</span>`:''}${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(c.setName||'')}</span><b>${money(c.value)}</b></div></button>`}
 function renderBinder(){const o=game.owned,hits=o.filter(c=>c.value>=10).length,top=o.reduce((m,c)=>c.value>m.value?c:m,{value:0,name:'None yet'});
  $('#binderStats').innerHTML=statHTML([['Cards',o.length,`${hits} hit${hits===1?'':'s'} · ${o.filter(c=>c.slab).length} slabs`],['Binder value',money(collectionValue()),'TCGplayer market'],['Top card',money(top.value),esc(top.name)],['Cash',money(game.cash),'Sell cards to add cash']]);
  $$('#binderFilter button').forEach(b=>b.classList.toggle('on',b.dataset.f===binderFilter));
+ const vc=vaultCards().sort((a,b)=>b.value-a.value);
+ $('#vaultStrip').innerHTML=`<div class="section-head" style="margin-top:4px"><h2>★ My Vault</h2><span class="muted" style="font-size:12px">${vc.length} / ${VAULT_MAX} · can't be sold · friends can see it</span></div>${vc.length?`<div class="feed vaultrow">${vc.map(c=>`<button class="vcard" data-action="view-vault" data-uid="${c.uid}"><span class="tile-img${c.slab?' is-slab':''}">${imgTag(c)}</span><small>${esc(c.name)}</small><b>${moneyS(c.value)}</b></button>`).join('')}</div>`:'<div class="empty" style="margin-bottom:14px">Tap any card, then ☆ Vault to keep it safe forever. Your favorites, not your bank.</div>'}`;
  binderCache=binderList();
  const max=600,shown=binderCache.slice(0,max);
  $('#binderGrid').innerHTML=shown.length?shown.map((c,i)=>tile(c,i)).join('')+(binderCache.length>max?`<div class="empty" style="grid-column:1/-1">Showing ${max} of ${binderCache.length}. Sell some bulk to see the rest.</div>`:''):`<div class="empty" style="grid-column:1/-1">${o.length?'No cards match this filter.':'No cards yet. Rip a pack to start your binder.'}</div>`}
@@ -980,14 +1099,17 @@ function boardHTML(rows,t){if(!rows.length)return `<div class="empty">${t==='sha
  return rows.map((r,i)=>{const clown=t==='nw'&&rows.length>=3&&i===rows.length-1,king=Feed.king&&r.username===Feed.king,medal=t==='shame'?(i===0?'🤡':i+1):(i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1);
   const sub=t==='best'?esc(r.best_name||'Nothing yet'):t==='shame'?`${r.shame} bailout${r.shame===1?'':'s'} · LV ${r.level||1}`:`LV ${r.level||1} · 🏆 ${r.trophies||0}`;
   const val=t==='best'?moneyS(r.best_value||0):t==='shame'?`${moneyS((r.shame||0)*START)} begged`:moneyS(r.networth||0);
-  return `<div class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}"><b>${medal}</b><span><b>${esc(r.username)}</b>${king?' 👑':''}${clown?' 🤡':''}${r.prestige?' ⭐'+r.prestige:''}<br><small>${sub}</small></span><b>${val}</b></div>`}).join('')}
+  return `<button class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}" data-action="player" data-u="${esc(r.username)}"><b>${medal}</b><span><b>${esc(r.username)}</b>${king?' 👑':''}${clown?' 🤡':''}${r.prestige?' ⭐'+r.prestige:''}<br><small>${sub}</small></span><b>${val}</b></button>`}).join('')}
+async function playerModal(u){let r=null;try{r=(await Cloud.req(`/rest/v1/saves?username=eq.${encodeURIComponent(u)}&select=username,level,networth,trophies,prestige,showcase:data->showcase,best:data->best`,{},false)||[])[0]}catch(e){}
+ if(!r){toast(`Couldn't load ${u}.`);return}const sc=r.showcase||[];
+ modal({icon:Feed.king===u?'👑':'🃏',title:`${esc(r.username)}${r.prestige?' ⭐'+r.prestige:''}`,html:`LV ${r.level||1} · ${moneyS(r.networth||0)} net worth · 🏆 ${r.trophies||0}${r.best&&r.best.value?`<br>Best pull: <b style="color:var(--gold)">${esc(r.best.name)} · ${moneyS(r.best.value)}</b>`:''}<div class="eyebrow" style="margin-top:14px">★ Vault ${sc.length}/${VAULT_MAX}</div>${sc.length?`<div class="showgrid">${sc.map(c=>`<div><img src="${esc(c.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">${c.first?'1st ':''}${esc(c.name)}${c.slab?` [${c.grade}]`:''}<b>${moneyS(c.value)}</b></div>`).join('')}</div>`:`<p>${u===Cloud.name?'Your vault is empty. Go flex something.':'Nothing in the vault. Either humble or broke.'}</p>`}`,buttons:[{label:'Close',primary:true}]})}
 function renderHistory(){const h=game.history,pk=paidPacks(),spent=sum(pk.map(x=>x.cost)),val=sum(pk.map(x=>x.value)),wins=pk.filter(x=>x.value>=x.cost).length;
  $('#histStats').innerHTML=statHTML([['Paid rips',pk.length,'Last 150 kept'],['Spent',money(spent),'In this history'],['Pulled',money(val),`${signed(val-spent)} net`],['Green rips',pk.length?Math.round(wins/pk.length*100)+'%':'0%',`${wins} beat the price`]]);
  $('#histList').innerHTML=h.length?h.map(histRow).join(''):'<div class="empty">Your first pack is waiting in the shop.</div>'}
 
 /* ---------- overlays, modal, toast ---------- */
 let lockCount=0;
-const lock=()=>{lockCount++;document.body.classList.add('locked')}, unlock=()=>{lockCount=Math.max(0,lockCount-1);if(!lockCount)document.body.classList.remove('locked')};
+const lock=()=>{lockCount++;document.body.classList.add('locked')}, unlock=()=>{lockCount=Math.max(0,lockCount-1);if(!lockCount){document.body.classList.remove('locked');typeof navNudge==='function'&&navNudge()}};
 function showOverlay(id){const el=$('#'+id);if(el.hidden){el.hidden=false;lock()}}
 function hideOverlay(id){const el=$('#'+id);if(!el.hidden){el.hidden=true;unlock()}}
 let modalClose=null;
@@ -1010,14 +1132,16 @@ function startRip(id,o={}){if(rip||spinning)return;const t=tierById(id);if(!t)re
  game.godPacks=(game.godPacks||0)+gods;
  if(voucher)game.vouchers[id]-=qty;else{spend(cost);game.spent=r2(game.spent+cost)}
  game.opened+=qty;game.owned.push(...all);
- const bulk=qty>1;rip={tier:t,qty,cost,voucher,gid,bulk,cards:[...all].sort((a,b)=>bulk?b.value-a.value:a.value-b.value),i:-1,sell:new Set(),fresh:new Set(all.filter(c=>!inDex(c.id)).map(c=>c.uid)),god:gods,phase:'sealed'};collect(all);
+ const bulk=qty>1;rip={tier:t,qty,cost,voucher,gid,bulk,cards:[...all].sort((a,b)=>bulk?b.value-a.value:a.value-b.value),i:-1,sell:new Set(),fresh:new Set(all.filter(c=>!inDex(c.id)).map(c=>c.uid)),god:gods,phase:'sealed'};collect(all);bountyCheck(all);
  lastRip={id,qty,gid,voucher};lastCards=rip.cards;checkProgress(all);save();Feed.post(all);preload(bulk?rip.cards.slice(0,3):all);showOverlay('rip');ripSealed()}
-function ripSealed(){const t=rip.tier;$('#rip').style.setProperty('--accent',t.color);
+function ripSealed(){const t=rip.tier;$('#ripStage').classList.add('sealing');$('#rip').style.setProperty('--accent',t.color);
  $('#ripLabel').textContent=`${t.name.toUpperCase()}${rip.qty>1?' ×'+rip.qty:''} · ${rip.voucher?'REWARD':money(rip.cost)}`;$('#ripStep').textContent=`${rip.cards.length} CARD${rip.cards.length>1?'S':''}`;
- const sub=t.first?'1ST EDITION · WOTC ERA':t.vintage?'VINTAGE · WOTC ERA':rip.gid?esc(groupDef(rip.gid).name.toUpperCase()):'TRADING CARD SIMULATOR';
- $('#ripStage').innerHTML=`<div class="pack3d${rip.bulk?' stack':''}" style="--accent:${t.color}"><div class="pk-top"></div><div class="pk-body"><div class="pk-burst"></div><div class="pk-logo">POKÉ<br>RIP</div><div class="pk-sub">${sub}</div><div class="pk-tier">${esc(t.tag)} · ${rip.bulk?`×${rip.qty} PACKS`:t.kind==='pack'?`${t.bulk+t.slots.length} CARDS`:'1 CARD'}</div></div></div>`;
- $('#ripInfo').innerHTML=`<div class="hint">Swipe across the top to rip ${rip.bulk?'them all':'it'} open</div>`;$('#ripActions').innerHTML='';rip.phase='sealed'}
-function ripTear(){rip.phase='tearing';$('.pack3d').classList.add('torn');Sound.tear();buzz(25);flash(.35);if(rip.god)setTimeout(()=>{flash(.95);FX.burst(320,RAINBOW);Sound.hit(6);buzz([80,40,80,40,200])},350);$('#ripInfo').innerHTML='';setTimeout(ripNext,720)}
+ const a=tierArt(t),st=tierStamp(t);
+ $('#ripStage').innerHTML=`<div class="pack3d art${rip.bulk?' stack':''}" style="--accent:${t.color};--ar:${a.ar};--seam:${a.seam};--tint:${tierTint(t)};--img:url('${a.src}')"><div class="pk-peek">${BACK}</div><div class="pk-top"></div><div class="pk-tear"></div><div class="pk-guide"></div><div class="pk-body">${st?`<span class="pk-stamp${st==='?'?' q':''}">${st}</span>`:''}<div class="pk-tier">${rip.gid?esc(groupDef(rip.gid).name.toUpperCase())+' · ':''}${rip.bulk?`×${rip.qty} PACKS`:t.kind==='pack'?`${t.bulk+t.slots.length} CARDS`:'1 CARD'}</div></div></div>`;
+ $('#ripInfo').innerHTML=`<div class="hint">Swipe across the pack to rip ${rip.bulk?'them all':'it'} open<br><small>or just tap, if you're lazy</small></div>`;$('#ripActions').innerHTML='';rip.phase='sealed'}
+function ripTear(){rip.phase='tearing';$('#ripStage').classList.remove('sealing');const k=$('.pack3d');k.classList.remove('dragging');k.classList.add('torn');Sound.tear();buzz([30,20,60]);flash(.4);
+ const r=k.getBoundingClientRect(),acc=rip.tier.color,sm=parseFloat(k.style.getPropertyValue('--seam'))||.16;FX.spawn(r.left+r.width/2,r.top+r.height*sm,46,[acc,'#ffffff',acc,'#f5c451'],7);
+ if(rip.god)setTimeout(()=>{flash(.95);FX.burst(320,RAINBOW);Sound.hit(6);buzz([80,40,80,40,200])},450);$('#ripInfo').innerHTML='';setTimeout(ripNext,1150)}
 function ripNext(){if(!rip)return;rip.i++;const c=rip.cards[rip.i],lvl=lvlOf(c),pack=rip.tier.kind==='pack'&&!rip.bulk,last=rip.i===rip.cards.length-1;
  $('#ripStep').textContent=rip.bulk?`BEST OF ${rip.cards.length} CARDS`:pack?`CARD ${rip.i+1} OF ${rip.cards.length}`:'YOUR PULL';
  $('#ripStage').innerHTML=`<div class="flipwrap enter lvl${lvl}${lvl>=3?' tease':''}" style="--glow:${GLOW[lvl]}"><div class="aura"></div><div class="persp"><div class="flip"><div class="face back">${BACK}</div><div class="face front${lvl>=3&&!c.slab?' holo':''}">${c.slab?slabHTML(c,true):imgTag(c,true,true)}</div></div></div></div>`;
@@ -1026,7 +1150,7 @@ function ripNext(){if(!rip)return;rip.i++;const c=rip.cards[rip.i],lvl=lvlOf(c),
 function ripFlip(){const c=rip.cards[rip.i],lvl=lvlOf(c),w=$('.flipwrap');rip.phase='flipping';
  const go=()=>{if(!rip)return;w.classList.remove('charging','tease');w.querySelector('.flip').classList.add('flipped');Sound.flip();buzz(10);
   setTimeout(()=>{if(!rip)return;w.classList.add('revealed');
-   $('#ripInfo').innerHTML=`${c.slab?`<div class="slab-banner">GRADED ${c.grade} SLAB PULL!</div>`:''}<div class="ri-name">${c.first?'<span class="gtag">1ST ED</span> ':''}${esc(c.name)}${c.slab?` <span class="gtag">GRADED ${c.grade}</span>`:''}</div><div class="ri-meta">${metaLine(c)}</div><div class="ri-val lvl${lvl}" id="riVal">$0.00</div>${!rip.bulk&&rip.tier.kind!=='pack'?roastHTML(c.value,rip.cost||rip.tier.price,c.value):''}${lvl>=2?`<button class="linkbtn" data-action="share-pull" data-i="${rip.i}">Share this pull ↗</button>`:''}`;
+   $('#ripInfo').innerHTML=`${c.mystery?`<div class="slab-banner" style="background:linear-gradient(90deg,#c86bff,#ffd36b,#c86bff);background-size:200% 100%">🎁 ${esc(c.mystery.toUpperCase())}</div> `:''}${c.slab?`<div class="slab-banner">GRADED ${c.grade} SLAB PULL!</div>`:''}<div class="ri-name">${c.first?'<span class="gtag">1ST ED</span> ':''}${esc(c.name)}${c.slab?` <span class="gtag">GRADED ${c.grade}</span>`:''}</div><div class="ri-meta">${metaLine(c)}</div><div class="ri-val lvl${lvl}" id="riVal">$0.00</div>${!rip.bulk&&rip.tier.kind!=='pack'?roastHTML(c.value,rip.cost||rip.tier.price,c.value):''}${lvl>=2?`<button class="linkbtn" data-action="share-pull" data-i="${rip.i}">Share this pull ↗</button>`:''}`;
    countUp($('#riVal'),c.value,lvl>=3?1100:450);celebrate(lvl);rip.phase='revealed';ripRevealedActions()},420)};
  if(lvl>=4){w.classList.add('charging');Sound.charge();buzz([20,40,20,40,20]);setTimeout(go,950)}else go()}
 function ripRevealedActions(){const last=rip.i===rip.cards.length-1;
@@ -1063,7 +1187,7 @@ function ripAgain(){finalizeRip();const L=lastRip,t=tierById(L.id);
  if(L.voucher){const n=game.vouchers[L.id]||0;if(!n){hideOverlay('rip');return}startRip(L.id,{qty:Math.min(n,L.qty),voucher:true,group:L.gid});return}
  if(game.cash+1e-9<t.price*L.qty){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(L.id,{qty:L.qty,group:L.gid})}
 let swallowTap=false;const swallow=()=>{swallowTap=true;setTimeout(()=>{swallowTap=false},450)};
-function ripTap(){if(!rip)return;if(swallowTap){swallowTap=false;return}if(rip.phase==='sealed')ripTear();else if(rip.phase==='facedown')ripFlip();else if(rip.phase==='revealed')ripAdvance()}
+function ripTap(){if(!rip)return;if(swallowTap){swallowTap=false;return}if(rip.phase==='sealed')autoTear();else if(rip.phase==='facedown')ripFlip();else if(rip.phase==='revealed')ripAdvance()}
 
 /* ---------- card viewer ---------- */
 // mode: 'owned' (binder: sell/trade), 'set' (catalog card: buy), 'view'
@@ -1072,7 +1196,8 @@ function openViewer(list,i,mode='view'){if(!list[i])return;V={list,i,mode};rende
 function closeViewer(){V=null;hideOverlay('viewer')}
 function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lvl=vt(c.value),owned=V.mode==='owned'&&game.owned.some(x=>x.uid===c.uid),have=V.mode==='set'?game.owned.filter(x=>x.id===c.id).length:0;
  let acts=`<button class="secondary" data-action="v-share">Share ↗</button>`;
- if(owned)acts+=`<button class="secondary" data-action="v-trade">Trade</button><button class="primary" data-action="v-sell">Sell · ${money(c.value)}${earnsTicket(c)?' + 🎟':''}</button>`;
+ if(owned&&c.vault)acts+=`<button class="primary" data-action="v-vault">★ In your vault · Remove</button>`;
+ else if(owned)acts+=`<button class="secondary" data-action="v-trade">Trade</button><button class="primary" data-action="v-sell">Sell · ${money(c.value)}${earnsTicket(c)?' + 🎟':''}</button>`;
  else if(V.mode==='set')acts+=have?`<button class="primary" data-action="v-close">Owned ×${have}</button>`:inDex(c.id)?`<button class="secondary" data-action="v-buy" ${game.cash+1e-9>=buyPrice(c)?'':'disabled'}>Buy again · ${money(buyPrice(c))}</button><button class="primary" data-action="v-close">✓ Collected</button>`:`<button class="primary" data-action="v-buy" ${game.cash+1e-9>=buyPrice(c)?'':'disabled'}>Buy · ${money(buyPrice(c))}</button>`;
  else acts+=`<button class="primary" data-action="v-close">Close</button>`;
  $('#viewerBody').innerHTML=`<div class="v-count">${V.i+1} / ${V.list.length}</div>
@@ -1083,6 +1208,7 @@ function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lv
  <div class="v-val lvl${lvl}">${money(c.value)}</div><div class="v-src">${c.est?'Estimated value':'TCGplayer market price'}${c.slab&&c.raw?` · ${money(c.raw)} raw plus grade bonus`:''}</div>
  ${c.at&&V.mode!=='set'?`<div class="v-src">Pulled ${ago(c.at)}${c.from?` from ${esc(c.from)}`:''}</div>`:''}${V.mode==='set'&&!have?'<div class="v-src">Market buys cost 30% over value</div>':''}</div>
  <div class="v-actions">${acts}</div>`;
+ const st=$('#vStar');st.hidden=!owned;st.classList.toggle('on',!!c.vault);st.textContent=c.vault?'★ In vault':`☆ Vault ${vaultCards().length}/${VAULT_MAX}`;
  const card=$('#vCard'),tilt=$('#vTilt');
  const move=e=>{const r=card.getBoundingClientRect(),x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));tilt.style.transform=`rotateY(${(x-.5)*26}deg) rotateX(${(.5-y)*26}deg) scale(1.03)`;tilt.style.setProperty('--mx',x*100+'%');tilt.style.setProperty('--my',y*100+'%')};
  const reset=()=>{tilt.style.transform='';tilt.style.setProperty('--mx','50%');tilt.style.setProperty('--my','50%')};
@@ -1094,7 +1220,10 @@ async function viewerSell(){if(!V)return;const c=V.list[V.i];if(!await okToLose(
  const r=sellCard(c.uid);if(!r)return;save();toast(r.value<.25?`Sold for ${money(r.value)}. Don't spend it all in one place.`:`${c.name} sold for ${money(r.value)}${r.ticket?' · 🎟 +1 Slab Grab ticket!':''}`);if(r.ticket){Sound.hit(3);FX.burst(60,GOLDS)}
  dropFromViewer();checkBroke()}
 function dropFromViewer(){V.list.splice(V.i,1);if(!V.list.length)closeViewer();else{V.i=Math.min(V.i,V.list.length-1);renderViewer()}}
-async function viewerTrade(){if(!V)return;const c=V.list[V.i];if(!game.owned.some(x=>x.uid===c.uid))return;const credit=r2(c.value*TRADE_BONUS);
+function toggleVault(){if(!V)return;const c=V.list[V.i];if(!game.owned.includes(c))return;
+ if(!c.vault&&vaultCards().length>=VAULT_MAX){toast(`Your vault is full (${VAULT_MAX}). Take one out first.`);return}
+ c.vault=!c.vault;save();Sound.init();Sound.flip();toast(c.vault?pick([`${c.name} is in the vault. Safe from your own bad decisions.`,`Locked away. Even Kyle can't make you sell it.`,`Vaulted. Your future self says thanks.`]):`${c.name} is out of the vault and back on the market.`,3200);renderViewer()}
+async function viewerTrade(){if(!V)return;const c=V.list[V.i];if(!game.owned.some(x=>x.uid===c.uid)||c.vault)return;const credit=r2(c.value*TRADE_BONUS);
  const opts=TIERS.filter(t=>unlocked(t)&&credit>=t.price).map(t=>{const n=Math.min(50,Math.floor(credit/t.price));return{label:`${n}× ${t.name} · ${moneyS(n*t.price)}`,value:t.id,n,price:t.price}});
  if(!opts.length){toast(`Trade-ins start at ${moneyS(TIERS[0].price/TRADE_BONUS)}. Sell this one instead.`);return}
  opts[opts.length-1].primary=true;
@@ -1120,7 +1249,7 @@ function spin(){if(spinning)return;const mode=grabMode,m=MODES[mode];if(activePo
  if(mode==='god'&&!free){if(game.level<m.lvl){toast(`God Tier unlocks at level ${m.lvl}.`);return}if(game.cash+1e-9<m.cost){toast(`A God Tier spin costs ${money(m.cost)}.`);return}}
  Sound.init();const prize=prizeFor(mode);prize.uid=uid();prize.at=Date.now();prize.from=m.name;
  if(mode==='daily')game.lastSpin=today();else if(mode==='std'){game.tickets--;spend(m.cost);game.grabSpent=r2((game.grabSpent||0)+m.cost)}else if(free)game.vouchers.god--;else{spend(m.cost);game.grabSpent=r2((game.grabSpent||0)+m.cost)}
- const tier=mode==='std'?'grab':mode;game.slabsWon=(game.slabsWon||0)+1;game.owned.push(prize);collect([prize]);game.history.unshift(histEntry(tier,mode==='daily'||free?0:m.cost,[prize]));spinning=true;checkProgress([prize]);save();Feed.post([prize]);
+ const tier=mode==='std'?'grab':mode;game.slabsWon=(game.slabsWon||0)+1;game.owned.push(prize);collect([prize]);bountyCheck([prize]);game.history.unshift(histEntry(tier,mode==='daily'||free?0:m.cost,[prize]));spinning=true;checkProgress([prize]);save();Feed.post([prize]);
  const N=48,P=41,items=Array.from({length:N},(_,i)=>i===P?prize:decoyFor(mode)),track=$('#reelTrack'),reel=$('#reel');
  track.style.transform='translate3d(0,0,0)';track.dataset.mode=mode;track.innerHTML=items.map(reelItem).join('');
  const cs=getComputedStyle(track),gap=parseFloat(cs.columnGap)||10,pad=parseFloat(cs.paddingLeft)||0,iw=track.children[0].getBoundingClientRect().width,w=iw+gap,view=reel.clientWidth;
@@ -1222,17 +1351,17 @@ let brokeOpen=false;
 async function checkBroke(){if(rip||brokeOpen||spinning)return;const cheapest=Math.min(...TIERS.filter(unlocked).map(t=>t.price));if(game.cash+1e-9>=cheapest)return;
  if(Object.entries(game.vouchers).some(([k,n])=>n>0&&k!=='god')){toast('Low on cash? You have reward packs to open in the Shop.');return}
  if(spinReady()){toast('Low on cash? Your daily free slab spin is ready.');return}
- if(collectionValue()+game.cash>=cheapest){toast('Low on cash. Sell a few cards from your binder.');return}
+ if(sellableValue()+game.cash>=cheapest){toast('Low on cash. Sell a few cards from your binder.');return}
  brokeOpen=true;await modal({icon:'😅',title:'O no, you have a gambling problem!',html:'Time to alert Kyle you have a problem :)',buttons:[{label:'Fine, alert him',primary:true,value:1}]});
  game.cash=r2(game.cash+START);game.given=r2(game.given+START);game.kyle=(game.kyle||0)+1;save();
  await modal({icon:'😏',title:pick(['He already knows ;)','Kyle has been notified.','Kyle sighed audibly.']),html:`Kyle has been alerted${game.kyle>1?` (that's ${game.kyle} times now)`:''}. Your virtual bankroll got topped up by $100.${game.kyle>=3?'<br>Your family has been cc\'d.':''}`,buttons:[{label:'Back to the packs',primary:true,value:1}]});brokeOpen=false}
-async function sellBulk(){const bulk=game.owned.filter(c=>!c.slab&&c.value<1);if(!bulk.length){toast('No bulk under $1 to sell.');return}const tot=sum(bulk.map(c=>c.value));
+async function sellBulk(){const bulk=game.owned.filter(c=>!c.slab&&!c.vault&&c.value<1);if(!bulk.length){toast('No bulk under $1 to sell.');return}const tot=sum(bulk.map(c=>c.value));
  const ok=await modal({icon:'🧹',title:'Sell all your bulk?',html:`Sell ${bulk.length} card${bulk.length>1?'s':''} under $1 for ${money(tot)}. They still count toward your sets.`,buttons:[{label:'Cancel',value:false},{label:'Sell bulk',primary:true,value:true}]});if(!ok)return;
  bulk.forEach(c=>sellCard(c.uid));save();toast(`Sold ${bulk.length} bulk cards for ${money(tot)}`)}
-async function sellDupes(){const slabIds=new Set(game.owned.filter(c=>c.slab).map(c=>c.id)),best=new Map();
- for(const c of game.owned){if(c.slab)continue;const k=c.id,b=best.get(k);if(!b||c.value>b.value)best.set(k,c)}
- const dupes=game.owned.filter(c=>!c.slab&&(slabIds.has(c.id)||best.get(c.id)!==c));if(!dupes.length){toast('No duplicates to sell.');return}const tot=sum(dupes.map(c=>c.value)),tix=dupes.filter(earnsTicket).length;
- const ok=await modal({icon:'🧹',title:'Sell your duplicates?',html:`Sell ${dupes.length} extra cop${dupes.length>1?'ies':'y'} for ${money(tot)}${tix?` (+${tix} 🎟)`:''}. You keep one of every card, and slabs are never sold.`,buttons:[{label:'Cancel',value:false},{label:'Sell dupes',primary:true,value:true}]});if(!ok)return;
+async function sellDupes(){const keepIds=new Set(game.owned.filter(c=>c.slab||c.vault).map(c=>c.id)),best=new Map();
+ for(const c of game.owned){if(c.slab||c.vault)continue;const k=c.id,b=best.get(k);if(!b||c.value>b.value)best.set(k,c)}
+ const dupes=game.owned.filter(c=>!c.slab&&!c.vault&&(keepIds.has(c.id)||best.get(c.id)!==c));if(!dupes.length){toast('No duplicates to sell.');return}const tot=sum(dupes.map(c=>c.value)),tix=dupes.filter(earnsTicket).length;
+ const ok=await modal({icon:'🧹',title:'Sell your duplicates?',html:`Sell ${dupes.length} extra cop${dupes.length>1?'ies':'y'} for ${money(tot)}${tix?` (+${tix} 🎟)`:''}. You keep one of every card. Slabs and vault cards are never sold.`,buttons:[{label:'Cancel',value:false},{label:'Sell dupes',primary:true,value:true}]});if(!ok)return;
  let t=0;dupes.forEach(c=>{const r=sellCard(c.uid);if(r&&r.ticket)t++});save();toast(`Sold ${dupes.length} duplicates for ${money(tot)}${t?` · 🎟 +${t}`:''}`)}
 function newRun(prestige){const keep={owner:game.owner,prestige},bank=START*(1+prestige);game=fresh();Object.assign(game,keep);game.cash=game.given=bank;$('#reelTrack').innerHTML='';save()}
 const BAILOUT_UNDER=25, BAILOUT_DAILY=3;
@@ -1248,7 +1377,8 @@ async function prestigeRun(){if(!game.beat)return;const p=(game.prestige||0)+1,o
 function showOdds(id){const t=tierById(id);if(!t)return;const pool=packPool(t);
  const table=(title,bands)=>`<div class="odds-t"><div class="odds-title">${title}</div>${bands.map(([a,b,w])=>{const n=pool.filter(c=>c.value>=a&&c.value<b).length;return `<div class="odds-row"><span>${bandLabel(a,b)}</span><span class="odds-bar"><i style="width:${Math.max(3,w)}%"></i></span><b>${w}%</b><small>${n.toLocaleString()} cards</small></div>`}).join('')}</div>`;
  let html=`<p>${t.desc}</p>`;
- if(t.kind==='pack')html+=t.id==='hit'?table('Guaranteed hit',HIT_BANDS)+table('Bonus slot',BONUS_BANDS):table('Rare slot',SLOTS[t.slots[0]]);
+ if(t.kind==='mystery')html+=`<div class="odds-t"><div class="odds-title">What's inside</div>${MYSTERY.map(m=>`<div class="odds-row"><span>${m.label}</span><span class="odds-bar"><i style="width:${m.w}%"></i></span><b>${m.w}%</b><small></small></div>`).join('')}</div><p class="odds-note">Crown Zenith slabs come graded 8, 9 or 10. Graded vintage pays up to 12x raw. The JACKPOT is a raw trophy card: Blastoise, Lugia, Shining Charizard and friends.</p>`;
+ else if(t.kind==='pack')html+=t.id==='hit'?table('Guaranteed hit',HIT_BANDS)+table('Bonus slot',BONUS_BANDS):table('Rare slot',SLOTS[t.slots[0]]);
  else html+=table('Card value'+(t.slab===1?' (raw, before grading)':''),t.bands)+`<p class="odds-note">${t.slab===1?'Always':Math.round(t.slab*100)+'% chance it'} comes as a graded slab (9 or 10), worth 1.4x to 2.5x raw.</p>`;
  if(t.slabRare)html+=`<p class="odds-note">${Math.round(t.slabRare*100)}% chance the rare comes graded 8, 9 or 10. Vintage grades pay 1.8x, 3.5x and 12x raw.</p>`;
  html+=`<p class="odds-note">"Cards" is how many cards in ${t.vintage?'the vintage vault':'your current rotation'} fall in that range. Empty ranges roll to the nearest range that has cards.${t.lvl>1?` Unlocks at level ${t.lvl}.`:''}</p>`;
@@ -1273,6 +1403,9 @@ const ACTIONS={
  'set-filter':el=>{setFilter=el.dataset.f;renderCollect()},
  trophy:el=>trophyModal(+el.dataset.i),
  'view-set':el=>openViewer(setCache.slice(),+el.dataset.i,'set'),
+ 'v-vault':()=>toggleVault(),
+ 'view-vault':el=>{const l=vaultCards().sort((a,b)=>b.value-a.value);openViewer(l,Math.max(0,l.findIndex(c=>c.uid===el.dataset.uid)),'owned')},
+ player:el=>playerModal(el.dataset.u),
  'v-buy':()=>{if(V&&buyCard(V.list[V.i])&&V)renderViewer()},
  'open-voucher':el=>{const k=el.dataset.tier,n=game.vouchers[k]||0;if(n)startRip(k,{qty:Math.min(n,ripQty),voucher:true})},
  'daily-go':()=>{grabMode='daily';go('grab')},
@@ -1317,17 +1450,32 @@ document.addEventListener('keydown',e=>{if(!V||!$('#modal').hidden)return;if(e.k
  vb.addEventListener('touchend',e=>{if(sx==null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)viewerStep(dx<0?1:-1)},{passive:true})})();
 (()=>{const st=$('#ripStage');st.addEventListener('pointermove',e=>{const w=st.querySelector('.flipwrap.revealed');if(!w||!rip)return;const p=w.querySelector('.persp'),r=w.getBoundingClientRect(),x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));p.style.transform=`perspective(900px) rotateY(${(x-.5)*22}deg) rotateX(${(.5-y)*22}deg)`;p.style.setProperty('--mx',x*100+'%');p.style.setProperty('--my',y*100+'%')});st.addEventListener('pointerleave',()=>{const p=st.querySelector('.revealed .persp');if(p)p.style.transform=''})})();
 setInterval(()=>{if(rip)return;if(currentView==='shop')renderDaily();if(currentView==='grab'&&!spinning)renderGrab()},60000);
-(()=>{const st=$('#ripStage');let sx=null,moved=0,ticks=0;
- st.addEventListener('pointerdown',e=>{if(!rip||rip.phase!=='sealed'||!e.target.closest('.pack3d'))return;sx=e.clientX;moved=0;ticks=0;try{st.setPointerCapture(e.pointerId)}catch(_){}});
- st.addEventListener('pointermove',e=>{if(sx==null||!rip||rip.phase!=='sealed')return;const pk=$('.pack3d'),top=pk&&pk.querySelector('.pk-top');if(!top)return;moved=Math.abs(e.clientX-sx);const p=Math.min(1,moved/(pk.offsetWidth*.75));
-  top.style.transform=`translate(${p*14*Math.sign(e.clientX-sx)}%,${-p*40}%) rotate(${p*10*Math.sign(e.clientX-sx)}deg)`;const t=Math.floor(p*8);if(t>ticks){ticks=t;Sound.init();Sound.noise(.05,.08);buzz(4)}
-  if(p>=1){sx=null;swallow();top.style.transform='';ripTear()}});
- const end=()=>{if(sx==null)return;sx=null;const top=$('.pack3d .pk-top');if(moved>10){swallow();if(top){top.style.transition='transform .2s';top.style.transform='';setTimeout(()=>{if(top)top.style.transition=''},220)}}};
+// Rip gesture: start anywhere, drag a full pack-width. Tear line follows the finger, foil flies, release past 70% finishes it.
+let autoTear=()=>{};
+(()=>{const st=$('#rip');let sx=null,dir=0,p=0,ticks=0,busy=false,pid=null;
+ const pk=()=>$('.pack3d');
+ function setP(v,x,y){const k=pk();if(!k)return;p=v;const top=k.querySelector('.pk-top'),tear=k.querySelector('.pk-tear');k.classList.add('dragging');
+  top.style.transform=`translate(${dir*v*7}%,${-v*24}%) rotate(${dir*v*10}deg)`;tear.classList.toggle('r',dir<0);tear.style.transform=`scaleX(${v})`;k.style.transform=`rotate(${dir*v*-2}deg)`;
+  const t=Math.floor(v*16);if(t>ticks){ticks=t;Sound.init();Sound.crinkle(v);buzz(4+Math.round(v*8));if(x!=null){const r=k.getBoundingClientRect();FX.spawn(dir>0?r.left+r.width*v:r.right-r.width*v,r.top+r.height*(parseFloat(k.style.getPropertyValue('--seam'))||.16),3,[rip?rip.tier.color:'#fff','#ffffff'],3)}}}
+ function finish(){if(busy||!rip||rip.phase!=='sealed')return;busy=true;const from=p,t0=performance.now(),d=Math.max(120,(1-from)*420);if(!dir)dir=1;
+  const step=now=>{const q=Math.min(1,(now-t0)/d),v=from+(1-from)*q;setP(v,1,0);if(q<1)requestAnimationFrame(step);else{busy=false;const k=pk();if(k)k.style.transform='';ripTear()}};requestAnimationFrame(step)}
+ autoTear=()=>{if(!rip||rip.phase!=='sealed')return;dir=1;p=0;ticks=0;finish()};
+ st.addEventListener('pointerdown',e=>{if(!rip||rip.phase!=='sealed'||busy||e.target.closest('button'))return;sx=e.clientX;dir=0;ticks=0;p=0;pid=e.pointerId});
+ st.addEventListener('pointermove',e=>{if(sx==null||!rip||rip.phase!=='sealed')return;const dx=e.clientX-sx;if(!dir&&Math.abs(dx)>6){dir=Math.sign(dx);try{st.setPointerCapture(pid)}catch(_){}}if(!dir)return;const k=pk();if(!k)return;
+  const need=Math.max(k.offsetWidth*1.1,220),v=Math.max(0,Math.min(1,dx*dir/need));setP(v,e.clientX,e.clientY);if(v>=1){sx=null;swallow();finish()}});
+ const end=()=>{if(sx==null)return;sx=null;if(p<=.04)return;swallow();if(p>=.7){finish();return}const k=pk();if(!k)return;const top=k.querySelector('.pk-top'),tear=k.querySelector('.pk-tear');
+  top.style.transition=tear.style.transition=k.style.transition='transform .28s';top.style.transform='';tear.style.transform='scaleX(0)';k.style.transform='';k.classList.remove('dragging');p=0;setTimeout(()=>{top.style.transition=tear.style.transition=k.style.transition=''},300)};
  st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end)})();
 $('#setPicker').addEventListener('change',e=>{const id=e.target.value;e.target.value='';e.target.blur();if(id)addSet(id)});
+document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('bounty')){bountyOpen=e.target.open;LS.set('pokerip-bounty-open',bountyOpen)}},true);
 $('#binderSort').addEventListener('change',()=>renderBinder());
 addEventListener('hashchange',()=>{route();window.scrollTo(0,0)});
 addEventListener('storage',e=>{if(e.key===SAVE_KEY&&!rip&&!spinning){game=load();render()}});
+// iOS Safari can leave the fixed bottom bar stranded mid-screen after the keyboard or toolbar moves. Nudge it back.
+const navNudge=()=>requestAnimationFrame(()=>{window.scrollTo(window.scrollX,window.scrollY);const t=$('.tabs');if(t){t.style.bottom='1px';requestAnimationFrame(()=>{t.style.bottom=''})}});
+document.addEventListener('focusout',e=>{if(e.target.matches('input,select,textarea'))setTimeout(navNudge,60)});
+if(window.visualViewport){let vvT;visualViewport.addEventListener('resize',()=>{clearTimeout(vvT);vvT=setTimeout(navNudge,120)})}
+addEventListener('orientationchange',()=>setTimeout(navNudge,300));
 let lastFocusPull=0;
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){if(Cloud.timer)Cloud.push()}else if(Date.now()-lastFocusPull>20000){lastFocusPull=Date.now();cloudRefresh()}});
 
