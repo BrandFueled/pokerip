@@ -84,11 +84,7 @@ select.sel{background:#141e2d;border:1px solid var(--line);border-radius:9px;min
 .pack-head{display:flex;justify-content:space-between;align-items:center;position:relative}
 .tier{font-size:10px;font-weight:900;letter-spacing:.14em;color:var(--accent)}
 .odds-btn{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:0 9px;min-height:30px}
-.pack-art{height:104px;display:grid;place-items:center;position:relative}
-.mini-pack{width:62px;height:96px;border-radius:7px;border:1px solid #ffffff42;background:linear-gradient(155deg,var(--accent),#27305a 55%,#0b1020);box-shadow:0 12px 28px #0009,0 0 26px -6px var(--accent);transform:rotate(-7deg);display:grid;place-items:center;position:relative;overflow:hidden;transition:transform .25s}
-.mini-pack:before{content:"";position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 42%,#ffffff45 50%,transparent 58%);animation:sheen 3.2s linear infinite}
-.mini-pack span{font-size:10px;font-weight:1000;letter-spacing:.1em;line-height:1.05;text-align:center;position:relative}
-.pack:hover .mini-pack{transform:rotate(-2deg) scale(1.06)}
+.pack-art{height:110px;display:grid;place-items:center;position:relative;margin-bottom:6px}
 .pack h3{margin:2px 0 3px;font-size:18px}
 .pack p{margin:0;color:var(--muted);font-size:12px;flex:1}
 .pack-price{font-size:22px;font-weight:900;margin:10px 0 9px;letter-spacing:-.02em}
@@ -369,7 +365,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  .stat{padding:11px 12px}.stat b{font-size:18px}
  .packs{gap:10px}
  .pack{padding:12px}
- .pack-art{height:88px}.mini-pack{width:52px;height:80px}
+ .pack-art{height:92px}.mini-art{height:86px}.mini-art.single{height:80px}
  .pack h3{font-size:16px}.pack p{font-size:11px}
  .pack-price{font-size:19px;margin:8px 0 8px}
  .gridcards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
@@ -479,7 +475,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .mini-art{position:relative;height:100px;aspect-ratio:var(--ar);filter:var(--tint) drop-shadow(0 10px 16px #000a) drop-shadow(0 0 12px color-mix(in srgb,var(--accent) 45%,transparent));transition:transform .2s}
 .mini-art.single{height:92px}
 .mini-art img{width:100%;height:100%;display:block}
-.pack:hover .mini-art{transform:rotate(-3deg) scale(1.06)}
+@media(hover:hover){.pack:hover .mini-art{transform:rotate(-3deg) scale(1.06)}}
 .pack.locked .mini-art{filter:grayscale(.9) brightness(.6)}
 .pk-stamp{position:absolute;left:50%;top:76%;transform:translate(-50%,-50%) rotate(-8deg);z-index:3;white-space:nowrap;font-weight:1000;letter-spacing:.12em;font-size:9px;padding:3px 7px;border-radius:4px;color:#fff;background:#000c;border:1.5px solid #fff;box-shadow:0 0 12px #000}
 .pk-stamp.q{top:50%;font-size:42px;padding:0 14px;border-radius:12px;letter-spacing:0;background:#2a0a3acc;border-color:#e2b6ff;color:#fff;text-shadow:0 0 14px #c86bff;transform:translate(-50%,-50%) rotate(-8deg)}
@@ -513,10 +509,12 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .gpick button{display:grid;grid-template-columns:36px 1fr;gap:10px;align-items:center;padding:6px;border-radius:10px;background:#141e2d;border:1px solid var(--line);color:inherit;text-align:left}
 .gpick img{width:36px;border-radius:4px}.gpick b{display:block;font-size:13px}.gpick small{color:var(--muted);font-size:11px}
 .vcard.grading .tile-img{border-color:#54d69a88}
-.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.badge{padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1622;opacity:.5}
-.badge.got{opacity:1;border-color:#f5c45166;background:linear-gradient(160deg,#241e0c,#0f1622)}
-.badge span{font-size:22px}.badge b{display:block;font-size:12px;margin-top:4px}.badge small{display:block;font-size:11px;color:var(--muted)}
+.bstrip{display:flex;align-items:center;gap:6px;width:100%;padding:12px 14px;border-radius:14px;border:1px solid #f5c45155;background:linear-gradient(160deg,#241e0c,#0f1622);color:inherit;text-align:left;font-size:22px;flex-wrap:wrap}
+.bstrip small{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.bdgs{display:grid;gap:6px;text-align:left;max-height:58vh;overflow:auto}
+.bdg{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1622;opacity:.5}
+.bdg.got{opacity:1;border-color:#f5c45166;background:linear-gradient(160deg,#241e0c,#0f1622)}
+.bdg span{font-size:22px;text-align:center}.bdg b{display:block;font-size:13px}.bdg small{display:block;font-size:11px;color:var(--muted)}
 .guide{display:grid;gap:9px;text-align:left;max-height:56vh;overflow:auto}
 .guide div{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
 .guide span{font-size:19px;line-height:1.2;text-align:center}
@@ -657,7 +655,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <div class="stats" id="statsGrid"></div>
  <div id="boardWrap" hidden><div class="section-head"><h2>Leaderboard</h2><button class="smallbtn" data-action="lb-refresh">Refresh</button></div><div class="seg grabseg" id="boardSeg"></div><div class="panel rows" id="board"></div></div>
  <div class="section-head"><h2>🏅 Badges</h2><span class="muted" id="badgeCount"></span></div>
- <div class="badges" id="badges"></div>
+ <div id="badges"></div>
  <div class="section-head"><h2>Best pulls</h2></div>
  <div class="best" id="bestPulls"></div>
  <div class="section-head"><h2>Recent rips</h2><button class="smallbtn" data-action="nav" data-view="history">View all</button></div>
@@ -1389,7 +1387,7 @@ function renderStats(){const nw=networth(),pl=nw-game.given,pk=paidPacks(),cost=
  const best=allPulls().sort((a,b)=>b.value-a.value);statsBest=best.slice(0,6);
  $('#statsGrid').innerHTML=statHTML([['Net worth',money(nw),'Cash + binder'],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,`vs. ${money(game.given)} given`],['Level',`LV ${game.level}${game.prestige?' ⭐'+game.prestige:''}`,`${moneyS(game.xp)} XP`],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,game.beat?'Beaten!':'Fill the case'],['Lifetime spent',money(game.spent),`${game.opened} packs`],['Return rate',ret+'%','Paid packs, last 150'],['Biggest pull',money(best[0]?.value||0),esc(best[0]?fullName(best[0]):'None yet')],['Cash from sales',money(game.sold||0),'Cards sold back'],['Slabs grabbed',game.slabsWon||0,`${money(game.grabSpent||0)} on spins`],['Kyle alerts',game.kyle||0,`${game.bailouts||0} bailout${game.bailouts===1?'':'s'} begged for`]]);
  $('#badgeCount').textContent=`${MILESTONES.filter(m=>game.miles[m.id]).length} / ${MILESTONES.length}`;
- $('#badges').innerHTML=MILESTONES.map(m=>{const got=game.miles[m.id];return `<div class="badge${got?' got':''}"><span>${got?m.icon:'🔒'}</span><b>${esc(m.name)}</b><small>${esc(m.desc)}</small></div>`}).join('');
+ {const got=MILESTONES.filter(m=>game.miles[m.id]);$('#badges').innerHTML=`<button class="bstrip" data-action="badges">${got.length?got.map(m=>`<span title="${esc(m.name)}">${m.icon}</span>`).join(''):'<span style="font-size:14px;color:var(--muted)">No badges yet. Go do something embarrassing.</span>'}<small>See all ›</small></button>`}
  $('#bestPulls').innerHTML=statsBest.length?statsBest.map((c,i)=>tile(c,i,'view-best')).join(''):'<div class="empty" style="grid-column:1/-1">Your best pulls will show up here.</div>';
  $('#recentRips').innerHTML=game.history.length?game.history.slice(0,5).map(histRow).join(''):'<div class="empty">Rip a pack and your pulls will show up here.</div>';
  $('#settings').innerHTML=`${Cloud.on?`<button class="smallbtn" data-action="account">${Cloud.s?`👤 ${esc(Cloud.name)} · Account`:'👤 Log in to save'}</button>`:''}<button class="smallbtn" data-action="guide">📖 How to play</button><button class="smallbtn" data-action="sound">${Sound.on?'🔊 Sound on':'🔇 Sound off'}</button>${game.beat?'<button class="smallbtn" data-action="prestige" style="color:var(--gold)">⭐ Prestige</button>':''}<button class="smallbtn" data-action="bailout">💸 I need more money</button>`;
@@ -1464,19 +1462,21 @@ function ripRevealedActions(){const last=rip.i===rip.cards.length-1;
  else{const c=rip.cards[0];$('#ripActions').innerHTML=`<button class="secondary" data-action="single-sell">Sell · ${money(c.value)}${earnsTicket(c)?' + 🎟':''}</button><button class="primary" data-action="single-keep">Keep it</button>`}}
 function ripAdvance(){if(!rip||rip.phase!=='revealed'||(!rip.bulk&&!multi(rip.tier)))return;const w=$('.flipwrap');rip.phase='leaving';w.classList.add('leave');setTimeout(()=>{if(!rip)return;rip.bulk||rip.i>=rip.cards.length-1?ripSummary():ripNext()},250)}
 function ripSkip(){if(!rip||(!rip.bulk&&!multi(rip.tier))||['summary','flipping','leaving','tearing'].includes(rip.phase))return;const rest=rip.cards.slice(rip.i+(rip.phase==='revealed'?1:0));ripSummary();celebrate(Math.max(0,...rest.map(lvlOf)))}
-let autoBulk=LS.get('pokerip-autobulk',false)===true;
+let autoBulk=(v=>v===true?1:typeof v==='number'?v:0)(LS.get('pokerip-autobulk',0)); // 0 = off, else auto-sell under this $
 function roastFor(value,cost,top,cards){const r=cost?value/cost:9;const k=(r>=3||(top>=200&&r>=1.5))?'huge':r>=1?'good':r>=.5?'meh':'awful';const ctx=contextRoasts(k,cards||[]);return{k,line:ctx.length&&Math.random()<.45?pick(ctx):pick(ROAST[k])}}
 const roastHTML=(value,cost,top,cards)=>{const{k,line}=roastFor(value,cost,top,cards);return `<div class="roast${k==='awful'||k==='meh'?' bad':''}">${esc(line)}</div>`};
 function sumCard(c,i){const s=rip.sell.has(c.uid),lvl=vt(c.value);return `<div class="sum-card lvl${lvl}${s?' selling':''}" style="--glow:${GLOW[lvl]}"><button class="sum-img" data-action="view-rip" data-i="${i}" aria-label="View ${esc(c.name)}">${rip.fresh.has(c.uid)?'<span class="newtag">NEW</span>':''}${imgTag(c,false,true)}</button><div class="sum-name">${c.slab?`[${c.grade}] `:''}${c.first?'1st ':''}${esc(c.name)}</div><div class="sum-val">${money(c.value)}</div><div class="seg mini"><button data-action="rip-keep" data-uid="${c.uid}" class="${s?'':'on'}">Keep</button><button data-action="rip-sell" data-uid="${c.uid}" class="${s?'on sell':''}">Sell</button></div></div>`}
 const isBulk=c=>c.value<1&&!c.slab;
+const under=n=>c=>c.value<n&&!c.slab;
+const featMin=()=>rip&&rip.cards.length>40?10:1;
 function ripSummary(){const first=rip.phase!=='summary';rip.phase='summary';const t=rip.tier;$('#ripStep').textContent='RESULTS';
- const idx=rip.cards.map((c,i)=>[c,i]);let feat=idx.filter(([c])=>!isBulk(c)),bulk=idx.filter(([c])=>isBulk(c));if(!feat.length&&bulk.length)feat=[bulk.shift()];
- if(first&&!rip.summed){rip.summed=true;if(autoBulk)bulk.forEach(([c])=>rip.sell.add(c.uid))}
+ const idx=rip.cards.map((c,i)=>[c,i]);const fm=featMin(),low=c=>c.value<fm&&!c.slab;let feat=idx.filter(([c])=>!low(c)),bulk=idx.filter(([c])=>low(c));if(!feat.length&&bulk.length)feat=[bulk.shift()];
+ if(first&&!rip.summed){rip.summed=true;if(autoBulk)rip.cards.forEach(c=>{if(under(autoBulk)(c))rip.sell.add(c.uid)})}
  const bv=sum(bulk.map(([c])=>c.value)),bSell=bulk.length&&bulk.every(([c])=>rip.sell.has(c.uid));
- $('#ripStage').innerHTML=`<div class="summary">${feat.map(([c,i])=>sumCard(c,i)).join('')}${bulk.length?`<button class="bulkrow" data-action="bulk-toggle"><span>+ ${bulk.length} bulk card${bulk.length>1?'s':''} under $1 · <b>${money(bv)}</b>${bSell?' · selling':''}</span><span>${rip.showBulk?'Hide':'Show'}</span></button>${rip.showBulk?bulk.map(([c,i])=>sumCard(c,i)).join(''):''}`:''}</div>`;
+ $('#ripStage').innerHTML=`<div class="summary">${feat.map(([c,i])=>sumCard(c,i)).join('')}${bulk.length?`<button class="bulkrow" data-action="bulk-toggle"><span>+ ${bulk.length} card${bulk.length>1?'s':''} under ${moneyS(fm)} · <b>${money(bv)}</b>${bSell?' · selling':''}</span><span>${rip.showBulk?'Hide':'Show'}</span></button>${rip.showBulk?bulk.map(([c,i])=>sumCard(c,i)).join(''):''}`:''}</div>`;
  const total=sum(rip.cards.map(c=>c.value)),sel=rip.cards.filter(c=>rip.sell.has(c.uid)),st=sum(sel.map(c=>c.value)),tix=sel.filter(earnsTicket).length,nw=rip.cards.filter(c=>rip.fresh.has(c.uid)).length,top=Math.max(...rip.cards.map(c=>c.value));
  if(first)rip.roast=roastHTML(total,rip.cost||t.price*rip.qty,top,rip.cards);
- $('#ripInfo').innerHTML=`${rip.god?`<div class="godban">🌈 GOD PACK${rip.god>1?' ×'+rip.god:''}!!</div>`:''}<div class="sum-total"><span class="muted">${rip.bulk?`${rip.qty} packs`:'Pack value'}</span><b>${money(total)}</b><span class="${total>=rip.cost?'pos':'neg'}">${rip.voucher?'Reward!':`${signed(total-rip.cost)} vs. ${money(rip.cost)}`}</span></div>${rip.roast}<div class="muted" style="font-size:12px;margin-top:6px">${sel.length?`Selling ${sel.length} for ${money(st)}${tix?` · earns ${tix} 🎟`:''}`:'Keeping everything'}${nw?` · ${nw} new for your sets`:''}</div><div class="sum-quick"><button class="smallbtn" data-action="rip-sellbulk">Sell bulk</button><button class="smallbtn" data-action="rip-sellall">Sell all</button><button class="smallbtn" data-action="rip-keepall">Keep all</button><button class="smallbtn" data-action="auto-bulk" style="${autoBulk?'color:var(--green);border-color:#54d69a66':''}">${autoBulk?'✓ ':''}Auto-sell bulk</button><button class="smallbtn" data-action="share-best">Share best ↗</button></div>`;
+ $('#ripInfo').innerHTML=`${rip.god?`<div class="godban">🌈 GOD PACK${rip.god>1?' ×'+rip.god:''}!!</div>`:''}<div class="sum-total"><span class="muted">${rip.bulk?`${rip.qty} packs`:'Pack value'}</span><b>${money(total)}</b><span class="${total>=rip.cost?'pos':'neg'}">${rip.voucher?'Reward!':`${signed(total-rip.cost)} vs. ${money(rip.cost)}`}</span></div>${rip.roast}<div class="muted" style="font-size:12px;margin-top:6px">${sel.length?`Selling ${sel.length} for ${money(st)}${tix?` · earns ${tix} 🎟`:''}`:'Keeping everything'}${nw?` · ${nw} new for your sets`:''}</div><div class="sum-quick"><span class="muted" style="font-size:12px;align-self:center">Sell under</span>${[1,10,50].map(n=>`<button class="smallbtn" data-action="rip-under" data-n="${n}">${moneyS(n)}</button>`).join('')}<button class="smallbtn" data-action="rip-sellall">Sell all</button><button class="smallbtn" data-action="rip-keepall">Keep all</button></div><div class="sum-quick"><button class="smallbtn" data-action="auto-bulk" style="${autoBulk?'color:var(--green);border-color:#54d69a66':''}">Auto-sell: ${autoBulk?'under '+moneyS(autoBulk):'off'}</button><button class="smallbtn" data-action="share-best">Share best ↗</button></div>`;
  ripEndActions()}
 function ripEndActions(){const L=lastRip,t=tierById(L.id);let again='';
  if(L.free)again='';
@@ -1500,9 +1500,10 @@ function ripTap(){if(!rip)return;if(swallowTap){swallowTap=false;return}if(rip.p
 let V=null;
 function openViewer(list,i,mode='view'){if(!list[i])return;V={list,i,mode};renderViewer();showOverlay('viewer')}
 function closeViewer(){V=null;hideOverlay('viewer')}
-function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lvl=vt(c.value),owned=V.mode==='owned'&&game.owned.some(x=>x.uid===c.uid),have=V.mode==='set'?game.owned.filter(x=>x.id===c.id).length:0;
+function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lvl=vt(c.value),mine=!!c.uid&&game.owned.some(x=>x.uid===c.uid),inRip=V.mode==='view'&&!!rip&&mine,owned=(V.mode==='owned'||(V.mode==='view'&&!rip))&&mine,have=V.mode==='set'?game.owned.filter(x=>x.id===c.id).length:0;
  let acts=owned?'':`<button class="secondary" data-action="v-share">Share ↗</button>`;const gbtn=owned&&!c.slab&&!c.grading?`<button class="secondary" data-action="v-grade">🔬 Grade · ${moneyS(GRADE_FEE)}</button>`:'';
- if(owned&&c.grading)acts+=`<button class="secondary" data-action="v-share">Share ↗</button><button class="primary" disabled>🔬 At the grader · ${c.grading<=Date.now()?'ready!':'back in '+Math.ceil((c.grading-Date.now())/60000)+'m'}</button>`;
+ if(inRip){acts+=c.grading?`<button class="primary" disabled>🔬 Sent to the grader</button>`:!c.slab?`<button class="secondary" data-action="v-grade">🔬 Grade · ${moneyS(GRADE_FEE)}</button><button class="primary" data-action="v-close">Close</button>`:`<button class="primary" data-action="v-close">Close</button>`}
+ else if(owned&&c.grading)acts+=`<button class="secondary" data-action="v-share">Share ↗</button><button class="primary" disabled>🔬 At the grader · ${c.grading<=Date.now()?'ready!':'back in '+Math.ceil((c.grading-Date.now())/60000)+'m'}</button>`;
  else if(owned&&c.vault)acts+=`${gbtn||'<button class="secondary" data-action="v-share">Share ↗</button>'}<button class="primary" data-action="v-vault">★ In vault · Remove</button>`;
  else if(owned)acts+=`${gbtn||'<button class="secondary" data-action="v-share">Share ↗</button>'}<button class="secondary" data-action="v-trade">Trade</button><button class="primary" data-action="v-sell">Sell · ${money(c.value)}${earnsTicket(c)?' + 🎟':''}</button>`;
  else if(V.mode==='set')acts+=have?`<button class="primary" data-action="v-close">Owned ×${have}</button>`:inDex(c.id)?`<button class="secondary" data-action="v-buy" ${game.cash+1e-9>=buyPrice(c)?'':'disabled'}>Buy again · ${money(buyPrice(c))}</button><button class="primary" data-action="v-close">✓ Collected</button>`:`<button class="primary" data-action="v-buy" ${game.cash+1e-9>=buyPrice(c)?'':'disabled'}>Buy · ${money(buyPrice(c))}</button>`;
@@ -1515,7 +1516,7 @@ function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lv
  <div class="v-val lvl${lvl}">${money(c.value)}</div><div class="v-src">${c.est?'Estimated value':'TCGplayer market price'}${c.slab&&c.raw?` · ${money(c.raw)} raw plus grade bonus`:''}</div>
  ${c.at&&V.mode!=='set'?`<div class="v-src">Pulled ${ago(c.at)}${c.from?` from ${esc(c.from)}`:''}</div>`:''}${owned&&gbtn?'<button class="linkbtn" data-action="v-share">Share ↗</button>':''}${c.value>=20&&!c.slab&&(!game.grail||game.grail.id!==c.id)?'<button class="linkbtn" data-action="v-grail">⭐ Make this my Grail</button>':game.grail&&game.grail.id===c.id?'<div class="v-src" style="color:var(--gold)">⭐ Your current Grail</div>':''}${V.mode==='set'&&!have?'<div class="v-src">Market buys cost 30% over value</div>':''}</div>
  <div class="v-actions">${acts}</div>`;
- const st=$('#vStar');st.hidden=!owned;st.classList.toggle('on',!!c.vault);st.textContent=c.vault?'★ In vault':`☆ Vault ${vaultCards().length}/${vaultMax()}`;
+ const st=$('#vStar');st.hidden=!(owned||inRip);st.classList.toggle('on',!!c.vault);st.textContent=c.vault?'★ In vault':`☆ Vault ${vaultCards().length}/${vaultMax()}`;
  const card=$('#vCard'),tilt=$('#vTilt');
  const move=e=>{const r=card.getBoundingClientRect(),x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));tilt.style.transform=`rotateY(${(x-.5)*26}deg) rotateX(${(.5-y)*26}deg) scale(1.03)`;tilt.style.setProperty('--mx',x*100+'%');tilt.style.setProperty('--my',y*100+'%')};
  const reset=()=>{tilt.style.transform='';tilt.style.setProperty('--mx','50%');tilt.style.setProperty('--my','50%')};
@@ -1527,7 +1528,7 @@ async function viewerSell(){if(!V)return;const c=V.list[V.i];if(!await okToLose(
  const r=sellCard(c.uid);if(!r)return;save();toast(r.value<.25?`Sold for ${money(r.value)}. Don't spend it all in one place.`:`${c.name} sold for ${money(r.value)}${r.ticket?' · 🎟 +1 Slab Grab ticket!':''}`);if(r.ticket){Sound.hit(3);FX.burst(60,GOLDS)}
  dropFromViewer();checkBroke()}
 function dropFromViewer(){V.list.splice(V.i,1);if(!V.list.length)closeViewer();else{V.i=Math.min(V.i,V.list.length-1);renderViewer()}}
-function toggleVault(){if(!V)return;const c=V.list[V.i];if(!game.owned.includes(c))return;
+function toggleVault(){if(!V)return;const c=game.owned.find(x=>x.uid===V.list[V.i].uid);if(!c)return;if(rip)rip.sell.delete(c.uid);
  if(!c.vault&&vaultCards().length>=vaultMax()){toast(`Your vault is full (${vaultMax()}). Take one out first.`);return}
  c.vault=!c.vault;save();Sound.init();Sound.flip();toast(c.vault?pick([`${c.name} is in the vault. Safe from your own bad decisions.`,`Locked away. Even Kyle can't make you sell it.`,`Vaulted. Your future self says thanks.`]):`${c.name} is out of the vault and back on the market.`,3200);renderViewer()}
 async function viewerTrade(){if(!V)return;const c=V.list[V.i];if(!game.owned.some(x=>x.uid===c.uid)||c.vault||c.grading)return;const credit=r2(c.value*TRADE_BONUS);
@@ -1707,6 +1708,7 @@ const GUIDE=[
  ['🔁','Trade-ins','Swap a card for packs worth 10% more than selling it.'],
  ['💸','Broke?','Hit "I need more money" on Stats. Under $25 only, 3 a day. Kyle will judge you.'],
  ['💾','Save','Log in (no email) so your run follows you to any device.']];
+function badgesModal(){const n=MILESTONES.filter(m=>game.miles[m.id]).length;modal({icon:'🏅',title:`Badges · ${n} / ${MILESTONES.length}`,html:`<div class="bdgs">${MILESTONES.map(m=>{const got=game.miles[m.id];return `<div class="bdg${got?' got':''}"><span>${got?m.icon:'🔒'}</span><div><b>${esc(m.name)}</b><small>${esc(m.desc)}${got?` · earned ${ago(got)}`:` · reward: ${rewardText(m.reward)}`}</small></div></div>`}).join('')}</div>`,buttons:[{label:'Close',primary:true}]})}
 function guideModal(){LS.set('pokerip-guide',1);modal({icon:'📖',title:'How to play',html:`<div class="guide">${GUIDE.map(([i,t,d])=>`<div><span>${i}</span><p><b>${t}</b> ${d}</p></div>`).join('')}</div>`,buttons:[{label:"Let's rip",primary:true}]})}
 function levelsModal(){const rows=[];for(let l=2;l<=MAX_LVL;l++)rows.push(`<div class="lvrow${l<=game.level?' done':''}${l===game.level+1?' cur':''}"><span><b>LV ${l}</b> · ${moneyS(XP_AT[l])}</span><span>${UNLOCKS[l]?`🔓 ${UNLOCKS[l]} · `:''}${rewardText(lvlReward(l))}</span></div>`);
  modal({icon:'⭐',title:`Level ${game.level}`,html:`<p>You earn 1 XP for every dollar you spend on packs, spins and cards. Every level pays out rewards, and some unlock new packs.</p><div style="max-height:44vh;overflow:auto">${rows.join('')}</div>`,buttons:[{label:'Got it',primary:true}]})}
@@ -1719,6 +1721,7 @@ const ACTIONS={
  qty:el=>{ripQty=+el.dataset.n;LS.set('pokerip-qty',ripQty);render()},
  levels:()=>levelsModal(),
  guide:()=>guideModal(),
+ badges:()=>badgesModal(),
  account:()=>accountModal(),
  sound:()=>{Sound.on=!Sound.on;LS.set('pokerip-sound',Sound.on);if(Sound.on){Sound.init();Sound.flip()}render()},
  retry:()=>location.reload(),
@@ -1730,7 +1733,7 @@ const ACTIONS={
  trophy:el=>trophyModal(+el.dataset.i),
  'view-set':el=>openViewer(setCache.slice(),+el.dataset.i,'set'),
  'v-vault':()=>toggleVault(),
- 'v-grade':async()=>{if(!V)return;await submitGrading(V.list[V.i]);V&&renderViewer()},
+ 'v-grade':async()=>{if(!V)return;const c=V.list[V.i];await submitGrading(c);if(rip&&c.grading){rip.sell.delete(c.uid);rip.phase==='summary'&&ripSummary()}V&&renderViewer()},
  'v-grail':async()=>{if(!V)return;const c=V.list[V.i],base=cardById(c.id)||c;await setGrail(c.first?{...base,value:c.value,first:true}:base);V&&renderViewer()},
  'view-grading':el=>{const l=gradingCards();openViewer(l,Math.max(0,l.findIndex(c=>c.uid===el.dataset.uid)),'owned')},
  'ticket-shop':()=>ticketShop(),
@@ -1753,6 +1756,7 @@ const ACTIONS={
  'rip-keep':el=>{rip&&(rip.sell.delete(el.dataset.uid),ripSummary())},
  'rip-sell':el=>{rip&&(rip.sell.add(el.dataset.uid),ripSummary())},
  'rip-sellbulk':()=>quickSell(isBulk),
+ 'rip-under':el=>{const n=+el.dataset.n;if(rip){rip.sell.clear();quickSell(under(n))}},
  'rip-keepall':()=>{rip&&(rip.sell.clear(),ripSummary())},
  'rip-sellall':()=>quickSell(()=>true),
  'rip-done':()=>ripDone(),
@@ -1777,7 +1781,7 @@ const ACTIONS={
  bailout:()=>bailout(),
  'board-tab':el=>{boardTab=el.dataset.t;renderStats()},
  'bulk-toggle':()=>{if(rip){rip.showBulk=!rip.showBulk;ripSummary()}},
- 'auto-bulk':()=>{autoBulk=!autoBulk;LS.set('pokerip-autobulk',autoBulk);if(rip&&autoBulk)rip.cards.forEach(c=>{if(isBulk(c))rip.sell.add(c.uid)});rip&&ripSummary();toast(autoBulk?'Bulk under $1 now auto-sells after every rip.':'Auto-sell bulk is off.')}};
+ 'auto-bulk':()=>{const steps=[0,1,10,50];autoBulk=steps[(steps.indexOf(autoBulk)+1)%steps.length];LS.set('pokerip-autobulk',autoBulk);if(rip&&autoBulk){rip.sell.clear();rip.cards.forEach(c=>{if(under(autoBulk)(c))rip.sell.add(c.uid)})}rip&&ripSummary();toast(autoBulk?`Cards under ${moneyS(autoBulk)} now auto-sell after every rip.`:'Auto-sell is off.')}};
 document.addEventListener('click',e=>{const el=e.target.closest('[data-action]');if(!el||el.disabled)return;const fn=ACTIONS[el.dataset.action];if(fn)fn(el,e)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(modalClose)modalClose(null);else if(V)closeViewer();return}
  if(!$('#modal').hidden||V)return;if(rip&&(e.key===' '||e.key==='Enter')&&!e.target.closest('button')){e.preventDefault();ripTap()}});
