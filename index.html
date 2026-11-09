@@ -710,7 +710,7 @@ const LUCK=4;
 const luckW=bands=>{const w=bands.map(b=>b[2]);if(w.length<2||!LUCK)return w;const take=Math.min(LUCK,w[0]*.5),rest=sum(w.slice(1));w[0]-=take;for(let i=1;i<w.length;i++)w[i]+=take*w[i]/rest;return w};
 const SLOTS={RARE:RARE_BANDS,BONUS:BONUS_BANDS,HIT:HIT_BANDS,VRARE:VRARE_BANDS,FRARE:FRARE_BANDS};
 const GRADE_MULT={modern:{7:.75,8:1.15,9:1.4,10:2.5},vintage:{7:1.1,8:1.8,9:3.5,10:12}};
-const GRADE_FEE=25, GRADE_MS=36e5, GRADE_SLOTS=3, SUBMIT_GRADES=[[7,28],[8,41],[9,22],[10,9]];
+const GRADE_FEE=25, GRADE_MS=6e5, GRADE_SLOTS=3, SUBMIT_GRADES=[[7,28],[8,41],[9,22],[10,9]];
 const PACK_GRADES=[[9,66],[10,34]], GRAB_GRADES=[[8,26],[9,51],[10,23]], VINT_GRADES=[[8,46],[9,42],[10,12]];
 const GRADE_NAME={7:'NEAR MINT',8:'NM-MT',9:'MINT',10:'GEM MINT'};
 const TIERS=[
@@ -997,7 +997,7 @@ const gradesReady=()=>gradingCards().filter(c=>c.grading<=Date.now());
 async function submitGrading(c){if(!c||c.slab||c.grading)return;if(gradingCards().length>=GRADE_SLOTS){toast(`The grader only takes ${GRADE_SLOTS} at a time. Wait for one to come back.`);return}
  if(game.cash+1e-9<GRADE_FEE){toast(`Grading costs ${money(GRADE_FEE)}.`);return}
  const ev=c.value*(isVintage(c.setId)?2.73:1.18)-GRADE_FEE;
- const ok=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,html:`${money(GRADE_FEE)}, back in 1 hour. Most cards come back a 7 or 8. About 1 in 5 is a 9, and 9% are a 10.<br><br>Raw value ${money(c.value)}. ${c.value<20?'Honestly? Grading this is a terrible idea. Kyle loves it.':ev>0?'On average this one is worth grading.':'On average you lose money on this. Do it for the story.'}${c.vault?'<br>It stays in your Vault.':''}`,buttons:[{label:'Never mind',value:false},{label:`Send it · ${moneyS(GRADE_FEE)}`,primary:true,value:true}]});
+ const ok=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,html:`${money(GRADE_FEE)}, back in 10 minutes. Most cards come back a 7 or 8. About 1 in 5 is a 9, and 9% are a 10.<br><br>Raw value ${money(c.value)}. ${c.value<20?'Honestly? Grading this is a terrible idea. Kyle loves it.':ev>0?'On average this one is worth grading.':'On average you lose money on this. Do it for the story.'}${c.vault?'<br>It stays in your Vault.':''}`,buttons:[{label:'Never mind',value:false},{label:`Send it · ${moneyS(GRADE_FEE)}`,primary:true,value:true}]});
  if(!ok||!game.owned.includes(c)||c.grading)return;spend(GRADE_FEE);game.grabSpent=r2((game.grabSpent||0)+GRADE_FEE);c.grading=Date.now()+GRADE_MS;save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`]),3200)}
 async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||spinning)return;
  for(const c of ready){const g=SUBMIT_GRADES[wIndex(SUBMIT_GRADES.map(x=>x[1]))][0],raw=c.value;delete c.grading;c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;
@@ -1527,7 +1527,7 @@ const GUIDE=[
  ['🃏','Rip packs','Swipe across a pack to tear it open (or tap). Single pulls just flip. Keep the hits, sell the bulk.'],
  ['⭐','Levels','Every $1 you spend is 1 XP. Levels pay out free packs and unlock bigger ones.'],
  ['🎰','Slab Grab','One free spin a day. The classic reel costs a ticket + $50 (sell a $50+ card for a free ticket). God Tier is the big gamble.'],
- ['🔬','Grading','Send a raw card for $25, back in an hour. Most come back 7 or 8. A 10 pays big. A 7 hurts.'],
+ ['🔬','Grading','Send a raw card for $25, back in an 10 minutes. Most come back 7 or 8. A 10 pays big. A 7 hurts.'],
  ['★','Vault','Lock up to 15 favorites. They can\'t be sold, and friends can see them.'],
  ['🌟','Grail Quest','Pick a dream card. Ripping fills the meter. Full meter = a shot at it, and every miss raises your odds.'],
  ['🎯',"Kyle's Bounties",'3 new targets every Monday. Finish all 3 for a bonus God Tier spin.'],
