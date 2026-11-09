@@ -533,6 +533,9 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .tshop.off{opacity:.45}
 .sealed .brow{grid-template-columns:40px 1fr auto}
 .boxbtns{display:flex;gap:6px}
+.daily.hot{border-color:#ff9b6566;background:linear-gradient(90deg,#2a1608,#0f1724 70%)}
+.daily.rival{width:100%;text-align:left;color:inherit;border-color:#ff5f7066;background:linear-gradient(90deg,#2a0c12,#0f1724 70%)}
+.daily.rival.ahead{border-color:#54d69a66;background:linear-gradient(90deg,#0b2a1c,#0f1724 70%)}
 .togglechip{display:inline-flex;align-items:center;gap:6px}
 .toolbar-r{flex-wrap:wrap}
 @media(max-width:760px){
@@ -578,6 +581,8 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <div class="stats" id="shopStats"></div>
  <div id="daily"></div>
  <div id="rewards"></div>
+ <div id="rivalBox"></div>
+ <div id="hotSet"></div>
  <div id="gradesBack"></div>
  <div id="grailBox"></div>
  <div id="bounties"></div>
@@ -728,6 +733,7 @@ const GRADE_MULT={modern:{7:.75,8:1.15,9:1.4,10:2.5},vintage:{7:1.1,8:1.8,9:3.5,
 const GRADE_FEE=25, GRADE_MS=6e5, GRADE_SLOTS=3, SUBMIT_GRADES=[[7,28],[8,41],[9,22],[10,9]];
 const PACK_GRADES=[[9,66],[10,34]], GRAB_GRADES=[[8,26],[9,51],[10,23]], VINT_GRADES=[[8,46],[9,42],[10,12]];
 const GRADE_NAME={7:'NEAR MINT',8:'NM-MT',9:'MINT',10:'GEM MINT'};
+const gradeFee=c=>c.value<500?25:c.value<5000?150:c.value<50000?1000:r2(c.value*.05); // grading costs more for valuable cards, like the real thing
 const gradeName=c=>c.black?'BLACK LABEL':GRADE_NAME[c.grade]||'';
 const BLACK_MULT=5, BLACK_FROM_GRADING=.06;
 const TIERS=[
@@ -1030,7 +1036,7 @@ const KYLE_CARD_ODDS=1e-6;
 const KYLE_CARD=()=>({id:'kyle-1',name:'The Kyle Card',setId:'kyle',setName:'???',num:'1/1',rarity:'Mythical',value:1000000,est:false,img:'single.webp',slab:false});
 
 /* ---------- game state ---------- */
-const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,seen:{},cold:0,hot:0,vaultMax:15,vaultBought:0,sealed:[],borrowed:null,lastEvent:'',disasters:0,grading:[],gradeLog:{},grail:null,grailsWon:0,miles:{},prestige:0,beat:false,bailouts:0,bailDay:'',bailToday:0,savedAt:0,owner:null});
+const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,seen:{},cold:0,hot:0,grailLog:[],rival:null,vaultMax:15,vaultBought:0,sealed:[],borrowed:null,lastEvent:'',disasters:0,grading:[],gradeLog:{},grail:null,grailsWon:0,miles:{},prestige:0,beat:false,bailouts:0,bailDay:'',bailToday:0,savedAt:0,owner:null});
 const slim=c=>({id:c.id,name:c.name,value:c.value,img:c.img,slab:!!c.slab,grade:c.grade,first:!!c.first,setId:c.setId,setName:c.setName,num:c.num,rarity:c.rarity,raw:c.raw,est:c.est});
 function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.given==null)d.given=START*(1+(d.kyle||0));
  const f=fresh();for(const k in f)if(d[k]==null)d[k]=f[k];d.v=4;delete d.lastFree;
@@ -1101,10 +1107,10 @@ function milestoneCheck(){for(const m of MILESTONES){if(game.miles[m.id]||!m.tes
 const gradingCards=()=>game.owned.filter(c=>c.grading);
 const gradesReady=()=>gradingCards().filter(c=>c.grading<=Date.now());
 async function submitGrading(c){if(!c||c.slab||c.grading)return;if(gradingCards().length>=GRADE_SLOTS){toast(`The grader only takes ${GRADE_SLOTS} at a time. Wait for one to come back.`);return}
- if(game.cash+1e-9<GRADE_FEE){toast(`Grading costs ${money(GRADE_FEE)}.`);return}
- const ev=c.value*(isVintage(c.setId)?2.73:1.18)-GRADE_FEE,ins=r2(Math.max(1,c.value*.1)),risk=Math.round(DISASTER_ODDS(networth())*100);
- const v=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,stack:true,html:`${money(GRADE_FEE)}, back in 10 minutes. Most cards come back a 7 or 8. About 1 in 5 is a 9, and 9% are a 10. A tiny few come back <b style="color:var(--text)">Black Label</b>.<br><br>Raw value ${money(c.value)}. ${c.value<20?'Honestly? Grading this is a terrible idea. Kyle loves it.':ev>0?'On average this one is worth grading.':'On average you lose money on this. Do it for the story.'}<br><small>${risk}% of submissions never come back (fires, floods, raccoons). Insurance pays the raw value if disaster strikes.</small>`,buttons:[{label:`Send + insure · ${moneyS(GRADE_FEE+ins)}`,primary:true,value:'ins'},{label:`Send it uninsured · ${moneyS(GRADE_FEE)}`,value:'raw'},{label:'Never mind',value:null}]});
- if(!v||!game.owned.includes(c)||c.grading)return;const cost=GRADE_FEE+(v==='ins'?ins:0);if(game.cash+1e-9<cost){toast(`You need ${money(cost)} for that.`);return}
+ const fee=gradeFee(c);if(game.cash+1e-9<fee){toast(`Grading this one costs ${money(fee)}.`);return}
+ const ev=c.value*(isVintage(c.setId)?2.73:1.18)-fee,ins=r2(Math.max(1,c.value*.1)),risk=Math.round(DISASTER_ODDS(networth())*100);
+ const v=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,stack:true,html:`${money(fee)} to grade (bigger cards cost more), back in 10 minutes. Most cards come back a 7 or 8. About 1 in 5 is a 9, and 9% are a 10. A tiny few come back <b style="color:var(--text)">Black Label</b>.<br><br>Raw value ${money(c.value)}. ${c.value<20?'Honestly? Grading this is a terrible idea. Kyle loves it.':ev>0?'On average this one is worth grading.':'On average you lose money on this. Do it for the story.'}<br><small>${risk}% of submissions never come back (fires, floods, raccoons). Insurance pays the raw value if disaster strikes.</small>`,buttons:[{label:`Send + insure · ${moneyS(fee+ins)}`,primary:true,value:'ins'},{label:`Send it uninsured · ${moneyS(fee)}`,value:'raw'},{label:'Never mind',value:null}]});
+ if(!v||!game.owned.includes(c)||c.grading)return;const cost=fee+(v==='ins'?ins:0);if(game.cash+1e-9<cost){toast(`You need ${money(cost)} for that.`);return}
  spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v==='ins';save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
 async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||spinning)return;
  for(const c of ready){const raw=c.value,insured=c.insured;delete c.grading;delete c.insured;
@@ -1150,30 +1156,35 @@ async function boxAction(u,act){const b=game.sealed.find(x=>x.uid===u);if(!b||ri
  game.sealed=game.sealed.filter(x=>x!==b);save();startRip(d.tier,{qty:d.qty,free:true})}
 
 /* ---------- Grail Quest/* ---------- Grail Quest ---------- */
-const grailNeed=v=>Math.max(100,Math.round(v*2));
-const grailOdds=()=>Math.min(100,30+15*(game.grail?.misses||0));
+const recentGrails=()=>(game.grailLog||[]).filter(t=>Date.now()-t<7*864e5).length;
+const grailMult=()=>2+recentGrails(); // 2x the card's value, +1x per Grail finished in the last 7 days
+const grailNeed=v=>Math.max(100,Math.round(v*grailMult()));
+const grailShotToday=()=>game.grail&&game.grail.lastShot===today();
+const grailOdds=()=>Math.min(100,30+10*(game.grail?.misses||0));
 async function setGrail(c){if(!c||c.value<20){toast('Pick a Grail worth $20 or more.');return}
  if(game.grail&&game.grail.fill>0&&game.grail.id!==c.id){const ok=await modal({icon:'⭐',title:'Switch your Grail?',html:`You'll lose your progress on ${esc(game.grail.name)} (${moneyS(game.grail.fill)} of ${moneyS(game.grail.need)}).`,buttons:[{label:'Keep it',value:false},{label:'Switch',primary:true,value:true}]});if(!ok)return}
  const{fv,fest,...snap}=c;game.grail={id:c.id,name:c.name,setId:c.setId,setName:c.setName,num:c.num,rarity:c.rarity,img:c.img,value:c.value,first:!!c.first,est:c.est,need:grailNeed(c.value),fill:0,misses:0,at:Date.now()};save();
  toast(`⭐ ${c.name} is your Grail. Every pack you rip fills the meter.`,3500)}
 function grailFill(n){const g=game.grail;if(!g||n<=0)return;const was=g.fill>=g.need;g.fill=r2(Math.min(g.need,g.fill+n));if(!was&&g.fill>=g.need)setTimeout(()=>toast('⭐ Grail Shot ready! Check the Shop.',4000),1200)}
 function grailCard(){const g=game.grail,c=cardById(g.id);const base=c?inst(g.first?asFirst(c):c):{id:g.id,name:g.name,setId:g.setId,setName:g.setName,num:g.num,rarity:g.rarity,img:g.img,value:g.value,est:g.est,first:g.first,slab:false};base.uid=uid();base.at=Date.now();base.from='Grail Quest';return base}
-function grailNatural(c){const g=game.grail;game.grail=null;game.grailsWon=(game.grailsWon||0)+1;grant({god:1});note({icon:'⭐',fx:5,title:'You pulled your Grail!',html:`<b style="color:var(--text)">${esc(g.name)}</b>, straight out of a pack. No Grail Shot needed. Kyle throws in a <b style="color:var(--gold)">God Tier spin</b>.`,buttons:[{label:"LET'S GO",primary:true}]})}
-async function grailShot(){const g=game.grail;if(!g||g.fill<g.need||rip||spinning)return;const odds=grailOdds(),win=Math.random()*100<odds,stop=win?Math.random()*odds*.92+odds*.04:odds+(100-odds)*(.06+Math.random()*.88);
+function grailNatural(c){const g=game.grail;game.grail=null;game.grailsWon=(game.grailsWon||0)+1;game.grailLog=[...(game.grailLog||[]),Date.now()].slice(-20);grant({god:1});note({icon:'⭐',fx:5,title:'You pulled your Grail!',html:`<b style="color:var(--text)">${esc(g.name)}</b>, straight out of a pack. No Grail Shot needed. Kyle throws in a <b style="color:var(--gold)">God Tier spin</b>.`,buttons:[{label:"LET'S GO",primary:true}]})}
+async function grailShot(){const g=game.grail;if(!g||g.fill<g.need||rip||spinning)return;if(grailShotToday()){toast('One Grail Shot a day. Come back tomorrow.');return}g.lastShot=today();save();const odds=grailOdds(),win=Math.random()*100<odds,stop=win?Math.random()*odds*.92+odds*.04:odds+(100-odds)*(.06+Math.random()*.88);
  Sound.init();modal({icon:'⭐',title:`Grail Shot: ${esc(g.name)}`,html:`<div class="gshot"><img src="${esc(g.img)}" alt="" referrerpolicy="no-referrer"><div class="gbar"><i style="width:${odds}%"></i><b id="gNeedle"></b></div><div class="muted">${odds}% chance. Land in the gold.</div></div>`,buttons:[{label:'…',value:0}]});
  const nd=$('#gNeedle'),t0=performance.now(),dur=2600;let last=0;
  await new Promise(res=>{const step=now=>{const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3),wob=(1-p)*Math.sin(p*28)*40,x=Math.max(0,Math.min(100,stop*e+wob*(1-e)+(1-e)*50*Math.sin(p*9)));if(nd)nd.style.left=x+'%';if(Math.floor(p*30)>last){last=Math.floor(p*30);Sound.tick()}p<1?requestAnimationFrame(step):res()};requestAnimationFrame(step)});
  await sleep(500);if(modalClose)modalClose(null);
- if(win){const c=grailCard();game.owned.push(c);game.grail=null;game.grailsWon=(game.grailsWon||0)+1;collect([c]);checkProgress([c]);save();Feed.post([c]);celebrate(5);
+ if(win){const c=grailCard();game.owned.push(c);game.grail=null;game.grailsWon=(game.grailsWon||0)+1;game.grailLog=[...(game.grailLog||[]),Date.now()].slice(-20);collect([c]);checkProgress([c]);save();Feed.post([c]);celebrate(5);
   await modal({icon:'⭐',title:pick(ROAST.grailWin),html:`<div class="m-card">${imgTag(c,true,true)}</div><b style="color:var(--text)">${esc(c.name)}</b> is yours. Worth <b style="color:var(--gold)">${money(c.value)}</b>.<br>Pick a new Grail anytime.`,buttons:[{label:'Legendary',primary:true}]})}
  else{g.misses++;g.fill=0;save();Sound.tone(160,.5,'sawtooth',.05,0,70);buzz([40,30,40]);
   await modal({icon:'💔',title:'Missed!',html:`<div class="roast bad">${esc(pick(ROAST.grailMiss))}</div>Next shot: <b style="color:var(--gold)">${grailOdds()}%</b>. The meter starts over.`,buttons:[{label:'Again',primary:true}]})}}
-function grailList(q){const term=(q||'').trim().toLowerCase(),pool=allCards().filter(c=>c.value>=20);return(term?pool.filter(c=>(c.name+' '+c.setName).toLowerCase().includes(term)):pool).sort((a,b)=>b.value-a.value).slice(0,40)}
+function grailList(q){const term=(q||'').trim().toLowerCase(),pool=allCards().filter(c=>c.value>=20);if(term)return pool.filter(c=>(c.name+' '+c.setName).toLowerCase().includes(term)).sort((a,b)=>b.value-a.value).slice(0,40);
+ const a=[...pool];for(let i=a.length-1;i>0;i--){const k=Math.floor(Math.random()*(i+1));[a[i],a[k]]=[a[k],a[i]]}return a.slice(0,30).sort((x,y)=>y.value-x.value)}
 const grailListHTML=list=>list.map((c,i)=>`<button data-gi="${i}"><img src="${esc(c.img)}" alt="" loading="lazy" referrerpolicy="no-referrer"><span><b>${esc(c.name)}</b><small>${esc(c.setName)} · ${moneyS(c.value)}</small></span></button>`).join('')||'<div class="empty">No cards match.</div>';
 function grailPicker(){let list=grailList('');
- modal({icon:'⭐',title:'Pick your Grail',html:`<input class="inp" id="gq" placeholder="Search a card or set (Charizard, Umbreon…)" autocomplete="off" autocapitalize="none"><div class="gpick" id="gpick">${grailListHTML(list)}</div><p class="muted" style="font-size:12px">Cards worth $20+ from loaded sets. Add a set to your rotation to see more.</p>`,buttons:[{label:'Cancel',value:null}]});
+ modal({icon:'⭐',title:'Pick your Grail',html:`<div style="display:flex;gap:6px"><input class="inp" id="gq" placeholder="Search a card or set (Charizard, Umbreon…)" autocomplete="off" autocapitalize="none" style="flex:1"><button class="smallbtn" id="gshuf" style="min-height:48px">🔀</button></div><div class="gpick" id="gpick">${grailListHTML(list)}</div><p class="muted" style="font-size:12px">A random mix of cards worth $20+. Hit 🔀 for a new batch, or search. The meter costs ${grailMult()}x the card's value${grailMult()>2?` (you've finished ${recentGrails()} Grail${recentGrails()>1?'s':''} this week)`:''}.</p>`,buttons:[{label:'Cancel',value:null}]});
  setTimeout(()=>{const inp=$('#gq'),box=$('#gpick');if(!inp)return;let t;
   inp.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>{list=grailList(inp.value);box.innerHTML=grailListHTML(list);box.scrollTop=0},200)});
+  $('#gshuf').addEventListener('click',()=>{inp.value='';list=grailList('');box.innerHTML=grailListHTML(list);box.scrollTop=0});
   box.addEventListener('click',e=>{const b=e.target.closest('[data-gi]');if(!b)return;const c=list[+b.dataset.gi];if(modalClose)modalClose(null);setGrail(c)})},30)}
 
 /* ---------- Kyle's Bounties: 3 targets a week ---------- */
@@ -1198,9 +1209,13 @@ function bountyCheck(cards){const B=game.bounty;if(!B||B.week!==weekKey())return
  if(B.list.every(b=>b.done)&&!B.allDone){B.allDone=1;grant({god:1});note({icon:'🤠',fx:5,title:'Bounty hunter!',html:`All 3 bounties done this week. Kyle throws in a bonus <b style="color:var(--gold)">God Tier spin</b>.`,buttons:[{label:'Yeehaw',primary:true}]})}}
 
 /* ---------- pull generation ---------- */
+// Hot set of the day: one rotation set, picked by date, whose cards show up about twice as often.
+function hotSet(){const ids=[...selected].sort();if(!ids.length)return null;const d=today();let h=0;for(const ch of d)h=(h*31+ch.charCodeAt(0))>>>0;return ids[h%ids.length]}
+const HOT_WEIGHT=2;
+const hotW=c=>c.setId===hotSet()?HOT_WEIGHT:1;
 function bandPick(pool,bands,used){const idx=wIndex(luckW(bands)),order=[idx];
  for(let d=1;d<bands.length;d++){if(idx-d>=0)order.push(idx-d);if(idx+d<bands.length)order.push(idx+d)}
- for(const k of order){const[mn,mx]=bands[k],c=pool.filter(x=>x.value>=mn&&x.value<mx&&!used.has(x.name));if(c.length)return mx>=1e9?c[wIndex(c.map(x=>mn/x.value))]:pick(c)}
+ for(const k of order){const[mn,mx]=bands[k],c=pool.filter(x=>x.value>=mn&&x.value<mx&&!used.has(x.name));if(c.length)return mx>=1e9?c[wIndex(c.map(x=>mn/x.value*hotW(x)))]:c[wIndex(c.map(hotW))]}
  const rest=pool.filter(x=>!used.has(x.name)).sort((a,b)=>b.value-a.value);return pick(rest.slice(0,10).length?rest.slice(0,10):pool)}
 function pickBulk(pool,used,cap=1.5){let c=pool.filter(x=>/^(common|uncommon)$/i.test(x.rarity)&&x.value<cap&&!used.has(x.name));if(!c.length)c=pool.filter(x=>x.value<cap&&!used.has(x.name));if(!c.length)c=pool.filter(x=>!used.has(x.name));return pick(c.length?c:pool)}
 const inst=c=>{const{fv,fest,...o}=c;return{...o,slab:false,grade:undefined,raw:undefined}};
@@ -1271,7 +1286,7 @@ const qtySegHTML=()=>[1,5,10,15].map(n=>`<button data-action="qty" data-n="${n}"
 function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!catalog.offline;
  $('#shopStats').innerHTML=statHTML([['Cash',money(game.cash),'Virtual bankroll'],['Binder',money(collectionValue()),`${game.owned.length} card${game.owned.length===1?'':'s'}`],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,'Net worth vs. bankroll'],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,'The end goal']]);
  $('#guest').innerHTML=Cloud.on&&!Cloud.s?`<div class="daily guest"><div><b>👻 You're playing as a guest</b><span>${game.opened?`${game.opened} pack${game.opened===1?'':'s'} ripped and none of it is backed up.`:'Make an account so your pulls are saved.'} Takes 10 seconds, no email.</span></div><button class="primary" data-action="account">Save my run</button></div>`:'';
- renderDaily();renderRewards();renderGrades();$('#grailBox').innerHTML=grailHTML();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
+ renderHot();renderRival();renderDaily();renderRewards();renderGrades();$('#grailBox').innerHTML=grailHTML();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
  const isVault=t=>t.vintage||t.kind==='mystery',mod=TIERS.filter(t=>!isVault(t)&&t.kind!=='whale'),vin=TIERS.filter(isVault),wh=TIERS.filter(t=>t.kind==='whale'),next=TIERS.filter(t=>!unlocked(t)).sort((a,b)=>a.lvl-b.lvl)[0];
  $('#packs').innerHTML=mod.filter(unlocked).map(t=>packCard(t)).join('');
  $('#vault').innerHTML=vin.filter(unlocked).map(t=>packCard(t)).join('');
@@ -1289,8 +1304,8 @@ function packCard(t){const{label,dis}=ripLabel(t),lock=!unlocked(t);
 function renderGrades(){const el=$('#gradesBack');if(!el)return;const r=gradesReady().length,out=gradingCards().length;
  el.innerHTML=r?`<div class="daily ready grades"><div><b>📬 Your grades are back! (${r})</b><span>Moment of truth. Kyle already peeked.</span></div><button class="primary" data-action="grades-reveal">Reveal</button></div>`:''}
 function grailHTML(){const g=game.grail;if(!g)return `<button class="daily grail" data-action="grail-pick"><div><b>⭐ Grail Quest</b><span>Pick a dream card. Every pack you rip fills a meter toward a shot at it.</span></div><span class="chev">›</span></button>`;
- const ready=g.fill>=g.need,pct=Math.min(100,g.fill/g.need*100);
- return `<div class="panel grailp${ready?' ready':''}"><span class="hthumb">${imgTag(g)}</span><div><div class="eyebrow">⭐ Grail Quest${g.misses?` · ${g.misses} miss${g.misses>1?'es':''}`:''}</div><b>${g.first?'1st Ed ':''}${esc(g.name)}</b><small>${esc(g.setName||'')} · ${moneyS(g.value)}</small><span class="prog"><i style="width:${pct}%"></i></span><small>${ready?`Shot ready · ${grailOdds()}% chance`:`${moneyS(g.need-g.fill)} more in rips for a ${grailOdds()}% shot`}</small></div>${ready?'<button class="primary" data-action="grail-shot">Take the shot</button>':'<button class="smallbtn" data-action="grail-pick">Change</button>'}</div>`}
+ const full=g.fill>=g.need,ready=full&&!grailShotToday(),pct=Math.min(100,g.fill/g.need*100);
+ return `<div class="panel grailp${ready?' ready':''}"><span class="hthumb">${imgTag(g)}</span><div><div class="eyebrow">⭐ Grail Quest${g.misses?` · ${g.misses} miss${g.misses>1?'es':''}`:''}</div><b>${g.first?'1st Ed ':''}${esc(g.name)}</b><small>${esc(g.setName||'')} · ${moneyS(g.value)}</small><span class="prog"><i style="width:${pct}%"></i></span><small>${full&&grailShotToday()?`Shot used today. Next ${grailOdds()}% shot tomorrow.`:ready?`Shot ready · ${grailOdds()}% chance`:`${moneyS(g.need-g.fill)} more in rips for a ${grailOdds()}% shot`}</small></div>${ready?'<button class="primary" data-action="grail-shot">Take the shot</button>':'<button class="smallbtn" data-action="grail-pick">Change</button>'}</div>`}
 let bountyOpen=LS.get('pokerip-bounty-open',null);
 function renderBounties(){const el=$('#bounties');if(!el)return;ensureBounties();const B=game.bounty;if(!B||B.week!==weekKey()){el.innerHTML='';return}const left=B.list.filter(b=>!b.done).length;
  el.innerHTML=`<details class="panel bounty"${(bountyOpen??left>0)?' open':''}><summary class="b-head"><b>🎯 Kyle's Bounties</b><span class="muted">${left?`${3-left}/3 done · `:'All done · '}new in ${untilWeek()} <span class="chev">▾</span></span></summary>${B.list.map(b=>`<div class="brow${b.done?' done':''}">${b.img?`<span class="hthumb">${imgTag(b)}</span>`:`<span class="bicon">${b.type==='name'?'🔎':b.type==='slab10'?'💎':'💰'}</span>`}<span class="bmain"><b>${esc(b.title)}</b><small>${esc(b.sub)}</small>${b.need>1&&!b.done?`<span class="prog"><i style="width:${b.have/b.need*100}%"></i></span>`:''}</span><span class="breward">${b.done?'✅':`${b.have}/${b.need}`}<small>${b.done?'Paid':rewardText(b.reward)}</small></span></div>`).join('')}${B.list.every(b=>b.done)?'':'<div class="bfoot">Finish all 3 for a bonus God Tier spin. Market buys don\'t count.</div>'}</details>`}
@@ -1298,6 +1313,15 @@ function renderSealed(){const el=$('#sealedBox');if(!el)return;const avail=SEALE
  $('#whaleHead').hidden=!avail.length&&!mine.length&&!TIERS.some(t=>t.kind==='whale'&&unlocked(t));
  el.innerHTML=(avail.length?`<div class="panel rows sealed">${avail.map(d=>`<div class="brow"><span class="bicon">📦</span><span class="bmain"><b>${esc(d.name)}</b><small>${esc(d.blurb)} · gains ${(d.rate*100).toFixed(1)}% a day while sealed</small></span><button class="buy" style="--accent:#9fb0c8;min-height:40px;width:auto;padding:0 14px" data-action="box-buy" data-id="${d.id}" ${game.cash+1e-9>=d.price&&!rip?'':'disabled'}>${moneyS(d.price)}</button></div>`).join('')}</div>`:'')
  +(mine.length?`<div class="section-head" style="margin-top:12px"><h2>📦 Your sealed boxes</h2></div><div class="panel rows sealed">${mine.map(b=>{const d=boxDef(b.box),v=boxValue(b),g=(v/b.cost-1)*100;return `<div class="brow"><span class="bicon">📦</span><span class="bmain"><b>${esc(d?d.name:'Box')}</b><small>Paid ${moneyS(b.cost)} · now <b style="color:var(--gold)">${moneyS(v)}</b> <span class="${g>=0?'pos':'neg'}">(+${g.toFixed(1)}%)</span></small></span><span class="boxbtns"><button class="smallbtn" data-action="box-sell" data-u="${b.uid}">Sell</button><button class="smallbtn" data-action="box-open" data-u="${b.uid}" style="color:var(--gold)">Open</button></span></div>`}).join('')}</div>`:'')}
+const HOT_LINES=['Hits from it show up twice as often today.','Kyle says it is running hot. Kyle is not a scientist.','Rip it while it lasts. Tomorrow it is cold again.','The algorithm has chosen. Do not question it.'];
+function renderHot(){const el=$('#hotSet');if(!el)return;const h=hotSet();el.innerHTML=h&&catalog.ready?`<div class="daily hot"><div><b>🔥 Hot set today: ${esc(setName(h))}</b><span>${HOT_LINES[new Date().getDate()%HOT_LINES.length]}</span></div><button class="smallbtn" data-action="open-set" data-g="${esc(h)}">Rip it</button></div>`:''}
+function renderRival(){const el=$('#rivalBox');if(!el)return;const r=game.rival;if(!r||!Cloud.on){el.innerHTML='';return}Rival.load();const d=Rival.data;
+ if(!d){el.innerHTML=`<div class="daily rival"><div><b>⚔️ Rival: ${esc(r)}</b><span>Checking the scoreboard…</span></div></div>`;return}
+ const gap=networth()-(d.networth||0),line=gap>=0?pick2(['Rub it in.','Kyle is impressed. Briefly.','Do a lap.','They should be ashamed.'],r):pick2(['Embarrassing.','Kyle is disappointed in you.','Pathetic, honestly.','Are you even trying?'],r);
+ el.innerHTML=`<button class="daily rival${gap>=0?' ahead':''}" data-action="player" data-u="${esc(r)}"><div><b>⚔️ ${gap>=0?`You're ${moneyS(gap)} ahead of ${esc(r)}`:`You're ${moneyS(-gap)} behind ${esc(r)}`}</b><span>${line} LV ${d.level||1} · 🏆 ${d.trophies||0}</span></div><span class="chev">›</span></button>`}
+const pick2=(a,seed)=>{let h=new Date().getHours();for(const ch of seed)h+=ch.charCodeAt(0);return a[h%a.length]};
+const Rival={data:null,at:0,who:null,async load(){const r=game.rival;if(!r||!Cloud.on)return;if(this.who===r&&Date.now()-this.at<60000)return;this.who=r;this.at=Date.now();
+ try{const rows=await Cloud.req(`/rest/v1/saves?username=eq.${encodeURIComponent(r)}&select=username,networth,level,trophies`,{},false);this.data=(rows&&rows[0])||null;if(currentView==='shop')renderRival()}catch(e){}}};
 function renderDaily(){const el=$('#daily');if(!el)return;el.innerHTML=spinReady()?`<div class="daily ready"><div><b>🎰 Daily free slab spin is ready</b><span>One free Slab Grab spin every day. Resets at midnight.</span></div><button class="primary" data-action="daily-go">Spin it</button></div>`:`<div class="daily"><div><b>🎰 Free spin used</b><span>Next free spin in ${untilMidnight()}</span></div></div>`}
 function renderRewards(){const v=game.vouchers,keys=[...TIERS.map(t=>t.id),'god','asc'].filter(k=>v[k]>0);
  $('#rewards').innerHTML=keys.length?`<div class="rewards"><b>🎁 Rewards</b>${keys.map(k=>{const n=v[k];if(k==='god'||k==='asc')return `<span class="rw">${n}× ${vName(k)}<button data-action="god-go" data-m="${k}">Spin</button></span>`;const q=Math.min(n,ripQty);return `<span class="rw">${n}× ${esc(vName(k))}<button data-action="open-voucher" data-tier="${k}" ${rip?'disabled':''}>Open${q>1?' '+q:''}</button></span>`}).join('')}</div>`:''}
@@ -1403,7 +1427,7 @@ function boardHTML(rows,t){if(!rows.length)return `<div class="empty">${t==='sha
   return `<button class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}" data-action="player" data-u="${esc(r.username)}"><b>${medal}</b><span><b>${esc(r.username)}</b>${king?' 👑':''}${clown?' 🤡':''}${r.prestige?' ⭐'+r.prestige:''}<br><small>${sub}</small></span><b>${val}</b></button>`}).join('')}
 async function playerModal(u){let r=null;try{r=(await Cloud.req(`/rest/v1/saves?username=eq.${encodeURIComponent(u)}&select=username,level,networth,trophies,prestige,showcase:data->showcase,best:data->best,miles:data->miles`,{},false)||[])[0]}catch(e){}
  if(!r){toast(`Couldn't load ${u}.`);return}const sc=r.showcase||[];
- modal({icon:Feed.king===u?'👑':'🃏',title:`${esc(r.username)}${r.prestige?' ⭐'+r.prestige:''}`,html:`LV ${r.level||1} · ${moneyS(r.networth||0)} net worth · 🏆 ${r.trophies||0}${r.best&&r.best.value?`<br>Best pull: <b style="color:var(--gold)">${esc(r.best.name)} · ${moneyS(r.best.value)}</b>`:''}${r.miles&&Object.keys(r.miles).length?`<div style="margin-top:10px;font-size:20px" title="Badges">${MILESTONES.filter(m=>r.miles[m.id]).map(m=>`<span title="${esc(m.name)}">${m.icon}</span>`).join(' ')}</div>`:''}<div class="eyebrow" style="margin-top:14px">★ Vault ${sc.length}/${vaultMax()}</div>${sc.length?`<div class="showgrid">${sc.map(c=>`<div><img src="${esc(c.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">${c.first?'1st ':''}${esc(c.name)}${c.slab?` [${c.grade}]`:''}<b>${moneyS(c.value)}</b></div>`).join('')}</div>`:`<p>${u===Cloud.name?'Your vault is empty. Go flex something.':'Nothing in the vault. Either humble or broke.'}</p>`}`,buttons:[{label:'Close',primary:true}]})}
+ modal({icon:Feed.king===u?'👑':'🃏',title:`${esc(r.username)}${r.prestige?' ⭐'+r.prestige:''}`,html:`LV ${r.level||1} · ${moneyS(r.networth||0)} net worth · 🏆 ${r.trophies||0}${r.best&&r.best.value?`<br>Best pull: <b style="color:var(--gold)">${esc(r.best.name)} · ${moneyS(r.best.value)}</b>`:''}${r.miles&&Object.keys(r.miles).length?`<div style="margin-top:10px;font-size:20px" title="Badges">${MILESTONES.filter(m=>r.miles[m.id]).map(m=>`<span title="${esc(m.name)}">${m.icon}</span>`).join(' ')}</div>`:''}<div class="eyebrow" style="margin-top:14px">★ Vault ${sc.length}/${vaultMax()}</div>${sc.length?`<div class="showgrid">${sc.map(c=>`<div><img src="${esc(c.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">${c.first?'1st ':''}${esc(c.name)}${c.slab?` [${c.grade}]`:''}<b>${moneyS(c.value)}</b></div>`).join('')}</div>`:`<p>${u===Cloud.name?'Your vault is empty. Go flex something.':'Nothing in the vault. Either humble or broke.'}</p>`}`,buttons:u===Cloud.name?[{label:'Close',primary:true}]:[{label:game.rival===u?'Drop rival':'⚔️ Make rival',value:'rival'},{label:'Close',primary:true}]}).then(v=>{if(v==='rival'){game.rival=game.rival===u?null:u;Rival.data=null;Rival.at=0;save();toast(game.rival?`${u} is your rival. The Shop will keep score.`:'Rival dropped. Coward.',3200)}})}
 function renderHistory(){const h=game.history,pk=paidPacks(),spent=sum(pk.map(x=>x.cost)),val=sum(pk.map(x=>x.value)),wins=pk.filter(x=>x.value>=x.cost).length;
  $('#histStats').innerHTML=statHTML([['Paid rips',pk.length,'Last 150 kept'],['Spent',money(spent),'In this history'],['Pulled',money(val),`${signed(val-spent)} net`],['Green rips',pk.length?Math.round(wins/pk.length*100)+'%':'0%',`${wins} beat the price`]]);
  $('#histList').innerHTML=h.length?h.map(histRow).join(''):'<div class="empty">Your first pack is waiting in the shop.</div>'}
@@ -1501,8 +1525,8 @@ let V=null;
 function openViewer(list,i,mode='view'){if(!list[i])return;V={list,i,mode};renderViewer();showOverlay('viewer')}
 function closeViewer(){V=null;hideOverlay('viewer')}
 function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lvl=vt(c.value),mine=!!c.uid&&game.owned.some(x=>x.uid===c.uid),inRip=V.mode==='view'&&!!rip&&mine,owned=(V.mode==='owned'||(V.mode==='view'&&!rip))&&mine,have=V.mode==='set'?game.owned.filter(x=>x.id===c.id).length:0;
- let acts=owned?'':`<button class="secondary" data-action="v-share">Share ↗</button>`;const gbtn=owned&&!c.slab&&!c.grading?`<button class="secondary" data-action="v-grade">🔬 Grade · ${moneyS(GRADE_FEE)}</button>`:'';
- if(inRip){acts+=c.grading?`<button class="primary" disabled>🔬 Sent to the grader</button>`:!c.slab?`<button class="secondary" data-action="v-grade">🔬 Grade · ${moneyS(GRADE_FEE)}</button><button class="primary" data-action="v-close">Close</button>`:`<button class="primary" data-action="v-close">Close</button>`}
+ let acts=owned?'':`<button class="secondary" data-action="v-share">Share ↗</button>`;const gbtn=owned&&!c.slab&&!c.grading?`<button class="secondary" data-action="v-grade">🔬 Grade · ${moneyS(gradeFee(c))}</button>`:'';
+ if(inRip){acts+=c.grading?`<button class="primary" disabled>🔬 Sent to the grader</button>`:!c.slab?`<button class="secondary" data-action="v-grade">🔬 Grade · ${moneyS(gradeFee(c))}</button><button class="primary" data-action="v-close">Close</button>`:`<button class="primary" data-action="v-close">Close</button>`}
  else if(owned&&c.grading)acts+=`<button class="secondary" data-action="v-share">Share ↗</button><button class="primary" disabled>🔬 At the grader · ${c.grading<=Date.now()?'ready!':'back in '+Math.ceil((c.grading-Date.now())/60000)+'m'}</button>`;
  else if(owned&&c.vault)acts+=`${gbtn||'<button class="secondary" data-action="v-share">Share ↗</button>'}<button class="primary" data-action="v-vault">★ In vault · Remove</button>`;
  else if(owned)acts+=`${gbtn||'<button class="secondary" data-action="v-share">Share ↗</button>'}<button class="secondary" data-action="v-trade">Trade</button><button class="primary" data-action="v-sell">Sell · ${money(c.value)}${earnsTicket(c)?' + 🎟':''}</button>`;
@@ -1695,13 +1719,15 @@ const GUIDE=[
  ['🃏','Rip packs','Swipe across a pack to tear it open (or tap). Single pulls just flip. Keep the hits, sell the bulk.'],
  ['⭐','Levels','Every $1 you spend is 1 XP. Levels pay out free packs and unlock bigger ones.'],
  ['🎰','Slab Grab','One free spin a day. The classic reel costs a ticket + $50 (sell a $50+ card for a free ticket). God Tier is the big gamble.'],
- ['🔬','Grading','Send a raw card for $25, back in 10 minutes. Most come back 7 or 8. A 10 pays big, a Black Label pays huge. A few never come back. Insure the good ones.'],
+ ['🔬','Grading','Send a raw card (from $25, more for pricey cards), back in 10 minutes. Most come back 7 or 8. A 10 pays big, a Black Label pays huge. A few never come back. Insure the good ones.'],
  ['🎟','Ticket Shop','Tap 🎟 at the top to trade tickets for packs, spins, sealed boxes and more Vault slots.'],
  ['📦','Sealed boxes','Buy a box and it gains value every day you hold it. Sell it or rip it whenever.'],
  ['🐋','High rollers','Whale Packs and the Ascended reel unlock late. Black Label slabs are 5x a 10.'],
  ['🎲','Life happens','Once in a while something good or terrible happens to your binder. The Vault and slabs are safe.'],
  ['★','Vault','Lock up your favorites (15 to start). They can\'t be sold or damaged, and friends can see them.'],
- ['🌟','Grail Quest','Pick a dream card. Ripping fills the meter. Full meter = a shot at it, and every miss raises your odds.'],
+ ['🌟','Grail Quest','Pick a dream card. Ripping fills the meter. Full meter = one shot a day, and every miss raises your odds.'],
+ ['🔥','Hot set','One set runs hot each day. Its cards show up twice as often.'],
+ ['⚔️','Rival','Tap a friend on the leaderboard and make them your rival. The Shop keeps score.'],
  ['🎯',"Kyle's Bounties",'3 new targets every Monday. Finish all 3 for a bonus God Tier spin.'],
  ['📚','Master sets','Every card you\'ve ever pulled counts, even if you sold it. Finish a set for rewards.'],
  ['🏆','Trophy Case','10 legendary slabs. Collect them all to beat the game, then prestige.'],
