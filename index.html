@@ -541,6 +541,12 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .pager{display:flex;justify-content:center;align-items:center;gap:14px;margin:12px 0 18px;font-size:13px;font-weight:800;color:var(--muted)}
 .bbig{display:grid;gap:10px;justify-items:center}.bbig img{width:170px;border-radius:10px;box-shadow:0 0 30px -8px var(--gold)}
 .t2icon{aspect-ratio:63/88;display:grid;place-items:center;font-size:44px;background:radial-gradient(circle,#2a2210,#0b1018)}
+.anim{width:min(240px,62vw);aspect-ratio:3/4;margin:0 auto 12px;border-radius:14px;background-size:500% 100%;background-repeat:no-repeat;animation:animPlay 3s step-end forwards;box-shadow:0 8px 30px #0008}
+@keyframes animPlay{0%{background-position:0% 0}18%{background-position:25% 0}36%{background-position:50% 0}54%{background-position:75% 0}72%,100%{background-position:100% 0}}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}.confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.mastertxt{font-size:26px;font-weight:1000;color:var(--gold);text-shadow:0 0 18px #ffd34d88;margin:4px 0 8px;animation:mpulse 1s ease-in-out infinite alternate}
+@keyframes mpulse{to{transform:scale(1.06)}}
 .sbpanel{border-color:#57d6d066;background:linear-gradient(160deg,#0c2226,#0f1622 65%)}
 .sbcode{font-size:34px;font-weight:1000;letter-spacing:.25em;color:var(--gold);margin:14px 0 4px}
 .togglechip{display:inline-flex;align-items:center;gap:6px}
@@ -619,6 +625,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <p class="sub">Tap any card to inspect it, sell it, or trade it in for packs. Selling a card worth $50+ earns a Slab Grab ticket.</p>
  <div class="stats" id="binderStats"></div>
  <div id="vaultStrip"></div>
+ <div id="sharedBox" style="margin-bottom:12px"></div>
  <div class="toolbar">
   <div class="seg" id="binderFilter"><button data-action="filter" data-f="all" class="on">All</button><button data-action="filter" data-f="hits">Hits</button><button data-action="filter" data-f="slabs">Slabs</button><button data-action="filter" data-f="vintage">Vintage</button><button data-action="filter" data-f="vault">★</button></div>
   <div class="toolbar-r"><select class="sel" id="binderSort" aria-label="Sort cards"><option value="new">Newest first</option><option value="value">Highest value</option><option value="name">Name A to Z</option></select><button class="smallbtn" data-action="sell-bulk">Sell under $1</button><button class="smallbtn" data-action="sell-dupes">Sell dupes</button></div>
@@ -633,7 +640,6 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
   <h1 class="title">Collect</h1>
   <p class="sub">Fill the Trophy Case to beat POKÉ RIP. Build master sets along the way for big rewards.</p>
   <div id="grailBox2"></div>
-  <div id="sharedBox" style="margin-bottom:12px"></div>
   <div class="section-head"><h2>🏆 Trophy Case</h2><span class="muted" id="trophyHead"></span></div>
   <div class="gridcards trophies" id="trophyGrid"></div>
   <div class="section-head"><h2>🏆 Trophy Case II</h2><span class="muted" id="trophy2Head"></span></div>
@@ -1087,8 +1093,14 @@ DISASTERS.push(
  'A seagull flew into the facility, grabbed your card, and flew to the beach. Lifeguards say it is "not their department."',
  'Your card was laminated, shrink-wrapped, then run through a car wash. All three. On purpose. Nobody knows why.');
 
+/* ---------- Funny animations (5-frame sprite sheets in /anim) ---------- */
+const ANIMS={chomp:'anim/chomp.webp',yeet:'anim/yeet.webp',cash:'anim/cash.webp',money:'anim/money.webp'};
+const animHTML=k=>ANIMS[k]?`<div class="anim" style="background-image:url('${ANIMS[k]}')"></div>`:'';
+Object.values(ANIMS).forEach(u=>{const i=new Image();i.src=u});
+const MASTER_PAY=180000;
+
 /* ---------- game state ---------- */
-const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,seen:{},cold:0,hot:0,shared:null,grailLog:[],rival:null,vaultMax:30,vaultBought:0,sealed:[],borrowed:null,lastEvent:'',disasters:0,grading:[],gradeLog:{},grail:null,grailsWon:0,miles:{},prestige:0,beat:false,bailouts:0,bailDay:'',bailToday:0,savedAt:0,owner:null});
+const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,seen:{},cold:0,hot:0,shared:null,masterPaid:{},grailLog:[],rival:null,vaultMax:30,vaultBought:0,sealed:[],borrowed:null,lastEvent:'',disasters:0,grading:[],gradeLog:{},grail:null,grailsWon:0,miles:{},prestige:0,beat:false,bailouts:0,bailDay:'',bailToday:0,savedAt:0,owner:null});
 const slim=c=>({id:c.id,name:c.name,value:c.value,img:c.img,slab:!!c.slab,grade:c.grade,first:!!c.first,setId:c.setId,setName:c.setName,num:c.num,rarity:c.rarity,raw:c.raw,est:c.est});
 function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.given==null)d.given=START*(1+(d.kyle||0));
  const f=fresh();for(const k in f)if(d[k]==null)d[k]=f[k];d.v=4;delete d.lastFree;
@@ -1172,7 +1184,7 @@ async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||s
  for(const c of ready){const raw=c.value,insured=c.insured;delete c.grading;delete c.insured;
   if(Math.random()<DISASTER_ODDS(networth())){const i=game.owned.indexOf(c);if(i>=0)game.owned.splice(i,1);game.disasters=(game.disasters||0)+1;if(insured)game.cash=r2(game.cash+raw);save();
    Sound.init();Sound.tone(196,.9,'sine',.06,0,98);Sound.tone(147,1.2,'sine',.05,.35,73);buzz([200,100,300]);
-   await modal({icon:'🕯️',title:pick(DISASTER_TITLES),html:`<div class="m-card" style="filter:grayscale(1) brightness(.6)">${imgTag(c,true,true)}</div><b style="color:var(--text)">${esc(c.name)}</b><br><span class="muted">${money(raw)} · gone</span><p style="margin-top:10px">${esc(pick(DISASTERS))}</p>${insured?`<p style="color:var(--green)">Insurance paid out <b>${money(raw)}</b>. Smart.</p>`:'<p class="roast bad">It was not insured. Sucks to suck.</p>'}`,buttons:[{label:insured?'Thank god for insurance':'🕯️ Pay respects',primary:true}]});continue}
+   await modal({icon:'🕯️',title:pick(DISASTER_TITLES),html:`${animHTML('chomp')}<b style="color:var(--text)">${esc(c.name)}</b><br><span class="muted">${money(raw)} · gone</span><p style="margin-top:10px">${esc(pick(DISASTERS))}</p>${insured?`<p style="color:var(--green)">Insurance paid out <b>${money(raw)}</b>. Smart.</p>`:'<p class="roast bad">It was not insured. Sucks to suck.</p>'}`,buttons:[{label:insured?'Thank god for insurance':'🕯️ Pay respects',primary:true}]});continue}
   const g=SUBMIT_GRADES[wIndex(SUBMIT_GRADES.map(x=>x[1]))][0];c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(g===10&&Math.random()<BLACK_FROM_GRADING)blackify(c);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;if(c.black)game.gradeLog.black=(game.gradeLog.black||0)+1;
   collect([c]);checkProgress([c]);save();Feed.post([c]);celebrate(c.black?5:g===10?5:g===9?4:g===8?2:0);if(c.black){flash(.9);FX.burst(260,['#000000','#f5c451','#ffffff'])}if(g===7){Sound.init();Sound.tone(220,.5,'sawtooth',.05,0,90)}
   await modal({icon:c.black?'🖤':g===10?'💎':g===9?'🔥':g===8?'👍':'🤦',title:c.black?'BLACK LABEL!!':`It came back a ${g}!`,html:`<div class="m-card">${slabHTML(c,true)}</div><b style="color:var(--text)">${esc(c.name)}</b><br>${money(raw)} raw → <b style="color:${c.value>=raw?'var(--green)':'var(--red)'}">${money(c.value)}</b><div class="roast${g<=7?' bad':''}">${esc(c.black?pick(['BLACK LABEL. Kyle has never seen one. Kyle is shaking.','Black Label. The grader called his mom.','This slab needs its own bodyguard.']):pick(ROAST.grade[g]))}</div>`,buttons:[{label:'Next',primary:true}]})}
@@ -1181,22 +1193,23 @@ async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||s
 /* ---------- random life events (max one a day; never Vault cards or slabs) ---------- */
 function lifeEvent(){if(game.lastEvent===today()||rip||spinning)return;const nw=networth();if(Math.random()>=LIFE_ODDS(nw))return;
  const raws=game.owned.filter(c=>!c.vault&&!c.slab&&!c.grading&&!c.cond&&c.value>=5),bulk=game.owned.filter(c=>!c.vault&&!c.slab&&!c.grading&&c.value<5),nice=game.owned.filter(c=>!c.vault&&!c.grading&&c.value>=20);
- const good=Math.random()<.35;let html='',icon,title;
+ const good=Math.random()<.35;let html='',icon,title,an='';
  if(good){const e=pick(LIFE_GOOD);icon=e.icon;title=e.title;
+  an=['cash','shoebox','tix'].includes(e.id)?'money':'';
   if(e.id==='cash'){const amt=r2(Math.min(2000,20+game.level*15+Math.random()*80));game.cash=r2(game.cash+amt);html=e.body(amt)}
   else if(e.id==='mom'){grant({mystery:1});html=e.body()}else if(e.id==='tix'){grant({tickets:5});html=e.body()}
   else if(e.id==='shoebox'){const amt=r2(Math.min(5000,50+game.level*40+Math.random()*200));game.cash=r2(game.cash+amt);html=e.body(amt)}
   else if(e.id==='collector'){const c=pick(raws);if(!c)return;gradeIt(c,[[9,1]]);c.from='Mystery Collector';html=e.body(c)}
   else if(e.id==='misprint'){const c=pick(raws);if(!c)return;c.value=r2(c.value*3);c.cond='Misprint';html=e.body(c)}
   else{const c=pick(raws.length?raws:game.owned.filter(c=>!c.grading));if(!c)return;c.value=r2(c.value*1.5);html=e.body(c)}}
- else{const opts=LIFE_BAD.filter(e=>e.need==='raw'?raws.length:e.need==='bulk'?bulk.length:e.need==='rich'?nw>=5e4&&game.cash>100:e.need==='nice'?nice.length&&!game.borrowed:e.need==='lost'?nice.length&&!game.lost:e.need==='kylesold'?nice.length:false);if(!opts.length)return;const e=pick(opts);icon=e.icon;title=e.title;
+ else{const opts=LIFE_BAD.filter(e=>e.need==='raw'?raws.length:e.need==='bulk'?bulk.length:e.need==='rich'?nw>=5e4&&game.cash>100:e.need==='nice'?nice.length&&!game.borrowed:e.need==='lost'?nice.length&&!game.lost:e.need==='kylesold'?nice.length:false);if(!opts.length)return;const e=pick(opts);icon=e.icon;title=e.title;an=e.need==='rich'?'cash':e.need==='raw'||e.need==='bulk'?(Math.random()<.5?'chomp':'yeet'):'yeet';
   if(e.need==='raw'){const c=pick(raws);c.value=r2(Math.max(.05,c.value*e.mult));c.cond=e.cond;html=e.body(c)}
   else if(e.need==='bulk'){const c=pick(bulk);game.owned.splice(game.owned.indexOf(c),1);html=e.body(c)}
   else if(e.need==='rich'){const amt=r2(game.cash*.03);game.cash=r2(game.cash-amt);html=e.body(null,amt)}
   else if(e.need==='lost'){const c=pick(nice);game.owned.splice(game.owned.indexOf(c),1);game.lost={card:c,until:Date.now()+(1+Math.random()*2)*864e5};html=e.body(c)}
   else if(e.need==='kylesold'){const c=pick(nice);game.owned.splice(game.owned.indexOf(c),1);const amt=r2(c.value*.8);game.cash=r2(game.cash+amt);html=e.body(c,amt)}
   else{const c=pick(nice);game.owned.splice(game.owned.indexOf(c),1);game.borrowed={card:c,until:Date.now()+864e5};html=e.body(c)}}
- game.lastEvent=today();save();note({icon,title,html:esc(html),buttons:[{label:good?'Nice':pick(['Ugh','Why me','Sucks to suck']),primary:true}]})}
+ game.lastEvent=today();save();note({icon,title,html:animHTML(an)+esc(html),buttons:[{label:good?'Nice':pick(['Ugh','Why me','Sucks to suck']),primary:true}]})}
 function checkBorrowedOnly(){const b=game.borrowed;if(!b||Date.now()<b.until)return;b.card.sticker=true;game.owned.push(b.card);game.borrowed=null;save();
  note({icon:'🤝',title:'Kyle brought your card back',html:`${esc(b.card.name)} is back in your binder. He put a sticker on it that says "KYLE WAS HERE." It doesn't affect the value. Emotionally, it does.`,buttons:[{label:'Thanks, I guess',primary:true}]})}
 function checkBorrowed(){checkBorrowedOnly();const l=game.lost;if(!l||Date.now()<l.until)return;game.owned.push(l.card);game.lost=null;save();note({icon:'🛋️',title:'Found it!',html:`${esc(l.card.name)} was under the couch the whole time. Along with $3 and a Zubat you forgot you had.`,buttons:[{label:'Phew',primary:true}]})}
@@ -1401,7 +1414,7 @@ function binderList(){let a=game.owned.slice();if(binderFilter==='hits')a=a.filt
 function tile(c,i,action='view-card'){const lvl=vt(c.value),tag=c.black?'BLACK LABEL':c.slab?`${c.first?'1ST ED · ':''}GRADED ${c.grade}`:c.first?'1ST EDITION':lvl>=3?'HIT':'';
  return `<button class="tile lvl${lvl}${c.vault?' vaulted':''}" data-action="${action}" data-i="${i}" style="--glow:${GLOW[lvl]}"><div class="tile-img${c.slab?' is-slab':''}">${c.vault?'<span class="tile-cnt">★</span>':''}${tag?`<span class="tile-tag">${tag}</span>`:''}${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(c.setName||'')}</span><b>${money(c.value)}</b></div></button>`}
 const pagerHTML=(act,p,n)=>`<div class="pager"><button class="smallbtn" data-action="${act}" data-d="-1" ${p?'':'disabled'}>‹ Prev</button><span>Page ${p+1} / ${n}</span><button class="smallbtn" data-action="${act}" data-d="1" ${p<n-1?'':'disabled'}>Next ›</button></div>`;
-function renderBinder(){const o=game.owned,hits=o.filter(c=>c.value>=10).length,top=o.reduce((m,c)=>c.value>m.value?c:m,{value:0,name:'None yet'});
+function renderBinder(){renderShared();const o=game.owned,hits=o.filter(c=>c.value>=10).length,top=o.reduce((m,c)=>c.value>m.value?c:m,{value:0,name:'None yet'});
  $('#binderStats').innerHTML=statHTML([['Cards',o.length,`${hits} hit${hits===1?'':'s'} · ${o.filter(c=>c.slab).length} slabs`],['Binder value',money(collectionValue()),'TCGplayer market'],['Top card',money(top.value),esc(top.name)],['Cash',money(game.cash),'Sell cards to add cash']]);
  $$('#binderFilter button').forEach(b=>b.classList.toggle('on',b.dataset.f===binderFilter));
  const gc=gradingCards();
@@ -1421,7 +1434,7 @@ function trophyTile(t,i){const got=game.trophies[t.id];
 function setRow(gid){const d=groupDef(gid),p=progress(gid),done=game.sets[gid]?.done,loading=d.sets.some(s=>catalog.loading.has(s));
  return `<button class="srow" data-action="open-set" data-g="${esc(gid)}"><span><b>${esc(d.name)}</b><small>${p?`${p.have} / ${p.total}`:loading?'Loading…':catalog.offline?'Offline':'Tap to load'}${done?' · ✅ Complete':''}</small></span><span class="prog"><i style="width:${p?p.pct:0}%"></i></span><span class="chev">›</span></button>`}
 function trophy2Tile(t,i){const got=(game.trophies2||{})[t.id];return `<button class="tile troph ${got?'got':'off'}" data-action="trophy2" data-i="${i}"><div class="tile-img">${got?'<span class="tile-tag">🏆 EARNED</span>':''}${t.img?`<img src="${esc(t.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:`<div class="t2icon">${t.icon}</div>`}</div><div class="tile-name">${esc(t.name)}</div><div class="tile-foot"><span>${got?'Earned':'Locked'}</span><b>${t.icon}</b></div></button>`}
-function renderCollectMain(){$('#grailBox2').innerHTML=grailHTML();renderShared();$('#trophy2Head').textContent=`${TROPHIES2.filter(t=>(game.trophies2||{})[t.id]).length} / ${TROPHIES2.length}`;$('#trophy2Grid').innerHTML=TROPHIES2.map(trophy2Tile).join('');$('#trophyHead').textContent=`${trophyCount()} / ${TROPHIES.length}`;
+function renderCollectMain(){$('#grailBox2').innerHTML=grailHTML();$('#trophy2Head').textContent=`${TROPHIES2.filter(t=>(game.trophies2||{})[t.id]).length} / ${TROPHIES2.length}`;$('#trophy2Grid').innerHTML=TROPHIES2.map(trophy2Tile).join('');$('#trophyHead').textContent=`${trophyCount()} / ${TROPHIES.length}`;
  $('#trophyGrid').innerHTML=TROPHIES.map(trophyTile).join('');
  $('#featSets').innerHTML=MASTER.map(m=>{const p=progress(m.id),done=game.sets[m.id]?.done;return `<div class="panel feat"><div class="feat-top"><div><div class="eyebrow">Featured master set</div><b>${esc(m.name)}</b></div><span class="muted">${p?`${p.have} / ${p.total} cards`:'Loading…'}</span></div><div class="prog"><i style="width:${p?p.pct:0}%"></i></div><div class="muted" style="font-size:12px">${esc(m.note)}. Reward: ${rewardText(m.reward)} plus a trophy${done?' · ✅ Claimed':''}</div><div class="feat-actions"><button class="primary" data-action="open-set" data-g="${m.id}">Open set</button></div></div>`}).join('');
  $('#vintSets').innerHTML=VINTAGE_SETS.map(setRow).join('');
@@ -1791,7 +1804,7 @@ const GUIDE=[
  ['🔬','Grading','Send a raw card (from $25, more for pricey cards), back in 10 minutes. Most come back 7 or 8. A 10 pays big, a Black Label pays huge. A few never come back. Insure the good ones.'],
  ['🎟','Ticket Shop','Tap 🎟 at the top to trade tickets for packs, spins, sealed boxes and more Vault slots.'],
  ['🐋','High rollers','Whale Packs, the Ascended reel and the Leviathan unlock late. Black Label slabs are 5x a 10.'],
- ['🤝','Shared binder','Start one in Collect, send your buddy the code, and stack cards together toward a set. You can take back what you added.'],
+ ['🤝','Shared binder','Start one in the Binder tab, send your buddy the code, and stack cards together toward a set. Finish the whole set as GRADED 10s and you each get $180,000, with a 33% shot to double it.'],
  ['🧬','Evolution Packs','A whole evolution line from one set, every card a Gem Mint 10. Unlocks at level 10.'],
  ['🏆','Trophy Case II','Ten brutal goals for after you beat the game. Black Labels, perfect master sets, a $10M net worth.'],
  ['🎲','Life happens','Once in a while something good or terrible happens to your binder. The Vault and slabs are safe.'],
@@ -1822,7 +1835,7 @@ const Shared={b:null,cards:[],at:0,busy:false,
  get id(){return game.shared||null},
  async load(force){if(!Cloud.on||!Cloud.s||!this.id)return;if(this.busy||(!force&&Date.now()-this.at<20000))return;this.busy=true;this.at=Date.now();
   try{const b=(await Cloud.req(`/rest/v1/shared_binders?id=eq.${this.id}&select=*`)||[])[0];if(!b){this.b=null;this.cards=[];return}this.b=b;
-   this.cards=await Cloud.req(`/rest/v1/shared_cards?binder_id=eq.${this.id}&select=id,user_id,username,card,created_at&order=created_at.desc`)||[];if(currentView==='collect'&&!collectSet)renderShared()}
+   this.cards=await Cloud.req(`/rest/v1/shared_cards?binder_id=eq.${this.id}&select=id,user_id,username,card,created_at&order=created_at.desc`)||[];if(currentView==='binder')renderShared()}
   catch(e){console.warn('Shared binder load failed',e)}finally{this.busy=false}},
  code(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<6;i++)s+=a[Math.floor(Math.random()*a.length)];return s}};
 const sharedName=()=>Shared.b?Shared.b.name:'shared binder';
@@ -1833,7 +1846,7 @@ async function sharedCreate(){if(!Cloud.s){accountModal();return}
  if(!v)return;const name=($('#sbName')?.value||'').trim()||'Our Binder',target=$('#sbTarget')?.value||null;
  try{const r=await Cloud.req('/rest/v1/shared_binders',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({name,code:Shared.code(),owner_a:Cloud.user,a_name:Cloud.name,target})});const b=r&&r[0];if(!b)throw new Error('no row');
   game.shared=b.id;save();Shared.b=b;Shared.cards=[];renderShared();
-  modal({icon:'🤝',title:`${esc(name)} is ready`,html:`Send your buddy this code. They join from the Collect tab.<div class="sbcode">${esc(b.code)}</div>`,buttons:[{label:'Copy code',value:'copy'},{label:'Done',primary:true}]}).then(x=>{if(x==='copy')copyText(b.code)})}
+  modal({icon:'🤝',title:`${esc(name)} is ready`,html:`Send your buddy this code. They join from the Binder tab.<div class="sbcode">${esc(b.code)}</div>`,buttons:[{label:'Copy code',value:'copy'},{label:'Done',primary:true}]}).then(x=>{if(x==='copy')copyText(b.code)})}
  catch(e){toast(`Couldn't create it (${e.message}). Did the Supabase SQL get run?`,5000)}}
 async function sharedJoin(){if(!Cloud.s){accountModal();return}
  const v=await modal({icon:'🤝',title:'Join a shared binder',html:`<input class="inp" id="sbCode" placeholder="6-letter code" maxlength="6" autocapitalize="characters" style="text-transform:uppercase;letter-spacing:.2em;text-align:center">`,buttons:[{label:'Cancel',value:null},{label:'Join',primary:true,value:'go'}]});
@@ -1855,7 +1868,7 @@ async function sendToShared(c){if(!Shared.b||!c||c.vault||c.grading||!game.owned
 async function sharedCardModal(i){const r=Shared.cards[i];if(!r)return;const c=r.card,mine=r.user_id===Cloud.user;
  const v=await modal({title:esc(c.name),html:`<div class="m-card">${c.slab?slabHTML(c,true):imgTag(c,true,true)}</div>${metaLine(c)}<br>Worth <b style="color:var(--gold)">${money(c.value)}</b><br><span class="muted">Added by ${esc(r.username)} ${ago(Date.parse(r.created_at)||Date.now())}</span>`,buttons:mine?[{label:'Take it back',value:'back'},{label:'Close',primary:true}]:[{label:'Close',primary:true}]});
  if(v!=='back')return;try{await Cloud.req(`/rest/v1/shared_cards?id=eq.${r.id}`,{method:'DELETE',headers:{Prefer:'return=minimal'}});c.uid=c.uid||uid();game.owned.push(c);save();await Shared.load(true);toast(`${c.name} is back in your binder.`)}catch(e){toast(`Couldn't take it back (${e.message}).`)}}
-let sharedPage=0;
+let sharedPage=0,sharedOpen=false;
 function renderShared(){const el=$('#sharedBox');if(!el)return;
  if(!Cloud.on){el.innerHTML='';return}
  if(!Cloud.s){el.innerHTML=`<div class="daily"><div><b>🤝 Shared binder</b><span>Log in to build a binder with a buddy.</span></div><button class="smallbtn" data-action="account">Log in</button></div>`;return}
@@ -1863,12 +1876,22 @@ function renderShared(){const el=$('#sharedBox');if(!el)return;
  Shared.load();const b=Shared.b;if(!b){el.innerHTML=`<div class="daily"><div><b>🤝 Shared binder</b><span>Loading…</span></div></div>`;return}
  const rows=Shared.cards,val=sum(rows.map(r=>r.card.value)),who=[b.a_name,b.b_name].filter(Boolean).join(' + ');
  let prog='';if(b.target&&groupLoaded(b.target)){const ids=new Set(groupCards(b.target).map(c=>c.id)),have=new Set(rows.filter(r=>ids.has(r.card.id)).map(r=>r.card.id)),tens=new Set(rows.filter(r=>ids.has(r.card.id)&&r.card.slab&&r.card.grade===10).map(r=>r.card.id));
-  prog=`<div class="muted" style="font-size:12px;margin-top:6px">${esc(groupDef(b.target).name)}: ${have.size} / ${ids.size} cards · ${tens.size} graded 10</div><span class="prog" style="margin-top:4px"><i style="width:${ids.size?tens.size/ids.size*100:0}%"></i></span>`}
+  if(ids.size&&tens.size===ids.size)masterCheck(b);prog=`<div class="muted" style="font-size:12px;margin-top:6px">${esc(groupDef(b.target).name)}: ${have.size} / ${ids.size} cards · ${tens.size} graded 10</div><span class="prog" style="margin-top:4px"><i style="width:${ids.size?tens.size/ids.size*100:0}%"></i></span>`}
  else if(b.target)ensureGroup(b.target);
  const n=Math.max(1,Math.ceil(rows.length/9));sharedPage=Math.min(sharedPage,n-1);const s=sharedPage*9;
- el.innerHTML=`<div class="panel feat sbpanel"><div class="feat-top"><div><div class="eyebrow">🤝 Shared binder · ${esc(who)}${b.b_name?'':' · waiting for a buddy'}</div><b>${esc(b.name)}</b></div><button class="smallbtn" data-action="sb-edit">✏️ Edit</button></div>
+ el.innerHTML=`<div class="panel feat sbpanel"><div class="feat-top"><div><div class="eyebrow">🤝 Shared binder · ${esc(who)}${b.b_name?'':' · waiting for a buddy'}</div><b>${esc(b.name)}</b></div><span class="boxbtns"><button class="smallbtn" data-action="sb-edit">✏️</button><button class="smallbtn" data-action="sb-toggle" style="color:var(--gold)">${sharedOpen?'Close':'Open ›'}</button></span></div>
  <div class="muted" style="font-size:12px">${rows.length} card${rows.length===1?'':'s'} · ${moneyS(val)}${b.b_name?'':` · invite code <b style="color:var(--text);letter-spacing:.15em">${esc(b.code)}</b>`}</div>${prog}</div>
- ${rows.length?`<div class="gridcards g3 vaultpage">${rows.slice(s,s+9).map((r,i)=>{const c=r.card,lvl=vt(c.value);return `<button class="tile lvl${lvl}" data-action="sb-card" data-i="${s+i}" style="--glow:${GLOW[lvl]}"><div class="tile-img${c.slab?' is-slab':''}">${c.black?'<span class="tile-tag">BLACK LABEL</span>':c.slab?`<span class="tile-tag">GRADED ${c.grade}</span>`:''}${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(r.username)}</span><b>${moneyS(c.value)}</b></div></button>`}).join('')}</div>${n>1?pagerHTML('sbpage',sharedPage,n):''}`:'<div class="empty">Empty so far. Tap any card in your binder and hit 🤝 Send to shared binder.</div>'}`}
+ ${!sharedOpen?'':rows.length?`<div class="gridcards g3 vaultpage">${rows.slice(s,s+9).map((r,i)=>{const c=r.card,lvl=vt(c.value);return `<button class="tile lvl${lvl}" data-action="sb-card" data-i="${s+i}" style="--glow:${GLOW[lvl]}"><div class="tile-img${c.slab?' is-slab':''}">${c.black?'<span class="tile-tag">BLACK LABEL</span>':c.slab?`<span class="tile-tag">GRADED ${c.grade}</span>`:''}${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(r.username)}</span><b>${moneyS(c.value)}</b></div></button>`}).join('')}</div>${n>1?pagerHTML('sbpage',sharedPage,n):''}`:'<div class="empty">Empty so far. Tap any card in your binder and hit 🤝 Send to shared binder.</div>'}`}
+
+let celebrating=false;
+async function masterCheck(b){game.masterPaid=game.masterPaid||{};if(celebrating||game.masterPaid[b.target])return;celebrating=true;
+ game.masterPaid[b.target]=Date.now();game.cash=r2(game.cash+MASTER_PAY);save();const set=groupDef(b.target).name,who=[b.a_name,b.b_name].filter(Boolean).join(' & ');
+ const fx=document.createElement('div');fx.className='confetti';fx.innerHTML=Array.from({length:70},()=>`<i style="left:${Math.random()*100}%;animation-delay:${Math.random()*1.5}s;animation-duration:${2.5+Math.random()*2}s;background:${pick(['#ffd34d','#57d6d0','#ff6b8b','#8ef58e','#fff','#b98bff'])}"></i>`).join('');document.body.appendChild(fx);
+ try{Sound.init();Sound.flip&&Sound.flip()}catch(e){}
+ await modal({icon:'👑',title:'MASTER SET. ALL 10s.',html:`${animHTML('money')}<div class="mastertxt">${esc(set)}</div><p><b>${esc(who)}</b> finished every card in ${esc(set)} as a GRADED 10. Do you know how many Wendy's shifts that is? Neither do we.</p><p>You each get <b style="color:var(--gold)">${money(MASTER_PAY)}</b>. One shot, 33% chance to double it.</p>`,buttons:[{label:'Roll for double',primary:true,value:true}]});
+ const win=Math.random()<1/3;if(win){game.cash=r2(game.cash+MASTER_PAY);save()}
+ await modal({icon:win?'🎰':'💸',title:win?'DOUBLED.':'No double.',html:win?`${animHTML('money')}<p>${money(MASTER_PAY*2)} total. Johnny is going to hear about this for years.</p>`:`${animHTML('cash')}<p>Still walked away with ${money(MASTER_PAY)}. Don't be greedy. Okay, be a little greedy.</p>`,buttons:[{label:win?'LET\'S GO':'Fair',primary:true}]});
+ fx.remove();celebrating=false;renderHeader()}
 
 /* ---------- events ---------- */
 const ACTIONS={
@@ -1882,6 +1905,7 @@ const ACTIONS={
  'sb-create':()=>sharedCreate(),
  'sb-join':()=>sharedJoin(),
  'sb-edit':()=>sharedEdit(),
+ 'sb-toggle':()=>{sharedOpen=!sharedOpen;sharedPage=0;renderShared()},
  'sb-card':el=>sharedCardModal(+el.dataset.i),
  sbpage:el=>{sharedPage=Math.max(0,sharedPage+ +el.dataset.d);renderShared()},
  'v-share-binder':()=>{if(V)sendToShared(game.owned.find(x=>x.uid===V.list[V.i].uid))},
