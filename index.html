@@ -559,6 +559,73 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  .grabseg button{font-size:12px;padding:0 4px}
 }
 @media(min-width:420px) and (max-width:760px){.trophies{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.shelf{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;margin:0 -2px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.shelf::-webkit-scrollbar{display:none}
+.bcover{position:relative;flex:0 0 104px;height:132px;border-radius:6px 12px 12px 6px;border:1px solid #ffffff1a;background:linear-gradient(150deg,color-mix(in srgb,var(--bc) 34%,#141b28),#0e1420 80%);color:var(--text);display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:10px 10px 10px 16px;text-align:left;gap:2px;box-shadow:0 6px 16px #0007;transition:transform .15s}
+.bcover .bspine{position:absolute;left:0;top:0;bottom:0;width:7px;border-radius:6px 0 0 6px;background:var(--bc);opacity:.85}
+.bcover .bicon{font-size:26px;position:absolute;top:10px;left:16px}.bcover b{font-size:13px;line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.bcover small{font-size:11px;color:var(--muted)}
+.bcover.on{transform:translateY(-4px);border-color:var(--bc);box-shadow:0 10px 22px #000a,0 0 0 1px var(--bc)}
+.bcover.add{background:transparent;border:1.5px dashed #ffffff33;--bc:#ffffff44}.bcover.add .bicon{color:var(--muted)}
+.iconpick{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0 10px}.iconpick button{font-size:20px;width:40px;height:40px;border-radius:10px;border:1px solid #ffffff22;background:#ffffff08}.iconpick button.on{border-color:var(--gold);background:#ffd34d22}
+.eeveepanel{border-color:#ff9ecf66;background:linear-gradient(160deg,#2a1424,#141626 70%)}
+.stones{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.stone{font-size:18px;background:#ffffff0d;border-radius:10px;padding:4px 8px;display:flex;align-items:center;gap:4px}.stone small{font-size:11px;color:var(--muted)}.stone.off{opacity:.35;filter:grayscale(1)}
+.dexchips{display:flex;gap:6px;overflow-x:auto;margin:10px 0;scrollbar-width:none}.dexchips button{flex:0 0 auto;border-radius:20px;border:1px solid #ff9ecf44;background:#ff9ecf11;color:var(--text);padding:7px 12px;font-size:13px;font-weight:700}.dexchips button.on{background:#ff9ecf;color:#2a1424}.dexchips small{opacity:.7;font-weight:600}
+.tile.dex.miss .tile-img{filter:grayscale(1) brightness(.45)}.tile.dex.miss .tile-name{color:var(--muted)}
+.petbox{display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;border:1px solid #ff9ecf55;background:linear-gradient(140deg,#2a1424,#151a28);margin-bottom:12px}
+.petbox>div{flex:1;min-width:0;display:flex;flex-direction:column}.petbox b{font-size:15px}.petbox span{font-size:12px;color:var(--muted)}.petbox .prog{display:block}
+.petee{flex:0 0 74px;height:74px;border-radius:50%;border:3px solid #ff9ecf;padding:0;overflow:hidden;background:#ffd6ec;box-shadow:0 0 18px #ff9ecf66;animation:eeBreathe 3s ease-in-out infinite}
+.petbox.done .petee{animation:snooze 4s ease-in-out infinite;filter:saturate(.8)}
+.petimg{display:block;width:100%;height:100%;background-size:250%;background-position:50% 24%}
+.petee.wig{animation:wig .45s ease}
+@keyframes eeBreathe{50%{transform:scale(1.05)}}@keyframes snooze{50%{transform:rotate(-6deg) scale(.97)}}
+@keyframes wig{20%{transform:rotate(-12deg) scale(1.1)}45%{transform:rotate(10deg) scale(1.12)}70%{transform:rotate(-6deg)}100%{transform:none}}
+.heart{position:fixed;z-index:9999;pointer-events:none;font-size:22px;animation:heartUp 1.2s ease-out forwards}
+@keyframes heartUp{to{transform:translate(var(--dx,0),-90px) scale(1.4);opacity:0}}
+.paw{position:fixed;bottom:-30px;z-index:60;pointer-events:none;animation:pawUp 3s ease-out forwards}
+@keyframes pawUp{to{transform:translate(var(--dx),-105vh) rotate(25deg);opacity:0}}
+#rip.eeveerip{background:radial-gradient(circle at 50% 35%,#4a1f3d,#160d1a 70%)}
+#rip.eeveerip .ri-val{color:#ffb3d9}
+.eeveeban{position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:70;font-size:22px;font-weight:1000;white-space:nowrap;color:#fff;padding:10px 18px;border-radius:30px;background:linear-gradient(90deg,#ff9ecf,#b98bff,#ff9ecf);background-size:200% 100%;box-shadow:0 0 30px #ff9ecf;animation:eban 3.4s ease forwards,shine 1.2s linear infinite}
+@keyframes eban{0%{transform:translateX(-50%) scale(.3);opacity:0}12%{transform:translateX(-50%) scale(1.15);opacity:1}20%,85%{transform:translateX(-50%) scale(1)}100%{opacity:0}}
+@keyframes shine{to{background-position:200% 0}}
+.evoanim{position:relative;width:min(210px,56vw);margin:0 auto 12px;aspect-ratio:3/4}
+.evoanim>div{position:absolute;inset:0}.evoanim img{width:100%;height:100%;object-fit:contain}
+.evo-old{animation:evoOld 4s ease forwards}.evo-new{opacity:0;animation:evoNew 4s ease forwards}
+.evo-flash{background:radial-gradient(circle,#fff,#fff0 70%);opacity:0;animation:evoFlash 4s ease forwards;pointer-events:none}
+@keyframes evoOld{0%,70%{opacity:1}78%,100%{opacity:0}}
+@keyframes evoNew{0%,74%{opacity:0;transform:scale(.6);filter:brightness(8)}86%{opacity:1;transform:scale(1.08);filter:brightness(2)}100%{opacity:1;transform:none;filter:none}}
+@keyframes evoFlash{0%,68%{opacity:0;transform:scale(.5)}76%{opacity:1;transform:scale(1.6)}100%{opacity:0;transform:scale(2)}}
+.evotext{opacity:0;animation:eeFade .5s 3.6s forwards}@keyframes eeFade{to{opacity:1}}
+#eeHouse{position:fixed;inset:0;z-index:40;background:radial-gradient(circle at 50% 0%,#5a2a4c,#2a1424 45%,#160d1a);color:var(--text);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:env(safe-area-inset-top) 0 calc(30px + env(safe-area-inset-bottom));opacity:0;transition:opacity .25s}
+#eeHouse.show{opacity:1}
+.eh-top{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#2a1424e6;backdrop-filter:blur(8px);border-bottom:1px solid #ff9ecf33}.eh-top b{font-size:18px;color:#ffd6ec}
+.eh-x{width:36px;height:36px;border-radius:50%;border:1px solid #ff9ecf55;background:#ff9ecf22;color:#fff;font-size:16px}
+.eh-body{max-width:520px;margin:0 auto;padding:14px 16px}
+.eh-hero{text-align:center;padding:6px 0 10px}.eh-hero h2{color:#ffd6ec;margin:10px 0 6px}.eh-hero p{color:#e8c9da}
+.eh-stage{position:relative;height:230px;display:flex;align-items:flex-end;justify-content:center}
+.eh-floor{position:absolute;bottom:8px;left:50%;width:150px;height:18px;margin-left:-75px;border-radius:50%;background:#00000055;filter:blur(3px)}
+.eh-eevee,#eeBuddy{background:url('anim/ee_flip.webp') 100% 0/600% 100% no-repeat;border:0;padding:0;cursor:pointer}
+.eh-eevee{position:relative;z-index:1;width:210px;height:210px;transform-origin:50% 90%;animation:eeIdle 2.6s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+.eh-stage.sleepy .eh-eevee{animation:eeSleep 4s ease-in-out infinite;filter:brightness(.85) saturate(.85)}
+.eh-stage.pouty .eh-eevee{animation:eePout 1.6s ease-in-out infinite;filter:saturate(.75)}
+.eh-eevee.flip,#eeBuddy.flip{animation:eeFlip .9s step-end}.eh-eevee.wig{animation:eeWig .45s ease}
+@keyframes eeFlip{0%{background-position:0% 0}16%{background-position:20% 0}32%{background-position:40% 0}48%{background-position:60% 0}64%{background-position:80% 0}80%,100%{background-position:100% 0}}
+@keyframes eeIdle{50%{transform:scaleY(.97) translateY(2px)}}@keyframes eeSleep{50%{transform:rotate(-3deg) scaleY(.95)}}@keyframes eePout{25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+@keyframes eeWig{30%{transform:rotate(-8deg) scale(1.06)}60%{transform:rotate(7deg) scale(1.08)}100%{transform:none}}
+.eh-mood{position:absolute;top:14px;right:calc(50% - 115px);font-size:30px;z-index:2;animation:eeIdle 2s ease-in-out infinite}
+.eh-mt{font-weight:800;color:#ffd6ec;margin:6px 0 8px}.eh-small{font-size:12px;color:#d8b5c8;margin-top:6px}
+.eh-pets{display:flex;justify-content:center;gap:4px}.eh-pets i{font-style:normal;font-size:18px;filter:grayscale(1) opacity(.3);transition:.3s}.eh-pets i.on{filter:none;transform:scale(1.15)}
+.eh-card{background:#ffffff0a;border:1px solid #ff9ecf33;border-radius:16px;padding:12px 14px;margin:12px 0}.eh-card small{display:block;color:#d8b5c8;font-size:12px;margin-top:8px}
+.eh-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.eh-big{display:flex;flex-direction:column;align-items:center;gap:3px;padding:16px 10px;border-radius:18px;border:1px solid #ff9ecf66;background:linear-gradient(160deg,#ff9ecf33,#b98bff1a);color:#fff}.eh-big span{font-size:30px}.eh-big small{color:#e8c9da;font-size:12px}
+.eh-btn{background:#ff9ecf!important;color:#2a1424!important;margin-top:10px}
+.eh-hug{width:min(220px,58vw)}
+.eh-portal{width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;border:1px solid #ff9ecf55;background:linear-gradient(140deg,#2a1424,#151a28);color:var(--text);text-align:left;margin-bottom:12px}
+.eh-portal>span:nth-child(2){flex:1;display:flex;flex-direction:column}.eh-portal small{color:var(--muted);font-size:12px}.eh-portal .chev{color:#ff9ecf;font-size:22px}
+.eh-pmini{flex:0 0 52px;height:52px;background:url('anim/ee_flip.webp') 100% 0/600% 100% no-repeat;animation:eeIdle 2.6s ease-in-out infinite}
+#eeBuddy{position:fixed;z-index:60;right:10px;bottom:calc(84px + env(safe-area-inset-bottom));width:58px;height:58px;opacity:.9;pointer-events:none}
+.eh-intro{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:#160d1acc;transition:opacity .3s}.eh-intro.out{opacity:0}
+.eh-flipbig{width:180px;height:180px;margin:0 auto;background:url('anim/ee_flip.webp') 0 0/600% 100% no-repeat;animation:eeFlip .9s step-end infinite}
+.evo-bu{width:100%!important;height:100%;margin:0!important;aspect-ratio:auto!important;border-radius:12px}.evo-old .anim{animation-duration:2.8s}
 </style>
 </head>
 <body>
@@ -590,6 +657,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <p class="sub">Real cards, real market prices, fake money. Spend to level up and unlock bigger packs. <button class="linkbtn" data-action="guide" style="display:inline">📖 How to play</button></p>
  <div class="banner" id="apiBanner" hidden><span>Couldn't reach the card database, so you're ripping a small sample pool.</span><button class="smallbtn" data-action="retry">Retry</button></div>
  <div id="guest"></div>
+ <div id="petBox"></div>
  <div id="feedWrap" hidden><div class="feed-head"><span class="eyebrow">🔥 Live pulls</span><span class="muted" id="kingLine"></span></div><div class="feed" id="feed"></div></div>
  <div class="stats" id="shopStats"></div>
  <div id="daily"></div>
@@ -623,15 +691,20 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <div class="eyebrow">Your binder</div>
  <h1 class="title">Collection</h1>
  <p class="sub">Tap any card to inspect it, sell it, or trade it in for packs. Selling a card worth $50+ earns a Slab Grab ticket.</p>
+ <div id="shelf"></div>
+ <div id="sharedWrap" hidden><div id="sharedBox" style="margin-bottom:12px"></div></div>
+ <div id="eeveeDex" hidden></div>
+ <div id="binderMain">
+ <div id="customHead"></div>
  <div class="stats" id="binderStats"></div>
  <div id="vaultStrip"></div>
- <div id="sharedBox" style="margin-bottom:12px"></div>
  <div class="toolbar">
   <div class="seg" id="binderFilter"><button data-action="filter" data-f="all" class="on">All</button><button data-action="filter" data-f="hits">Hits</button><button data-action="filter" data-f="slabs">Slabs</button><button data-action="filter" data-f="vintage">Vintage</button><button data-action="filter" data-f="vault">★</button></div>
-  <div class="toolbar-r"><select class="sel" id="binderSort" aria-label="Sort cards"><option value="new">Newest first</option><option value="value">Highest value</option><option value="name">Name A to Z</option></select><button class="smallbtn" data-action="sell-bulk">Sell under $1</button><button class="smallbtn" data-action="sell-dupes">Sell dupes</button></div>
+  <div class="toolbar-r"><select class="sel" id="binderSort" aria-label="Sort cards"><option value="new">Newest first</option><option value="value">Highest value</option><option value="name">Name A to Z</option></select><button class="smallbtn" data-action="sell-bulk">Sell under $1</button><button class="smallbtn" data-action="sell-bulk" data-lim="100">Sell under $100</button><button class="smallbtn" data-action="sell-dupes">Sell dupes</button></div>
  </div>
  <div class="gridcards g3" id="binderGrid"></div>
  <div id="binderPager"></div>
+ </div>
 </section>
 
 <section class="view" id="v-collect" hidden>
@@ -1100,7 +1173,7 @@ Object.values(ANIMS).forEach(u=>{const i=new Image();i.src=u});
 const MASTER_PAY=180000;
 
 /* ---------- game state ---------- */
-const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,seen:{},cold:0,hot:0,shared:null,masterPaid:{},grailLog:[],rival:null,vaultMax:30,vaultBought:0,sealed:[],borrowed:null,lastEvent:'',disasters:0,grading:[],gradeLog:{},grail:null,grailsWon:0,miles:{},prestige:0,beat:false,bailouts:0,bailDay:'',bailToday:0,savedAt:0,owner:null});
+const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,seen:{},cold:0,hot:0,shared:null,masterPaid:{},binders:[],stones:{},eeveeBadges:{},grailLog:[],rival:null,vaultMax:30,vaultBought:0,sealed:[],borrowed:null,lastEvent:'',disasters:0,grading:[],gradeLog:{},grail:null,grailsWon:0,miles:{},prestige:0,beat:false,bailouts:0,bailDay:'',bailToday:0,savedAt:0,owner:null});
 const slim=c=>({id:c.id,name:c.name,value:c.value,img:c.img,slab:!!c.slab,grade:c.grade,first:!!c.first,setId:c.setId,setName:c.setName,num:c.num,rarity:c.rarity,raw:c.raw,est:c.est});
 function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.given==null)d.given=START*(1+(d.kyle||0));
  const f=fresh();for(const k in f)if(d[k]==null)d[k]=f[k];d.v=4;delete d.lastFree;
@@ -1110,7 +1183,7 @@ function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.
  if(!d.best){let b=null;for(const c of[...d.owned,...d.history.flatMap(h=>h.cards)])if(!b||c.value>b.value)b=c;d.best=b?{value:b.value,name:fullName(b)}:{value:0,name:''}}
  return d}
 function load(){const d=LS.get(SAVE_KEY);if(d&&(d.v===3||d.v===4)&&typeof d.cash==='number')return normalize(d);return fresh()}
-function save(){levelCheck();milestoneCheck();trophy2Check();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
+function save(){levelCheck();milestoneCheck();trophy2Check();eeveeBadgeCheck();eeveeDoneCheck();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
  if(!LS.set(SAVE_KEY,game)){game.history.length=Math.min(game.history.length,40);pruneSetCache();LS.set(SAVE_KEY,game)}Cloud.queue();render()}
 const boxDef=id=>SEALED.find(b=>b.id===id);
 const boxValue=b=>{const d=boxDef(b.box);if(!d)return 0;const days=(Date.now()-b.at)/864e5;return r2(Math.min(b.cost*BOX_CAP,b.cost*Math.pow(1+d.rate,days)))};
@@ -1301,6 +1374,7 @@ function gradeIt(c,dist){const g=dist[wIndex(dist.map(x=>x[1]))][0];c.slab=true;
 function blackify(c){c.slab=true;c.grade=10;c.black=true;if(!c.raw)c.raw=c.value;c.value=r2(c.raw*GRADE_MULT[eraOf(c)][10]*BLACK_MULT);return c}
 function slabOf(c,g,raw,first){const x=inst(c);x.slab=true;x.grade=g;x.raw=r2(raw);x.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(first){x.first=true;x.est=c.fest??c.est}return x}
 function generate(t,pool){const used=new Set(),out=[],take=c=>{used.add(c.name);const x=inst(c);out.push(x);return x};
+ if(t.kind==='eevee')return generateEevee(t,pool);
  if(t.kind==='mystery'){out.push(Math.random()<KYLE_CARD_ODDS?KYLE_CARD():mysteryPull());return out}
  if(t.kind==='whale'){const gp=gradedPool('all');for(let i=0;i<t.n;i++){const x={...bandPick(gp,t.bands,used)};used.add(x.name);if(t.black&&Math.random()<t.black)blackify(x);out.push(x)}return out}
  if(t.kind==='evo'){const L=pick(evoLines());for(const st of L.stages)out.push(slabOf(pick(st),10,0,false));out.forEach((x,i)=>{const src=L.stages[i].find(c=>c.id===x.id)||x;x.raw=src.value;x.value=r2(src.value*GRADE_MULT[eraOf(x)][10])});return out}
@@ -1315,8 +1389,8 @@ function mysteryPull(){const m=MYSTERY[wIndex(MYSTERY.map(x=>x.w))],holo=vintage
  else if(m.src==='vg')c=gradeIt(inst(bandPick(holo,[[8,30,60],[30,100,30],[100,1e9,10]],none)),VINT_GRADES);
  else{const t=pick(TROPHIES.filter(t=>t.card&&t.id!=='t-zard1')),tc=cardById(t.card);c=tc?inst(t.first?asFirst(tc):tc):{id:t.card,name:t.name,setId:t.set,setName:setName(t.set),num:t.num,rarity:'Rare Holo',value:t.raw,est:true,img:`${IMG}/${t.set}/${t.num}.png`,first:!!t.first,slab:false}}
  c.mystery=m.label;return c}
-function packPool(t,gid){const base=gid?groupCards(gid):t.vintage?vintagePool():activePool();return t.first?cached('first:'+(gid||'all'),()=>base.map(asFirst)):base}
-const poolReady=(t,gid)=>t.kind==='evo'?evoLines().length>0:t.kind==='mystery'?vintagePool().length>=VMIN_POOL&&groupLoaded('cz')&&groupCards('cz').length>0:packPool(t,gid).length>=(t.vintage||gid?VMIN_POOL:MIN_POOL);
+function packPool(t,gid){if(t.kind==='eevee')return eeveePool();const base=gid?groupCards(gid):t.vintage?vintagePool():activePool();return t.first?cached('first:'+(gid||'all'),()=>base.map(asFirst)):base}
+const poolReady=(t,gid)=>t.kind==='eevee'?eeveeReady():t.kind==='evo'?evoLines().length>0:t.kind==='mystery'?vintagePool().length>=VMIN_POOL&&groupLoaded('cz')&&groupCards('cz').length>0:packPool(t,gid).length>=(t.vintage||gid?VMIN_POOL:MIN_POOL);
 function gradedPool(src){return cached('gp:'+src,()=>{const out=[];for(const c of src==='all'?allCards():activePool()){if(c.value>=1)for(const g of[8,9,10])out.push(slabOf(c,g,c.value,false));if(c.fv>=1)for(const g of[8,9,10])out.push(slabOf(c,g,c.fv,true))}return out})}
 function trophyCard(t){const c=cardById(t.card),base=c||{id:t.card,name:t.name,setId:t.set,setName:setName(t.set),num:t.num,rarity:'Rare Holo',value:t.raw,est:true,img:`${IMG}/${t.set}/${t.num}.png`};
  const raw=c?(t.first?(c.fv||t.raw):c.value):t.raw;const x=slabOf(base,10,raw,!!t.first);if(!c)x.est=true;return x}
@@ -1365,7 +1439,7 @@ const qtySegHTML=()=>[1,5,10,15].map(n=>`<button data-action="qty" data-n="${n}"
 function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!catalog.offline;
  $('#shopStats').innerHTML=statHTML([['Cash',money(game.cash),'Virtual bankroll'],['Binder',money(collectionValue()),`${game.owned.length} card${game.owned.length===1?'':'s'}`],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,'Net worth vs. bankroll'],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,'The end goal']]);
  $('#guest').innerHTML=Cloud.on&&!Cloud.s?`<div class="daily guest"><div><b>👻 You're playing as a guest</b><span>${game.opened?`${game.opened} pack${game.opened===1?'':'s'} ripped and none of it is backed up.`:'Make an account so your pulls are saved.'} Takes 10 seconds, no email.</span></div><button class="primary" data-action="account">Save my run</button></div>`:'';
- renderHot();renderRival();renderDaily();renderRewards();renderGrades();$('#grailBox').innerHTML=grailHTML();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
+ $('#petBox').innerHTML=petHTML();renderHot();renderRival();renderDaily();renderRewards();renderGrades();$('#grailBox').innerHTML=grailHTML();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
  const isVault=t=>t.vintage||t.kind==='mystery'||t.kind==='evo',mod=TIERS.filter(t=>!isVault(t)&&t.kind!=='whale'),vin=TIERS.filter(isVault),wh=TIERS.filter(t=>t.kind==='whale'),next=TIERS.filter(t=>!unlocked(t)).sort((a,b)=>a.lvl-b.lvl)[0];
  $('#packs').innerHTML=mod.filter(unlocked).map(t=>packCard(t)).join('');
  $('#vault').innerHTML=vin.filter(unlocked).map(t=>packCard(t)).join('');
@@ -1376,8 +1450,8 @@ function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!cat
 function ripLabel(t,gid,named){const lock=!unlocked(t),ready=poolReady(t,gid),cost=t.price*ripQty,afford=game.cash+1e-9>=cost;
  const label=lock?`🔒 Unlocks at LV ${t.lvl}`:!ready?(catalog.offline&&(t.vintage||gid)?'Offline right now':catalog.ready||t.vintage||gid?'Loading cards…':'Loading cards…'):!afford?`Need ${money(cost-game.cash)} more`:named?`Rip ${ripQty>1?ripQty+' ':''}${t.name}${ripQty>1?'s':''} · ${money(cost)}`:`Rip ${ripQty>1?'×'+ripQty+' · ':'it · '}${money(cost)}`;
  return{label,dis:lock||!ready||!afford||!!rip}}
-const miniArt=t=>{const a=tierArt(t),st=tierStamp(t);return `<div class="mini-art${t.kind==='single'?' single':''}" style="--ar:${a.ar};--tint:${tierTint(t)}"><img src="${a.src}" alt="" draggable="false">${st?`<span class="pk-stamp${st==='?'?' q':''}">${st}</span>`:''}</div>`};
-function packCard(t){const{label,dis}=ripLabel(t),lock=!unlocked(t);
+const miniArt=t=>{const a=tierArt(t),st=t.stamp||tierStamp(t);return `<div class="mini-art${t.kind==='single'?' single':''}" style="--ar:${a.ar};--tint:${(t.tint||tierTint(t))}"><img src="${a.src}" alt="" draggable="false">${st?`<span class="pk-stamp${st==='?'?' q':''}">${st}</span>`:''}</div>`};
+function packCard(t){if(t.id==='eevee'&&!eeveeReady())return `<article class="pack" style="--accent:${t.color}"><div class="pack-head"><span class="tier">${t.tag}</span></div><div class="pack-art">${miniArt(t)}</div><h3>${t.name}</h3><p>Every Eevee and Eeveelution card ever made. One quick download and the pack is ready.</p><div class="pack-price">🐾</div><button class="buy" data-action="eevee-dl" ${eeveeLoading?'disabled':''}>${eeveeLoading?'Downloading…':'Download Eevee cards'}</button></article>`;const{label,dis}=ripLabel(t),lock=!unlocked(t);
  const chip=t.slab===1?'🏅 ALWAYS GRADED':t.slab?`🏅 ${Math.round(t.slab*100)}% SLAB CHANCE`:t.slabRare?`🏅 ${Math.round(t.slabRare*100)}% SLAB CHANCE`:'';
  return `<article class="pack${lock?' locked':''}" style="--accent:${t.color}"><div class="pack-head"><span class="tier">${t.tag}</span><button class="odds-btn" data-action="odds" data-tier="${t.id}">Odds</button></div><div class="pack-art">${miniArt(t)}</div><h3>${t.name}</h3><p>${t.blurb}</p>${chip?`<span class="slab-chip">${chip}</span>`:''}<div class="pack-price">${money(t.price)}</div><button class="buy" data-action="buy" data-tier="${t.id}" ${dis?'disabled':''}>${label}</button></article>`}
 function renderGrades(){const el=$('#gradesBack');if(!el)return;const r=gradesReady().length,out=gradingCards().length;
@@ -1410,12 +1484,12 @@ function renderRotation(){const pool=activePool(),nl=[...selected].filter(id=>ca
  if(pool.length){let mn=Infinity,mx=0;for(const c of pool){if(c.value<mn)mn=c.value;if(c.value>mx)mx=c.value}$('#rotRange').textContent=`Card values ${money(mn)} to ${money(mx)}`}else $('#rotRange').textContent='';
  const sel=$('#setPicker');if(document.activeElement!==sel){const groups=new Map();for(const s of catalog.sets){if(selected.has(s.id))continue;const g=s.series||'Other';if(!groups.has(g))groups.set(g,[]);groups.get(g).push(s)}
   sel.disabled=catalog.offline;sel.innerHTML='<option value="">Add a Pokémon set…</option>'+[...groups].map(([g,ss])=>`<optgroup label="${esc(g)}">${ss.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.releaseDate?` (${esc(String(s.releaseDate).slice(0,4))})`:''}</option>`).join('')}</optgroup>`).join('')}}
-function binderList(){let a=game.owned.slice();if(binderFilter==='hits')a=a.filter(c=>c.value>=10);if(binderFilter==='slabs')a=a.filter(c=>c.slab);if(binderFilter==='vintage')a=a.filter(c=>isVintage(c.setId));if(binderFilter==='vault')a=a.filter(c=>c.vault);const s=$('#binderSort').value;if(s==='value')a.sort((x,y)=>y.value-x.value);else if(s==='name')a.sort((x,y)=>x.name.localeCompare(y.name));else a.sort((x,y)=>(y.at||0)-(x.at||0));return a}
+function binderList(){const cb=binderById(openBinder);let a=cb?binderCards(cb):game.owned.slice();if(binderFilter==='hits')a=a.filter(c=>c.value>=10);if(binderFilter==='slabs')a=a.filter(c=>c.slab);if(binderFilter==='vintage')a=a.filter(c=>isVintage(c.setId));if(binderFilter==='vault')a=a.filter(c=>c.vault);const s=$('#binderSort').value;if(s==='value')a.sort((x,y)=>y.value-x.value);else if(s==='name')a.sort((x,y)=>x.name.localeCompare(y.name));else a.sort((x,y)=>(y.at||0)-(x.at||0));return a}
 function tile(c,i,action='view-card'){const lvl=vt(c.value),tag=c.black?'BLACK LABEL':c.slab?`${c.first?'1ST ED · ':''}GRADED ${c.grade}`:c.first?'1ST EDITION':lvl>=3?'HIT':'';
  return `<button class="tile lvl${lvl}${c.vault?' vaulted':''}" data-action="${action}" data-i="${i}" style="--glow:${GLOW[lvl]}"><div class="tile-img${c.slab?' is-slab':''}">${c.vault?'<span class="tile-cnt">★</span>':''}${tag?`<span class="tile-tag">${tag}</span>`:''}${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(c.setName||'')}</span><b>${money(c.value)}</b></div></button>`}
 const pagerHTML=(act,p,n)=>`<div class="pager"><button class="smallbtn" data-action="${act}" data-d="-1" ${p?'':'disabled'}>‹ Prev</button><span>Page ${p+1} / ${n}</span><button class="smallbtn" data-action="${act}" data-d="1" ${p<n-1?'':'disabled'}>Next ›</button></div>`;
-function renderBinder(){renderShared();const o=game.owned,hits=o.filter(c=>c.value>=10).length,top=o.reduce((m,c)=>c.value>m.value?c:m,{value:0,name:'None yet'});
- $('#binderStats').innerHTML=statHTML([['Cards',o.length,`${hits} hit${hits===1?'':'s'} · ${o.filter(c=>c.slab).length} slabs`],['Binder value',money(collectionValue()),'TCGplayer market'],['Top card',money(top.value),esc(top.name)],['Cash',money(game.cash),'Sell cards to add cash']]);
+function renderBinder(){renderShelf();renderShared();const cb=binderById(openBinder),o=cb?binderCards(cb):game.owned,hits=o.filter(c=>c.value>=10).length,top=o.reduce((m,c)=>c.value>m.value?c:m,{value:0,name:'None yet'});
+ $('#binderStats').innerHTML=statHTML([['Cards',o.length,`${hits} hit${hits===1?'':'s'} · ${o.filter(c=>c.slab).length} slabs`],['Binder value',money(cb?sum(o.map(c=>c.value)):collectionValue()),cb?'This binder':'TCGplayer market'],['Top card',money(top.value),esc(top.name)],['Cash',money(game.cash),'Sell cards to add cash']]);
  $$('#binderFilter button').forEach(b=>b.classList.toggle('on',b.dataset.f===binderFilter));
  const gc=gradingCards();
  const vc=vaultCards().sort((a,b)=>b.value-a.value);
@@ -1529,7 +1603,7 @@ let toastTimer;function toast(s,ms=2600){const e=$('#toast');e.textContent=s;e.c
 
 /* ---------- ripping ---------- */
 let rip=null,lastRip=null,lastCards=[];
-const multi=t=>t.kind==='pack'||t.kind==='whale'||t.kind==='evo';
+const multi=t=>t.kind==='eevee'||t.kind==='pack'||t.kind==='whale'||t.kind==='evo';
 function startRip(id,o={}){if(rip||spinning)return;const t=tierById(id);if(!t)return;const qty=Math.max(1,o.qty||1),voucher=!!o.voucher,free=!!o.free,gid=o.group||null;
  if(voucher){if((game.vouchers[id]||0)<qty){toast('No more of those to open.');return}}
  else if(!free&&!unlocked(t)){toast(`${t.name} unlocks at level ${t.lvl}.`);return}
@@ -1537,20 +1611,20 @@ function startRip(id,o={}){if(rip||spinning)return;const t=tierById(id);if(!t)re
  if(!poolReady(t,gid)){toast(catalog.offline?'Those cards are offline right now.':'Still loading those cards. Try again in a sec.');return}
  Sound.init();const pool=packPool(t,gid),now=Date.now(),all=[],from=t.name+(gid?` · ${groupDef(gid).name}`:'');let gods=0;
  pullGid=gid;try{for(let i=0;i<qty;i++){const cards=generate(t,pool);if(cards.god)gods++;if(sum(cards.map(c=>c.value))>=t.price){game.hot++;game.cold=0}else{game.cold++;game.hot=0}cards.forEach(c=>{c.uid=uid();c.at=now;c.from=cards.god?'GOD PACK':from});all.push(...cards);game.history.unshift(histEntry(t.id,voucher||free?0:t.price,cards))}}finally{pullGid=null}
- game.godPacks=(game.godPacks||0)+gods;
+ game.godPacks=(game.godPacks||0)+gods;const stoneDrops=t.kind==='eevee'?Array.from({length:qty},dropStone).filter(Boolean):[];
  if(voucher)game.vouchers[id]-=qty;else if(!free){spend(cost);game.spent=r2(game.spent+cost);grailFill(cost)}
  game.opened+=qty;game.owned.push(...all);
- const bulk=qty>1;rip={tier:t,qty,cost,voucher:voucher||free,gid,bulk,cards:[...all].sort((a,b)=>bulk?b.value-a.value:a.value-b.value),i:-1,sell:new Set(),fresh:new Set(all.filter(c=>!inDex(c.id)).map(c=>c.uid)),god:gods,phase:'sealed'};collect(all);bountyCheck(all);
+ const bulk=qty>1;rip={tier:t,qty,cost,voucher:voucher||free,gid,bulk,cards:[...all].sort((a,b)=>bulk?b.value-a.value:a.value-b.value),i:-1,sell:new Set(),fresh:new Set(all.filter(c=>!inDex(c.id)).map(c=>c.uid)),god:gods,stones:stoneDrops,phase:'sealed'};collect(all);bountyCheck(all);
  lastRip={id,qty,gid,voucher:voucher||free,free};lastCards=rip.cards;checkProgress(all);save();Feed.post(all);preload(bulk?rip.cards.slice(0,3):all);showOverlay('rip');ripSealed()}
-function ripSealed(){const t=rip.tier;$('#rip').style.setProperty('--accent',t.color);
+function ripSealed(){const t=rip.tier;$('#rip').style.setProperty('--accent',t.color);$('#rip').classList.toggle('eeveerip',t.kind==='eevee');eeBuddy(t.kind==='eevee');if(t.kind==='eevee'){eeHugIntro();setTimeout(()=>pawBurst(10),200)}
  $('#ripLabel').textContent=`${t.name.toUpperCase()}${rip.qty>1?' ×'+rip.qty:''} · ${rip.voucher?'REWARD':money(rip.cost)}`;$('#ripStep').textContent=`${rip.cards.length} CARD${rip.cards.length>1?'S':''}`;
  if(t.kind==='single'){rip.phase='tearing';$('#ripActions').innerHTML='';ripNext();return}
- $('#ripStage').classList.add('sealing');const a=tierArt(t),st=tierStamp(t);
- $('#ripStage').innerHTML=`<div class="pack3d art${rip.bulk?' stack':''}" style="--accent:${t.color};--ar:${a.ar};--seam:${a.seam};--tint:${tierTint(t)};--img:url('${a.src}')"><div class="pk-peek">${BACK}</div><div class="pk-top"></div><div class="pk-tear"></div><div class="pk-guide"></div><div class="pk-body">${st?`<span class="pk-stamp${st==='?'?' q':''}">${st}</span>`:''}<div class="pk-tier">${rip.gid?esc(groupDef(rip.gid).name.toUpperCase())+' · ':''}${rip.bulk?`×${rip.qty} PACKS`:t.kind==='pack'?`${t.bulk+t.slots.length} CARDS`:t.kind==='whale'?`${t.n} SLABS`:t.kind==='evo'?'ONE FULL LINE · ALL 10s':'1 CARD'}</div></div></div>`;
+ $('#ripStage').classList.add('sealing');const a=tierArt(t),st=t.stamp||tierStamp(t);
+ $('#ripStage').innerHTML=`<div class="pack3d art${rip.bulk?' stack':''}" style="--accent:${t.color};--ar:${a.ar};--seam:${a.seam};--tint:${(t.tint||tierTint(t))};--img:url('${a.src}')"><div class="pk-peek">${BACK}</div><div class="pk-top"></div><div class="pk-tear"></div><div class="pk-guide"></div><div class="pk-body">${st?`<span class="pk-stamp${st==='?'?' q':''}">${st}</span>`:''}<div class="pk-tier">${rip.gid?esc(groupDef(rip.gid).name.toUpperCase())+' · ':''}${rip.bulk?`×${rip.qty} PACKS`:t.kind==='pack'?`${t.bulk+t.slots.length} CARDS`:t.kind==='whale'?`${t.n} SLABS`:t.kind==='evo'?'ONE FULL LINE · ALL 10s':'1 CARD'}</div></div></div>`;
  $('#ripInfo').innerHTML=`<div class="hint">Swipe across the pack to rip ${rip.bulk?'them all':'it'} open<br><small>or just tap, if you're lazy</small></div>`;$('#ripActions').innerHTML='';rip.phase='sealed'}
 function ripTear(){rip.phase='tearing';$('#ripStage').classList.remove('sealing');const k=$('.pack3d');k.classList.remove('dragging');k.classList.add('torn');Sound.tear();buzz([30,20,60]);flash(.4);
  const r=k.getBoundingClientRect(),acc=rip.tier.color,sm=parseFloat(k.style.getPropertyValue('--seam'))||.16;FX.spawn(r.left+r.width/2,r.top+r.height*sm,46,[acc,'#ffffff',acc,'#f5c451'],7);
- if(rip.god)setTimeout(()=>{flash(.95);FX.burst(320,RAINBOW);Sound.hit(6);buzz([80,40,80,40,200])},450);$('#ripInfo').innerHTML='';setTimeout(ripNext,1150)}
+ if(rip.tier.kind==='eevee')pawBurst(34,true);if(rip.god)setTimeout(()=>{flash(.95);FX.burst(320,RAINBOW);Sound.hit(6);buzz([80,40,80,40,200])},450);$('#ripInfo').innerHTML='';setTimeout(ripNext,1150)}
 function ripNext(){if(!rip)return;rip.i++;const c=rip.cards[rip.i],lvl=lvlOf(c),pack=multi(rip.tier)&&!rip.bulk,last=rip.i===rip.cards.length-1;
  $('#ripStep').textContent=rip.bulk?`BEST OF ${rip.cards.length} CARDS`:pack?`CARD ${rip.i+1} OF ${rip.cards.length}`:'YOUR PULL';
  $('#ripStage').innerHTML=`<div class="flipwrap enter lvl${lvl}${lvl>=3?' tease':''}" style="--glow:${GLOW[lvl]}"><div class="aura"></div><div class="persp"><div class="flip"><div class="face back">${BACK}</div><div class="face front${lvl>=3&&!c.slab?' holo':''}">${c.slab?slabHTML(c,true):imgTag(c,true,true)}</div></div></div></div>`;
@@ -1560,7 +1634,7 @@ function ripFlip(){const c=rip.cards[rip.i],lvl=lvlOf(c),w=$('.flipwrap');rip.ph
  const go=()=>{if(!rip)return;w.classList.remove('charging','tease');w.querySelector('.flip').classList.add('flipped');Sound.flip();buzz(10);
   setTimeout(()=>{if(!rip)return;w.classList.add('revealed');
    $('#ripInfo').innerHTML=`${c.mystery?`<div class="slab-banner" style="background:linear-gradient(90deg,#c86bff,#ffd36b,#c86bff);background-size:200% 100%">🎁 ${esc(c.mystery.toUpperCase())}</div> `:''}${c.slab?`<div class="slab-banner">GRADED ${c.grade} SLAB PULL!</div>`:''}<div class="ri-name">${c.first?'<span class="gtag">1ST ED</span> ':''}${esc(c.name)}${c.slab?` <span class="gtag">GRADED ${c.grade}</span>`:''}</div><div class="ri-meta">${metaLine(c)}</div><div class="ri-val lvl${lvl}" id="riVal">$0.00</div>${!rip.bulk&&!multi(rip.tier)?roastHTML(c.value,rip.cost||rip.tier.price,c.value,[c]):''}${lvl>=2?`<button class="linkbtn" data-action="share-pull" data-i="${rip.i}">Share this pull ↗</button>`:''}`;
-   countUp($('#riVal'),c.value,lvl>=3?1100:450);celebrate(lvl);rip.phase='revealed';ripRevealedActions()},420)};
+   countUp($('#riVal'),c.value,lvl>=3?1100:450);celebrate(lvl);if(rip.tier.kind==='eevee'){if(lvl>=3||c.slab)eeBuddyHop();if(eeveeBig(c))eeveeParty(c);else pawBurst(8)}rip.phase='revealed';ripRevealedActions()},420)};
  if(lvl>=4){w.classList.add('charging');Sound.charge();buzz([20,40,20,40,20]);setTimeout(go,950)}else go()}
 function ripRevealedActions(){const last=rip.i===rip.cards.length-1;
  if(rip.bulk)$('#ripActions').innerHTML=`<button class="primary" data-action="rip-next">See all ${rip.cards.length} cards</button>`;
@@ -1575,7 +1649,7 @@ function sumCard(c,i){const s=rip.sell.has(c.uid),lvl=vt(c.value);return `<div c
 const isBulk=c=>c.value<1&&!c.slab;
 const under=n=>c=>c.value<n&&!c.slab;
 const featMin=()=>rip&&rip.cards.length>40?10:1;
-function ripSummary(){const first=rip.phase!=='summary';rip.phase='summary';const t=rip.tier;$('#ripStep').textContent='RESULTS';
+function ripSummary(){if(rip.phase!=='summary'&&rip.stones&&rip.stones.length){const s=rip.stones;rip.stones=[];setTimeout(()=>{pawBurst(20,true);toast(`💎 You found ${s.map(k=>STONES[k][0]+' '+STONES[k][1]).join(', ')}! Use it on an Eevee.`,4200)},700)}const first=rip.phase!=='summary';rip.phase='summary';const t=rip.tier;$('#ripStep').textContent='RESULTS';
  const idx=rip.cards.map((c,i)=>[c,i]);const fm=featMin(),low=c=>c.value<fm&&!c.slab;let feat=idx.filter(([c])=>!low(c)),bulk=idx.filter(([c])=>low(c));if(!feat.length&&bulk.length)feat=[bulk.shift()];
  if(first&&!rip.summed){rip.summed=true;if(autoBulk)rip.cards.forEach(c=>{if(under(autoBulk)(c))rip.sell.add(c.uid)})}
  const bv=sum(bulk.map(([c])=>c.value)),bSell=bulk.length&&bulk.every(([c])=>rip.sell.has(c.uid));
@@ -1594,7 +1668,7 @@ function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const u of rip.se
 function singleChoose(sell){if(!rip||rip.phase!=='revealed')return;const c=rip.cards[0];if(sell)rip.sell.add(c.uid);finalizeRip();
  $('#ripInfo').insertAdjacentHTML('beforeend',`<div class="ri-done">${sell?`Sold for ${money(c.value)}`:'Added to your binder'}</div>`);ripEndActions()}
 let nudged=false;
-function ripDone(){const best=lastCards.length?Math.max(...lastCards.map(c=>c.value)):0;finalizeRip();hideOverlay('rip');checkBroke();lifeEvent();flushNotes();if(Cloud.on&&!Cloud.s&&!nudged&&(best>=25||game.opened>=5)){nudged=true;setTimeout(()=>toast(best>=25?`Nice pull. Shame if your browser deleted it. Tap 💾 Save up top.`:'Your run is not backed up. Tap 💾 Save up top.',4500),900)}}
+function ripDone(){const best=lastCards.length?Math.max(...lastCards.map(c=>c.value)):0;finalizeRip();hideOverlay('rip');eeBuddy(false);if(reopenHouse){reopenHouse=false;setTimeout(openHouse,250)}checkBroke();lifeEvent();flushNotes();if(Cloud.on&&!Cloud.s&&!nudged&&(best>=25||game.opened>=5)){nudged=true;setTimeout(()=>toast(best>=25?`Nice pull. Shame if your browser deleted it. Tap 💾 Save up top.`:'Your run is not backed up. Tap 💾 Save up top.',4500),900)}}
 function ripAgain(){finalizeRip();const L=lastRip,t=tierById(L.id);
  if(L.voucher){const n=game.vouchers[L.id]||0;if(!n){hideOverlay('rip');return}startRip(L.id,{qty:Math.min(n,L.qty),voucher:true,group:L.gid});return}
  if(game.cash+1e-9<t.price*L.qty){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(L.id,{qty:L.qty,group:L.gid})}
@@ -1620,7 +1694,7 @@ function renderViewer(){const c=V.list[V.i];if(!c){closeViewer();return}const lv
  <button class="v-nav" data-action="v-next" ${V.i>=V.list.length-1?'disabled':''} aria-label="Next card">›</button></div>
  <div class="v-info"><h2>${c.first?'<span class="gtag">1ST ED</span> ':''}${esc(c.name)}${c.slab?` <span class="gtag">GRADED ${c.grade} · ${GRADE_NAME[c.grade]||''}</span>`:''}</h2><div class="v-meta">${metaLine(c)}</div>
  <div class="v-val lvl${lvl}">${money(c.value)}</div><div class="v-src">${c.est?'Estimated value':'TCGplayer market price'}${c.slab&&c.raw?` · ${money(c.raw)} raw plus grade bonus`:''}</div>
- ${c.at&&V.mode!=='set'?`<div class="v-src">Pulled ${ago(c.at)}${c.from?` from ${esc(c.from)}`:''}</div>`:''}${owned&&gbtn?'<button class="linkbtn" data-action="v-share">Share ↗</button>':''}${owned&&game.shared&&Shared.b&&!c.vault&&!c.grading?`<button class="linkbtn" data-action="v-share-binder">🤝 Send to ${esc(sharedName())}</button>`:''}${c.value>=20&&!c.slab&&(!game.grail||game.grail.id!==c.id)?'<button class="linkbtn" data-action="v-grail">⭐ Make this my Grail</button>':game.grail&&game.grail.id===c.id?'<div class="v-src" style="color:var(--gold)">⭐ Your current Grail</div>':''}${V.mode==='set'&&!have?'<div class="v-src">Market buys cost 3x value. Pulling it is way cheaper</div>':''}</div>
+ ${c.at&&V.mode!=='set'?`<div class="v-src">Pulled ${ago(c.at)}${c.from?` from ${esc(c.from)}`:''}</div>`:''}${owned&&gbtn?'<button class="linkbtn" data-action="v-share">Share ↗</button>':''}${owned?'<button class="linkbtn" data-action="v-addbinder">📒 Add to binder</button>':''}${owned&&canEvolve(game.owned.find(x=>x.uid===c.uid))?`<button class="linkbtn" data-action="v-evolve" style="color:#ff9ecf">💎 Evolve with a stone</button>`:''}${owned&&game.shared&&Shared.b&&!c.vault&&!c.grading?`<button class="linkbtn" data-action="v-share-binder">🤝 Send to ${esc(sharedName())}</button>`:''}${c.value>=20&&!c.slab&&(!game.grail||game.grail.id!==c.id)?'<button class="linkbtn" data-action="v-grail">⭐ Make this my Grail</button>':game.grail&&game.grail.id===c.id?'<div class="v-src" style="color:var(--gold)">⭐ Your current Grail</div>':''}${V.mode==='set'&&!have?'<div class="v-src">Market buys cost 3x value. Pulling it is way cheaper</div>':''}</div>
  <div class="v-actions">${acts}</div>`;
  const st=$('#vStar');st.hidden=!(owned||inRip);st.classList.toggle('on',!!c.vault);st.textContent=c.vault?'★ In vault':`☆ Vault ${vaultCards().length}/${vaultMax()}`;
  const card=$('#vCard'),tilt=$('#vTilt');
@@ -1671,7 +1745,7 @@ function spin(){if(spinning)return;const mode=grabMode,m=MODES[mode];if(activePo
  const step=now=>{const p=Math.min(1,(now-t0)/dur),x=target*ease(p);track.style.transform=`translate3d(${-x}px,0,0)`;const idx=Math.floor((x+view/2-pad)/w);if(idx!==last){last=idx;Sound.tick();if(p<.8)buzz(3)}if(p<1)requestAnimationFrame(step);else land()};
  requestAnimationFrame(step);
  function land(){spinning=false;const el=track.children[P];el&&el.classList.add('won');const lvl=vt(prize.value);celebrate(Math.max(3,lvl));render();
-  setTimeout(()=>modal({icon:'🏆',title:`You grabbed a ${prize.first?'1st Edition ':''}Graded ${prize.grade}!`,html:`<div class="m-card">${slabHTML(prize,true)}</div><b style="color:var(--text)">${esc(prize.name)}</b><br>${esc(prize.setName)} · worth <b class="${lvl>=4?'':'pos'}" style="${lvl>=4?'color:var(--gold)':''}">${money(prize.value)}</b>`,buttons:[{label:'Nice',value:0},{label:'See binder',primary:true,value:1}]}).then(v=>{if(v)go('binder');checkBroke();lifeEvent()}),650)}}
+  setTimeout(()=>modal({icon:'🏆',title:`You grabbed a ${prize.first?'1st Edition ':''}Graded ${prize.grade}!`,html:`<div class="m-card">${slabHTML(prize,true)}</div><b style="color:var(--text)">${esc(prize.name)}</b><br>${esc(prize.setName)} · worth <b class="${lvl>=4?'':'pos'}" style="${lvl>=4?'color:var(--gold)':''}">${money(prize.value)}</b>`,buttons:[{label:`Sell · ${moneyS(prize.value)}${earnsTicket(prize)?' + 🎟':''}`,value:2},{label:'Keep it',primary:true,value:0}]}).then(v=>{if(v===2){sellCard(prize.uid);save();Sound.cash&&Sound.cash();toast(`Sold for ${money(prize.value)}.`)}checkBroke();lifeEvent()}),650)}}
 
 /* ---------- share a pull ---------- */
 const SHARE_URL=/^https?:/.test(location.href)?location.origin+location.pathname:'https://brandfueled.github.io/pokerip/';
@@ -1769,8 +1843,8 @@ async function checkBroke(){if(rip||brokeOpen||spinning)return;const cheapest=Ma
  brokeOpen=true;await modal({icon:'😅',title:'O no, you have a gambling problem!',html:'Time to alert Kyle you have a problem :)',buttons:[{label:'Fine, alert him',primary:true,value:1}]});
  game.cash=r2(game.cash+START);game.given=r2(game.given+START);game.kyle=(game.kyle||0)+1;save();
  await modal({icon:'😏',title:pick(['He already knows ;)','Kyle has been notified.','Kyle sighed audibly.']),html:`Kyle has been alerted${game.kyle>1?` (that's ${game.kyle} times now)`:''}. Your virtual bankroll got topped up by $100.${game.kyle>=3?'<br>Your family has been cc\'d.':''}`,buttons:[{label:'Back to the packs',primary:true,value:1}]});brokeOpen=false}
-async function sellBulk(){const bulk=game.owned.filter(c=>!c.slab&&!c.vault&&!c.grading&&c.value<1);if(!bulk.length){toast('No bulk under $1 to sell.');return}const tot=sum(bulk.map(c=>c.value));
- const ok=await modal({icon:'🧹',title:'Sell all your bulk?',html:`Sell ${bulk.length} card${bulk.length>1?'s':''} under $1 for ${money(tot)}. They still count toward your sets.`,buttons:[{label:'Cancel',value:false},{label:'Sell bulk',primary:true,value:true}]});if(!ok)return;
+async function sellBulk(lim=1){const bulk=game.owned.filter(c=>!c.slab&&!c.vault&&!c.grading&&c.value<lim&&!(game.grail&&game.grail.uid===c.uid));if(!bulk.length){toast(`No raw cards under $${lim} to sell.`);return}const tot=sum(bulk.map(c=>c.value));
+ const ok=await modal({icon:'🧹',title:lim>1?`Sell everything under $${lim}?`:'Sell all your bulk?',html:`Sell ${bulk.length} raw card${bulk.length>1?'s':''} under $${lim} for ${money(tot)}. Slabs and Vault cards are safe. They still count toward your sets.`,buttons:[{label:'Cancel',value:false},{label:`Sell ${bulk.length}`,primary:true,value:true}]});if(!ok)return;
  bulk.forEach(c=>sellCard(c.uid));save();toast(`Sold ${bulk.length} bulk cards for ${money(tot)}`)}
 async function sellDupes(){const keepIds=new Set(game.owned.filter(c=>c.slab||c.vault||c.grading).map(c=>c.id)),best=new Map();
  for(const c of game.owned){if(c.slab||c.vault||c.grading)continue;const k=c.id,b=best.get(k);if(!b||c.value>b.value)best.set(k,c)}
@@ -1804,6 +1878,8 @@ const GUIDE=[
  ['🔬','Grading','Send a raw card (from $25, more for pricey cards), back in 10 minutes. Most come back 7 or 8. A 10 pays big, a Black Label pays huge. A few never come back. Insure the good ones.'],
  ['🎟','Ticket Shop','Tap 🎟 at the top to trade tickets for packs, spins, sealed boxes and more Vault slots.'],
  ['🐋','High rollers','Whale Packs, the Ascended reel and the Leviathan unlock late. Black Label slabs are 5x a 10.'],
+ ['📚','Binder shelf','Make your own binders from the + on the Binder tab, then tap any card and hit 📒 Add to binder. Cards can live in more than one.'],
+ ['🐾','Eevee corner','Download the Eevee cards once from the Shop. Then rip Eevee Packs, pet Eevee daily, fill the Eevee Dex, and use Evolution Stones on your Eevees.'],
  ['🤝','Shared binder','Start one in the Binder tab, send your buddy the code, and stack cards together toward a set. Finish the whole set as GRADED 10s and you each get $180,000, with a 33% shot to double it.'],
  ['🧬','Evolution Packs','A whole evolution line from one set, every card a Gem Mint 10. Unlocks at level 10.'],
  ['🏆','Trophy Case II','Ten brutal goals for after you beat the game. Black Labels, perfect master sets, a $10M net worth.'],
@@ -1893,8 +1969,171 @@ async function masterCheck(b){game.masterPaid=game.masterPaid||{};if(celebrating
  await modal({icon:win?'🎰':'💸',title:win?'DOUBLED.':'No double.',html:win?`${animHTML('money')}<p>${money(MASTER_PAY*2)} total. Johnny is going to hear about this for years.</p>`:`${animHTML('cash')}<p>Still walked away with ${money(MASTER_PAY)}. Don't be greedy. Okay, be a little greedy.</p>`,buttons:[{label:win?'LET\'S GO':'Fair',primary:true}]});
  fx.remove();celebrating=false;renderHeader()}
 
+/* ================= Chunk 4: binder shelf + Eevee ================= */
+
+/* ---------- Binder shelf ---------- */
+let openBinder=LS.get('pokerip-openbinder','all');
+const myBinders=()=>game.binders||(game.binders=[]);
+const binderById=id=>myBinders().find(b=>b.id===id);
+function binderCards(b){const have=new Map(game.owned.map(c=>[c.uid,c]));b.uids=b.uids.filter(u=>have.has(u));return b.uids.map(u=>have.get(u))}
+const BCOLORS=['#ffd34d','#57d6d0','#ff8bb0','#9887ff','#ff9b65','#8ef58e','#6bb5ff'];
+function shelfHTML(){if(openBinder!=='all'&&openBinder!=='shared'&&openBinder!=='eevee'&&!binderById(openBinder))openBinder='all';
+ if(openBinder==='eevee'&&!eeveeReady())openBinder='all';
+ const cov=(id,icon,name,sub,color)=>`<button class="bcover${openBinder===id?' on':''}" data-action="shelf" data-b="${esc(id)}" style="--bc:${color}"><span class="bspine"></span><span class="bicon">${icon}</span><b>${esc(name)}</b><small>${sub}</small></button>`;
+ return `<div class="shelf">${cov('all','📚','All Cards',`${game.owned.length} cards`,'#c9d1e0')}${myBinders().map((b,i)=>cov(b.id,b.icon||'📒',b.name,`${binderCards(b).length} cards`,BCOLORS[i%BCOLORS.length])).join('')}${game.shared?cov('shared','🤝',Shared.b?Shared.b.name:'Shared','with a buddy','#57d6d0'):''}${eeveeReady()?cov('eevee','🐾','Eevee Dex',`${eeveeDexHave()} / ${eeveePool().length}`,'#ff9ecf'):''}<button class="bcover add" data-action="binder-new"><span class="bicon">＋</span><b>New binder</b><small>&nbsp;</small></button></div>`}
+function renderShelf(){$('#shelf').innerHTML=shelfHTML();
+ const alt=openBinder==='shared'||openBinder==='eevee',custom=binderById(openBinder);
+ $('#binderMain').hidden=alt;$('#sharedWrap').hidden=openBinder!=='shared';$('#eeveeDex').hidden=openBinder!=='eevee';
+ $('#vaultStrip').hidden=!!custom;$('#customHead').innerHTML=custom?`<div class="section-head" style="margin-top:4px"><h2>${custom.icon||'📒'} ${esc(custom.name)}</h2><span class="boxbtns"><button class="smallbtn" data-action="binder-edit">✏️ Edit</button></span></div>`:'';
+ if(openBinder==='shared'){sharedOpen=true}
+ if(openBinder==='eevee')renderEeveeDex()}
+async function binderNew(){const v=await modal({icon:'📒',title:'New binder',html:`<input class="inp" id="bName" placeholder="Name (like Charizard Shrine)" maxlength="30"><div class="iconpick">${['📒','🔥','💧','⚡','🌿','👑','💎','🐉','👻','🌙','⭐','🐾'].map((x,i)=>`<button type="button" class="${i?'':'on'}" data-ic="${x}">${x}</button>`).join('')}</div>`,buttons:[{label:'Cancel',value:null},{label:'🤝 Shared with a buddy',value:'shared'},{label:'Create',primary:true,value:'go'}]});
+ if(v==='shared'){if(game.shared){openBinder='shared';render();return}const w=await modal({icon:'🤝',title:'Shared binder',html:'Build one binder with a buddy. One of you starts it, the other joins with the code.',buttons:[{label:'Join with a code',value:'join'},{label:'Start one',primary:true,value:'start'}]});if(w==='start')await sharedCreate();if(w==='join')await sharedJoin();if(game.shared){openBinder='shared';LS.set('pokerip-openbinder','shared');render()}return}
+ if(!v)return;const name=($('#bName')?.value||'').trim()||'My Binder';const b={id:'b'+uid(),name,icon:pickedIcon||'📒',uids:[],at:Date.now()};myBinders().push(b);pickedIcon=null;openBinder=b.id;LS.set('pokerip-openbinder',openBinder);save();render();toast('Binder made. Tap any card and hit 📒 Add to binder.',3200)}
+let pickedIcon=null;document.addEventListener('click',e=>{const b=e.target.closest('.iconpick [data-ic]');if(!b)return;pickedIcon=b.dataset.ic;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
+async function binderEdit(){const b=binderById(openBinder);if(!b)return;pickedIcon=b.icon;
+ const v=await modal({icon:b.icon||'📒',title:'Edit binder',html:`<input class="inp" id="bName" value="${esc(b.name)}" maxlength="30"><div class="iconpick">${['📒','🔥','💧','⚡','🌿','👑','💎','🐉','👻','🌙','⭐','🐾'].map(x=>`<button type="button" class="${x===b.icon?'on':''}" data-ic="${x}">${x}</button>`).join('')}</div><p class="muted" style="font-size:12px">Deleting a binder doesn't delete any cards. They stay in All Cards.</p>`,buttons:[{label:'Delete binder',value:'del'},{label:'Save',primary:true,value:'save'}]});
+ if(v==='save'){b.name=($('#bName')?.value||'').trim()||b.name;b.icon=pickedIcon||b.icon;save();render()}
+ if(v==='del'){game.binders=myBinders().filter(x=>x!==b);openBinder='all';LS.set('pokerip-openbinder','all');save();render()}}
+async function addToBinder(c){if(!c||!game.owned.includes(c))return;
+ const list=()=>myBinders().map(b=>`<button class="tshop" data-bt="${b.id}"><b>${b.icon||'📒'} ${esc(b.name)}</b><span>${b.uids.includes(c.uid)?'✅ In it':'Add'}</span></button>`).join('');
+ const p=modal({icon:'📒',title:`Add ${esc(c.name)} to…`,html:myBinders().length?`<div class="tshops" id="btList">${list()}</div>`:'<p>You don\'t have any binders yet.</p>',buttons:[{label:'＋ New binder',value:'new'},{label:'Done',primary:true}]});
+ setTimeout(()=>$$('#btList [data-bt]').forEach(el=>el.addEventListener('click',()=>{const b=binderById(el.dataset.bt);const i=b.uids.indexOf(c.uid);i<0?b.uids.push(c.uid):b.uids.splice(i,1);save();$('#btList').innerHTML=list();addToBinderRebind()})),30);
+ function addToBinderRebind(){$$('#btList [data-bt]').forEach(el=>el.addEventListener('click',()=>{const b=binderById(el.dataset.bt);const i=b.uids.indexOf(c.uid);i<0?b.uids.push(c.uid):b.uids.splice(i,1);save();$('#btList').innerHTML=list();addToBinderRebind()}))}
+ const v=await p;if(v==='new'){await binderNew();const b=myBinders()[myBinders().length-1];if(b&&!b.uids.includes(c.uid)){b.uids.push(c.uid);save();render()}}else render()}
+
+/* ---------- Eevee: card list ---------- */
+const EEVEELUTIONS=['Eevee','Vaporeon','Jolteon','Flareon','Espeon','Umbreon','Leafeon','Glaceon','Sylveon'];
+const EEVEE_KEY='pokerip-eevee-v1',EEVEE_TTL=30*864e5;
+let eeveeLoading=false;
+const speciesOf=c=>EEVEELUTIONS.find(n=>new RegExp('\\b'+n+'\\b','i').test(c.name))||'Eevee';
+const eeveePool=()=>catalog.data.eevee||[];
+const eeveeReady=()=>eeveePool().length>=20;
+{const c=LS.get(EEVEE_KEY);if(c&&c.cards&&c.cards.length)catalog.data.eevee=c.cards}
+async function eeveeDownload(){if(eeveeLoading)return;if(catalog.offline){toast('The card database is offline right now.');return}eeveeLoading=true;render();
+ try{const q=EEVEELUTIONS.map(n=>`name:*${n.toLowerCase()}*`).join(' OR ');let page=1,all=[];
+  for(;;){const p=new URLSearchParams({q,pageSize:'250',page:String(page),select:'id,name,number,rarity,subtypes,supertype,images,tcgplayer,set'});const b=await getJSON(`${API}/cards?${p}`,90000,true);const d=b.data||[];all.push(...d);if(d.length<250||all.length>=(b.totalCount||0)||page>=8)break;page++}
+  const cards=all.filter(r=>r.images&&r.images.small&&r.supertype==='Pokémon'&&r.set).map(r=>{const c=compact(r,r.set.id,r.set.name);c.sp=speciesOf(c);return c});
+  if(cards.length<20)throw new Error('only '+cards.length+' cards');
+  catalog.data.eevee=cards;invalidatePool();LS.set(EEVEE_KEY,{at:Date.now(),cards})||(pruneSetCache(),LS.set(EEVEE_KEY,{at:Date.now(),cards}));eeveePrice();
+  modal({icon:'🐾',title:`${cards.length} Eevee cards downloaded!`,html:`Every Eevee and Eeveelution card ever made is now in the game. The Eevee Pack is ready in the Shop, and the Eevee Dex is on your Binder shelf.`,buttons:[{label:'Yay',primary:true}]})}
+ catch(e){toast(`Couldn't download the Eevee cards (${e.message}). Try again in a bit.`,4500)}finally{eeveeLoading=false;render()}}
+
+/* ---------- Eevee Pack ---------- */
+const EEVEE_BANDS=[[0,2,52],[2,10,28],[10,60,14],[60,1e9,6]],EEVEE_SLAB=.1;
+TIERS.push({id:'eevee',name:'Eevee Pack',tag:'EEVEE PACK',price:25,color:'#ff9ecf',kind:'eevee',n:3,slab:.1,bands:EEVEE_BANDS,lvl:1,tint:'hue-rotate(300deg) saturate(1.4) brightness(1.12)',stamp:'🐾 EEVEE',blurb:'3 Eevee family cards · 10% slab chance · drops Evolution Stones',desc:'Three cards from every Eevee and Eeveelution card ever printed. Each card has a 10% shot at being graded, and some packs drop an Evolution Stone.'});
+TIER_IDS.add('eevee');
+function eeveePrice(){const t=tierById('eevee');if(!eeveeReady())return;const ev=bandEV(eeveePool(),EEVEE_BANDS)*3*1.12;t.price=Math.min(40,Math.max(10,Math.round(ev/5)*5))}
+eeveePrice();
+const STONES={water:['💧','Water Stone','Vaporeon'],thunder:['⚡','Thunder Stone','Jolteon'],fire:['🔥','Fire Stone','Flareon'],sun:['☀️','Sun Stone','Espeon'],moon:['🌙','Moon Stone','Umbreon'],leaf:['🌿','Leaf Stone','Leafeon'],ice:['❄️','Ice Stone','Glaceon'],ribbon:['🎀','Friendship Ribbon','Sylveon']};
+const STONE_CAP=3,STONE_ODDS=.3;
+const stones=()=>game.stones||(game.stones={});
+function dropStone(){if(Math.random()>=STONE_ODDS)return null;const open=Object.keys(STONES).filter(k=>(stones()[k]||0)<STONE_CAP);if(!open.length)return null;const k=pick(open);stones()[k]=(stones()[k]||0)+1;return k}
+function generateEevee(t,pool){const used=new Set(),out=[];for(let i=0;i<t.n;i++){const x=inst(bandPick(pool,EEVEE_BANDS,used));used.add(x.name);if(Math.random()<EEVEE_SLAB)gradeIt(x,PACK_GRADES);out.push(x)}return out}
+
+/* ---------- Eevee rip vibes ---------- */
+function pawBurst(n=26,big=false){const host=$('#rip')||document.body;for(let i=0;i<n;i++){const s=document.createElement('span');s.className='paw';s.textContent=pick(big?['💖','✨','🐾','💗','⭐','🌸']:['🐾','💗','✨','🌸']);s.style.left=(10+Math.random()*80)+'%';s.style.setProperty('--dx',(Math.random()*120-60)+'px');s.style.animationDelay=(Math.random()*.6)+'s';s.style.fontSize=(big?22:16)+Math.random()*16+'px';host.appendChild(s);setTimeout(()=>s.remove(),3200)}}
+function eeveeParty(c){pawBurst(60,true);flash(.7);FX.burst(220,['#ff9ecf','#ffd6ec','#ffffff','#ffd34d','#b98bff']);Sound.hit(6);buzz([60,40,60,40,180]);
+ const b=document.createElement('div');b.className='eeveeban';b.innerHTML=`✨ ${c.slab&&c.grade===10?'GEM MINT EEVEE MOMENT':'EEVEE JACKPOT'} ✨`;($('#rip')||document.body).appendChild(b);setTimeout(()=>b.remove(),3400)}
+const eeveeBig=c=>c.slab&&c.grade===10||c.value>=150;
+
+/* ---------- Evolution with stones ---------- */
+const canEvolve=c=>c&&game.owned.includes(c)&&!c.vault&&!c.grading&&!c.slab&&/^eevee\b/i.test(c.name)&&eeveeReady();
+async function evolveModal(c){if(!canEvolve(c))return;const have=Object.keys(STONES).filter(k=>stones()[k]);
+ if(!have.length){modal({icon:'💎',title:'No Evolution Stones yet',html:'Stones drop from Eevee Packs (about 1 in 3) and from petting Eevee. You can hold up to 3 of each.',buttons:[{label:'Okay',primary:true}]});return}
+ const v=await modal({icon:'💎',title:`Evolve ${esc(c.name)}?`,html:`<p>Pick a stone. Your Eevee turns into a random card of that Eeveelution. Could be bulk, could be a Moonbreon. That's the fun.</p><div class="tshops">${have.map((k,i)=>`<button class="tshop" data-m-stone="${k}"><b>${STONES[k][0]} ${STONES[k][1]} → ${STONES[k][2]}</b><span>×${stones()[k]}</span></button>`).join('')}</div>`,buttons:[{label:'Not now',value:null}]});
+ void v}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-m-stone]');if(!b||!V)return;const c=game.owned.find(x=>x.uid===V.list[V.i].uid);if(modalClose)modalClose(null);setTimeout(()=>doEvolve(c,b.dataset.mStone),120)});
+async function doEvolve(c,k){if(!canEvolve(c)||!stones()[k])return;const sp=STONES[k][2],pool=eeveePool().filter(x=>x.sp===sp);if(!pool.length){toast(`No ${sp} cards loaded.`);return}
+ stones()[k]--;const n=inst(bandPick(pool,EEVEE_BANDS,new Set()));n.uid=uid();n.at=Date.now();n.from=`Evolved with a ${STONES[k][1]}`;
+ const i=game.owned.indexOf(c);game.owned.splice(i,1,n);myBinders().forEach(b=>{const j=b.uids.indexOf(c.uid);if(j>=0)b.uids[j]=n.uid});collect([n]);checkProgress([n]);save();
+ if(V)closeViewer();
+ Sound.charge&&Sound.charge();
+ await modal({icon:STONES[k][0],title:`Eevee is evolving…`,html:`<div class="evoanim"><div class="evo-old">${eeAnim('evolve','evo-bu')}</div><div class="evo-new">${imgTag(n,true,true)}</div><div class="evo-flash"></div></div><div class="evotext"><b style="color:var(--text)">${esc(n.name)}</b><br><span class="muted">${esc(n.setName)}</span><br>worth <b style="color:var(--gold)">${money(n.value)}</b> <span class="muted">(Eevee was ${money(c.value)})</span></div>`,buttons:[{label:n.value>=c.value*2?'LET\'S GOOO':n.value<c.value?'Oof. Worth it.':'Cute',primary:true}]});
+ if(n.value>=50){pawBurst(40,true)}render()}
+
+/* ---------- Eevee House (its own little portal) ---------- */
+const PET_GOAL=10,EE_ANIM={flip:'anim/ee_flip.webp',evolve:'anim/ee_evolve.webp',sneeze:'anim/ee_sneeze.webp',hug:'anim/ee_hug.webp'};
+Object.values(EE_ANIM).forEach(u=>{const i=new Image();i.src=u});
+const eeAnim=(k,cls='')=>`<div class="anim ${cls}" style="background-image:url('${EE_ANIM[k]}')"></div>`;
+const yday=()=>{const d=new Date();d.setDate(d.getDate()-1);return d.toISOString().slice(0,10)};
+function petState(){const d=today();if(game.petDay!==d){if(game.petDay)game.petPrev=game.petDay;game.petDay=d;game.pets=0}return game.pets||0}
+function eeveeMood(){const n=petState(),h=new Date().getHours();
+ if(!n&&game.petPrev&&game.petPrev<yday())return['pouty','😤','Eevee is pouting. You skipped a day. Pet her to make up.'];
+ if(n>=PET_GOAL)return['sleepy','💤','Eevee is full of love and napping. Come back tomorrow.'];
+ if(h>=22||h<7)return['sleepy','💤','Eevee is sleepy but will still take pets.'];
+ return n?['happy','💗','Eevee is so happy right now.']:['happy','✨','Eevee is waiting for pets.']}
+function houseHTML(){if(!eeveeReady())return `<div class="eh-hero">${eeAnim('hug','eh-hug')}<h2>Welcome to the Eevee House</h2><p>First, grab every Eevee and Eeveelution card ever made. It's one quick download.</p><button class="primary eh-btn" data-action="eevee-dl" ${eeveeLoading?'disabled':''}>${eeveeLoading?'Downloading…':'🐾 Download Eevee cards'}</button></div>`;
+ const n=petState(),[mood,mi,mt]=eeveeMood(),t=tierById('eevee'),stoneRow=Object.keys(STONES).map(k=>`<span class="stone${stones()[k]?'':' off'}" title="${STONES[k][1]}">${STONES[k][0]}<small>${stones()[k]||0}</small></span>`).join('');
+ const rows=EEVEELUTIONS.filter(sp=>(game.eeveeBadges||{})[sp]).length;
+ return `<div class="eh-hero"><div class="eh-stage ${mood}"><span class="eh-mood">${mi}</span><button class="eh-eevee" data-action="pet" aria-label="Pet Eevee"></button><div class="eh-floor"></div></div>
+ <p class="eh-mt">${mt}</p><div class="eh-pets">${Array.from({length:PET_GOAL},(_,i)=>`<i class="${i<n?'on':''}">💗</i>`).join('')}</div><p class="eh-small">${n>=PET_GOAL?'Today\'s treat is claimed.':`Tap Eevee to pet. ${PET_GOAL-n} more for today's treat.`}</p></div>
+ <div class="eh-card"><b>💎 Evolution Stones</b><div class="stones">${stoneRow}</div><small>Packs drop them about 1 in 3. Max 3 of each. Tap an Eevee you own and hit 💎 Evolve.</small></div>
+ <div class="eh-row"><button class="eh-big" data-action="eh-rip"><span>🎁</span><b>Rip an Eevee Pack</b><small>${money(t.price)} · 3 cards</small></button><button class="eh-big" data-action="eh-dex"><span>📖</span><b>Eevee Dex</b><small>${eeveeDexHave()} / ${eeveePool().length} · ${rows}/9 🏅</small></button></div>
+ <div id="ehDex" ${ehDex?'':'hidden'}></div>`}
+let ehDex=false;
+function openHouse(){let h=$('#eeHouse');if(!h){h=document.createElement('div');h.id='eeHouse';document.body.appendChild(h)}
+ h.innerHTML=`<div class="eh-top"><b>🐾 Eevee House</b><button class="eh-x" data-action="eh-close" aria-label="Close">✕</button></div><div class="eh-body">${houseHTML()}</div>`;h.hidden=false;h.classList.add('show');if(!houseOpen){houseOpen=true;lock()}
+ if(ehDex)renderEeveeDex($('#ehDex'))}
+let houseOpen=false;
+function closeHouse(){const h=$('#eeHouse');if(h){h.classList.remove('show');h.hidden=true}if(houseOpen){houseOpen=false;unlock()}render()}
+const refreshHouse=()=>{if(houseOpen)openHouse()};
+function portalHTML(){return `<button class="eh-portal" data-action="eh-open"><span class="eh-pmini"></span><span><b>🐾 Eevee House</b><small>${eeveeReady()?`${eeveeMood()[1]} Pet Eevee, rip Eevee Packs, fill the Eevee Dex`:'A cozy little corner just for Eevee fans'}</small></span><span class="chev">›</span></button>`}
+function petHTML(){return portalHTML()}
+function pet(el){const n=petState(),wasPouty=eeveeMood()[0]==='pouty',r=el.getBoundingClientRect();
+ for(let i=0;i<4;i++){const s=document.createElement('span');s.className='heart';s.textContent=pick(['💗','💖','💕','✨']);s.style.left=r.left+r.width/2+(Math.random()*80-40)+'px';s.style.top=r.top+r.height*.3+'px';s.style.setProperty('--dx',(Math.random()*40-20)+'px');document.body.appendChild(s);setTimeout(()=>s.remove(),1300)}
+ buzz(8);try{Sound.tone(880+Math.random()*300,.06)}catch(e){}
+ el.classList.remove('flip','wig');void el.offsetWidth;el.classList.add(Math.random()<.35||n===PET_GOAL-1?'flip':'wig');
+ if(n>=PET_GOAL)return;game.pets=n+1;save();
+ if(wasPouty)toast('Eevee forgives you. 💗',2200);
+ if(game.pets>=PET_GOAL){const st=Math.random()<.35?dropStone():null;let msg;
+  if(st)msg=`Eevee sneezed out a ${STONES[st][0]} ${STONES[st][1]}. Don't ask how.`;
+  else if(Math.random()<.5){const amt=r2(25+game.level*8+Math.random()*50);game.cash=r2(game.cash+amt);msg=`Eevee sneezed and ${money(amt)} came out. Magic? Allergies? Who cares.`}
+  else{game.tickets+=2;msg='Eevee sneezed out 2 🎟 tickets. Very good girl.'}
+  save();setTimeout(()=>modal({icon:'🐾',title:'Eevee has a treat for you',html:`${eeAnim('sneeze')}<p>${msg}</p>`,buttons:[{label:'💗',primary:true}]}).then(()=>{refreshHouse()}),900);return}
+ setTimeout(()=>{const p=$$('.eh-pets i');if(p[n])p[n].classList.add('on');const sm=$('.eh-small');if(sm)sm.textContent=`Tap Eevee to pet. ${PET_GOAL-game.pets} more for today's treat.`;if(wasPouty)refreshHouse()},50)}
+
+/* subtle Eevee buddy during Eevee rips */
+function eeBuddy(on){let b=$('#eeBuddy');if(!on){b&&b.remove();return}if(!b){b=document.createElement('div');b.id='eeBuddy';($('#rip')||document.body).appendChild(b)}}
+function eeBuddyHop(){const b=$('#eeBuddy');if(!b)return;b.classList.remove('flip');void b.offsetWidth;b.classList.add('flip')}
+function eeHugIntro(){const r=$('#rip');if(!r)return;const d=document.createElement('div');d.className='eh-intro';d.innerHTML=eeAnim('hug');r.appendChild(d);const go=()=>{d.classList.add('out');setTimeout(()=>d.remove(),300)};d.onclick=go;setTimeout(go,2600)}
+
+/* ---------- Eevee Dex ---------- */
+let dexSp='Eevee',dexPage=0;
+const eeveeDexHave=()=>eeveePool().filter(c=>inDex(c.id)).length;
+function renderEeveeDex(target){const el=target||$('#eeveeDex');if(!el)return;if(!eeveeReady()){el.innerHTML='';return}
+ const pool=eeveePool(),by=sp=>pool.filter(c=>c.sp===sp).sort((a,b)=>b.value-a.value),badges=game.eeveeBadges||{};
+ const chips=EEVEELUTIONS.map(sp=>{const l=by(sp),h=l.filter(c=>inDex(c.id)).length;return `<button class="${sp===dexSp?'on':''}" data-action="dex-sp" data-sp="${sp}">${badges[sp]?'🏅 ':''}${sp} <small>${h}/${l.length}</small></button>`}).join('');
+ const list=by(dexSp),n=Math.max(1,Math.ceil(list.length/9));dexPage=Math.min(dexPage,n-1);const s=dexPage*9,stoneRow=Object.keys(STONES).map(k=>`<span class="stone${stones()[k]?'':' off'}">${STONES[k][0]}<small>${stones()[k]||0}</small></span>`).join('');
+ el.innerHTML=`<div class="panel feat eeveepanel"><div class="eyebrow">🐾 Eevee Dex</div><b>${eeveeDexHave()} / ${pool.length} Eevee family cards collected</b><div class="muted" style="font-size:12px;margin-top:4px">Finish an Eeveelution row for a 🏅 badge and 5 🎟. Tap an Eevee you own and hit 💎 Evolve to use a stone.</div><div class="stones">${stoneRow}</div></div>
+ <div class="dexchips">${chips}</div>
+ <div class="gridcards g3">${list.slice(s,s+9).map(c=>{const got=inDex(c.id);return `<div class="tile dex${got?'':' miss'}"><div class="tile-img">${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(c.setName)}</span><b>${got?moneyS(c.value):'?'}</b></div></div>`}).join('')}</div>${n>1?pagerHTML('dexpage',dexPage,n):''}`}
+function eeveeBadgeCheck(){if(!eeveeReady())return;const b=game.eeveeBadges||(game.eeveeBadges={}),pool=eeveePool();
+ for(const sp of EEVEELUTIONS){if(b[sp])continue;const l=pool.filter(c=>c.sp===sp);if(l.length&&l.every(c=>inDex(c.id))){b[sp]=Date.now();game.tickets+=5;pawBurst(50,true);note({icon:'🏅',title:`${sp} row complete!`,html:`You own every ${sp} card ever printed. That's a badge and 5 🎟. Eevee is so proud.`,buttons:[{label:'💗',primary:true}]})}}}
+
+const EXTRA_ACTIONS={
+ shelf:el=>{openBinder=el.dataset.b;LS.set('pokerip-openbinder',openBinder);binderPage=0;if(openBinder==='shared'){sharedOpen=true;Shared.load(true)}render()},
+ 'binder-new':()=>binderNew(),'binder-edit':()=>binderEdit(),
+ 'v-addbinder':()=>{if(V)addToBinder(game.owned.find(x=>x.uid===V.list[V.i].uid))},
+ 'v-evolve':()=>{if(V)evolveModal(game.owned.find(x=>x.uid===V.list[V.i].uid))},
+ 'eevee-dl':async()=>{await eeveeDownload();refreshHouse()},pet:el=>pet(el),
+ 'dex-sp':el=>{dexSp=el.dataset.sp;dexPage=0;houseOpen&&ehDex?renderEeveeDex($('#ehDex')):renderEeveeDex()},
+ 'eh-open':()=>openHouse(),'eh-close':()=>closeHouse(),
+ 'eh-dex':()=>{ehDex=!ehDex;openHouse();if(ehDex)setTimeout(()=>$('#ehDex')?.scrollIntoView({behavior:'smooth'}),60)},
+ 'eh-rip':()=>{if(houseOpen){houseOpen=false;unlock();$('#eeHouse').hidden=true;reopenHouse=true}ripQty=1;startRip('eevee');if(!rip){reopenHouse=false;openHouse()}},
+ dexpage:el=>{dexPage=Math.max(0,dexPage+ +el.dataset.d);houseOpen&&ehDex?renderEeveeDex($('#ehDex')):renderEeveeDex()},
+};
+
+let reopenHouse=false;
+function eeveeDoneCheck(){const b=game.eeveeBadges||{};if(eeveeReady()&&!game.eeveeDexDone&&EEVEELUTIONS.every(sp=>b[sp]))eeveeDexDone()}
+const EEVEE_DEX_PAY=100000;
+function eeveeDexDone(){game.eeveeDexDone=Date.now();game.cash=r2(game.cash+EEVEE_DEX_PAY);
+ const top=eeveePool().slice().sort((a,b)=>b.value-a.value)[0],x=blackify(slabOf(top,10,top.value,false));x.uid=uid();x.at=Date.now();x.from='Eevee Dex reward';game.owned.push(x);collect([x]);
+ setTimeout(()=>{pawBurst(80,true);const fx=document.createElement('div');fx.className='confetti';fx.innerHTML=Array.from({length:70},()=>`<i style="left:${Math.random()*100}%;animation-delay:${Math.random()*1.5}s;animation-duration:${2.5+Math.random()*2}s;background:${pick(['#ff9ecf','#ffd6ec','#fff','#ffd34d','#b98bff'])}"></i>`).join('');document.body.appendChild(fx);
+  modal({icon:'👑',title:'THE WHOLE EEVEE DEX.',html:`<div class="eh-flipbig"></div><div class="mastertxt" style="color:#ff9ecf;text-shadow:0 0 18px #ff9ecf">Every. Single. Eevee.</div><p>You own every Eevee and Eeveelution card ever printed. That's absurd and we love you for it.</p><p><b style="color:var(--gold)">${money(EEVEE_DEX_PAY)}</b> plus a <b>BLACK LABEL</b> ${esc(x.name)} slab, worth ${money(x.value)}.</p>`,buttons:[{label:'💗 Eevee forever',primary:true}]}).then(()=>{fx.remove();render()})},400)}
+
 /* ---------- events ---------- */
-const ACTIONS={
+const ACTIONS={...EXTRA_ACTIONS,
  nav:el=>go(el.dataset.view),
  buy:el=>startRip(el.dataset.tier,{qty:ripQty,group:el.dataset.g||null}),
  odds:el=>showOdds(el.dataset.tier),
@@ -1960,7 +2199,7 @@ const ACTIONS={
  hist:el=>{const h=game.history.find(x=>x.id===el.dataset.id);if(h)openViewer(h.cards.map(c=>({...c,from:tierInfo(h.tier).name,at:h.at})).sort((a,b)=>b.value-a.value),0,'view')},
  'v-prev':()=>viewerStep(-1),'v-next':()=>viewerStep(1),'v-close':()=>closeViewer(),'v-sell':()=>viewerSell(),'v-trade':()=>viewerTrade(),
  filter:el=>{binderFilter=el.dataset.f;binderPage=0;renderBinder()},
- 'sell-bulk':()=>sellBulk(),
+ 'sell-bulk':el=>sellBulk(+(el.dataset.lim||1)),
  'sell-dupes':()=>sellDupes(),
  spin:()=>spin(),
  'buy-ticket':()=>{if(spinning)return;if(game.cash+1e-9<TICKET_PRICE){toast(`A ticket costs ${money(TICKET_PRICE)}.`);return}spend(TICKET_PRICE);game.grabSpent=r2((game.grabSpent||0)+TICKET_PRICE);game.tickets++;Sound.init();Sound.flip();save();toast('🎟 Ticket bought. Time to spin!')},
