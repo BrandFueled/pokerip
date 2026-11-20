@@ -677,6 +677,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .hrow{display:flex;justify-content:space-between;align-items:center}.hrow.me b:first-child{color:var(--gold)}
 .t2hint{font-size:10.5px;color:var(--muted);line-height:1.25;padding:0 4px 4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .dougimg{vertical-align:middle;border-radius:50%;object-fit:cover}.dougpic{display:flex;justify-content:center;margin:-4px 0 6px}.dougpic .dougimg{border:3px solid #ffd34d66;box-shadow:0 0 18px #ffd34d44}
+.dougsay{display:flex;gap:12px;align-items:center;text-align:left;background:#6bb5ff14;border-radius:14px;padding:10px;margin-bottom:10px}.dougsay .dougimg{flex:0 0 auto;border:2px solid #ffd34d66}.dougsay b{font-size:15px}.dougsay small{color:var(--muted);font-size:11px}.dougsay p{margin:4px 0 0;font-size:13px;color:#d9e6ff}
 </style>
 </head>
 <body>
@@ -1530,7 +1531,7 @@ const gradesReady=()=>gradingCards().filter(c=>c.grading<=Date.now());
 async function submitGrading(c){if(!c||c.slab||c.grading)return;if(gradingCards().length>=GRADE_SLOTS){toast(`The grader only takes ${GRADE_SLOTS} at a time. Wait for one to come back.`);return}
  const fee=r2(gradeFee(c)*(1-garyDiscount()));if(game.cash+1e-9<fee){toast(`Grading this one costs ${money(fee)}.`);return}
  const ev=c.value*(isVintage(c.setId)?2.73:1.18)-fee,ins=r2(Math.max(1,c.value*.1)),risk=Math.round(DISASTER_ODDS(networth())*100);
- const v=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,stack:true,html:`<p class="garyline">${dougImg(28)} <b>Doug (${esc(garyName())})</b>: ${esc(pick(GARY_SUBMIT))}${bribeOpen()?' <i>He leans in. "Doug is... open to an arrangement today."</i>':''}</p>${money(fee)} to grade${garyDiscount()?` (Doug's ${Math.round(garyDiscount()*100)}% loyalty discount)`:''} (bigger cards cost more), back in 10 minutes. Most cards come back a 7 or 8. About 1 in 5 is a 9, and 9% are a 10. A tiny few come back <b style="color:var(--text)">Black Label</b>.<br><br>Raw value ${money(c.value)}. ${c.value<20?'Honestly? Grading this is a terrible idea. Kyle loves it.':ev>0?'On average this one is worth grading.':'On average you lose money on this. Do it for the story.'}<br><small>${risk}% of submissions never come back (fires, floods, raccoons). Insurance pays the raw value if disaster strikes.</small>`,buttons:[{label:`Send + insure · ${moneyS(fee+ins)}`,primary:true,value:'ins'},{label:`Send it uninsured · ${moneyS(fee)}`,value:'raw'},...(bribeOpen()?[{label:`💵 Insure + bribe Doug · ${moneyS(fee+ins+bribeCost(fee))}`,value:'bribe'}]:[]),{label:'Never mind',value:null}]});
+ const v=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,stack:true,html:`<div class="dougsay">${dougImg(88)}<div><b>Doug</b> <small>${esc(garyName())}</small><p>${esc(pick(GARY_SUBMIT))}${bribeOpen()?' <i>He leans in. "Doug is... open to an arrangement today."</i>':''}</p></div></div><p style="font-size:13.5px">${money(fee)} to grade${garyDiscount()?` (${Math.round(garyDiscount()*100)}% loyalty discount)`:''}, back in 10 min. Usually a 7 or 8. About 1 in 5 is a 9, 9% are 10s.</p><p style="font-size:13.5px">Raw ${money(c.value)}. ${c.value<20?'Grading this is a terrible idea. Kyle loves it.':ev>0?'Worth grading on average.':'Loses money on average. Do it for the story.'}</p><small class="muted">${risk}% never come back. Insurance pays the raw value.</small>`,buttons:[{label:`Send + insure · ${moneyS(fee+ins)}`,primary:true,value:'ins'},{label:`Send it uninsured · ${moneyS(fee)}`,value:'raw'},...(bribeOpen()?[{label:`💵 Insure + bribe Doug · ${moneyS(fee+ins+bribeCost(fee))}`,value:'bribe'}]:[]),{label:'Never mind',value:null}]});
  if(!v||!game.owned.includes(c)||c.grading)return;const cost=fee+(v!=='raw'?ins:0)+(v==='bribe'?bribeCost(fee):0);if(game.cash+1e-9<cost){toast(`You need ${money(cost)} for that.`);return}
  spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v!=='raw';gary().subs++;if(v==='bribe'){gary().bribes++;const lv=garyLevel(),r=Math.random();c.bribe=r<.03?'caught':r<.7+lv*.03?'yes':'pocket'}if(charmOn()&&game.charm.grade){c.charmed=true;game.charm.grade=false;setTimeout(()=>toast('🍀 Lucky Charm used on this one. +20% toward a 9 or 10.',3000),3300)}save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
 async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||spinning)return;
@@ -2510,7 +2511,7 @@ const Trade={list:[],at:0,busy:false,friends:null,
    if(t.kind==='mystery')revealMystery(t,true);else if(t.kind!=='gift')toast(`🔁 ${t.to_name} accepted your trade. ${c?esc(c.name)+' is in your binder.':''}`,3500)}
   else if(t.status==='declined'){this.refund(t);await this.patch(t.id,{from_done:true});t.from_done=true;toast(`${t.to_name} declined your ${t.kind==='gift'?'gift':'trade'}. ${t.give.name} came back.${t.kind==='gift'?' Ouch.':''}`,3500)}}},
  refund(t){const x={...t.give,uid:uid(),at:Date.now()};game.owned.push(x);if(t.tax_from)game.cash=r2(game.cash+t.tax_from);if(t.gift_tix)game.tickets+=t.gift_tix;save()},
- patch(id,b){return Cloud.req(`/rest/v1/trades?id=eq.${id}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)})},
+ patch(id,b){return tradeReq(`/rest/v1/trades?id=eq.${id}`,'PATCH',b)},
  async friendsList(){if(this.friends&&Date.now()-this.fAt<120000)return this.friends;const rows=await Cloud.req(`/rest/v1/saves?select=user_id,username&order=updated_at.desc&limit=100`,{},false)||[];this.fAt=Date.now();return this.friends=rows.filter(r=>r.user_id&&r.user_id!==Cloud.user)},
  incoming(){return this.list.filter(t=>t.to_user===Cloud.user&&t.status==='open')}};
 const cleanCard=c=>{const{fv,fest,grading,vault,insured,charmed,...x}=c;return x};
@@ -2578,7 +2579,7 @@ async function newTrade(kind){if(!Cloud.s){accountModal();return}const f=await p
  await sendTrade({kind:fair?'fair':'lopsided',to:f,give,want,tax_from,tax_to,msg})}
 async function askMsg(html,ph){const v=await modal({icon:'✍️',title:'Send it?',html:`<p>${html}</p><input class="inp" id="tmsg" placeholder="${ph}" maxlength="80">`,buttons:[{label:'Cancel',value:null},{label:'Send',primary:true,value:'go'}]});return v?($('#tmsg')?.value||'').trim():null}
 async function sendTrade({kind,to,give,want=null,tax_from=0,tax_to=0,gift_tix=0,msg='',tier=null}){if(!game.owned.includes(give)||!tradeable(give)){toast('That card is not available anymore.');return}
- try{await Cloud.req('/rest/v1/trades',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({from_user:Cloud.user,from_name:Cloud.name,to_user:to.user_id,to_name:to.username,kind,give:cleanCard(give),want:want?cleanCard(want):null,tax_from,tax_to,gift_tix,msg,status:'open',...(kind==='mystery'?{tier}:{})})});
+ try{await tradeReq('/rest/v1/trades','POST',({from_user:Cloud.user,from_name:Cloud.name,to_user:to.user_id,to_name:to.username,kind,give:cleanCard(give),want:want?cleanCard(want):null,tax_from,tax_to,gift_tix,msg,status:'open',...(kind==='mystery'?{tier}:{})}));
   if(kind==='gift')ts().gifts=(ts().gifts||0)+1;
   game.owned.splice(game.owned.indexOf(give),1);if(tax_from)game.cash=r2(game.cash-tax_from);if(gift_tix)game.tickets-=gift_tix;save();
   toast(kind==='mystery'?`🎲 Face down and sent. ${to.username} has no idea what's coming.`:kind==='gift'?`🎁 Gift sent to ${to.username}. Emily says that's sweet. Johnny says that's suspicious.`:`🔁 Offer sent to ${to.username}.`,3500);await Trade.sync(true)}
@@ -2647,6 +2648,10 @@ function karmaHTML(k,role,t){if(!k)return '';const hosedMe=k.hosed===role,other=
 
 function swapStats(t,role){const S=ts();S.mystery=(S.mystery||0)+1;if(t.karma&&t.karma.kind)S.chaos=(S.chaos||0)+1;const mine=role==='from'?t.give:t.back,got=role==='from'?t.back:t.give;if(!t.tier&&mine&&got&&got.value>=mine.value*10&&got.value>=50)S.bigWin=(S.bigWin||0)+1}
 
+/* If Supabase is missing a newer column (tier, karma), drop it and try again instead of failing. */
+async function tradeReq(path,method,body){let b={...body};for(let i=0;i<4;i++){try{return await Cloud.req(path,{method,headers:{Prefer:'return=minimal'},body:JSON.stringify(b)})}
+ catch(e){const m=/find the '(\w+)' column/.exec(e.message||'');if(!m||!(m[1] in b))throw e;console.warn('trades table is missing column',m[1]);delete b[m[1]]}}}
+
 /* ================= Chunk 6: rewards for things already in the game ================= */
 ROAST.grade[1]=['A 1. The curse was real. Kyle tried to warn you.','POOR. Doug held it up to the light and laughed.','A 1. That slab is now a coaster. Kyle approves.'];
 ROAST.grade[2]=['A 2. Doug reported you. That\'s what you get for bribing.','Doug snitched. Enjoy your 2, criminal.','A 2 and a lecture from Doug. Worth it? No.'];
@@ -2666,7 +2671,7 @@ const GARY_BACK={yes:["Doug winks at you. You did not see anything.","Doug says 
 function graderWeights(c){const w=charmGradeWeights(c),lv=garyLevel();const shift=(p)=>{const m=(w[0]+w[1])*p;w[0]*=1-p;w[1]*=1-p;w[2]+=m*.65;w[3]+=m*.35};
  if(lv)shift(lv*.03);if(c.bribe==='yes')shift(.4);return w}
 function garyModal(){const g=gary(),lv=garyLevel(),next=GARY_LV[lv+1];
- modal({icon:'🥸',title:'Doug the Grader',html:`<div class="dougpic">${dougImg(96)}</div><p>Doug runs POKÉ RIP GRADED out of a strip mall. Doug is a completely normal human man with a mustache. Doug is definitely not a Pikachu in a trench coat. Do not ask Doug about the tail.</p><p>The more you send him, the more he likes you.</p>
+ modal({icon:'🥸',title:'Doug the Grader',html:`<div class="dougpic">${dougImg(150)}</div><p>Doug runs POKÉ RIP GRADED out of a strip mall. Doug is a completely normal human man with a mustache. Doug is definitely not a Pikachu in a trench coat. Do not ask Doug about the tail.</p><p>The more you send him, the more he likes you.</p>
  <div class="garybox"><b>${esc(garyName())}</b> · ${g.subs} cards graded${next?`<span class="prog" style="margin:6px 0"><i style="width:${Math.min(100,g.subs/next[0]*100)}%"></i></span><small>${next[0]-g.subs} more to reach ${esc(next[1])}</small>`:'<small>Max loyalty. Doug would take a bullet for you. Probably.</small>'}</div>
  <p style="font-size:13px">Perks right now: <b>${Math.round(garyDiscount()*100)}% off</b> grading fees and <b>+${lv*3}% luck</b> toward a 9 or 10.</p>
  <p style="font-size:13px">💵 <b>Bribes:</b> ${g.bribes} sent · ${g.pocketed} pocketed · ${g.caught} reported. Doug only takes bribes every 5th card (he has a reputation to protect). Most of the time he takes it and the card looks great. Sometimes he just keeps your money. Very rarely he reports you and it comes back a 2.</p>
