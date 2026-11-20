@@ -1434,7 +1434,7 @@ function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.
  if(!d.best){let b=null;for(const c of[...d.owned,...d.history.flatMap(h=>h.cards)])if(!b||c.value>b.value)b=c;d.best=b?{value:b.value,name:fullName(b)}:{value:0,name:''}}
  return d}
 function load(){const d=LS.get(SAVE_KEY);if(d&&(d.v===3||d.v===4)&&typeof d.cash==='number')return normalize(d);return fresh()}
-function save(){cstatsUpdate();prestigeScan();levelCheck();milestoneCheck();trophy2Check();eeveeBadgeCheck();eeveeDoneCheck();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
+function save(){if(window.__booted){for(const f of[cstatsUpdate,prestigeScan,eeveeBadgeCheck,eeveeDoneCheck])try{f()}catch(e){console.warn(e)}}levelCheck();milestoneCheck();trophy2Check();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
  if(!LS.set(SAVE_KEY,game)){game.history.length=Math.min(game.history.length,40);pruneSetCache();LS.set(SAVE_KEY,game)}Cloud.queue();render()}
 const boxDef=id=>SEALED.find(b=>b.id===id);
 const boxValue=b=>{const d=boxDef(b.box);if(!d)return 0;const days=(Date.now()-b.at)/864e5;return r2(Math.min(b.cost*BOX_CAP,b.cost*Math.pow(1+d.rate,days)))};
@@ -2407,15 +2407,15 @@ function eeveeDexDone(){game.eeveeDexDone=Date.now();game.cash=r2(game.cash+EEVE
 /* ---------- Lucky Charm ---------- */
 const CHARM_COST=150,CHARM_MS=5*60*1000;
 var simMode=false;
-const charmOn=()=>!!(game.charm&&game.charm.until>Date.now());
-const charmMissingMode=()=>charmOn()&&pullGid&&groupLoaded(pullGid)&&!(game.sets[pullGid]&&game.sets[pullGid].done);
-function charmLuck(){return simMode||!charmOn()||charmMissingMode()?0:.2}
-function charmMissing(){return !simMode&&charmMissingMode()?2:1}
+function charmOn(){return !!(typeof game!=='undefined'&&game&&game.charm&&game.charm.until>Date.now())}
+function charmMissingMode(){return charmOn()&&pullGid&&groupLoaded(pullGid)&&!(game.sets[pullGid]&&game.sets[pullGid].done)}
+function charmLuck(){try{return simMode||!charmOn()||charmMissingMode()?0:.2}catch(e){return 0}}
+function charmMissing(){try{return !simMode&&charmMissingMode()?2:1}catch(e){return 1}}
 async function buyCharm(){if(charmOn()){toast('Your Lucky Charm is already glowing.');return}
  if(game.tickets<CHARM_COST){modal({icon:'🍀',title:'Lucky Charm',html:`Costs ${CHARM_COST} 🎟. You have ${game.tickets}. Johnny suggests ripping more packs. Emily suggests therapy.`,buttons:[{label:'Fine',primary:true}]});return}
  const ok=await modal({icon:'🍀',title:`Lucky Charm · ${CHARM_COST} 🎟`,html:`<p>For <b>5 minutes</b>, every pack and pull gets <b>+20% luck</b>. If you're ripping a set you haven't finished, the luck goes into <b>pulling cards you're missing</b> instead.</p><p>It also gives <b>one</b> grading submission +20% luck toward a 9 or 10.</p><p class="muted" style="font-size:12px">Kyle says it's science. Emily says it's a rabbit's foot with extra steps.</p>`,buttons:[{label:'Not now',value:false},{label:'Activate',primary:true,value:true}]});
  if(!ok||game.tickets<CHARM_COST)return;game.tickets-=CHARM_COST;game.charm={until:Date.now()+CHARM_MS,grade:true};save();pawBurst&&pawBurst(16,true);toast('🍀 Lucky Charm is on. 5 minutes. Go go go.',3000);render();charmTick()}
-let charmTimer=null;
+var charmTimer=null;
 function charmTick(){clearInterval(charmTimer);const el=()=>$('#charmPill');const draw=()=>{let p=el();if(!charmOn()){p&&p.remove();clearInterval(charmTimer);return}
   if(!p){p=document.createElement('button');p.id='charmPill';p.dataset.action='charm';document.body.appendChild(p)}const s=Math.max(0,Math.ceil((game.charm.until-Date.now())/1000));p.textContent=`🍀 ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}${game.charm.grade?' · 🔬':''}`};draw();charmTimer=setInterval(draw,1000)}
 function charmGradeWeights(c){if(!c.charmed)return SUBMIT_GRADES.map(x=>x[1]);const w=SUBMIT_GRADES.map(x=>x[1]),move=(w[0]+w[1])*.2;w[0]*=.8;w[1]*=.8;w[2]+=move*.65;w[3]+=move*.35;return w}
@@ -2424,7 +2424,7 @@ function charmGradeWeights(c){if(!c.charmed)return SUBMIT_GRADES.map(x=>x[1]);co
 const PRESTIGE_REWARD={cash:50000,tickets:15};
 function bestGrades(){const m=new Map();for(const c of game.owned)if(c.slab&&!c.grading){const g=c.grade||0;if(g>(m.get(c.id)||0))m.set(c.id,g)}return m}
 function prestigeProgress(gid,bg){const cards=groupCards(gid);return{have:cards.filter(c=>(bg.get(c.id)||0)>=9).length,total:cards.length}}
-let prestigeAt=0;
+var prestigeAt=0;
 function prestigeScan(force){if(!force&&Date.now()-prestigeAt<4000)return;prestigeAt=Date.now();const done=Object.keys(game.sets||{}).filter(g=>game.sets[g].done&&groupLoaded(g));if(!done.length)return;
  const bg=bestGrades();game.prestiged=game.prestiged||{};
  for(const g of done){if(game.prestiged[g])continue;const p=prestigeProgress(g,bg);if(p.total>=5&&p.have===p.total){game.prestiged[g]=Date.now();game.prestige=Object.keys(game.prestiged).length;game.cash=r2(game.cash+PRESTIGE_REWARD.cash);game.tickets+=PRESTIGE_REWARD.tickets;
@@ -2438,7 +2438,7 @@ function prestigeHTML(){const done=Object.keys(game.sets||{}).filter(g=>game.set
 function collectionStats(){const tens=game.owned.filter(c=>c.slab&&c.grade===10&&!c.black).length,blacks=game.owned.filter(c=>c.black).length,sets=Object.values(game.sets||{}).filter(s=>s.done).length,uniq=Object.keys(game.dex||{}).length,pr=Object.keys(game.prestiged||{}).length;
  const bl=game.owned.filter(c=>c.black).sort((a,b)=>b.value-a.value).slice(0,24).map(c=>({id:c.id,name:c.name,img:c.img,setName:c.setName,value:c.value,first:!!c.first}));
  return{tens,blacks,sets,prestige:pr,uniq,score:uniq+tens*10+blacks*100+sets*50+pr*500,bl}}
-let csAt=0;function cstatsUpdate(){if(Date.now()-csAt<3000)return;csAt=Date.now();game.cstats=collectionStats()}
+var csAt=0;function cstatsUpdate(){if(Date.now()-csAt<3000)return;csAt=Date.now();game.cstats=collectionStats()}
 const CS_TABS=[['score','🏅 Collection'],['tens','💎 10s'],['blacks','🖤 Black Labels'],['sets','📚 Sets']];
 async function csBoard(t){const rows=await Cloud.req(`/rest/v1/saves?select=username,networth,level,trophies,prestige,cs:data->cstats&limit=200`,{},false)||[];return rows.filter(r=>r.cs).sort((a,b)=>(b.cs[t]||0)-(a.cs[t]||0)).slice(0,25)}
 function csRowsHTML(rows,t){if(!rows.length)return '<div class="empty">Nobody has stats yet. Rip a pack to get on the board.</div>';
@@ -2446,7 +2446,7 @@ function csRowsHTML(rows,t){if(!rows.length)return '<div class="empty">Nobody ha
   return `<button class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}" data-action="player" data-u="${esc(r.username)}"><b>${medal}</b><span><b>${esc(r.username)}</b>${r.prestige?' ⭐'+r.prestige:''}<br><small>💎 ${cs.tens||0} · 🖤 ${cs.blacks||0} · 📚 ${cs.sets||0} · ${(cs.uniq||0).toLocaleString()} unique</small></span><b>${t==='score'?(v).toLocaleString()+' pts':v}</b></button>`}).join('')}
 
 /* ---------- Black Label Wall ---------- */
-let wallData=null,wallAt=0;
+var wallData=null,wallAt=0;
 async function loadWall(){if(!Cloud.on)return;if(Date.now()-wallAt<60000&&wallData)return;wallAt=Date.now();
  try{const rows=await Cloud.req(`/rest/v1/saves?select=username,cs:data->cstats&limit=200`,{},false)||[];const all=[];for(const r of rows)for(const c of (r.cs&&r.cs.bl)||[])all.push({...c,owner:r.username});wallData=all.sort((a,b)=>b.value-a.value);if(currentView==='collect'&&!collectSet)renderWall()}catch(e){}}
 function renderWall(){const el=$('#wallBox');if(!el)return;const mine=game.owned.filter(c=>c.black);let list=wallData;
@@ -2483,7 +2483,7 @@ const cleanCard=c=>{const{fv,fest,grading,vault,insured,charmed,...x}=c;return x
 const tradeable=c=>!c.vault&&!c.grading;
 function renderTradeBadge(){const n=Trade.incoming().length,b=$('#tpBadge');if(b){b.textContent=n;b.hidden=!n}}
 function tradePortalHTML(){if(!Cloud.on)return '';return `<button class="tp-portal" data-action="tp-open"><span class="tp-ic">🔁</span><span><b>Trading Post</b><small>${Cloud.s?'Fair trades, lopsided trades, gifts and Mystery Swaps':'Log in to trade with friends'}</small></span><span class="tp-badge" id="tpBadge" hidden>0</span><span class="chev">›</span></button>`}
-let tpOpen=false;
+var tpOpen=false;
 function openPost(){if(!Cloud.s){accountModal();return}let h=$('#tpost');if(!h){h=document.createElement('div');h.id='tpost';document.body.appendChild(h)}h.hidden=false;h.classList.add('show');if(!tpOpen){tpOpen=true;lock()}renderPost();Trade.sync(true)}
 function closePost(){const h=$('#tpost');if(h){h.hidden=true;h.classList.remove('show')}if(tpOpen){tpOpen=false;unlock()}render()}
 function tcardHTML(c,hidden){return hidden?`<div class="tcard back"><span>?</span></div>`:`<div class="tcard"><div class="timg">${c.slab?`<span class="tile-tag">${c.black?'BLACK LABEL':'GRADED '+c.grade}</span>`:''}${imgTag(c)}</div><b>${esc(c.name)}</b><small>${moneyS(c.value)}</small></div>`}
@@ -2558,7 +2558,7 @@ const EXTRA_ACTIONS2={
  'tp-new':el=>newTrade(el.dataset.k),'tp-accept':el=>acceptTrade(el.dataset.id),'tp-decline':el=>declineTrade(el.dataset.id),
  'tp-cancel':el=>cancelTrade(el.dataset.id),'tp-mystery':el=>mysteryRespond(el.dataset.id),'tp-replay':el=>{const t=tradeById(el.dataset.id);if(t)revealMystery(t,t.from_user===Cloud.user)},
  'cs-tab':el=>{csTab=el.dataset.t;renderStats()}};
-let csTab=null;
+var csTab=null;
 function rivalStats(d){const a=game.cstats||collectionStats(),b=d.cs||{},cell=(ic,x,y)=>`<span class="${x>y?'pos':x<y?'neg':''}">${ic} ${x} vs ${y}</span>`;return `<span class="rstats">${cell('💎',a.tens||0,b.tens||0)}${cell('🖤',a.blacks||0,b.blacks||0)}${cell('📚',a.sets||0,b.sets||0)}</span>`}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-m-value]');if(b&&modalClose)modalClose(b.dataset.mValue)});
 setTimeout(()=>{if(charmOn())charmTick()},500);
@@ -2691,6 +2691,7 @@ if(Cloud.s&&game.owner!==Cloud.user){Cloud.ready=true}
 setTimeout(checkBorrowed,1500);
 cloudRefresh();
 if(!LS.get('pokerip-guide',0)&&!game.opened)setTimeout(guideModal,700);
+window.__booted=true;
 initCatalog().then(async()=>{checkBroke();await loadExtras();for(const id of[...selected].filter(id=>catalog.failed.has(id))){catalog.failed.delete(id);try{await loadSet(id)}catch(e){}}invalidatePool();render()});
 </script>
 </body>
