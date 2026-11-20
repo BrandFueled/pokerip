@@ -645,10 +645,10 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .trow{background:#ffffff08;border:1px solid #ffffff14;border-radius:14px;padding:10px 12px;margin-bottom:10px}.trow.open{border-color:#6bb5ff55}.trow.declined,.trow.cancelled{opacity:.55}
 .trow-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.trow-h b{font-size:13.5px}.trow-h small{color:var(--muted);font-size:11px;white-space:nowrap}
 .tcards{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0}.tcards.big .tcard{width:120px}.tx{font-size:20px;color:var(--muted)}
-.tcard{width:96px;display:flex;flex-direction:column;gap:2px;text-align:center}.tcard .timg{position:relative}.tcard .timg img{width:100%;border-radius:6px}.tcard b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tcard small{font-size:11px;color:var(--gold)}
+.tcard{width:96px;min-width:0;display:flex;flex-direction:column;gap:2px;text-align:center}.tcard .timg{position:relative}.tcard .timg img{width:100%;border-radius:6px}.tcard b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tcard small{font-size:11px;color:var(--gold)}
 .tcard.back{aspect-ratio:63/88;border-radius:8px;background:repeating-linear-gradient(45deg,#2b2350,#2b2350 8px,#3a2f6b 8px,#3a2f6b 16px);border:2px solid #c86bff88;align-items:center;justify-content:center}.tcard.back span{font-size:34px;font-weight:1000;color:#e6c8ff}
 .tmsg{font-style:italic;color:#cfe6ff;font-size:13px;margin:4px 0}.tacts{display:flex;gap:8px;justify-content:flex-end}.tacts .primary.smallbtn{padding:8px 12px}
-.pkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:52vh;overflow-y:auto;margin-top:8px}.pk{background:none;border:1px solid #ffffff14;border-radius:10px;padding:4px;color:var(--text)}.pk .tcard{width:100%}
+.pkgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:52vh;overflow-y:auto;margin-top:8px}.pk{background:none;border:1px solid #ffffff14;border-radius:10px;padding:4px;color:var(--text)}.pk .tcard{width:100%}
 .mreveal{display:flex;gap:14px;justify-content:center;margin:6px 0 10px}.mside{display:flex;flex-direction:column;align-items:center;gap:6px}.mside small{color:var(--muted)}
 .mflip{position:relative;width:118px;aspect-ratio:63/96;perspective:800px}.mf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .7s cubic-bezier(.3,1.4,.5,1)}
 .mf.back{display:flex;align-items:center;justify-content:center;border-radius:10px;background:repeating-linear-gradient(45deg,#2b2350,#2b2350 8px,#3a2f6b 8px,#3a2f6b 16px);border:2px solid #c86bff88;font-size:40px;font-weight:1000;color:#e6c8ff;animation:mfB .7s 1.1s forwards}
@@ -656,6 +656,17 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 @keyframes mfB{to{transform:rotateY(-180deg)}}@keyframes mfF{to{transform:rotateY(0)}}
 .mverdict{opacity:0;animation:eeFade .5s 1.9s forwards;text-align:center}.mverdict span{font-size:40px}
 .mflip{animation:mShake .9s ease-in-out}@keyframes mShake{20%,60%{transform:rotate(-3deg)}40%,80%{transform:rotate(3deg)}}
+
+.tline{font-size:13px;color:#cfe6ff;margin:6px 0 2px;line-height:1.35}
+.tside{display:flex;flex-direction:column;align-items:center;gap:4px}.tside>small{font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tcard .tset{color:var(--muted)!important;font-size:10px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttax{font-size:12px;color:#ffd9a0;margin:2px 0}.ttax.fair{color:#9ff0c0}.ttax.karma{color:#e6c8ff}
+.ftag{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px;font-size:10px;font-weight:800;border-radius:6px;padding:2px 4px}.ftag.ok{background:#5fe39b22;color:#9ff0c0}.ftag.tax{background:#ffb34d1a;color:#ffd9a0}
+.frange{background:#5fe39b14;border:1px solid #5fe39b44;color:#cff5df;border-radius:10px;padding:8px 10px;font-size:12.5px;margin-bottom:8px}
+.sorry{margin-top:10px;background:#ffd34d18;border:1px solid #ffd34d55;border-radius:10px;padding:8px;font-size:13px}.sorry.dim{opacity:.7;background:#ffffff08;border-color:#ffffff1a}
+.karmaban{margin:12px auto 4px;display:inline-block;font-weight:1000;letter-spacing:.2em;padding:6px 14px;border-radius:20px;color:#fff;background:linear-gradient(90deg,#7b2cff,#ff3d8b,#7b2cff);background-size:200% 100%;animation:shine 1s linear infinite,eban2 .6s 2.2s both}
+@keyframes eban2{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.2);opacity:1}100%{transform:scale(1)}}
+.karmaline{font-weight:800;color:#f1d6ff;opacity:0;animation:eeFade .4s 2.6s forwards}
 </style>
 </head>
 <body>
@@ -851,10 +862,10 @@ const GOD_BANDS=[[5,15,50],[15,50,35],[50,200,12],[200,1e9,3]], GOD_ODDS=1/250, 
 const LUCK=4;
 const luckW=bands=>{const w=bands.map(b=>b[2]);const cl=typeof charmLuck==='function'?charmLuck():0;if(w.length<2||(!LUCK&&!cl))return w;const take=Math.min(LUCK+w[0]*cl,w[0]*.6),rest=sum(w.slice(1));w[0]-=take;for(let i=1;i<w.length;i++)w[i]+=take*w[i]/rest;return w};
 const SLOTS={RARE:RARE_BANDS,BONUS:BONUS_BANDS,HIT:HIT_BANDS,VRARE:VRARE_BANDS,FRARE:FRARE_BANDS};
-const GRADE_MULT={modern:{7:.75,8:1.15,9:1.4,10:2.5},vintage:{7:1.1,8:1.8,9:3.5,10:12}};
+const GRADE_MULT={modern:{1:.2,7:.75,8:1.15,9:1.4,10:2.5},vintage:{1:.3,7:1.1,8:1.8,9:3.5,10:12}};
 const GRADE_FEE=25, GRADE_MS=6e5, GRADE_SLOTS=5, SUBMIT_GRADES=[[7,28],[8,41],[9,22],[10,9]];
 const PACK_GRADES=[[9,66],[10,34]], GRAB_GRADES=[[8,26],[9,51],[10,23]], VINT_GRADES=[[8,46],[9,42],[10,12]];
-const GRADE_NAME={7:'NEAR MINT',8:'NM-MT',9:'MINT',10:'GEM MINT'};
+const GRADE_NAME={1:'POOR (CURSED)',7:'NEAR MINT',8:'NM-MT',9:'MINT',10:'GEM MINT'};
 const gradeFee=c=>c.value<500?25:c.value<5000?150:c.value<50000?1000:r2(c.value*.05); // grading costs more for valuable cards, like the real thing
 const gradeName=c=>c.black?'BLACK LABEL':GRADE_NAME[c.grade]||'';
 const BLACK_MULT=5, BLACK_FROM_GRADING=.06;
@@ -984,8 +995,16 @@ function compact(r,setId,sn){const p=(r.tcgplayer&&r.tcgplayer.prices)||{},v=isV
  return o}
 async function loadSetList(){const c=LS.get('pokerip-v3-setlist');if(c&&c.sets&&c.sets.length){catalog.sets=c.sets;if(Date.now()-c.at<LIST_TTL)return}
  try{const q=new URLSearchParams({pageSize:'250',orderBy:'-releaseDate',select:'id,name,series,releaseDate,total'});const b=await getJSON(`${API}/sets?${q}`);if(b.data&&b.data.length){catalog.sets=b.data;LS.set('pokerip-v3-setlist',{at:Date.now(),sets:b.data})}}catch(e){if(!catalog.sets.length)throw e}}
+/* Downloaded sets live in IndexedDB (lots of room) instead of localStorage (about 5MB, shared with your save). */
+const IDB={db:null,open(){if(this.db)return this.db;return this.db=new Promise((res,rej)=>{try{const r=indexedDB.open('pokerip',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})},
+ async get(k){try{const db=await this.open();return await new Promise(res=>{const q=db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null)})}catch(e){return null}},
+ async set(k,v){try{const db=await this.open();return await new Promise(res=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=()=>res(true);t.onerror=()=>res(false)})}catch(e){return false}}};
+async function migrateSetCache(){try{const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&(k.startsWith('pokerip-v4-set-')||k.startsWith('pokerip-eevee')))keys.push(k)}
+ for(const k of keys){const v=LS.get(k);if(v&&await IDB.set(k,v))localStorage.removeItem(k)}}catch(e){}}
+async function cacheGet(k){return LS.get(k)||await IDB.get(k)}
+async function cachePut(k,v){if(await IDB.set(k,v)){try{localStorage.removeItem(k)}catch(e){}return true}return LS.set(k,v)}
 const cacheKey=id=>'pokerip-v4-set-'+id;
-async function loadSet(id,pri=false){const key=cacheKey(id),cached=LS.get(key);
+async function loadSet(id,pri=false){const key=cacheKey(id),cached=await cacheGet(key);
  if(cached&&cached.cards&&cached.cards.length){catalog.data[id]=cached.cards;invalidatePool();if(Date.now()-cached.at<SET_TTL)return}
  if(catalog.loading.has(id)){while(catalog.loading.has(id))await sleep(300);if(catalog.data[id])return;throw new Error(catalog.failReason[id]||'load failed')}catalog.loading.add(id);render();
  try{const sn=setName(id);let page=1,all=[];
@@ -993,14 +1012,14 @@ async function loadSet(id,pri=false){const key=cacheKey(id),cached=LS.get(key);
   const cards=all.filter(r=>r.images&&r.images.small&&!(r.supertype==='Energy'&&(r.subtypes||[]).includes('Basic'))).map(r=>compact(r,id,sn));
   if(!cards.length)throw new Error('No cards in set');
   catalog.data[id]=cards;catalog.failed.delete(id);invalidatePool();
-  if(!LS.set(key,{at:Date.now(),cards})){pruneSetCache();LS.set(key,{at:Date.now(),cards})}
+  cachePut(key,{at:Date.now(),cards})
  }catch(e){if(!catalog.data[id]){catalog.failed.add(id);catalog.failReason[id]=e.message;throw e}}
  finally{catalog.loading.delete(id);render()}}
 const extraSets=()=>[...new Set([...MASTER.flatMap(m=>m.sets),...VINTAGE_SETS,...TROPHIES.filter(t=>t.set).map(t=>t.set)])];
-function pruneSetCache(){const keep=new Set([...selected,...extraSets()]);try{for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(!k)continue;if(k.startsWith('pokerip-v3-set-'))localStorage.removeItem(k);else if(k.startsWith('pokerip-v4-set-')&&!keep.has(k.slice(15)))localStorage.removeItem(k)}}catch(e){}}
+function pruneSetCache(){try{for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(k&&k.startsWith('pokerip-v3-set-'))localStorage.removeItem(k)}}catch(e){}migrateSetCache()}
 function useSeed(){catalog.offline=true;catalog.data={};for(const[s,num,name,rar,val]of SEED){const c={id:`${s}-${num}`,name,setId:s,setName:NAMES[s]||s,num:String(num),rarity:rar,value:val,est:true,img:`${IMG}/${s}/${num}.png`};if(isVintage(s)){c.fv=r2(val*firstMult(s,rar));c.fest=true}(catalog.data[s]=catalog.data[s]||[]).push(c)}
  if(!catalog.sets.length)catalog.sets=Object.keys(catalog.data).map(id=>({id,name:NAMES[id]||id,series:'Sample'}));selected=new Set(SEED_SETS);invalidatePool();catalog.ready=true;render()}
-async function initCatalog(){
+async function initCatalog(){await migrateSetCache();
  try{await loadSetList()}catch(e){console.warn('Card API unreachable, using sample pool',e);useSeed();return}
  const valid=new Set(catalog.sets.map(s=>s.id)),saved=LS.get(SEL_KEY,[]);
  let ids=(Array.isArray(saved)?saved:[]).filter(id=>valid.has(id));if(!ids.length)ids=DEFAULT_SETS.filter(id=>valid.has(id));if(!ids.length)ids=[catalog.sets[0].id];
@@ -1506,17 +1525,17 @@ async function submitGrading(c){if(!c||c.slab||c.grading)return;if(gradingCards(
  spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v==='ins';if(charmOn()&&game.charm.grade){c.charmed=true;game.charm.grade=false;setTimeout(()=>toast('🍀 Lucky Charm used on this one. +20% toward a 9 or 10.',3000),3300)}save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
 async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||spinning)return;
  for(const c of ready){const raw=c.value,insured=c.insured;delete c.grading;delete c.insured;
-  if(!c.vault&&Math.random()<DISASTER_ODDS(networth())){const i=game.owned.indexOf(c);if(i>=0)game.owned.splice(i,1);game.disasters=(game.disasters||0)+1;if(insured)game.cash=r2(game.cash+raw);save();
+  if(!safeCard(c)&&Math.random()<DISASTER_ODDS(networth())){const i=game.owned.indexOf(c);if(i>=0)game.owned.splice(i,1);game.disasters=(game.disasters||0)+1;if(insured)game.cash=r2(game.cash+raw);save();
    Sound.init();Sound.tone(196,.9,'sine',.06,0,98);Sound.tone(147,1.2,'sine',.05,.35,73);buzz([200,100,300]);
    await modal({icon:'🕯️',title:pick(DISASTER_TITLES),html:`${animHTML('chomp')}<b style="color:var(--text)">${esc(c.name)}</b><br><span class="muted">${money(raw)} · gone</span><p style="margin-top:10px">${esc(pick(DISASTERS))}</p>${insured?`<p style="color:var(--green)">Insurance paid out <b>${money(raw)}</b>. Smart.</p>`:'<p class="roast bad">It was not insured. Sucks to suck.</p>'}`,buttons:[{label:insured?'Thank god for insurance':'🕯️ Pay respects',primary:true}]});continue}
-  const g=SUBMIT_GRADES[wIndex(charmGradeWeights(c))][0];delete c.charmed;c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(g===10&&Math.random()<BLACK_FROM_GRADING)blackify(c);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;if(c.black)game.gradeLog.black=(game.gradeLog.black||0)+1;
+  let g=SUBMIT_GRADES[wIndex(charmGradeWeights(c))][0];delete c.charmed;if(c.cursed&&Math.random()<.5){g=1;setTimeout(()=>toast('💀 The curse got it. Kyle warned you.',3500),3500)}c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(g===10&&Math.random()<BLACK_FROM_GRADING)blackify(c);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;if(c.black)game.gradeLog.black=(game.gradeLog.black||0)+1;
   collect([c]);checkProgress([c]);save();Feed.post([c]);celebrate(c.black?5:g===10?5:g===9?4:g===8?2:0);if(c.black){flash(.9);FX.burst(260,['#000000','#f5c451','#ffffff'])}if(g===7){Sound.init();Sound.tone(220,.5,'sawtooth',.05,0,90)}
   await modal({icon:c.black?'🖤':g===10?'💎':g===9?'🔥':g===8?'👍':'🤦',title:c.black?'BLACK LABEL!!':`It came back a ${g}!`,html:`<div class="m-card">${slabHTML(c,true)}</div><b style="color:var(--text)">${esc(c.name)}</b><br>${money(raw)} raw → <b style="color:${c.value>=raw?'var(--green)':'var(--red)'}">${money(c.value)}</b><div class="roast${g<=7?' bad':''}">${esc(c.black?pick(['BLACK LABEL. Kyle has never seen one. Kyle is shaking.','Black Label. The grader called his mom.','This slab needs its own bodyguard.']):pick(ROAST.grade[g]))}</div>`,buttons:[{label:'Next',primary:true}]})}
  render()}
 
 /* ---------- random life events (max one a day; never Vault cards or slabs) ---------- */
 function lifeEvent(){if(game.lastEvent===today()||rip||spinning)return;const nw=networth();if(Math.random()>=LIFE_ODDS(nw))return;
- const raws=game.owned.filter(c=>!c.vault&&!c.slab&&!c.grading&&!c.cond&&c.value>=5),bulk=game.owned.filter(c=>!c.vault&&!c.slab&&!c.grading&&c.value<5),nice=game.owned.filter(c=>!c.vault&&!c.grading&&c.value>=20);
+ const raws=game.owned.filter(c=>!safeCard(c)&&!c.slab&&!c.grading&&!c.cond&&c.value>=5),bulk=game.owned.filter(c=>!safeCard(c)&&!c.slab&&!c.grading&&c.value<5),nice=game.owned.filter(c=>!safeCard(c)&&!c.grading&&c.value>=20);
  const good=Math.random()<.35;let html='',icon,title,an='';
  if(good){const e=pick(LIFE_GOOD);icon=e.icon;title=e.title;
   an=['cash','shoebox','tix'].includes(e.id)||e.cash?'money':'';
@@ -1677,6 +1696,9 @@ function tuneWhale(t,gp){const w0=(t.bands0||(t.bands0=t.bands.map(b=>b.slice())
  for(let k=0;k<60&&ev(w)>t.price*1.02&&w[3]>1;k++){const m=Math.min(1,w[3]-1);w[3]-=m;w[1]+=m}
  t.bands=t.bands0.map((b,i)=>[b[0],b[1],Math.round(w[i]*10)/10]);t.ret=ev(w)/t.price}
 
+/* Vault cards and cards in your own binders are safe from bulk sells and every accident. */
+function safeCard(c){if(!c)return false;if(c.vault)return true;const bs=(typeof game!=='undefined'&&game.binders)||[];for(const b of bs)if(b.uids&&b.uids.includes(c.uid))return true;return false}
+
 /* ---------- image helpers ---------- */
 function imgTag(c,hi=false,eager=false){const lo=c.img||'';return `<img src="${esc(hi?large(lo):lo)}" data-lo="${esc(lo)}" alt="${esc(c.name)}" ${eager?'':'loading="lazy"'} decoding="async" referrerpolicy="no-referrer" draggable="false" onerror="imgFail(this)">`}
 window.imgFail=function(img){const lo=img.dataset.lo;if(lo&&img.getAttribute('src')!==lo){img.src=lo;return}const d=document.createElement('div');d.className='img-missing';d.innerHTML=`<div>${esc(img.alt||'Pokémon card')}<span>ARTWORK UNAVAILABLE</span></div>`;img.replaceWith(d)};
@@ -1686,7 +1708,7 @@ const CARD_BACK='single.webp';
 const BACK=`<div class="cardback img"><img src="${CARD_BACK}" alt="" draggable="false" onerror="this.remove()"></div>`;
 (()=>{const i=new Image();i.src=CARD_BACK})();
 function preload(cards){for(const c of cards){const i=new Image();i.referrerPolicy='no-referrer';i.src=large(c.img)}}
-const metaLine=c=>[c.setName,c.num?'#'+c.num:'',c.first?'1st Edition':'',c.slab?'':c.rarity,c.cond||'',c.sticker?'Kyle sticker':''].filter(Boolean).map(esc).join(' · ');
+const metaLine=c=>[c.setName,c.num?'#'+c.num:'',c.first?'1st Edition':'',c.slab?'':c.rarity,c.cond||'',c.sticker?'Kyle sticker':'',c.cursed?'💀 Cursed by Kyle':''].filter(Boolean).map(esc).join(' · ');
 const fullName=c=>`${c.first?'1st Edition ':''}${c.name}${c.slab?` (Graded ${c.grade})`:''}`;
 
 /* ---------- views ---------- */
@@ -1930,8 +1952,8 @@ function ripEndActions(){const L=lastRip,t=tierById(L.id);let again='';
  else if(L.voucher){const n=game.vouchers[L.id]||0;if(n)again=`<button class="primary" data-action="rip-again">Open ${Math.min(n,L.qty)} more</button>`}
  else{const cost=packPrice(t,L.gid)*L.qty,pending=rip?sum(rip.cards.filter(c=>rip.sell.has(c.uid)).map(c=>c.value)):0;again=`<button class="primary" data-action="rip-again" ${game.cash+pending+1e-9>=cost?'':'disabled'}>Rip again · ${money(cost)}</button>`}
  $('#ripActions').innerHTML=`<button class="secondary" data-action="rip-done">Done</button>${again}`}
-function quickSell(test){if(!rip)return;rip.cards.forEach(c=>{if(test(c)&&!c.grading&&!c.vault)rip.sell.add(c.uid)});ripSummary()}
-function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const c of rip.cards)if(c.grading||c.vault)rip.sell.delete(c.uid);for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}const all=n>1&&n===rip.cards.length&&Math.max(...rip.cards.map(c=>c.value))>=10;rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}${all?' Paper hands 🧻':''}`)}
+function quickSell(test){if(!rip)return;rip.cards.forEach(c=>{if(test(c)&&!c.grading&&!safeCard(c))rip.sell.add(c.uid)});ripSummary()}
+function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const c of rip.cards)if(c.grading||safeCard(c))rip.sell.delete(c.uid);for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}const all=n>1&&n===rip.cards.length&&Math.max(...rip.cards.map(c=>c.value))>=10;rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}${all?' Paper hands 🧻':''}`)}
 function singleChoose(sell){if(!rip||rip.phase!=='revealed')return;const c=rip.cards[0];if(sell)rip.sell.add(c.uid);finalizeRip();
  $('#ripInfo').insertAdjacentHTML('beforeend',`<div class="ri-done">${sell?`Sold for ${money(c.value)}`:'Added to your binder'}</div>`);ripEndActions()}
 let nudged=false;
@@ -2111,12 +2133,12 @@ async function checkBroke(){if(rip||brokeOpen||spinning)return;const cheapest=Ma
  brokeOpen=true;await modal({icon:'😅',title:'O no, you have a gambling problem!',html:'Time to alert Kyle you have a problem :)',buttons:[{label:'Fine, alert him',primary:true,value:1}]});
  game.cash=r2(game.cash+START);game.given=r2(game.given+START);game.kyle=(game.kyle||0)+1;save();
  await modal({icon:'😏',title:pick(['He already knows ;)','Kyle has been notified.','Kyle sighed audibly.']),html:`Kyle has been alerted${game.kyle>1?` (that's ${game.kyle} times now)`:''}. Your virtual bankroll got topped up by $100.${game.kyle>=3?'<br>Your family has been cc\'d.':''}`,buttons:[{label:'Back to the packs',primary:true,value:1}]});brokeOpen=false}
-async function sellBulk(lim=1){const bulk=game.owned.filter(c=>!c.slab&&!c.vault&&!c.grading&&c.value<lim&&!(game.grail&&game.grail.uid===c.uid));if(!bulk.length){toast(`No raw cards under $${lim} to sell.`);return}const tot=sum(bulk.map(c=>c.value));
+async function sellBulk(lim=1){const bulk=game.owned.filter(c=>!c.slab&&!safeCard(c)&&!c.grading&&c.value<lim&&!(game.grail&&game.grail.uid===c.uid));if(!bulk.length){toast(`No raw cards under $${lim} to sell.`);return}const tot=sum(bulk.map(c=>c.value));
  const ok=await modal({icon:'🧹',title:lim>1?`Sell everything under $${lim}?`:'Sell all your bulk?',html:`Sell ${bulk.length} raw card${bulk.length>1?'s':''} under $${lim} for ${money(tot)}. Slabs and Vault cards are safe. They still count toward your sets.`,buttons:[{label:'Cancel',value:false},{label:`Sell ${bulk.length}`,primary:true,value:true}]});if(!ok)return;
  bulk.forEach(c=>sellCard(c.uid));save();toast(`Sold ${bulk.length} bulk cards for ${money(tot)}`)}
 async function sellDupes(){const keepIds=new Set(game.owned.filter(c=>c.slab||c.vault||c.grading).map(c=>c.id)),best=new Map();
  for(const c of game.owned){if(c.slab||c.vault||c.grading)continue;const k=c.id,b=best.get(k);if(!b||c.value>b.value)best.set(k,c)}
- const dupes=game.owned.filter(c=>!c.slab&&!c.vault&&!c.grading&&(keepIds.has(c.id)||best.get(c.id)!==c));if(!dupes.length){toast('No duplicates to sell.');return}const tot=sum(dupes.map(c=>c.value)),tix=dupes.filter(earnsTicket).length;
+ const dupes=game.owned.filter(c=>!c.slab&&!safeCard(c)&&!c.grading&&(keepIds.has(c.id)||best.get(c.id)!==c));if(!dupes.length){toast('No duplicates to sell.');return}const tot=sum(dupes.map(c=>c.value)),tix=dupes.filter(earnsTicket).length;
  const ok=await modal({icon:'🧹',title:'Sell your duplicates?',html:`Sell ${dupes.length} extra cop${dupes.length>1?'ies':'y'} for ${money(tot)}${tix?` (+${tix} 🎟)`:''}. You keep one of every card. Slabs and vault cards are never sold.`,buttons:[{label:'Cancel',value:false},{label:'Sell dupes',primary:true,value:true}]});if(!ok)return;
  let t=0;dupes.forEach(c=>{const r=sellCard(c.uid);if(r&&r.ticket)t++});save();toast(`Sold ${dupes.length} duplicates for ${money(tot)}${t?` · 🎟 +${t}`:''}`)}
 function newRun(prestige){const keep={owner:game.owner,prestige},bank=START*(1+prestige);game=fresh();Object.assign(game,keep);game.cash=game.given=bank;$('#reelTrack').innerHTML='';save()}
@@ -2267,7 +2289,7 @@ async function binderEdit(){const b=binderById(openBinder);if(!b)return;pickedIc
  if(v==='del'){game.binders=myBinders().filter(x=>x!==b);openBinder='all';LS.set('pokerip-openbinder','all');save();render()}}
 async function addToBinder(c){if(!c||!game.owned.includes(c))return;
  const list=()=>myBinders().map(b=>`<button class="tshop" data-bt="${b.id}"><b>${b.icon||'📒'} ${esc(b.name)}</b><span>${b.uids.includes(c.uid)?'✅ In it':'Add'}</span></button>`).join('');
- const p=modal({icon:'📒',title:`Add ${esc(c.name)} to…`,html:myBinders().length?`<div class="tshops" id="btList">${list()}</div>`:'<p>You don\'t have any binders yet.</p>',buttons:[{label:'＋ New binder',value:'new'},{label:'Done',primary:true}]});
+ const p=modal({icon:'📒',title:`Add ${esc(c.name)} to…`,html:myBinders().length?`<p class="muted" style="font-size:12px;margin-top:0">🛡️ Cards in a binder are safe from bulk sells and accidents, just like the Vault.</p><div class="tshops" id="btList">${list()}</div>`:'<p>You don\'t have any binders yet.</p>',buttons:[{label:'＋ New binder',value:'new'},{label:'Done',primary:true}]});
  setTimeout(()=>$$('#btList [data-bt]').forEach(el=>el.addEventListener('click',()=>{const b=binderById(el.dataset.bt);const i=b.uids.indexOf(c.uid);i<0?b.uids.push(c.uid):b.uids.splice(i,1);save();$('#btList').innerHTML=list();addToBinderRebind()})),30);
  function addToBinderRebind(){$$('#btList [data-bt]').forEach(el=>el.addEventListener('click',()=>{const b=binderById(el.dataset.bt);const i=b.uids.indexOf(c.uid);i<0?b.uids.push(c.uid):b.uids.splice(i,1);save();$('#btList').innerHTML=list();addToBinderRebind()}))}
  const v=await p;if(v==='new'){await binderNew();const b=myBinders()[myBinders().length-1];if(b&&!b.uids.includes(c.uid)){b.uids.push(c.uid);save();render()}}else render()}
@@ -2279,13 +2301,13 @@ let eeveeLoading=false;
 const speciesOf=c=>EEVEELUTIONS.find(n=>new RegExp('\\b'+n+'\\b','i').test(c.name))||'Eevee';
 const eeveePool=()=>catalog.data.eevee||[];
 const eeveeReady=()=>eeveePool().length>=20;
-{const c=LS.get(EEVEE_KEY);if(c&&c.cards&&c.cards.length)catalog.data.eevee=c.cards}
+cacheGet(EEVEE_KEY).then(c=>{if(c&&c.cards&&c.cards.length&&!catalog.data.eevee){catalog.data.eevee=c.cards;invalidatePool();eeveePrice();render()}});
 async function eeveeDownload(){if(eeveeLoading)return;if(catalog.offline){toast('The card database is offline right now.');return}eeveeLoading=true;render();
  try{const q=EEVEELUTIONS.map(n=>`name:*${n.toLowerCase()}*`).join(' OR ');let page=1,all=[];
   for(;;){const p=new URLSearchParams({q,pageSize:'250',page:String(page),select:'id,name,number,rarity,subtypes,supertype,images,tcgplayer,set'});const b=await getJSON(`${API}/cards?${p}`,90000,true);const d=b.data||[];all.push(...d);if(d.length<250||all.length>=(b.totalCount||0)||page>=8)break;page++}
   const cards=all.filter(r=>r.images&&r.images.small&&r.supertype==='Pokémon'&&r.set).map(r=>{const c=compact(r,r.set.id,r.set.name);c.sp=speciesOf(c);return c});
   if(cards.length<20)throw new Error('only '+cards.length+' cards');
-  catalog.data.eevee=cards;invalidatePool();LS.set(EEVEE_KEY,{at:Date.now(),cards})||(pruneSetCache(),LS.set(EEVEE_KEY,{at:Date.now(),cards}));eeveePrice();
+  catalog.data.eevee=cards;invalidatePool();cachePut(EEVEE_KEY,{at:Date.now(),cards});eeveePrice();
   modal({icon:'🐾',title:`${cards.length} Eevee cards downloaded!`,html:`Every Eevee and Eeveelution card ever made is now in the game. The Eevee Pack is ready in the Shop, and the Eevee Dex is on your Binder shelf.`,buttons:[{label:'Yay',primary:true}]})}
  catch(e){toast(`Couldn't download the Eevee cards (${e.message}). Try again in a bit.`,4500)}finally{eeveeLoading=false;render()}}
 
@@ -2471,7 +2493,7 @@ const Trade={list:[],at:0,busy:false,friends:null,
   catch(e){console.warn('Trades',e)}finally{this.busy=false}},
  // Sender side: collect what came back from trades that finished while you were away.
  async settle(){for(const t of this.list){if(t.from_user!==Cloud.user||t.from_done)continue;
-  if(t.status==='done'){const c=t.kind==='mystery'?t.back:t.want;if(c){const x={...c,uid:uid(),at:Date.now(),from:`Traded from ${t.to_name}`};delete x.vault;game.owned.push(x);collect([x])}
+  if(t.status==='done'){const conf=t.karma&&t.karma.kind==='confiscate',c=conf?null:t.kind==='mystery'?t.back:t.want;let x=null;if(conf){game.owned.push({...t.give,uid:uid(),at:Date.now()})}else if(c){x={...c,uid:uid(),at:Date.now(),from:`Traded from ${t.to_name}`};delete x.vault;game.owned.push(x);collect([x])}if(t.kind==='mystery')applyKarma(t.karma,'from',x);
    await this.patch(t.id,{from_done:true});t.from_done=true;save();
    if(t.kind==='mystery')revealMystery(t,true);else if(t.kind!=='gift')toast(`🔁 ${t.to_name} accepted your trade. ${c?esc(c.name)+' is in your binder.':''}`,3500)}
   else if(t.status==='declined'){this.refund(t);await this.patch(t.id,{from_done:true});t.from_done=true;toast(`${t.to_name} declined your ${t.kind==='gift'?'gift':'trade'}. ${t.give.name} came back.${t.kind==='gift'?' Ouch.':''}`,3500)}}},
@@ -2486,13 +2508,25 @@ function tradePortalHTML(){if(!Cloud.on)return '';return `<button class="tp-port
 var tpOpen=false;
 function openPost(){if(!Cloud.s){accountModal();return}let h=$('#tpost');if(!h){h=document.createElement('div');h.id='tpost';document.body.appendChild(h)}h.hidden=false;h.classList.add('show');if(!tpOpen){tpOpen=true;lock()}renderPost();Trade.sync(true)}
 function closePost(){const h=$('#tpost');if(h){h.hidden=true;h.classList.remove('show')}if(tpOpen){tpOpen=false;unlock()}render()}
-function tcardHTML(c,hidden){return hidden?`<div class="tcard back"><span>?</span></div>`:`<div class="tcard"><div class="timg">${c.slab?`<span class="tile-tag">${c.black?'BLACK LABEL':'GRADED '+c.grade}</span>`:''}${imgTag(c)}</div><b>${esc(c.name)}</b><small>${moneyS(c.value)}</small></div>`}
-function tradeRow(t){const me=t.from_user===Cloud.user,other=me?t.to_name:t.from_name,K={fair:'🤝 Fair trade',lopsided:'⚖️ Lopsided trade',gift:'🎁 Gift',mystery:'🎲 Mystery Swap'}[t.kind]||t.kind;
- const st=t.status==='open'?(me?'Waiting on them':'Your move'):t.status==='done'?'Done':t.status;
- let cards='';if(t.kind==='gift')cards=tcardHTML(t.give,false);else if(t.kind==='mystery')cards=`${tcardHTML(t.give,!me&&t.status==='open')}<span class="tx">⇄</span>${t.status==='done'?tcardHTML(t.back,false):tcardHTML(null,true)}`;else cards=`${tcardHTML(t.give)}<span class="tx">⇄</span>${tcardHTML(t.want)}`;
- let acts='';if(t.status==='open'){if(me)acts=`<button class="smallbtn" data-action="tp-cancel" data-id="${t.id}">Cancel</button>`;else acts=t.kind==='mystery'?`<button class="smallbtn" data-action="tp-decline" data-id="${t.id}">Nope</button><button class="primary smallbtn" data-action="tp-mystery" data-id="${t.id}">🎲 Pick my card</button>`:`<button class="smallbtn" data-action="tp-decline" data-id="${t.id}">Decline</button><button class="primary smallbtn" data-action="tp-accept" data-id="${t.id}">${t.kind==='gift'?'🎁 Open gift':'Accept'}${!me&&t.tax_to?` · ${moneyS(t.tax_to)} Kyle tax`:''}</button>`}
+function cardDesc(c){return c?`${c.name}${c.slab?` (${c.black?'Black Label':'Graded '+c.grade})`:' (Raw)'}`:''}
+function tcardHTML(c,hidden,tag=''){if(hidden||!c)return `<div class="tcard back"><span>?</span></div>`;
+ return `<div class="tcard"><div class="timg">${c.slab?`<span class="tile-tag">${c.black?'BLACK LABEL':'GRADED '+c.grade}</span>`:''}${imgTag(c)}</div><b>${esc(c.name)}</b><small class="tset">${esc(c.setName||'')}${c.num?' #'+esc(c.num):''}${c.slab?'':' · Raw'}</small><small>${moneyS(c.value)}</small>${tag}</div>`}
+function tradeSides(t){const me=t.from_user===Cloud.user;const mine=me?t.give:(t.kind==='mystery'?t.back:t.want),theirs=me?(t.kind==='mystery'?t.back:t.want):t.give;return{me,mine,theirs,other:me?t.to_name:t.from_name}}
+function tradeRow(t){const{me,mine,theirs,other}=tradeSides(t),K={fair:'🤝 Fair trade',lopsided:'⚖️ Lopsided trade',gift:'🎁 Gift',mystery:'🎲 Mystery Swap'}[t.kind]||t.kind;
+ const st=t.status==='open'?(me?'Waiting on them':'Your move'):t.status==='done'?'Done':t.status==='declined'?'Declined':'Cancelled';
+ const hideMine=t.kind==='mystery'&&!mine,hideTheirs=t.kind==='mystery'&&(t.status!=='done'||!theirs)&&!(me&&false);
+ let body;
+ if(t.kind==='gift')body=`<div class="tside one"><small>${me?'You gave':'You get'}</small>${tcardHTML(t.give)}</div>`;
+ else body=`<div class="tside"><small>You give</small>${tcardHTML(mine,hideMine)}</div><span class="tx">⇄</span><div class="tside"><small>You get</small>${tcardHTML(theirs,t.kind==='mystery'&&t.status!=='done')}</div>`;
+ let line='';if(t.status==='open'){
+  if(t.kind==='gift')line=me?`You're gifting ${esc(other)} your ${esc(cardDesc(t.give))}.`:`${esc(other)} is gifting you their ${esc(cardDesc(t.give))}.`;
+  else if(t.kind==='mystery')line=me?`You put in your ${esc(cardDesc(t.give))} face down. ${esc(other)} picks blind.`:`${esc(other)} put a card in face down. Pick one of yours blind.`;
+  else line=me?`You offered your ${esc(cardDesc(t.give))} for ${esc(other)}'s ${esc(cardDesc(t.want))}.`:`${esc(other)} wants your <b>${esc(cardDesc(t.want))}</b> and is offering their <b>${esc(cardDesc(t.give))}</b>.`}
+ const tax=t.kind==='lopsided'?`<p class="ttax">⚖️ Lopsided. ${t.tax_from?`${me?'You':esc(other)} paid Kyle ${moneyS(t.tax_from)}.`:t.tax_to?`${me?esc(other)+' pays':'You pay'} Kyle ${moneyS(t.tax_to)} to accept.`:''}</p>`:t.kind==='fair'?'<p class="ttax fair">🤝 Fair: values within 25%.</p>':'';
+ const kar=t.karma&&t.status==='done'?`<p class="ttax karma">⚡ ${esc(karmaText(t.karma,t))}</p>`:'';
+ let acts='';if(t.status==='open'){if(me)acts=`<button class="smallbtn" data-action="tp-cancel" data-id="${t.id}">Cancel</button>`;else acts=t.kind==='mystery'?`<button class="smallbtn" data-action="tp-decline" data-id="${t.id}">Nope</button><button class="primary smallbtn" data-action="tp-mystery" data-id="${t.id}">🎲 Pick my card</button>`:`<button class="smallbtn" data-action="tp-decline" data-id="${t.id}">Decline</button><button class="primary smallbtn" data-action="tp-accept" data-id="${t.id}">${t.kind==='gift'?'🎁 Open gift':'Accept'}${t.tax_to?` · ${moneyS(t.tax_to)} tax`:''}</button>`}
  else if(t.status==='done'&&t.kind==='mystery')acts=`<button class="smallbtn" data-action="tp-replay" data-id="${t.id}">🎬 Replay reveal</button>`;
- return `<div class="trow ${t.status}"><div class="trow-h"><b>${K} ${me?'to':'from'} ${esc(other)}</b><small>${st}</small></div><div class="tcards">${cards}</div>${t.msg?`<p class="tmsg">"${esc(t.msg)}"</p>`:''}${acts?`<div class="tacts">${acts}</div>`:''}</div>`}
+ return `<div class="trow ${t.status}"><div class="trow-h"><b>${K} ${me?'to':'from'} ${esc(other)}</b><small>${st}</small></div>${line?`<p class="tline">${line}</p>`:''}<div class="tcards">${body}</div>${tax}${kar}${t.msg?`<p class="tmsg">"${esc(t.msg)}"</p>`:''}${acts?`<div class="tacts">${acts}</div>`:''}</div>`}
 function renderPost(){const h=$('#tpost');if(!h)return;const L=Trade.list,inc=L.filter(t=>t.to_user===Cloud.user&&t.status==='open'),out=L.filter(t=>t.from_user===Cloud.user&&t.status==='open'),past=L.filter(t=>t.status!=='open').slice(0,15);
  h.innerHTML=`<div class="eh-top tp-top"><b>🔁 Trading Post</b><button class="eh-x" data-action="tp-close" aria-label="Close">✕</button></div><div class="eh-body">
  <div class="tp-new"><button class="tp-kind" data-action="tp-new" data-k="trade"><span>🤝</span><b>Trade</b><small>Swap cards. Fair is free. Lopsided pays the Kyle tax.</small></button><button class="tp-kind" data-action="tp-new" data-k="gift"><span>🎁</span><b>Gift</b><small>Send a card. Costs tickets.</small></button><button class="tp-kind myst" data-action="tp-new" data-k="mystery"><span>🎲</span><b>Mystery Swap</b><small>Both cards face down. No take-backs.</small></button></div>
@@ -2501,9 +2535,10 @@ function renderPost(){const h=$('#tpost');if(!h)return;const L=Trade.list,inc=L.
  ${past.length?`<div class="section-head"><h2>📜 History</h2></div>${past.map(tradeRow).join('')}`:''}
  ${!L.length?'<div class="empty">No trades yet. Send Johnny a Mystery Swap. What could go wrong.</div>':''}
  <p class="muted" style="font-size:12px;margin-top:14px">Fair trade: values within 25%. Lopsided: whoever gets the better card pays Kyle 15% of the difference. Gifts cost 1 🎟 per $100 (max 150). Vault cards can't be traded.</p></div>`}
-async function pickCard(title,list,sub=''){if(!list.length){toast('No cards to pick from.');return null}let q='',sort='value';
- const draw=()=>{const f=list.filter(c=>!q||c.name.toLowerCase().includes(q)).sort((a,b)=>sort==='value'?b.value-a.value:a.name.localeCompare(b.name)).slice(0,60);return f.map(c=>`<button class="pk" data-pk="${esc(c.uid)}">${tcardHTML(c)}</button>`).join('')||'<div class="empty">Nothing matches.</div>'};
- const p=modal({icon:'🃏',title,html:`${sub}<input class="inp" id="pkq" placeholder="Search by name" autocomplete="off"><div class="pkgrid" id="pkgrid">${draw()}</div>`,buttons:[{label:'Cancel',value:null}]});
+async function pickCard(title,list,sub='',ref=null,tagFn=null){if(!list.length){toast('No cards to pick from.');return null}let q='',sort=ref!=null?'fair':'value';
+ const tag=c=>tagFn?tagFn(c):ref==null?'':fairTag(c.value,ref);
+ const draw=()=>{const f=list.filter(c=>!q||c.name.toLowerCase().includes(q)||(c.setName||'').toLowerCase().includes(q)).sort((a,b)=>sort==='fair'?(Math.abs(Math.log((a.value||.01)/ref))-Math.abs(Math.log((b.value||.01)/ref))):b.value-a.value).slice(0,90);return f.map(c=>`<button class="pk" data-pk="${esc(c.uid)}">${tcardHTML(c,false,tag(c))}</button>`).join('')||'<div class="empty">Nothing matches.</div>'};
+ const p=modal({icon:'🃏',title,html:`${sub}<input class="inp" id="pkq" placeholder="Search by name or set" autocomplete="off"><div class="pkgrid" id="pkgrid">${draw()}</div>`,buttons:[{label:'Cancel',value:null}]});
  setTimeout(()=>{const i=$('#pkq');if(i)i.addEventListener('input',()=>{q=i.value.trim().toLowerCase();$('#pkgrid').innerHTML=draw()})},30);
  const pickedP=new Promise(res=>{const h=e=>{const b=e.target.closest('#pkgrid [data-pk]');if(!b)return;document.removeEventListener('click',h,true);e.stopPropagation();res(list.find(c=>c.uid===b.dataset.pk));modalClose&&modalClose('picked')};document.addEventListener('click',h,true);p.then(()=>setTimeout(()=>{document.removeEventListener('click',h,true);res(null)},50))});
  return pickedP}
@@ -2520,9 +2555,10 @@ async function newTrade(kind){if(!Cloud.s){accountModal();return}const f=await p
   const msg=await askMsg(`Send ${esc(c.name)} face down?`,'Trash talk (optional)');if(msg===null)return;await sendTrade({kind:'mystery',to:f,give:c,msg});return}
  // regular trade
  let theirs=[];try{theirs=await friendCards(f)}catch(e){}if(!theirs.length){toast(`Couldn't load ${f.username}'s binder.`);return}
- const want=await pickCard(`Pick a card from ${esc(f.username)}'s binder`,theirs);if(!want)return;
- const give=await pickCard(`What are you offering for ${esc(want.name)}?`,mine,`<p class="muted" style="font-size:12px">They have ${esc(want.name)} (${money(want.value)}). Within ${Math.round(FAIR_GAP*100)}% is a fair trade. Otherwise whoever gets the better card pays Kyle 15% of the difference.</p>`);if(!give)return;
- const gap=Math.abs(want.value-give.value),fair=gap<=Math.max(want.value,give.value)*FAIR_GAP,tax=fair?0:r2(gap*KYLE_TAX),tax_from=!fair&&want.value>give.value?tax:0,tax_to=!fair&&give.value>want.value?tax:0;
+ const myVals=mine.map(c=>c.value),matches=v=>myVals.filter(m=>isFair(m,v)).length;
+ const want=await pickCard(`Pick a card from ${esc(f.username)}'s binder`,theirs,'<p class="muted" style="font-size:12px">Tags show how many of your cards would make it a fair trade.</p>',null,c=>{const n=matches(c.value);return n?`<span class="ftag ok">🤝 ${n} fair match${n>1?'es':''}</span>`:'<span class="ftag tax">No fair match</span>'});if(!want)return;
+ const give=await pickCard(`What are you offering for ${esc(want.name)}?`,mine,fairRangeHTML(want.value,cardDesc(want)),want.value);if(!give)return;
+ const gap=Math.abs(want.value-give.value),fair=isFair(want.value,give.value),tax=fair?0:r2(gap*KYLE_TAX),tax_from=!fair&&want.value>give.value?tax:0,tax_to=!fair&&give.value>want.value?tax:0;
  if(tax_from&&game.cash<tax_from){toast(`You need ${money(tax_from)} for the Kyle tax.`);return}
  const msg=await askMsg(`${fair?'🤝 Fair trade':'⚖️ Lopsided trade'}: your ${esc(give.name)} (${moneyS(give.value)}) for their ${esc(want.name)} (${moneyS(want.value)})${tax_from?`<br>You pay Kyle ${money(tax_from)} because you're getting the better card.`:tax_to?`<br>${esc(f.username)} pays Kyle ${money(tax_to)} if they accept.`:''}`,'Add a note (optional)');if(msg===null)return;
  await sendTrade({kind:fair?'fair':'lopsided',to:f,give,want,tax_from,tax_to,msg})}
@@ -2541,16 +2577,19 @@ async function acceptTrade(id){const t=tradeById(id);if(!t||t.status!=='open')re
  if(t.tax_to&&game.cash<t.tax_to){toast(`You need ${money(t.tax_to)} for the Kyle tax.`);return}
  await Trade.patch(t.id,{status:'done',want:cleanCard(mine)});game.owned.splice(game.owned.indexOf(mine),1);if(t.tax_to)game.cash=r2(game.cash-t.tax_to);
  const x={...t.give,uid:uid(),at:Date.now(),from:`Traded from ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);save();
- const v=tradeVerdict(x.value,mine.value);modal({icon:VERDICT_ICON[v],title:'Trade done',html:`<div class="tcards big">${tcardHTML(mine)}<span class="tx">→</span>${tcardHTML(x)}</div><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p>`,buttons:[{label:'Nice',primary:true}]});await Trade.sync(true)}
+ const v=tradeVerdict(x.value,mine.value);modal({icon:VERDICT_ICON[v],title:'Trade done',html:`<div class="tcards big"><div class="tside"><small>You gave</small>${tcardHTML(mine)}</div><span class="tx">→</span><div class="tside"><small>You got</small>${tcardHTML(x)}</div></div><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p>`,buttons:[{label:'Nice',primary:true}]});await Trade.sync(true)}
 async function declineTrade(id){const t=tradeById(id);if(!t||t.status!=='open')return;await Trade.patch(t.id,{status:'declined'});toast(t.kind==='gift'?'Gift declined. Cold.':'Declined. Kyle respects the hustle.');Trade.sync(true)}
 async function cancelTrade(id){const t=tradeById(id);if(!t||t.status!=='open'||t.from_user!==Cloud.user)return;await Trade.patch(t.id,{status:'cancelled',from_done:true});Trade.refund(t);toast(`Cancelled. ${t.give.name} is back.`);Trade.sync(true)}
 async function mysteryRespond(id){const t=tradeById(id);if(!t||t.status!=='open')return;
  const c=await pickCard(`${esc(t.from_name)} sent a Mystery Swap`,game.owned.filter(tradeable),`<p class="muted" style="font-size:12px">Their card is face down. Pick one of yours to put in. Both flip at once. No take-backs. ${t.msg?`<br>They said: "${esc(t.msg)}"`:''}</p>`);if(!c)return;
  const fresh=(await Cloud.req(`/rest/v1/trades?id=eq.${t.id}&select=status`)||[])[0];if(!fresh||fresh.status!=='open'){toast('Too late, that swap is gone.');Trade.sync(true);return}
- await Trade.patch(t.id,{status:'done',back:cleanCard(c)});game.owned.splice(game.owned.indexOf(c),1);const x={...t.give,uid:uid(),at:Date.now(),from:`🎲 Mystery Swap with ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);save();
- t.back=cleanCard(c);t.status='done';revealMystery(t,false);Trade.sync(true)}
+ t.back=cleanCard(c);const k=rollKarma(t);await Trade.patch(t.id,{status:'done',back:t.back,karma:k});t.status='done';t.karma=k;
+ let x=null;if(!(k&&k.kind==='confiscate')){game.owned.splice(game.owned.indexOf(c),1);x={...t.give,uid:uid(),at:Date.now(),from:`🎲 Mystery Swap with ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x])}
+ applyKarma(k,'to',x);save();if(k&&k.kind==='shame')postShame(t);revealMystery(t,false);Trade.sync(true)}
+async function postShame(t){const lowFrom=t.karma.hosed==='to',low=lowFrom?t.from_name:t.to_name,hosed=lowFrom?t.to_name:t.from_name,cheap=lowFrom?t.give:t.back,big=lowFrom?t.back:t.give;
+ try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:low,name:`🤡 fleeced ${hosed} with a ${moneyS(cheap.value)} ${cheap.name} for a ${moneyS(big.value)} ${big.name}`,value:r2(big.value-cheap.value),img:cheap.img||'',grade:null,first:false,source:'Mystery Swap shame'}])})}catch(e){}}
 async function revealMystery(t,asSender){const mine=asSender?t.give:t.back,theirs=asSender?t.back:t.give,other=asSender?t.to_name:t.from_name;if(!mine||!theirs)return;const v=tradeVerdict(theirs.value,mine.value);
- await modal({icon:'🎲',title:'Mystery Swap reveal',html:`<div class="mreveal"><div class="mside"><small>You gave</small><div class="mflip"><div class="mf back"><span>?</span></div><div class="mf front">${tcardHTML(mine)}</div></div></div><div class="mside"><small>${esc(other)} gave</small><div class="mflip d2"><div class="mf back"><span>?</span></div><div class="mf front">${tcardHTML(theirs)}</div></div></div></div><div class="mverdict"><span>${VERDICT_ICON[v]}</span><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p></div>`,buttons:[{label:v==='robbery'||v==='win'?'HAHA':v==='fair'?'Fair enough':'I want a rematch',primary:true}]});
+ await modal({icon:'🎲',title:'Mystery Swap reveal',html:`<div class="mreveal"><div class="mside"><small>You gave</small><div class="mflip"><div class="mf back"><span>?</span></div><div class="mf front">${tcardHTML(mine)}</div></div></div><div class="mside"><small>${esc(other)} gave</small><div class="mflip d2"><div class="mf back"><span>?</span></div><div class="mf front">${tcardHTML(theirs)}</div></div></div></div><div class="mverdict"><span>${VERDICT_ICON[v]}</span><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p>${karmaHTML(t.karma,asSender?'from':'to',t)}</div>`,buttons:[{label:v==='robbery'||v==='win'?'HAHA':v==='fair'?'Fair enough':'I want a rematch',primary:true}]});
  if(v==='robbery')pawBurst&&pawBurst(30,true)}
 
 const EXTRA_ACTIONS2={
@@ -2562,6 +2601,31 @@ var csTab=null;
 function rivalStats(d){const a=game.cstats||collectionStats(),b=d.cs||{},cell=(ic,x,y)=>`<span class="${x>y?'pos':x<y?'neg':''}">${ic} ${x} vs ${y}</span>`;return `<span class="rstats">${cell('💎',a.tens||0,b.tens||0)}${cell('🖤',a.blacks||0,b.blacks||0)}${cell('📚',a.sets||0,b.sets||0)}</span>`}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-m-value]');if(b&&modalClose)modalClose(b.dataset.mValue)});
 setTimeout(()=>{if(charmOn())charmTick()},500);
+
+/* Fair range helpers: fair when the cheaper card is at least 75% of the pricier one. */
+const isFair=(a,b)=>Math.min(a,b)>=Math.max(a,b)*(1-FAIR_GAP);
+const fairRange=v=>[r2(v*(1-FAIR_GAP)),r2(v/(1-FAIR_GAP))];
+function fairTag(v,ref){if(isFair(v,ref))return '<span class="ftag ok">🤝 Fair</span>';const tax=r2(Math.abs(v-ref)*KYLE_TAX);return `<span class="ftag tax">⚖️ ${moneyS(tax)} tax</span>`}
+function fairRangeHTML(ref,label){const[lo,hi]=fairRange(ref);return `<div class="frange">🤝 Fair range for ${esc(label)} (${moneyS(ref)}): <b>${moneyS(lo)} to ${moneyS(hi)}</b>. Anything outside it costs a 15% Kyle tax on the difference.</div>`}
+
+/* ---------- Mystery Swap karma ---------- */
+const KARMA_LINES={
+ tax:["Kyle saw that. Kyle sees everything. Kyle took {amt}.","Kyle's Karma Tax: {amt}. Should've thought about it.","The dev giveth and the dev taketh away. Mostly taketh. {amt}."],
+ curse:["Kyle cursed the card you just got. Grade it and see what happens. 💀","That card is now cursed by Kyle. 50% chance it grades as a 1.","Kyle whispered something to your new card. It looks scared."],
+ shame:["Kyle posted this to the feed. Everyone knows now.","This swap is now public. Kyle made sure.","Kyle screenshotted it and sent it to everyone. You're famous."],
+ confiscate:["Kyle said no. Kyle is in charge. Both cards go home.","Kyle reversed the whole thing. God mode activated.","Kyle stepped in. Swap cancelled by divine intervention."]};
+function rollKarma(t){const a=t.give.value,b=t.back.value,hi=Math.max(a,b),lo=Math.min(a,b),gap=hi-lo;if(hi<lo*3||gap<500)return null;
+ const hosed=a>b?'from':'to';let tix=Math.min(50,Math.max(1,Math.floor(gap/500))),kind=null;
+ if(Math.random()<1/3){const r=Math.random();kind=r<.05?'confiscate':r<.45?'tax':r<.8?'curse':'shame'}
+ if(kind==='confiscate')tix=0;
+ return{hosed,tix,kind,amt:kind==='tax'?r2(gap*.1):0,line:kind?pick(KARMA_LINES[kind]).replace('{amt}',money(r2(gap*.1))):''}}
+function karmaText(k,t){const hosedName=k.hosed==='from'?t.from_name:t.to_name;return `${k.tix?`${hosedName} got ${k.tix} 🎟 in sorry tickets. `:''}${k.kind?k.line:''}`}
+// Apply my side of the karma. role: 'from' or 'to'. got = the card I received (if any).
+function applyKarma(k,role,got){if(!k)return;if(k.hosed===role){game.tickets+=k.tix||0}else if(k.kind==='tax'){game.cash=r2(Math.max(0,game.cash-k.amt))}else if(k.kind==='curse'&&got){got.cursed=true}save()}
+function karmaHTML(k,role,t){if(!k)return '';const hosedMe=k.hosed===role,other=role==='from'?t.to_name:t.from_name;
+ let h=!k.tix?'':hosedMe?`<div class="sorry">🎟 Kyle felt bad for you: <b>+${k.tix} sorry tickets</b>. ${esc(other)} did not feel bad.</div>`:`<div class="sorry dim">${esc(other)} got ${k.tix} sorry tickets out of this.</div>`;
+ if(k.kind)h+=`<div class="karmaban">⚡ KARMA ⚡</div><p class="karmaline">${esc(k.line)}${!hosedMe&&k.kind==='tax'?'':''}</p>${k.kind==='confiscate'?'<p class="muted" style="font-size:12px">Everyone keeps their own card.</p>':''}`;
+ return h}
 
 /* ---------- events ---------- */
 const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,
