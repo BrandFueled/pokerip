@@ -667,6 +667,16 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .karmaban{margin:12px auto 4px;display:inline-block;font-weight:1000;letter-spacing:.2em;padding:6px 14px;border-radius:20px;color:#fff;background:linear-gradient(90deg,#7b2cff,#ff3d8b,#7b2cff);background-size:200% 100%;animation:shine 1s linear infinite,eban2 .6s 2.2s both}
 @keyframes eban2{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.2);opacity:1}100%{transform:scale(1)}}
 .karmaline{font-weight:800;color:#f1d6ff;opacity:0;animation:eeFade .4s 2.6s forwards}
+.tierchip{display:inline-block;margin-top:4px;font-size:11px;font-weight:800;padding:2px 8px;border-radius:10px;background:#c86bff22;color:#e6c8ff}.tshop.rawdawg{flex-direction:column;align-items:flex-start;gap:2px;border-color:#ff9b65aa!important;background:linear-gradient(90deg,#ff9b6522,#c86bff22)!important}
+
+.goals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 16px}.goal{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border-radius:14px;border:1px solid #ffd34d33;background:linear-gradient(160deg,#ffd34d14,#141b28);color:var(--text);text-align:center}.goal span{font-size:24px}.goal b{font-size:13px}.goal small{font-size:11px;color:var(--muted)}
+.goalscroll{max-height:56vh;overflow-y:auto;text-align:left}
+.garybox{background:#ffffff0a;border:1px solid #ffffff1a;border-radius:12px;padding:10px 12px;margin:8px 0;display:flex;flex-direction:column}.garybox small{color:var(--muted);font-size:12px}.garybox .prog{display:block}
+.garyline{font-size:13px;color:#d9e6ff;background:#6bb5ff14;border-radius:10px;padding:7px 10px;margin:0 0 10px}
+.streakrow{display:flex;gap:6px;justify-content:center;margin:10px 0}.streakrow span{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;background:#ffffff0d;color:var(--muted);border:1px solid #ffffff1a}.streakrow span.on{background:linear-gradient(160deg,#ff9b65,#ff5f6d);color:#fff;border-color:transparent;box-shadow:0 0 12px #ff9b6588}
+.hrow{display:flex;justify-content:space-between;align-items:center}.hrow.me b:first-child{color:var(--gold)}
+.t2hint{font-size:10.5px;color:var(--muted);line-height:1.25;padding:0 4px 4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dougimg{vertical-align:middle;border-radius:50%;object-fit:cover}.dougpic{display:flex;justify-content:center;margin:-4px 0 6px}.dougpic .dougimg{border:3px solid #ffd34d66;box-shadow:0 0 18px #ffd34d44}
 </style>
 </head>
 <body>
@@ -754,12 +764,11 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
   <h1 class="title">Collect</h1>
   <p class="sub">Fill the Trophy Case to beat POKÉ RIP. Build master sets along the way for big rewards.</p>
   <div id="grailBox2"></div>
+  <div id="prestigeBox"></div>
   <div class="section-head"><h2>🏆 Trophy Case</h2><span class="muted" id="trophyHead"></span></div>
   <div class="gridcards trophies" id="trophyGrid"></div>
   <div class="section-head"><h2>🏆 Trophy Case II</h2><span class="muted" id="trophy2Head"></span></div>
   <div class="gridcards trophies" id="trophy2Grid"></div>
-  <div id="prestigeBox" style="margin-top:18px"></div>
-  <div id="wallBox" style="margin-top:18px"></div>
   <div class="section-head"><h2>📚 Master sets</h2></div>
   <div id="featSets"></div>
   <div class="section-head"><h2>Vintage sets</h2></div>
@@ -791,6 +800,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <h1 class="title">Stats</h1>
  <p class="sub">Your bankroll, your luck, and how often Kyle has been alerted.</p>
  <div class="stats" id="statsGrid"></div>
+ <div id="hustleBox" style="margin:16px 0"></div>
  <div id="boardWrap" hidden><div class="section-head"><h2>Leaderboard</h2><button class="smallbtn" data-action="lb-refresh">Refresh</button></div><div class="seg grabseg" id="boardSeg"></div><div class="panel rows" id="board"></div></div>
  <div class="section-head"><h2>🏅 Badges</h2><span class="muted" id="badgeCount"></span></div>
  <div id="badges"></div>
@@ -862,10 +872,10 @@ const GOD_BANDS=[[5,15,50],[15,50,35],[50,200,12],[200,1e9,3]], GOD_ODDS=1/250, 
 const LUCK=4;
 const luckW=bands=>{const w=bands.map(b=>b[2]);const cl=typeof charmLuck==='function'?charmLuck():0;if(w.length<2||(!LUCK&&!cl))return w;const take=Math.min(LUCK+w[0]*cl,w[0]*.6),rest=sum(w.slice(1));w[0]-=take;for(let i=1;i<w.length;i++)w[i]+=take*w[i]/rest;return w};
 const SLOTS={RARE:RARE_BANDS,BONUS:BONUS_BANDS,HIT:HIT_BANDS,VRARE:VRARE_BANDS,FRARE:FRARE_BANDS};
-const GRADE_MULT={modern:{1:.2,7:.75,8:1.15,9:1.4,10:2.5},vintage:{1:.3,7:1.1,8:1.8,9:3.5,10:12}};
+const GRADE_MULT={modern:{1:.2,2:.3,7:.75,8:1.15,9:1.4,10:2.5},vintage:{1:.3,2:.45,7:1.1,8:1.8,9:3.5,10:12}};
 const GRADE_FEE=25, GRADE_MS=6e5, GRADE_SLOTS=5, SUBMIT_GRADES=[[7,28],[8,41],[9,22],[10,9]];
 const PACK_GRADES=[[9,66],[10,34]], GRAB_GRADES=[[8,26],[9,51],[10,23]], VINT_GRADES=[[8,46],[9,42],[10,12]];
-const GRADE_NAME={1:'POOR (CURSED)',7:'NEAR MINT',8:'NM-MT',9:'MINT',10:'GEM MINT'};
+const GRADE_NAME={1:'POOR (CURSED)',2:'GOOD (REPORTED)',7:'NEAR MINT',8:'NM-MT',9:'MINT',10:'GEM MINT'};
 const gradeFee=c=>c.value<500?25:c.value<5000?150:c.value<50000?1000:r2(c.value*.05); // grading costs more for valuable cards, like the real thing
 const gradeName=c=>c.black?'BLACK LABEL':GRADE_NAME[c.grade]||'';
 const BLACK_MULT=5, BLACK_FROM_GRADING=.06;
@@ -1453,7 +1463,7 @@ function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.
  if(!d.best){let b=null;for(const c of[...d.owned,...d.history.flatMap(h=>h.cards)])if(!b||c.value>b.value)b=c;d.best=b?{value:b.value,name:fullName(b)}:{value:0,name:''}}
  return d}
 function load(){const d=LS.get(SAVE_KEY);if(d&&(d.v===3||d.v===4)&&typeof d.cash==='number')return normalize(d);return fresh()}
-function save(){if(window.__booted){for(const f of[cstatsUpdate,prestigeScan,eeveeBadgeCheck,eeveeDoneCheck])try{f()}catch(e){console.warn(e)}}levelCheck();milestoneCheck();trophy2Check();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
+function save(){if(window.__booted){for(const f of[cstatsUpdate,prestigeScan,eeveeBadgeCheck,eeveeDoneCheck,weekTick,artistCheck])try{f()}catch(e){console.warn(e)}}levelCheck();milestoneCheck();trophy2Check();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
  if(!LS.set(SAVE_KEY,game)){game.history.length=Math.min(game.history.length,40);pruneSetCache();LS.set(SAVE_KEY,game)}Cloud.queue();render()}
 const boxDef=id=>SEALED.find(b=>b.id===id);
 const boxValue=b=>{const d=boxDef(b.box);if(!d)return 0;const days=(Date.now()-b.at)/864e5;return r2(Math.min(b.cost*BOX_CAP,b.cost*Math.pow(1+d.rate,days)))};
@@ -1518,19 +1528,20 @@ function milestoneCheck(){for(const m of MILESTONES){if(game.miles[m.id]||!m.tes
 const gradingCards=()=>game.owned.filter(c=>c.grading);
 const gradesReady=()=>gradingCards().filter(c=>c.grading<=Date.now());
 async function submitGrading(c){if(!c||c.slab||c.grading)return;if(gradingCards().length>=GRADE_SLOTS){toast(`The grader only takes ${GRADE_SLOTS} at a time. Wait for one to come back.`);return}
- const fee=gradeFee(c);if(game.cash+1e-9<fee){toast(`Grading this one costs ${money(fee)}.`);return}
+ const fee=r2(gradeFee(c)*(1-garyDiscount()));if(game.cash+1e-9<fee){toast(`Grading this one costs ${money(fee)}.`);return}
  const ev=c.value*(isVintage(c.setId)?2.73:1.18)-fee,ins=r2(Math.max(1,c.value*.1)),risk=Math.round(DISASTER_ODDS(networth())*100);
- const v=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,stack:true,html:`${money(fee)} to grade (bigger cards cost more), back in 10 minutes. Most cards come back a 7 or 8. About 1 in 5 is a 9, and 9% are a 10. A tiny few come back <b style="color:var(--text)">Black Label</b>.<br><br>Raw value ${money(c.value)}. ${c.value<20?'Honestly? Grading this is a terrible idea. Kyle loves it.':ev>0?'On average this one is worth grading.':'On average you lose money on this. Do it for the story.'}<br><small>${risk}% of submissions never come back (fires, floods, raccoons). Insurance pays the raw value if disaster strikes.</small>`,buttons:[{label:`Send + insure · ${moneyS(fee+ins)}`,primary:true,value:'ins'},{label:`Send it uninsured · ${moneyS(fee)}`,value:'raw'},{label:'Never mind',value:null}]});
- if(!v||!game.owned.includes(c)||c.grading)return;const cost=fee+(v==='ins'?ins:0);if(game.cash+1e-9<cost){toast(`You need ${money(cost)} for that.`);return}
- spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v==='ins';if(charmOn()&&game.charm.grade){c.charmed=true;game.charm.grade=false;setTimeout(()=>toast('🍀 Lucky Charm used on this one. +20% toward a 9 or 10.',3000),3300)}save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
+ const v=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,stack:true,html:`<p class="garyline">${dougImg(28)} <b>Doug (${esc(garyName())})</b>: ${esc(pick(GARY_SUBMIT))}${bribeOpen()?' <i>He leans in. "Doug is... open to an arrangement today."</i>':''}</p>${money(fee)} to grade${garyDiscount()?` (Doug's ${Math.round(garyDiscount()*100)}% loyalty discount)`:''} (bigger cards cost more), back in 10 minutes. Most cards come back a 7 or 8. About 1 in 5 is a 9, and 9% are a 10. A tiny few come back <b style="color:var(--text)">Black Label</b>.<br><br>Raw value ${money(c.value)}. ${c.value<20?'Honestly? Grading this is a terrible idea. Kyle loves it.':ev>0?'On average this one is worth grading.':'On average you lose money on this. Do it for the story.'}<br><small>${risk}% of submissions never come back (fires, floods, raccoons). Insurance pays the raw value if disaster strikes.</small>`,buttons:[{label:`Send + insure · ${moneyS(fee+ins)}`,primary:true,value:'ins'},{label:`Send it uninsured · ${moneyS(fee)}`,value:'raw'},...(bribeOpen()?[{label:`💵 Insure + bribe Doug · ${moneyS(fee+ins+bribeCost(fee))}`,value:'bribe'}]:[]),{label:'Never mind',value:null}]});
+ if(!v||!game.owned.includes(c)||c.grading)return;const cost=fee+(v!=='raw'?ins:0)+(v==='bribe'?bribeCost(fee):0);if(game.cash+1e-9<cost){toast(`You need ${money(cost)} for that.`);return}
+ spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v!=='raw';gary().subs++;if(v==='bribe'){gary().bribes++;const lv=garyLevel(),r=Math.random();c.bribe=r<.03?'caught':r<.7+lv*.03?'yes':'pocket'}if(charmOn()&&game.charm.grade){c.charmed=true;game.charm.grade=false;setTimeout(()=>toast('🍀 Lucky Charm used on this one. +20% toward a 9 or 10.',3000),3300)}save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
 async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||spinning)return;
  for(const c of ready){const raw=c.value,insured=c.insured;delete c.grading;delete c.insured;
   if(!safeCard(c)&&Math.random()<DISASTER_ODDS(networth())){const i=game.owned.indexOf(c);if(i>=0)game.owned.splice(i,1);game.disasters=(game.disasters||0)+1;if(insured)game.cash=r2(game.cash+raw);save();
    Sound.init();Sound.tone(196,.9,'sine',.06,0,98);Sound.tone(147,1.2,'sine',.05,.35,73);buzz([200,100,300]);
    await modal({icon:'🕯️',title:pick(DISASTER_TITLES),html:`${animHTML('chomp')}<b style="color:var(--text)">${esc(c.name)}</b><br><span class="muted">${money(raw)} · gone</span><p style="margin-top:10px">${esc(pick(DISASTERS))}</p>${insured?`<p style="color:var(--green)">Insurance paid out <b>${money(raw)}</b>. Smart.</p>`:'<p class="roast bad">It was not insured. Sucks to suck.</p>'}`,buttons:[{label:insured?'Thank god for insurance':'🕯️ Pay respects',primary:true}]});continue}
-  let g=SUBMIT_GRADES[wIndex(charmGradeWeights(c))][0];delete c.charmed;if(c.cursed&&Math.random()<.5){g=1;setTimeout(()=>toast('💀 The curse got it. Kyle warned you.',3500),3500)}c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(g===10&&Math.random()<BLACK_FROM_GRADING)blackify(c);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;if(c.black)game.gradeLog.black=(game.gradeLog.black||0)+1;
+  let g=SUBMIT_GRADES[wIndex(graderWeights(c))][0];delete c.charmed;const bribe=c.bribe;delete c.bribe;if(bribe==='caught'){g=2;gary().caught++}else if(bribe==='pocket')gary().pocketed++;if(c.cursed&&Math.random()<.5){g=1;setTimeout(()=>toast('💀 The curse got it. Kyle warned you.',3500),3500)}else if(c.cursed&&g>=9)ts().curseBroken=(ts().curseBroken||0)+1;
+  {const G=gary();G.run10=g===10?(G.run10||0)+1:0;G.best10=Math.max(G.best10||0,G.run10)}c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(g===10&&Math.random()<BLACK_FROM_GRADING)blackify(c);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;if(c.black)game.gradeLog.black=(game.gradeLog.black||0)+1;
   collect([c]);checkProgress([c]);save();Feed.post([c]);celebrate(c.black?5:g===10?5:g===9?4:g===8?2:0);if(c.black){flash(.9);FX.burst(260,['#000000','#f5c451','#ffffff'])}if(g===7){Sound.init();Sound.tone(220,.5,'sawtooth',.05,0,90)}
-  await modal({icon:c.black?'🖤':g===10?'💎':g===9?'🔥':g===8?'👍':'🤦',title:c.black?'BLACK LABEL!!':`It came back a ${g}!`,html:`<div class="m-card">${slabHTML(c,true)}</div><b style="color:var(--text)">${esc(c.name)}</b><br>${money(raw)} raw → <b style="color:${c.value>=raw?'var(--green)':'var(--red)'}">${money(c.value)}</b><div class="roast${g<=7?' bad':''}">${esc(c.black?pick(['BLACK LABEL. Kyle has never seen one. Kyle is shaking.','Black Label. The grader called his mom.','This slab needs its own bodyguard.']):pick(ROAST.grade[g]))}</div>`,buttons:[{label:'Next',primary:true}]})}
+  await modal({icon:c.black?'🖤':g===10?'💎':g===9?'🔥':g===8?'👍':'🤦',title:c.black?'BLACK LABEL!!':`It came back a ${g}!`,html:`<div class="m-card">${slabHTML(c,true)}</div><b style="color:var(--text)">${esc(c.name)}</b><br>${money(raw)} raw → <b style="color:${c.value>=raw?'var(--green)':'var(--red)'}">${money(c.value)}</b>${bribe?`<p class="garyline">🥸 ${esc(pick(GARY_BACK[bribe]))}</p>`:''}<div class="roast${g<=7?' bad':''}">${esc(c.black?pick(['BLACK LABEL. Kyle has never seen one. Kyle is shaking.','Black Label. The grader called his mom.','This slab needs its own bodyguard.']):pick(ROAST.grade[g]))}</div>`,buttons:[{label:'Next',primary:true}]})}
  render()}
 
 /* ---------- random life events (max one a day; never Vault cards or slabs) ---------- */
@@ -1796,8 +1807,8 @@ function trophyTile(t,i){const got=game.trophies[t.id];
  const c=trophyCard(t);return `<button class="tile troph ${got?'got':'off'}" data-action="trophy" data-i="${i}"><div class="tile-img is-slab"><span class="tile-tag">${got?'🏆 EARNED':(t.first?'1ST ED · ':'')+'GEM MINT 10'}</span>${imgTag(c)}</div><div class="tile-name">${esc(t.name)}</div><div class="tile-foot"><span>${esc(t.label)}</span><b>${moneyS(c.value)}</b></div></button>`}
 function setRow(gid){const d=groupDef(gid),p=progress(gid),done=game.sets[gid]?.done,loading=d.sets.some(s=>catalog.loading.has(s));
  return `<button class="srow" data-action="open-set" data-g="${esc(gid)}"><span><b>${esc(d.name)}</b><small>${p?`${p.have} / ${p.total}`:loading?'Loading…':catalog.offline?'Offline':'Tap to load'}${done?' · ✅ Complete':''}</small></span><span class="prog"><i style="width:${p?p.pct:0}%"></i></span><span class="chev">›</span></button>`}
-function trophy2Tile(t,i){const got=(game.trophies2||{})[t.id];return `<button class="tile troph ${got?'got':'off'}" data-action="trophy2" data-i="${i}"><div class="tile-img">${got?'<span class="tile-tag">🏆 EARNED</span>':''}${t.img?`<img src="${esc(t.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:`<div class="t2icon">${t.icon}</div>`}</div><div class="tile-name">${esc(t.name)}</div><div class="tile-foot"><span>${got?'Earned':'Locked'}</span><b>${t.icon}</b></div></button>`}
-function renderCollectMain(){$('#grailBox2').innerHTML=grailHTML();$('#prestigeBox').innerHTML=prestigeHTML();renderWall();$('#trophy2Head').textContent=`${TROPHIES2.filter(t=>(game.trophies2||{})[t.id]).length} / ${TROPHIES2.length}`;$('#trophy2Grid').innerHTML=TROPHIES2.map(trophy2Tile).join('');$('#trophyHead').textContent=`${trophyCount()} / ${TROPHIES.length}`;
+function trophy2Tile(t,i){const got=(game.trophies2||{})[t.id];return `<button class="tile troph ${got?'got':'off'}" data-action="trophy2" data-i="${i}"><div class="tile-img">${got?'<span class="tile-tag">🏆 EARNED</span>':''}${t.img?`<img src="${esc(t.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:`<div class="t2icon">${t.icon}</div>`}</div><div class="tile-name">${esc(t.name)}</div>${got?'':`<div class="t2hint">${esc(t.hint||t.desc)}</div>`}<div class="tile-foot"><span>${got?'Earned':'Locked'}</span><b>${t.icon}</b></div></button>`}
+function renderCollectMain(){$('#grailBox2').innerHTML=grailHTML();$('#prestigeBox').innerHTML=goalsHTML();$('#trophy2Head').textContent=`${TROPHIES2.filter(t=>(game.trophies2||{})[t.id]).length} / ${TROPHIES2.length}`;$('#trophy2Grid').innerHTML=TROPHIES2.map(trophy2Tile).join('');$('#trophyHead').textContent=`${trophyCount()} / ${TROPHIES.length}`;
  $('#trophyGrid').innerHTML=TROPHIES.map(trophyTile).join('');
  $('#featSets').innerHTML=MASTER.map(m=>{const p=progress(m.id),done=game.sets[m.id]?.done;return `<div class="panel feat"><div class="feat-top"><div><div class="eyebrow">Featured master set</div><b>${esc(m.name)}</b></div><span class="muted">${p?`${p.have} / ${p.total} cards`:'Loading…'}</span></div><div class="prog"><i style="width:${p?p.pct:0}%"></i></div><div class="muted" style="font-size:12px">${esc(m.note)}. Reward: ${rewardText(m.reward)} plus a trophy${done?' · ✅ Claimed':''}</div><div class="feat-actions"><button class="primary" data-action="open-set" data-g="${m.id}">Open set</button></div></div>`}).join('');
  $('#vintSets').innerHTML=VINTAGE_SETS.map(setRow).join('');
@@ -1852,7 +1863,7 @@ function histRow(h){const t=tierInfo(h.tier),best=[...h.cards].sort((a,b)=>b.val
 /* ---------- stats + history ---------- */
 function allPulls(){const out=[];for(const h of game.history)for(const c of h.cards)out.push({...c,from:tierInfo(h.tier).name,at:h.at});return out}
 const paidPacks=()=>game.history.filter(h=>TIER_IDS.has(h.tier)&&h.cost>0);
-function renderStats(){const nw=networth(),pl=nw-game.given,pk=paidPacks(),cost=sum(pk.map(h=>h.cost)),ret=cost?Math.round(sum(pk.map(h=>h.value))/cost*100):0;
+function renderStats(){renderHustle();const nw=networth(),pl=nw-game.given,pk=paidPacks(),cost=sum(pk.map(h=>h.cost)),ret=cost?Math.round(sum(pk.map(h=>h.value))/cost*100):0;
  const best=allPulls().sort((a,b)=>b.value-a.value);statsBest=best.slice(0,6);
  $('#statsGrid').innerHTML=statHTML([['Net worth',money(nw),'Cash + binder'],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,`vs. ${money(game.given)} given`],['Level',`LV ${game.level}${game.prestige?' ⭐'+game.prestige:''}`,`${moneyS(game.xp)} XP`],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,game.beat?'Beaten!':'Fill the case'],['Lifetime spent',money(game.spent),`${game.opened} packs`],['Return rate',ret+'%','Paid packs, last 150'],['Biggest pull',money(best[0]?.value||0),esc(best[0]?fullName(best[0]):'None yet')],['Cash from sales',money(game.sold||0),'Cards sold back'],['Slabs grabbed',game.slabsWon||0,`${money(game.grabSpent||0)} on spins`],['Kyle alerts',game.kyle||0,`${game.bailouts||0} bailout${game.bailouts===1?'':'s'} begged for`]]);
  $('#badgeCount').textContent=`${MILESTONES.filter(m=>game.miles[m.id]).length} / ${MILESTONES.length}`;
@@ -2434,9 +2445,10 @@ function charmMissingMode(){return charmOn()&&pullGid&&groupLoaded(pullGid)&&!(g
 function charmLuck(){try{return simMode||!charmOn()||charmMissingMode()?0:.2}catch(e){return 0}}
 function charmMissing(){try{return !simMode&&charmMissingMode()?2:1}catch(e){return 1}}
 async function buyCharm(){if(charmOn()){toast('Your Lucky Charm is already glowing.');return}
- if(game.tickets<CHARM_COST){modal({icon:'🍀',title:'Lucky Charm',html:`Costs ${CHARM_COST} 🎟. You have ${game.tickets}. Johnny suggests ripping more packs. Emily suggests therapy.`,buttons:[{label:'Fine',primary:true}]});return}
- const ok=await modal({icon:'🍀',title:`Lucky Charm · ${CHARM_COST} 🎟`,html:`<p>For <b>5 minutes</b>, every pack and pull gets <b>+20% luck</b>. If you're ripping a set you haven't finished, the luck goes into <b>pulling cards you're missing</b> instead.</p><p>It also gives <b>one</b> grading submission +20% luck toward a 9 or 10.</p><p class="muted" style="font-size:12px">Kyle says it's science. Emily says it's a rabbit's foot with extra steps.</p>`,buttons:[{label:'Not now',value:false},{label:'Activate',primary:true,value:true}]});
- if(!ok||game.tickets<CHARM_COST)return;game.tickets-=CHARM_COST;game.charm={until:Date.now()+CHARM_MS,grade:true};save();pawBurst&&pawBurst(16,true);toast('🍀 Lucky Charm is on. 5 minutes. Go go go.',3000);render();charmTick()}
+ const free=(game.freeCharms||0)>0;
+ if(!free&&game.tickets<CHARM_COST){modal({icon:'🍀',title:'Lucky Charm',html:`Costs ${CHARM_COST} 🎟. You have ${game.tickets}. Johnny suggests ripping more packs. Emily suggests therapy.`,buttons:[{label:'Fine',primary:true}]});return}
+ const ok=await modal({icon:'🍀',title:free?'Lucky Charm · FREE':`Lucky Charm · ${CHARM_COST} 🎟`,html:`<p>For <b>5 minutes</b>, every pack and pull gets <b>+20% luck</b>. If you're ripping a set you haven't finished, the luck goes into <b>pulling cards you're missing</b> instead.</p><p>It also gives <b>one</b> grading submission +20% luck toward a 9 or 10.</p><p class="muted" style="font-size:12px">Kyle says it's science. Emily says it's a rabbit's foot with extra steps.</p>`,buttons:[{label:'Not now',value:false},{label:'Activate',primary:true,value:true}]});
+ if(!ok)return;if(free)game.freeCharms--;else{if(game.tickets<CHARM_COST)return;game.tickets-=CHARM_COST}game.charm={until:Date.now()+CHARM_MS,grade:true};save();pawBurst&&pawBurst(16,true);toast('🍀 Lucky Charm is on. 5 minutes. Go go go.',3000);render();charmTick()}
 var charmTimer=null;
 function charmTick(){clearInterval(charmTimer);const el=()=>$('#charmPill');const draw=()=>{let p=el();if(!charmOn()){p&&p.remove();clearInterval(charmTimer);return}
   if(!p){p=document.createElement('button');p.id='charmPill';p.dataset.action='charm';document.body.appendChild(p)}const s=Math.max(0,Math.ceil((game.charm.until-Date.now())/1000));p.textContent=`🍀 ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}${game.charm.grade?' · 🔬':''}`};draw();charmTimer=setInterval(draw,1000)}
@@ -2493,7 +2505,7 @@ const Trade={list:[],at:0,busy:false,friends:null,
   catch(e){console.warn('Trades',e)}finally{this.busy=false}},
  // Sender side: collect what came back from trades that finished while you were away.
  async settle(){for(const t of this.list){if(t.from_user!==Cloud.user||t.from_done)continue;
-  if(t.status==='done'){const conf=t.karma&&t.karma.kind==='confiscate',c=conf?null:t.kind==='mystery'?t.back:t.want;let x=null;if(conf){game.owned.push({...t.give,uid:uid(),at:Date.now()})}else if(c){x={...c,uid:uid(),at:Date.now(),from:`Traded from ${t.to_name}`};delete x.vault;game.owned.push(x);collect([x])}if(t.kind==='mystery')applyKarma(t.karma,'from',x);
+  if(t.status==='done'){const c=t.kind==='mystery'?t.back:t.want;let x=null;if(c){x={...c,uid:uid(),at:Date.now(),from:`Traded from ${t.to_name}`};delete x.vault;game.owned.push(x);collect([x])}if(t.kind==='mystery'){applyKarma(t.karma,'from',x);swapStats(t,'from')}else if(t.kind!=='gift')ts().trades=(ts().trades||0)+1;
    await this.patch(t.id,{from_done:true});t.from_done=true;save();
    if(t.kind==='mystery')revealMystery(t,true);else if(t.kind!=='gift')toast(`🔁 ${t.to_name} accepted your trade. ${c?esc(c.name)+' is in your binder.':''}`,3500)}
   else if(t.status==='declined'){this.refund(t);await this.patch(t.id,{from_done:true});t.from_done=true;toast(`${t.to_name} declined your ${t.kind==='gift'?'gift':'trade'}. ${t.give.name} came back.${t.kind==='gift'?' Ouch.':''}`,3500)}}},
@@ -2520,10 +2532,10 @@ function tradeRow(t){const{me,mine,theirs,other}=tradeSides(t),K={fair:'🤝 Fai
  else body=`<div class="tside"><small>You give</small>${tcardHTML(mine,hideMine)}</div><span class="tx">⇄</span><div class="tside"><small>You get</small>${tcardHTML(theirs,t.kind==='mystery'&&t.status!=='done')}</div>`;
  let line='';if(t.status==='open'){
   if(t.kind==='gift')line=me?`You're gifting ${esc(other)} your ${esc(cardDesc(t.give))}.`:`${esc(other)} is gifting you their ${esc(cardDesc(t.give))}.`;
-  else if(t.kind==='mystery')line=me?`You put in your ${esc(cardDesc(t.give))} face down. ${esc(other)} picks blind.`:`${esc(other)} put a card in face down. Pick one of yours blind.`;
+  else if(t.kind==='mystery')line=(me?`You put in your ${esc(cardDesc(t.give))} face down. ${esc(other)} picks blind.`:`${esc(other)} put a card in face down. Pick one of yours blind.`)+`<br><span class="tierchip">${tierLabel(t.tier)}</span>`;
   else line=me?`You offered your ${esc(cardDesc(t.give))} for ${esc(other)}'s ${esc(cardDesc(t.want))}.`:`${esc(other)} wants your <b>${esc(cardDesc(t.want))}</b> and is offering their <b>${esc(cardDesc(t.give))}</b>.`}
  const tax=t.kind==='lopsided'?`<p class="ttax">⚖️ Lopsided. ${t.tax_from?`${me?'You':esc(other)} paid Kyle ${moneyS(t.tax_from)}.`:t.tax_to?`${me?esc(other)+' pays':'You pay'} Kyle ${moneyS(t.tax_to)} to accept.`:''}</p>`:t.kind==='fair'?'<p class="ttax fair">🤝 Fair: values within 25%.</p>':'';
- const kar=t.karma&&t.status==='done'?`<p class="ttax karma">⚡ ${esc(karmaText(t.karma,t))}</p>`:'';
+ const kar=t.karma&&t.status==='done'?`<p class="ttax karma">🎲 ${esc(karmaText(t.karma,t))}</p>`:'';
  let acts='';if(t.status==='open'){if(me)acts=`<button class="smallbtn" data-action="tp-cancel" data-id="${t.id}">Cancel</button>`;else acts=t.kind==='mystery'?`<button class="smallbtn" data-action="tp-decline" data-id="${t.id}">Nope</button><button class="primary smallbtn" data-action="tp-mystery" data-id="${t.id}">🎲 Pick my card</button>`:`<button class="smallbtn" data-action="tp-decline" data-id="${t.id}">Decline</button><button class="primary smallbtn" data-action="tp-accept" data-id="${t.id}">${t.kind==='gift'?'🎁 Open gift':'Accept'}${t.tax_to?` · ${moneyS(t.tax_to)} tax`:''}</button>`}
  else if(t.status==='done'&&t.kind==='mystery')acts=`<button class="smallbtn" data-action="tp-replay" data-id="${t.id}">🎬 Replay reveal</button>`;
  return `<div class="trow ${t.status}"><div class="trow-h"><b>${K} ${me?'to':'from'} ${esc(other)}</b><small>${st}</small></div>${line?`<p class="tline">${line}</p>`:''}<div class="tcards">${body}</div>${tax}${kar}${t.msg?`<p class="tmsg">"${esc(t.msg)}"</p>`:''}${acts?`<div class="tacts">${acts}</div>`:''}</div>`}
@@ -2551,8 +2563,10 @@ async function newTrade(kind){if(!Cloud.s){accountModal();return}const f=await p
   if(game.tickets<tix){toast(`That gift costs ${tix} 🎟. You have ${game.tickets}. Generosity is expensive.`);return}
   const msg=await askMsg(`Gift ${esc(c.name)} to ${esc(f.username)} for ${tix} 🎟?`,'Add a note (optional)');if(msg===null)return;
   await sendTrade({kind:'gift',to:f,give:c,gift_tix:tix,msg});return}
- if(kind==='mystery'){const c=await pickCard(`Mystery Swap with ${esc(f.username)}`,mine,'<p class="muted" style="font-size:12px">Pick the card you\'re putting in. They won\'t see it. They\'ll pick one of theirs blind. Then both flip at once. No take-backs.</p>');if(!c)return;
-  const msg=await askMsg(`Send ${esc(c.name)} face down?`,'Trash talk (optional)');if(msg===null)return;await sendTrade({kind:'mystery',to:f,give:c,msg});return}
+ if(kind==='mystery'){const tier=await modal({icon:'🎲',title:'Want to play it safe?',html:`<p>Pick a tier and ${esc(f.username)} has to put in a card from the same range. Still blind, just less chaos.</p><div class="tshops">${Object.entries(SWAP_TIERS).map(([k,v])=>`<button class="tshop" data-m-value="${k}"><b>${v[0]} ${v[1]}</b><span>${moneyS(v[2])}${v[3]<1e12?' to '+moneyS(v[3]):'+'}</span></button>`).join('')}<button class="tshop rawdawg" data-m-value="raw"><b>🐶 RAW DAWG IT LIKE A CHAMP</b><span>No limits. Chaos Rolls on.</span></button></div>`,buttons:[{label:'Cancel',value:null}]});if(!tier)return;const tr=tier==='raw'?null:tier;
+  const pool=mine.filter(c=>inTier(c,tr));if(!pool.length){toast(`You don't have any cards in the ${SWAP_TIERS[tr][1]} tier.`);return}
+  const c=await pickCard(`Mystery Swap with ${esc(f.username)}`,pool,`<div class="frange">${tierLabel(tr)}</div>`+'<p class="muted" style="font-size:12px">Pick the card you\'re putting in. They won\'t see it. They\'ll pick one of theirs blind. Then both flip at once. No take-backs.</p>');if(!c)return;
+  const msg=await askMsg(`Send ${esc(c.name)} face down? ${tr?tierLabel(tr):'🐶 Raw Dawg. No limits.'}`,'Trash talk (optional)');if(msg===null)return;await sendTrade({kind:'mystery',to:f,give:c,msg,tier:tr});return}
  // regular trade
  let theirs=[];try{theirs=await friendCards(f)}catch(e){}if(!theirs.length){toast(`Couldn't load ${f.username}'s binder.`);return}
  const myVals=mine.map(c=>c.value),matches=v=>myVals.filter(m=>isFair(m,v)).length;
@@ -2563,8 +2577,9 @@ async function newTrade(kind){if(!Cloud.s){accountModal();return}const f=await p
  const msg=await askMsg(`${fair?'🤝 Fair trade':'⚖️ Lopsided trade'}: your ${esc(give.name)} (${moneyS(give.value)}) for their ${esc(want.name)} (${moneyS(want.value)})${tax_from?`<br>You pay Kyle ${money(tax_from)} because you're getting the better card.`:tax_to?`<br>${esc(f.username)} pays Kyle ${money(tax_to)} if they accept.`:''}`,'Add a note (optional)');if(msg===null)return;
  await sendTrade({kind:fair?'fair':'lopsided',to:f,give,want,tax_from,tax_to,msg})}
 async function askMsg(html,ph){const v=await modal({icon:'✍️',title:'Send it?',html:`<p>${html}</p><input class="inp" id="tmsg" placeholder="${ph}" maxlength="80">`,buttons:[{label:'Cancel',value:null},{label:'Send',primary:true,value:'go'}]});return v?($('#tmsg')?.value||'').trim():null}
-async function sendTrade({kind,to,give,want=null,tax_from=0,tax_to=0,gift_tix=0,msg=''}){if(!game.owned.includes(give)||!tradeable(give)){toast('That card is not available anymore.');return}
- try{await Cloud.req('/rest/v1/trades',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({from_user:Cloud.user,from_name:Cloud.name,to_user:to.user_id,to_name:to.username,kind,give:cleanCard(give),want:want?cleanCard(want):null,tax_from,tax_to,gift_tix,msg,status:'open'})});
+async function sendTrade({kind,to,give,want=null,tax_from=0,tax_to=0,gift_tix=0,msg='',tier=null}){if(!game.owned.includes(give)||!tradeable(give)){toast('That card is not available anymore.');return}
+ try{await Cloud.req('/rest/v1/trades',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({from_user:Cloud.user,from_name:Cloud.name,to_user:to.user_id,to_name:to.username,kind,give:cleanCard(give),want:want?cleanCard(want):null,tax_from,tax_to,gift_tix,msg,status:'open',...(kind==='mystery'?{tier}:{})})});
+  if(kind==='gift')ts().gifts=(ts().gifts||0)+1;
   game.owned.splice(game.owned.indexOf(give),1);if(tax_from)game.cash=r2(game.cash-tax_from);if(gift_tix)game.tickets-=gift_tix;save();
   toast(kind==='mystery'?`🎲 Face down and sent. ${to.username} has no idea what's coming.`:kind==='gift'?`🎁 Gift sent to ${to.username}. Emily says that's sweet. Johnny says that's suspicious.`:`🔁 Offer sent to ${to.username}.`,3500);await Trade.sync(true)}
  catch(e){toast(`Couldn't send it (${e.message}). Did the Supabase SQL get run?`,5000)}}
@@ -2576,18 +2591,18 @@ async function acceptTrade(id){const t=tradeById(id);if(!t||t.status!=='open')re
  if(!mine||!tradeable(mine)){toast(`You don't have ${t.want.name} anymore (or it's vaulted). Decline it or unvault it.`,4000);return}
  if(t.tax_to&&game.cash<t.tax_to){toast(`You need ${money(t.tax_to)} for the Kyle tax.`);return}
  await Trade.patch(t.id,{status:'done',want:cleanCard(mine)});game.owned.splice(game.owned.indexOf(mine),1);if(t.tax_to)game.cash=r2(game.cash-t.tax_to);
- const x={...t.give,uid:uid(),at:Date.now(),from:`Traded from ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);save();
+ const x={...t.give,uid:uid(),at:Date.now(),from:`Traded from ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);ts().trades=(ts().trades||0)+1;save();
  const v=tradeVerdict(x.value,mine.value);modal({icon:VERDICT_ICON[v],title:'Trade done',html:`<div class="tcards big"><div class="tside"><small>You gave</small>${tcardHTML(mine)}</div><span class="tx">→</span><div class="tside"><small>You got</small>${tcardHTML(x)}</div></div><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p>`,buttons:[{label:'Nice',primary:true}]});await Trade.sync(true)}
 async function declineTrade(id){const t=tradeById(id);if(!t||t.status!=='open')return;await Trade.patch(t.id,{status:'declined'});toast(t.kind==='gift'?'Gift declined. Cold.':'Declined. Kyle respects the hustle.');Trade.sync(true)}
 async function cancelTrade(id){const t=tradeById(id);if(!t||t.status!=='open'||t.from_user!==Cloud.user)return;await Trade.patch(t.id,{status:'cancelled',from_done:true});Trade.refund(t);toast(`Cancelled. ${t.give.name} is back.`);Trade.sync(true)}
 async function mysteryRespond(id){const t=tradeById(id);if(!t||t.status!=='open')return;
- const c=await pickCard(`${esc(t.from_name)} sent a Mystery Swap`,game.owned.filter(tradeable),`<p class="muted" style="font-size:12px">Their card is face down. Pick one of yours to put in. Both flip at once. No take-backs. ${t.msg?`<br>They said: "${esc(t.msg)}"`:''}</p>`);if(!c)return;
+ const pool=game.owned.filter(c=>tradeable(c)&&inTier(c,t.tier));if(!pool.length){toast(`You don't have any cards in the ${SWAP_TIERS[t.tier][1]} tier. You can hit Nope.`,4000);return}
+ const c=await pickCard(`${esc(t.from_name)} sent a Mystery Swap`,pool,`<div class="frange">${tierLabel(t.tier)}</div><p class="muted" style="font-size:12px">Their card is face down. Pick one of yours to put in. Both flip at once. No take-backs. ${t.msg?`<br>They said: "${esc(t.msg)}"`:''}</p>`);if(!c)return;
  const fresh=(await Cloud.req(`/rest/v1/trades?id=eq.${t.id}&select=status`)||[])[0];if(!fresh||fresh.status!=='open'){toast('Too late, that swap is gone.');Trade.sync(true);return}
  t.back=cleanCard(c);const k=rollKarma(t);await Trade.patch(t.id,{status:'done',back:t.back,karma:k});t.status='done';t.karma=k;
- let x=null;if(!(k&&k.kind==='confiscate')){game.owned.splice(game.owned.indexOf(c),1);x={...t.give,uid:uid(),at:Date.now(),from:`🎲 Mystery Swap with ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x])}
- applyKarma(k,'to',x);save();if(k&&k.kind==='shame')postShame(t);revealMystery(t,false);Trade.sync(true)}
-async function postShame(t){const lowFrom=t.karma.hosed==='to',low=lowFrom?t.from_name:t.to_name,hosed=lowFrom?t.to_name:t.from_name,cheap=lowFrom?t.give:t.back,big=lowFrom?t.back:t.give;
- try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:low,name:`🤡 fleeced ${hosed} with a ${moneyS(cheap.value)} ${cheap.name} for a ${moneyS(big.value)} ${big.name}`,value:r2(big.value-cheap.value),img:cheap.img||'',grade:null,first:false,source:'Mystery Swap shame'}])})}catch(e){}}
+ game.owned.splice(game.owned.indexOf(c),1);const x={...t.give,uid:uid(),at:Date.now(),from:`🎲 Mystery Swap with ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);
+ applyKarma(k,'to',x);swapStats(t,'to');save();if(k&&k.kind==='viral')postShame(t);revealMystery(t,false);Trade.sync(true)}
+async function postShame(t){const a=t.give,b=t.back;try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:`${t.from_name} & ${t.to_name}`,name:`🎲 swapped a ${moneyS(Math.max(a.value,b.value))} ${(a.value>b.value?a:b).name} for a ${moneyS(Math.min(a.value,b.value))} ${(a.value>b.value?b:a).name}. Thoughts and prayers.`,value:r2(Math.max(a.value,b.value)),img:(a.value>b.value?a:b).img||'',grade:null,first:false,source:'Mystery Swap'}])})}catch(e){}}
 async function revealMystery(t,asSender){const mine=asSender?t.give:t.back,theirs=asSender?t.back:t.give,other=asSender?t.to_name:t.from_name;if(!mine||!theirs)return;const v=tradeVerdict(theirs.value,mine.value);
  await modal({icon:'🎲',title:'Mystery Swap reveal',html:`<div class="mreveal"><div class="mside"><small>You gave</small><div class="mflip"><div class="mf back"><span>?</span></div><div class="mf front">${tcardHTML(mine)}</div></div></div><div class="mside"><small>${esc(other)} gave</small><div class="mflip d2"><div class="mf back"><span>?</span></div><div class="mf front">${tcardHTML(theirs)}</div></div></div></div><div class="mverdict"><span>${VERDICT_ICON[v]}</span><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p>${karmaHTML(t.karma,asSender?'from':'to',t)}</div>`,buttons:[{label:v==='robbery'||v==='win'?'HAHA':v==='fair'?'Fair enough':'I want a rematch',primary:true}]});
  if(v==='robbery')pawBurst&&pawBurst(30,true)}
@@ -2608,27 +2623,129 @@ const fairRange=v=>[r2(v*(1-FAIR_GAP)),r2(v/(1-FAIR_GAP))];
 function fairTag(v,ref){if(isFair(v,ref))return '<span class="ftag ok">🤝 Fair</span>';const tax=r2(Math.abs(v-ref)*KYLE_TAX);return `<span class="ftag tax">⚖️ ${moneyS(tax)} tax</span>`}
 function fairRangeHTML(ref,label){const[lo,hi]=fairRange(ref);return `<div class="frange">🤝 Fair range for ${esc(label)} (${moneyS(ref)}): <b>${moneyS(lo)} to ${moneyS(hi)}</b>. Anything outside it costs a 15% Kyle tax on the difference.</div>`}
 
-/* ---------- Mystery Swap karma ---------- */
+/* ---------- Mystery Swap: tiers + Chaos Roll ---------- */
+// Nobody knows the other card, so nothing here blames anyone. Chaos Rolls only happen in Raw Dawg swaps.
+const SWAP_TIERS={bulk:['🪙','Bulk',0,5],mid:['💵','Mid',5,100],big:['💰','Big',100,1000],whale:['🐋','Whale',1000,1e12]};
+const inTier=(c,t)=>!t||!SWAP_TIERS[t]||(c.value>=SWAP_TIERS[t][2]&&c.value<SWAP_TIERS[t][3]);
+const tierLabel=t=>t&&SWAP_TIERS[t]?`${SWAP_TIERS[t][0]} ${SWAP_TIERS[t][1]} tier (${moneyS(SWAP_TIERS[t][2])}${SWAP_TIERS[t][3]<1e12?' to '+moneyS(SWAP_TIERS[t][3]):'+'})`:'🐶 RAW DAWG (no limits)';
 const KARMA_LINES={
- tax:["Kyle saw that. Kyle sees everything. Kyle took {amt}.","Kyle's Karma Tax: {amt}. Should've thought about it.","The dev giveth and the dev taketh away. Mostly taketh. {amt}."],
- curse:["Kyle cursed the card you just got. Grade it and see what happens. 💀","That card is now cursed by Kyle. 50% chance it grades as a 1.","Kyle whispered something to your new card. It looks scared."],
- shame:["Kyle posted this to the feed. Everyone knows now.","This swap is now public. Kyle made sure.","Kyle screenshotted it and sent it to everyone. You're famous."],
- confiscate:["Kyle said no. Kyle is in charge. Both cards go home.","Kyle reversed the whole thing. God mode activated.","Kyle stepped in. Swap cancelled by divine intervention."]};
-function rollKarma(t){const a=t.give.value,b=t.back.value,hi=Math.max(a,b),lo=Math.min(a,b),gap=hi-lo;if(hi<lo*3||gap<500)return null;
- const hosed=a>b?'from':'to';let tix=Math.min(50,Math.max(1,Math.floor(gap/500))),kind=null;
- if(Math.random()<1/3){const r=Math.random();kind=r<.05?'confiscate':r<.45?'tax':r<.8?'curse':'shame'}
- if(kind==='confiscate')tix=0;
- return{hosed,tix,kind,amt:kind==='tax'?r2(gap*.1):0,line:kind?pick(KARMA_LINES[kind]).replace('{amt}',money(r2(gap*.1))):''}}
-function karmaText(k,t){const hosedName=k.hosed==='from'?t.from_name:t.to_name;return `${k.tix?`${hosedName} got ${k.tix} 🎟 in sorry tickets. `:''}${k.kind?k.line:''}`}
-// Apply my side of the karma. role: 'from' or 'to'. got = the card I received (if any).
-function applyKarma(k,role,got){if(!k)return;if(k.hosed===role){game.tickets+=k.tix||0}else if(k.kind==='tax'){game.cash=r2(Math.max(0,game.cash-k.amt))}else if(k.kind==='curse'&&got){got.cursed=true}save()}
+ pity:["Kyle saw that and felt something. Kyle covered {amt} of the loss out of his own pocket. It's fake money, but still.","Kyle's Pity Fund paid out {amt}. Kyle is a benevolent god today.","Kyle wiped a single tear and sent {amt}."],
+ curse:["Kyle cursed BOTH cards. Shared suffering. 💀","Kyle looked at this swap and cursed everything involved. 💀","Both cards are cursed now. Kyle says it builds character. 💀"],
+ viral:["This swap went viral. Kyle posted it to the feed. Thoughts and prayers.","Kyle shared this swap with everyone. History will remember.","The whole feed is watching. Kyle made sure."]};
+function rollKarma(t){if(t.tier)return null;const a=t.give.value,b=t.back.value,hi=Math.max(a,b),lo=Math.min(a,b),gap=hi-lo;if(hi<lo*3||gap<500)return null;
+ const hosed=a>b?'from':'to',tix=Math.min(50,Math.max(1,Math.floor(gap/500)));let kind=null;
+ if(Math.random()<1/3){const r=Math.random();kind=r<.4?'pity':r<.75?'curse':'viral'}
+ const amt=kind==='pity'?r2(gap*.25):0;return{hosed,tix,kind,amt,line:kind?pick(KARMA_LINES[kind]).replace('{amt}',money(amt)):''}}
+function karmaText(k,t){const hosedName=k.hosed==='from'?t.from_name:t.to_name;return `${hosedName} got ${k.tix} 🎟 in sorry tickets.${k.kind?' Chaos Roll: '+k.line:''}`}
+function curseCard(c){if(!c||c.cursed)return;c.cursed=true;if(c.slab){c.value=r2(c.value*.8);c.cursedSlab=true}}
+// Apply my side. role: 'from' or 'to'. got = the card I received.
+function applyKarma(k,role,got){if(!k)return;if(k.hosed===role){game.tickets+=k.tix||0;if(k.kind==='pity')game.cash=r2(game.cash+k.amt)}if(k.kind==='curse')curseCard(got);save()}
 function karmaHTML(k,role,t){if(!k)return '';const hosedMe=k.hosed===role,other=role==='from'?t.to_name:t.from_name;
- let h=!k.tix?'':hosedMe?`<div class="sorry">🎟 Kyle felt bad for you: <b>+${k.tix} sorry tickets</b>. ${esc(other)} did not feel bad.</div>`:`<div class="sorry dim">${esc(other)} got ${k.tix} sorry tickets out of this.</div>`;
- if(k.kind)h+=`<div class="karmaban">⚡ KARMA ⚡</div><p class="karmaline">${esc(k.line)}${!hosedMe&&k.kind==='tax'?'':''}</p>${k.kind==='confiscate'?'<p class="muted" style="font-size:12px">Everyone keeps their own card.</p>':''}`;
+ let h=hosedMe?`<div class="sorry">🎟 Kyle felt bad for you: <b>+${k.tix} sorry tickets</b>${k.kind==='pity'?` and <b>${money(k.amt)}</b> from Kyle's Pity Fund`:''}.</div>`:`<div class="sorry dim">${esc(other)} got ${k.tix} sorry tickets${k.kind==='pity'?' and a Pity Fund payout':''}. Nobody's mad. It was blind.</div>`;
+ if(k.kind)h+=`<div class="karmaban">🎲 CHAOS ROLL 🎲</div><p class="karmaline">${esc(k.line)}</p>${k.kind==='curse'?'<p class="muted" style="font-size:12px">Cursed raw cards have a 50% chance to grade as a 1. Cursed slabs lose 20% of their value.</p>':''}`;
  return h}
 
+function swapStats(t,role){const S=ts();S.mystery=(S.mystery||0)+1;if(t.karma&&t.karma.kind)S.chaos=(S.chaos||0)+1;const mine=role==='from'?t.give:t.back,got=role==='from'?t.back:t.give;if(!t.tier&&mine&&got&&got.value>=mine.value*10&&got.value>=50)S.bigWin=(S.bigWin||0)+1}
+
+/* ================= Chunk 6: rewards for things already in the game ================= */
+ROAST.grade[1]=['A 1. The curse was real. Kyle tried to warn you.','POOR. Doug held it up to the light and laughed.','A 1. That slab is now a coaster. Kyle approves.'];
+ROAST.grade[2]=['A 2. Doug reported you. That\'s what you get for bribing.','Doug snitched. Enjoy your 2, criminal.','A 2 and a lecture from Doug. Worth it? No.'];
+
+/* ---------- Doug the Grader ---------- */
+const GARY_LV=[[0,'Stranger'],[10,'Regular'],[25,'Buddy'],[60,'Best Customer'],[120,"Doug's Favorite"]];
+const gary=()=>game.gary||(game.gary={subs:0,bribes:0,caught:0,pocketed:0,run10:0,best10:0});
+function garyLevel(){const s=gary().subs;let i=0;GARY_LV.forEach(([n],k)=>{if(s>=n)i=k});return i}
+const garyName=()=>GARY_LV[garyLevel()][1];
+const garyDiscount=()=>garyLevel()*.05;
+const bribeCost=fee=>Math.max(20,r2(fee*.5));
+const GARY_SUBMIT=["Doug squints at it. \"I'll see what I can do.\"","Doug sniffs the card. Nobody knows why.","Doug says he's \"very busy\" and is clearly playing Candy Crush.","Doug puts on two pairs of reading glasses.","Doug whispers \"nice\" and then pretends he didn't."];
+const GARY_BACK={yes:["Doug winks at you. You did not see anything.","Doug says it \"just happened to look really good today.\"","Doug bought a new boat. Unrelated."],
+ pocket:["Doug took your money and did absolutely nothing. Classic Doug.","Doug says the bribe \"went to a good cause.\" The cause is Doug.","Doug pocketed it. Kyle saw. Kyle laughed."],
+ caught:["Doug REPORTED YOU. To who? Unclear. But it's a 2 now.","Doug's boss walked in mid-bribe. Doug threw you under the bus.","Doug has integrity today. Of all days."]};
+// Final grade odds: Lucky Charm, then Doug's loyalty, then any bribe.
+function graderWeights(c){const w=charmGradeWeights(c),lv=garyLevel();const shift=(p)=>{const m=(w[0]+w[1])*p;w[0]*=1-p;w[1]*=1-p;w[2]+=m*.65;w[3]+=m*.35};
+ if(lv)shift(lv*.03);if(c.bribe==='yes')shift(.4);return w}
+function garyModal(){const g=gary(),lv=garyLevel(),next=GARY_LV[lv+1];
+ modal({icon:'🥸',title:'Doug the Grader',html:`<div class="dougpic">${dougImg(96)}</div><p>Doug runs POKÉ RIP GRADED out of a strip mall. Doug is a completely normal human man with a mustache. Doug is definitely not a Pikachu in a trench coat. Do not ask Doug about the tail.</p><p>The more you send him, the more he likes you.</p>
+ <div class="garybox"><b>${esc(garyName())}</b> · ${g.subs} cards graded${next?`<span class="prog" style="margin:6px 0"><i style="width:${Math.min(100,g.subs/next[0]*100)}%"></i></span><small>${next[0]-g.subs} more to reach ${esc(next[1])}</small>`:'<small>Max loyalty. Doug would take a bullet for you. Probably.</small>'}</div>
+ <p style="font-size:13px">Perks right now: <b>${Math.round(garyDiscount()*100)}% off</b> grading fees and <b>+${lv*3}% luck</b> toward a 9 or 10.</p>
+ <p style="font-size:13px">💵 <b>Bribes:</b> ${g.bribes} sent · ${g.pocketed} pocketed · ${g.caught} reported. Doug only takes bribes every 5th card (he has a reputation to protect). Most of the time he takes it and the card looks great. Sometimes he just keeps your money. Very rarely he reports you and it comes back a 2.</p>
+ <p style="font-size:13px">🔥 Best run of 10s: ${g.best10||0}</p>`,buttons:[{label:'Bye Doug',primary:true}]})}
+
+/* ---------- Login streak ---------- */
+const STREAK_GIFTS={3:{hit:1},7:{slab:1},14:{tickets:25},30:{charm:1},60:{tickets:100},100:{charm:2}};
+function streakCheck(){const d=today(),s=game.streak||(game.streak={day:null,n:0,best:0});if(s.day===d)return;
+ const was=s.n,broke=s.day&&s.day<yday()&&was>1;s.n=s.day===yday()?s.n+1:1;s.day=d;s.best=Math.max(s.best||0,s.n);
+ const gift=STREAK_GIFTS[s.n]||null,base={tickets:Math.min(10,2+s.n)};grant(base);if(gift){if(gift.charm){game.freeCharms=(game.freeCharms||0)+gift.charm}else grant(gift)}save();
+ const giftTxt=gift?(gift.charm?`a free 🍀 Lucky Charm${gift.charm>1?' ×'+gift.charm:''}`:rewardText(gift)):'';
+ setTimeout(()=>note({icon:'🔥',title:`Day ${s.n} streak`,html:`${broke?`<p class="roast bad">You broke your ${was}-day streak. Kyle noticed. Kyle always notices.</p>`:''}<p>+${base.tickets} 🎟 for showing up.${giftTxt?` Streak bonus: <b style="color:var(--gold)">${giftTxt}</b>!`:''}</p><div class="streakrow">${[3,7,14,30,60,100].map(n=>`<span class="${s.n>=n?'on':''}">${n}</span>`).join('')}</div><p class="muted" style="font-size:12px">Big bonuses at day 3, 7, 14, 30, 60 and 100. Come back tomorrow.</p>`,buttons:[{label:'🔥 Nice',primary:true}]}),1800)}
+
+/* ---------- Artist Collections ---------- */
+const ARTISTS=['Mitsuhiro Arita','Ken Sugimori','Kagemaru Himeno','Atsuko Nishida','Tomokazu Komiya','5ban Graphics','Naoki Saito','Akira Komayama'];
+const ART_TIERS=[[10,{tickets:5}],[25,{tickets:10}],[50,{tickets:25,cash:10000}],[100,{tickets:50,cash:50000}],[250,{tickets:100,cash:250000}]];
+const artistIds={};let artistBusy=false;
+const artKey=a=>'pokerip-artist-'+a.toLowerCase().replace(/\W+/g,'-');
+async function loadArtist(a,force){if(artistIds[a]&&!force)return artistIds[a];const c=await cacheGet(artKey(a));if(c&&c.ids&&Date.now()-c.at<30*864e5){artistIds[a]=new Set(c.ids);return artistIds[a]}
+ if(catalog.offline)return null;try{let page=1,ids=[];for(;;){const p=new URLSearchParams({q:`artist:"${a}"`,pageSize:'250',page:String(page),select:'id'});const b=await getJSON(`${API}/cards?${p}`,60000);const d=b.data||[];ids.push(...d.map(x=>x.id));if(d.length<250||page>=10)break;page++}
+  if(ids.length){artistIds[a]=new Set(ids);cachePut(artKey(a),{at:Date.now(),ids})}return artistIds[a]||null}catch(e){return null}}
+async function loadAllArtists(){if(artistBusy)return;artistBusy=true;try{for(const a of ARTISTS){await loadArtist(a);await sleep(150)}}finally{artistBusy=false}artistCheck();refreshGoals()}
+const artistHave=a=>{const s=artistIds[a];if(!s)return null;let n=0;for(const id of s)if(inDex(id))n++;return n};
+function artistCheck(){const got=game.artistTiers||(game.artistTiers={});for(const a of ARTISTS){const n=artistHave(a);if(n==null)continue;for(const[t,r]of ART_TIERS){const k=a+'|'+t;if(got[k]||n<t)continue;got[k]=Date.now();grant(r);
+  note({icon:'🎨',title:`${esc(a)}: ${t} cards`,html:`You've collected ${t} different cards illustrated by ${esc(a)}. Kyle respects an art lover.<br>Reward: <b style="color:var(--gold)">${rewardText(r)}</b>`,buttons:[{label:'🎨 Nice',primary:true}]})}}}
+function artistsModal(){const rows=ARTISTS.map(a=>{const n=artistHave(a),tot=artistIds[a]?artistIds[a].size:null,next=ART_TIERS.find(([t])=>n==null||n<t);
+  return `<div class="prow"><span><b>🎨 ${esc(a)}</b><small>${n==null?'Loading…':`${n} collected${tot?' of '+tot:''}${next?` · next reward at ${next[0]}: ${rewardText(next[1])}`:' · all rewards earned'}`}</small>${n!=null&&next?`<span class="prog"><i style="width:${Math.min(100,n/next[0]*100)}%"></i></span>`:''}</span></div>`}).join('');
+ modal({icon:'🎨',title:'Artist Collections',html:`<p style="font-size:13px">Every card you pull counts toward the artist who drew it. Rewards at 10, 25, 50, 100 and 250 different cards.</p><div class="panel prestige goalscroll">${rows}</div>`,buttons:[{label:'Close',primary:true}]});if(ARTISTS.some(a=>!artistIds[a]))loadAllArtists().then(()=>{if(!$('#modal').hidden&&/Artist Collections/.test($('#modalBox h2').textContent))artistsModal()})}
+
+/* ---------- Weekly Hustle bonus ---------- */
+const weekId=(d=new Date())=>{const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x.toISOString().slice(0,10)};
+function weekTick(){const id=weekId(),nw=networth();if(!game.week||game.week.id!==id){if(game.week)game.weekDone={id:game.week.id,gain:r2(nw-game.week.nw0)};game.week={id,nw0:nw}}}
+let hustleRows=null,hustleAt=0;
+async function hustleLoad(){if(!Cloud.on||Date.now()-hustleAt<30000)return hustleRows;hustleAt=Date.now();try{hustleRows=await Cloud.req(`/rest/v1/saves?select=username,networth,wk:data->week,wd:data->weekDone&limit=100`,{},false)||[]}catch(e){}return hustleRows}
+async function hustleClaim(){if(!Cloud.on||!Cloud.s||!game.weekDone)return;const wd=game.weekDone,cl=game.weekClaimed||(game.weekClaimed={});if(cl[wd.id])return;
+ const rows=await hustleLoad();if(!rows)return;const same=rows.filter(r=>r.wd&&r.wd.id===wd.id);const others=same.filter(r=>r.username!==Cloud.name);
+ const waited=Date.now()-new Date(weekId()).getTime()>2*864e5,everyone=rows.filter(r=>r.wk).every(r=>r.username===Cloud.name||(r.wd&&r.wd.id===wd.id));if(!waited&&!everyone)return;
+ cl[wd.id]=Date.now();const best=Math.max(0,...others.map(r=>r.wd.gain));if(wd.gain<=0||wd.gain<best){save();return}
+ const top=Math.max(...rows.map(r=>r.networth||0)),under=(game.cashTopName=rows.find(r=>r.networth===top)?.username)!==Cloud.name;
+ const bonus=r2(Math.min(250000,Math.max(1000,wd.gain*.1))*(under?2:1));game.cash=r2(game.cash+bonus);save();
+ note({icon:'🏃',title:'Weekly Hustle Bonus',html:`You grew your net worth more than anyone last week: <b style="color:var(--green)">+${money(wd.gain)}</b>.${under?`<p>And you did it while <b>not</b> being #1 overall. Kyle loves an underdog, so it's doubled.</p>`:''}<p>Bonus: <b style="color:var(--gold)">${money(bonus)}</b></p><p class="muted" style="font-size:12px">Biggest weekly gain wins. New week starts Monday.</p>`,buttons:[{label:'🏃 Hustle',primary:true}]})}
+async function renderHustle(){const el=$('#hustleBox');if(!el)return;if(!Cloud.on){el.innerHTML='';return}const rows=await hustleLoad();if(!rows)return;const id=weekId();
+ const list=rows.filter(r=>r.wk&&r.wk.id===id).map(r=>({u:r.username,g:r2((r.networth||0)-r.wk.nw0)})).sort((a,b)=>b.g-a.g);
+ el.innerHTML=`<div class="section-head"><h2>🏃 This week's hustle</h2><span class="muted" style="font-size:12px">resets Monday</span></div><p class="muted" style="font-size:12px;margin:-4px 0 8px">Whoever grows their net worth the most this week gets a bonus. Doubled if you're not #1 overall.</p>${list.length?`<div class="panel prestige">${list.map((r,i)=>`<div class="prow hrow${Cloud.s&&r.u===Cloud.name?' me':''}"><b>${i===0?'🏃':i+1} ${esc(r.u)}</b><b style="color:${r.g>=0?'var(--green)':'var(--red)'}">${r.g>=0?'+':''}${money(r.g)}</b></div>`).join('')}</div>`:'<div class="empty">Nobody has played this week yet.</div>'}`}
+
+/* ---------- Trade + grader trophies ---------- */
+const ts=()=>game.tstats||(game.tstats={});
+TROPHIES2.push(
+ {id:'t3-swap1',icon:'🎲',name:'Blind Faith',desc:'Finish your first Mystery Swap.',hint:'Try a Mystery Swap in the Trading Post.',test:g=>(g.tstats||{}).mystery>=1,reward:{tickets:10}},
+ {id:'t3-chaos',icon:'🌀',name:'Survived the Chaos',desc:'Be part of a Raw Dawg swap that sets off a Chaos Roll.',hint:'Raw Dawg a Mystery Swap. Pray.',test:g=>(g.tstats||{}).chaos>=1,reward:{tickets:15}},
+ {id:'t3-heist',icon:'🦹',name:'Accidental Heist',desc:'Get back a card worth 10x what you put into a Raw Dawg swap.',hint:'Raw Dawg it and get lucky.',test:g=>(g.tstats||{}).bigWin>=1,reward:{tickets:25}},
+ {id:'t3-gift5',icon:'🎁',name:'Santa Kyle',desc:'Gift 5 cards to friends.',hint:'Gifts live in the Trading Post.',test:g=>(g.tstats||{}).gifts>=5,reward:{tickets:20}},
+ {id:'t3-trade10',icon:'🤝',name:'Deal Maker',desc:'Complete 10 regular trades.',hint:'Trade cards with friends.',test:g=>(g.tstats||{}).trades>=10,reward:{tickets:25}},
+ {id:'t3-gary2',icon:'🥸',name:'Doug Knows Your Name',desc:'Grade 25 cards and become Doug\'s Buddy.',hint:'Keep sending Doug cards.',test:g=>((g.gary||{}).subs||0)>=25,reward:{tickets:15}},
+ {id:'t3-gary5',icon:'🥇',name:"Doug's Favorite",desc:'Grade 120 cards. Doug would do anything for you.',hint:'A lot more grading.',test:g=>((g.gary||{}).subs||0)>=120,reward:{tickets:50}},
+ {id:'t3-hat',icon:'🎩',name:'Hat Trick',desc:'Get three 10s in a row from Doug.',hint:'Three gem mints back to back.',test:g=>((g.gary||{}).best10||0)>=3,reward:{god:2}},
+ {id:'t3-selfbl',icon:'🖤',name:'Self-Made Black Label',desc:'Get a Black Label from your own grading submission.',hint:'Doug has to give it to you.',test:g=>((g.gradeLog||{}).black||0)>=1,reward:{tickets:30}},
+ {id:'t3-snitch',icon:'🚔',name:'Snitched On',desc:'Get reported by Doug for bribing.',hint:'Crime doesn\'t pay. Usually.',test:g=>((g.gary||{}).caught||0)>=1,reward:{tickets:5}},
+ {id:'t3-curse',icon:'✨',name:'Curse Breaker',desc:'Grade a cursed card and get a 9 or 10.',hint:'Grade a 💀 card anyway.',test:g=>(g.tstats||{}).curseBroken>=1,reward:{tickets:15}},
+ {id:'t3-streak7',icon:'🔥',name:'Week Warrior',desc:'Reach a 7-day login streak.',hint:'Show up every day.',test:g=>((g.streak||{}).best||0)>=7,reward:{tickets:10}},
+ {id:'t3-streak30',icon:'🌋',name:'Touch Grass Never',desc:'Reach a 30-day login streak.',hint:'Show up every day for a month.',test:g=>((g.streak||{}).best||0)>=30,reward:{tickets:50}});
+
+/* ---------- Collector Goals hub (Prestige, Artists, Wall, Streak) ---------- */
+function goalsHTML(){const done=Object.keys(game.sets||{}).filter(g=>game.sets[g].done).length,pr=Object.keys(game.prestiged||{}).length,s=game.streak||{n:0};
+ const artDone=Object.keys(game.artistTiers||{}).length,bl=(wallData||[]).length||game.owned.filter(c=>c.black).length;
+ const tile=(a,ic,t,sub)=>`<button class="goal" data-action="${a}"><span>${ic}</span><b>${t}</b><small>${sub}</small></button>`;
+ return `<div class="goals">${tile('goal-prestige','⭐','Prestige',`${pr} / ${done} sets`)}${tile('goal-artists','🎨','Artists',`${artDone} rewards`)}${tile('goal-wall','🖤','Black Label Wall',`${bl} in the game`)}${tile('goal-gary',dougImg(30),'Doug',esc(garyName()))}${tile('goal-streak','🔥','Streak',`${s.n||0} day${(s.n||0)===1?'':'s'}`)}</div>`}
+function refreshGoals(){const el=$('#prestigeBox');if(el&&currentView==='collect'&&!collectSet)el.innerHTML=goalsHTML()}
+function prestigeModal(){const h=prestigeHTML();modal({icon:'⭐',title:'Prestige',html:h?`<div class="goalscroll">${h.replace(/<div class="section-head">.*?<\/div>/,'')}</div>`:'<p>Finish a master set first. Then come back and own every card in it as a 9 or 10 slab.</p>',buttons:[{label:'Close',primary:true}]})}
+function wallModal(){const box=document.createElement('div');box.id='wallBox';document.body.appendChild(box);renderWall();const html=box.innerHTML.replace(/<div class="section-head">.*?<\/div>/,'');box.remove();modal({icon:'🖤',title:'Black Label Wall',html:`<div class="goalscroll">${html}</div>`,buttons:[{label:'Close',primary:true}]});if(Cloud.on)loadWall().then(()=>{})}
+function streakModal(){const s=game.streak||{n:0,best:0};modal({icon:'🔥',title:`${s.n||0}-day streak`,html:`<p>Open the game every day for tickets. Bigger bonuses at day 3 (Hit Pack), 7 (Slab Pack), 14 (25 🎟), 30 (Lucky Charm), 60 (100 🎟) and 100 (2 Lucky Charms).</p><div class="streakrow">${[3,7,14,30,60,100].map(n=>`<span class="${(s.n||0)>=n?'on':''}">${n}</span>`).join('')}</div><p class="muted">Best streak: ${s.best||0} days.${game.freeCharms?` You have ${game.freeCharms} free Lucky Charm${game.freeCharms>1?'s':''} waiting.`:''}</p>`,buttons:[{label:'Close',primary:true}]})}
+
+const EXTRA_ACTIONS3={'goal-prestige':()=>prestigeModal(),'goal-artists':()=>artistsModal(),'goal-wall':()=>wallModal(),'goal-gary':()=>garyModal(),'goal-streak':()=>streakModal()};
+
+const dougImg=(px=40)=>`<img class="dougimg" src="anim/doug.png" width="${px}" height="${px}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'dougemoji',textContent:'🥸',style:'font-size:${Math.round(px*.8)}px'}))">`;
+const bribeOpen=()=>((gary().subs||0)+1)%5===0;
+
 /* ---------- events ---------- */
-const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,
+const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,...EXTRA_ACTIONS3,
  nav:el=>go(el.dataset.view),
  buy:el=>startRip(el.dataset.tier,{qty:ripQty,group:el.dataset.g||null}),
  odds:el=>showOdds(el.dataset.tier),
@@ -2756,6 +2873,7 @@ setTimeout(checkBorrowed,1500);
 cloudRefresh();
 if(!LS.get('pokerip-guide',0)&&!game.opened)setTimeout(guideModal,700);
 window.__booted=true;
+setTimeout(()=>{try{streakCheck()}catch(e){}hustleClaim();loadAllArtists()},2500);
 initCatalog().then(async()=>{checkBroke();await loadExtras();for(const id of[...selected].filter(id=>catalog.failed.has(id))){catalog.failed.delete(id);try{await loadSet(id)}catch(e){}}invalidatePool();render()});
 </script>
 </body>
