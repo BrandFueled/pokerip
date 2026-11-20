@@ -626,6 +626,36 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .eh-intro{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:#160d1acc;transition:opacity .3s}.eh-intro.out{opacity:0}
 .eh-flipbig{width:180px;height:180px;margin:0 auto;background:url('anim/ee_flip.webp') 0 0/600% 100% no-repeat;animation:eeFlip .9s step-end infinite}
 .evo-bu{width:100%!important;height:100%;margin:0!important;aspect-ratio:auto!important;border-radius:12px}.evo-old .anim{animation-duration:2.8s}
+.dupwarn{background:#ffb34d1f;border:1px solid #ffb34d66;color:#ffd9a0;border-radius:10px;padding:8px 10px;margin-bottom:10px;font-size:13px}
+
+#boardSeg{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}#boardSeg::-webkit-scrollbar{display:none}#boardSeg button{flex:0 0 auto;white-space:nowrap}
+.rstats{display:flex;gap:10px;font-size:12px;margin-top:4px}.rstats .pos{color:#5fe39b}.rstats .neg{color:#ff7b7b}
+#charmPill{position:fixed;z-index:65;top:calc(env(safe-area-inset-top) + 64px);right:12px;padding:6px 12px;border-radius:20px;border:1px solid #5fe39b88;background:#0d2a1ccc;color:#bff5d5;font-weight:800;font-size:13px;box-shadow:0 0 16px #5fe39b55;backdrop-filter:blur(6px);animation:eeIdle 2s ease-in-out infinite}
+.prestige{padding:6px 12px}.prow{padding:10px 0;border-bottom:1px solid #ffffff10}.prow:last-child{border:0}.prow>span{display:flex;flex-direction:column;gap:3px}.prow small{color:var(--muted);font-size:12px}.prow.star b{color:var(--gold)}.prow .prog{display:block}
+.wall{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.wcard{background:linear-gradient(160deg,#1a1a1a,#060606);border:1px solid #ffffff22;border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:2px;position:relative;box-shadow:0 0 14px #0009,inset 0 0 0 1px #ffd34d22}
+.wcard .wimg img{width:100%;border-radius:6px}.wcard b{font-size:11px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wcard small{font-size:10px;color:var(--muted)}
+.wone{position:absolute;top:8px;left:8px;font-size:9px;font-weight:900;letter-spacing:.06em;background:#000c;color:var(--gold);padding:2px 6px;border-radius:6px;border:1px solid #ffd34d55}
+.tp-portal{width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;border:1px solid #6bb5ff55;background:linear-gradient(140deg,#0f1f33,#151a28);color:var(--text);text-align:left;margin-bottom:12px;position:relative}
+.tp-portal>span:nth-child(2){flex:1;display:flex;flex-direction:column}.tp-portal small{color:var(--muted);font-size:12px}.tp-portal .chev{color:#6bb5ff;font-size:22px}.tp-ic{font-size:30px}
+.tp-badge{background:#ff5f6d;color:#fff;font-weight:900;font-size:12px;min-width:22px;height:22px;border-radius:11px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+#tpost{position:fixed;inset:0;z-index:40;background:radial-gradient(circle at 50% 0%,#14304d,#0c1624 50%,#080d16);color:var(--text);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:env(safe-area-inset-top) 0 calc(30px + env(safe-area-inset-bottom))}
+.tp-top{background:#0c1624e6!important;border-bottom-color:#6bb5ff33!important}.tp-top b{color:#cfe6ff!important}
+.tp-new{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:6px 0 14px}.tp-kind{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 6px;border-radius:14px;border:1px solid #6bb5ff44;background:#6bb5ff12;color:#fff;text-align:center}.tp-kind span{font-size:26px}.tp-kind b{font-size:13px}.tp-kind small{font-size:10.5px;color:var(--muted);line-height:1.25}
+.tp-kind.myst{border-color:#c86bff66;background:linear-gradient(160deg,#c86bff22,#6bb5ff12);animation:eeIdle 2.4s ease-in-out infinite}
+.trow{background:#ffffff08;border:1px solid #ffffff14;border-radius:14px;padding:10px 12px;margin-bottom:10px}.trow.open{border-color:#6bb5ff55}.trow.declined,.trow.cancelled{opacity:.55}
+.trow-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.trow-h b{font-size:13.5px}.trow-h small{color:var(--muted);font-size:11px;white-space:nowrap}
+.tcards{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0}.tcards.big .tcard{width:120px}.tx{font-size:20px;color:var(--muted)}
+.tcard{width:96px;display:flex;flex-direction:column;gap:2px;text-align:center}.tcard .timg{position:relative}.tcard .timg img{width:100%;border-radius:6px}.tcard b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tcard small{font-size:11px;color:var(--gold)}
+.tcard.back{aspect-ratio:63/88;border-radius:8px;background:repeating-linear-gradient(45deg,#2b2350,#2b2350 8px,#3a2f6b 8px,#3a2f6b 16px);border:2px solid #c86bff88;align-items:center;justify-content:center}.tcard.back span{font-size:34px;font-weight:1000;color:#e6c8ff}
+.tmsg{font-style:italic;color:#cfe6ff;font-size:13px;margin:4px 0}.tacts{display:flex;gap:8px;justify-content:flex-end}.tacts .primary.smallbtn{padding:8px 12px}
+.pkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:52vh;overflow-y:auto;margin-top:8px}.pk{background:none;border:1px solid #ffffff14;border-radius:10px;padding:4px;color:var(--text)}.pk .tcard{width:100%}
+.mreveal{display:flex;gap:14px;justify-content:center;margin:6px 0 10px}.mside{display:flex;flex-direction:column;align-items:center;gap:6px}.mside small{color:var(--muted)}
+.mflip{position:relative;width:118px;aspect-ratio:63/96;perspective:800px}.mf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .7s cubic-bezier(.3,1.4,.5,1)}
+.mf.back{display:flex;align-items:center;justify-content:center;border-radius:10px;background:repeating-linear-gradient(45deg,#2b2350,#2b2350 8px,#3a2f6b 8px,#3a2f6b 16px);border:2px solid #c86bff88;font-size:40px;font-weight:1000;color:#e6c8ff;animation:mfB .7s 1.1s forwards}
+.mf.front{transform:rotateY(180deg);animation:mfF .7s 1.1s forwards}.mf.front .tcard{width:100%}.mflip.d2 .mf{animation-delay:1.1s}
+@keyframes mfB{to{transform:rotateY(-180deg)}}@keyframes mfF{to{transform:rotateY(0)}}
+.mverdict{opacity:0;animation:eeFade .5s 1.9s forwards;text-align:center}.mverdict span{font-size:40px}
+.mflip{animation:mShake .9s ease-in-out}@keyframes mShake{20%,60%{transform:rotate(-3deg)}40%,80%{transform:rotate(3deg)}}
 </style>
 </head>
 <body>
@@ -699,7 +729,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
  <div class="stats" id="binderStats"></div>
  <div id="vaultStrip"></div>
  <div class="toolbar">
-  <div class="seg" id="binderFilter"><button data-action="filter" data-f="all" class="on">All</button><button data-action="filter" data-f="hits">Hits</button><button data-action="filter" data-f="slabs">Slabs</button><button data-action="filter" data-f="vintage">Vintage</button><button data-action="filter" data-f="vault">★</button></div>
+  <div class="seg" id="binderFilter"><button data-action="filter" data-f="all" class="on">All</button><button data-action="filter" data-f="hits">Hits</button><button data-action="filter" data-f="raw">Raw</button><button data-action="filter" data-f="slabs">Slabs</button><button data-action="filter" data-f="vintage">Vintage</button><button data-action="filter" data-f="vault">★</button></div>
   <div class="toolbar-r"><select class="sel" id="binderSort" aria-label="Sort cards"><option value="new">Newest first</option><option value="value">Highest value</option><option value="name">Name A to Z</option></select><button class="smallbtn" data-action="sell-bulk">Sell under $1</button><button class="smallbtn" data-action="sell-bulk" data-lim="100">Sell under $100</button><button class="smallbtn" data-action="sell-dupes">Sell dupes</button></div>
  </div>
  <div class="gridcards g3" id="binderGrid"></div>
@@ -717,6 +747,8 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
   <div class="gridcards trophies" id="trophyGrid"></div>
   <div class="section-head"><h2>🏆 Trophy Case II</h2><span class="muted" id="trophy2Head"></span></div>
   <div class="gridcards trophies" id="trophy2Grid"></div>
+  <div id="prestigeBox" style="margin-top:18px"></div>
+  <div id="wallBox" style="margin-top:18px"></div>
   <div class="section-head"><h2>📚 Master sets</h2></div>
   <div id="featSets"></div>
   <div class="section-head"><h2>Vintage sets</h2></div>
@@ -817,7 +849,7 @@ const GOD_BANDS=[[5,15,50],[15,50,35],[50,200,12],[200,1e9,3]], GOD_ODDS=1/250, 
 // Global luck: moves this many percentage points out of the worst outcome of every value roll,
 // spread across the better outcomes. Raise it to make the whole game hit more.
 const LUCK=4;
-const luckW=bands=>{const w=bands.map(b=>b[2]);if(w.length<2||!LUCK)return w;const take=Math.min(LUCK,w[0]*.5),rest=sum(w.slice(1));w[0]-=take;for(let i=1;i<w.length;i++)w[i]+=take*w[i]/rest;return w};
+const luckW=bands=>{const w=bands.map(b=>b[2]);const cl=typeof charmLuck==='function'?charmLuck():0;if(w.length<2||(!LUCK&&!cl))return w;const take=Math.min(LUCK+w[0]*cl,w[0]*.6),rest=sum(w.slice(1));w[0]-=take;for(let i=1;i<w.length;i++)w[i]+=take*w[i]/rest;return w};
 const SLOTS={RARE:RARE_BANDS,BONUS:BONUS_BANDS,HIT:HIT_BANDS,VRARE:VRARE_BANDS,FRARE:FRARE_BANDS};
 const GRADE_MULT={modern:{7:.75,8:1.15,9:1.4,10:2.5},vintage:{7:1.1,8:1.8,9:3.5,10:12}};
 const GRADE_FEE=25, GRADE_MS=6e5, GRADE_SLOTS=5, SUBMIT_GRADES=[[7,28],[8,41],[9,22],[10,9]];
@@ -1053,7 +1085,7 @@ const SEALED=[
  {id:'crate',name:'Whale Crate',tier:'whale',qty:10,price:90000,rate:.01,lvl:15,blurb:'10 Whale Packs'}];
 const BOX_CAP=4; // a box never grows past 4x what you paid
 // Ticket Shop: [tickets, reward key, label]. 'vault' = +1 Vault slot (price climbs), 'box:<id>' = a sealed box.
-const TICKET_SHOP=[[5,'hit','Hit Pack'],[10,'mystery','Mystery Pack'],[10,'vault','+1 Vault slot'],[15,'first','1st Edition Pack'],[50,'god','God Tier spin'],[200,'asc','Ascended spin'],[400,'whale','Whale Pack']];
+const TICKET_SHOP=[[150,'charm','🍀 Lucky Charm (5 min)'],[5,'hit','Hit Pack'],[10,'mystery','Mystery Pack'],[10,'vault','+1 Vault slot'],[15,'first','1st Edition Pack'],[50,'god','God Tier spin'],[200,'asc','Ascended spin'],[400,'whale','Whale Pack']];
 const DISASTER_ODDS=nw=>nw>=1e6?.04:nw>=25e4?.03:.02;
 const DISASTERS=[
  'The grading facility burned to the ground last night. Brad from intake did not make it. Neither did your card. Thoughts and prayers.',
@@ -1172,6 +1204,225 @@ const animHTML=k=>ANIMS[k]?`<div class="anim" style="background-image:url('${ANI
 Object.values(ANIMS).forEach(u=>{const i=new Image();i.src=u});
 const MASTER_PAY=180000;
 
+/* ---------- Fresh roast bank: Kyle, Emily and Johnny edition ---------- */
+ROAST.awful=[
+ "Johnny looked at this pack and said \"at least it's not mine.\" Then he checked. It's worse than his.",
+ "Emily would like to formally request you stop embarrassing the group.",
+ "Kyle coded the odds. Kyle did not code them to be this mean. You just have that kind of energy.",
+ "That pack is so bad Emily screenshotted it for her \"men are trash\" folder.",
+ "Congrats, you pulled the exact cards Johnny uses as bookmarks.",
+ "Kyle has been informed. Kyle is laughing. Kyle has stopped laughing to catch his breath. Kyle is laughing again.",
+ "Emily said she's not mad, just disappointed. She is also mad.",
+ "This is the worst pack anyone has opened since Johnny bought a Pokémon card at a gas station.",
+ "Johnny sent this pack a sympathy card. It was a bulk Rattata.",
+ "Somewhere Kyle is adding a new line to the code that just says your name and \"lol.\"",
+ "Emily could have bought something nice with that money. Like literally anything.",
+ "Your pull rate is a crime and Johnny is your accomplice.",
+ "If disappointment was a card, you'd finally have a holo.",
+ "Kyle checked the logs. The RNG saw you coming and took the day off.",
+ "Emily is filing this pack under \"reasons we can't have nice things.\"",
+ "That's not a pack, that's a cry for help in foil wrapping.",
+ "Johnny just high-fived himself because for once it wasn't him.",
+ "Kyle wants you to know he's proud of you for trying. He's lying.",
+ "You could have lit that money on fire and at least stayed warm.",
+ "Emily asked if this is what you do all day. Yes. Yes it is.",
+ "The cards in this pack have filed for unemployment.",
+ "Johnny would have traded you a sandwich for that whole pack. Half a sandwich.",
+ "Kyle is updating your nickname in the group chat. It is not flattering.",
+ "This pack is the Pokémon equivalent of stepping on a Lego.",
+ "Emily read the value out loud. Everyone in the room went quiet.",
+ "Fun fact: Johnny's grandma pulled better than this. She died in 2009.",
+ "Kyle built a whole game and this is how you repay him.",
+ "Your binder just asked for a restraining order.",
+ "Emily would like to remind you that the stock market exists.",
+ "That pack belongs in a museum. The Museum of Bad Decisions, curated by Johnny.",
+ "Even the energy cards look embarrassed to be here.",
+ "Kyle just muted you on Discord out of pure secondhand shame.",
+ "Johnny is using this pack as proof he's not the worst at this game. It worked.",
+ "Emily asked what a holo is. You still don't know either, judging by this pack.",
+ "You didn't rip a pack, you ripped a hole in your wallet.",
+ "Kyle says this is the moment you should go outside. Touch grass. Maybe a Bulbasaur.",
+ "This pack has the same value as Johnny's opinions on football.",
+ "Emily just changed the Netflix password.",
+ "The odds are 1 in 5 for a hit. You found the other 4 at once.",
+ "Johnny tried to say something nice about this pack. He couldn't think of anything.",
+ "Kyle is going to read this pack at your wedding.",
+ "That's a $0.02 Caterpie. Emily is choosing to believe you did it on purpose.",
+ "You're not unlucky. You're just bad. Kyle checked.",
+ "Emily said \"that's cute\" in the voice she uses for bad haircuts.",
+ "Johnny wants to know if you're okay. Johnny is not okay either.",
+ "That pack smelled like regret and old Doritos.",
+ "Kyle is considering adding a pity timer just for you. He won't, but he's considering it.",
+ "Somebody tell Emily this is a hobby and not a cry for help.",
+ "Johnny has opened 400 packs and never seen anything this sad.",
+ "The pack art was the most valuable thing in there.",
+ "Kyle says \"skill issue.\" Johnny agrees. Emily is already in bed.",
+ "If you squint, it's still bad.",
+ "Emily asked if she can return you like a bad Amazon order.",
+ "This pack is going straight in Johnny's \"things that make me feel better\" journal.",
+ "Kyle has now seen everything. Thanks for that."];
+ROAST.meh=[
+ "Not a W, not an L. The Johnny special: confusingly mediocre.",
+ "Emily gives this pack a polite \"oh nice\" and goes back to her phone.",
+ "Kyle says it's a C plus. He grades on a curve, and the curve is Johnny.",
+ "Mid. Like Johnny's chili. Edible, technically.",
+ "You almost made money. Almost is Emily's least favorite word.",
+ "That pack was like a lukewarm shower. Nobody's mad, nobody's happy.",
+ "Kyle calls this a \"tax write-off.\" It's fake money, Kyle.",
+ "Emily asked if that was good. You said \"kind of.\" She's not convinced.",
+ "Johnny would call this a win. Johnny has low standards.",
+ "Close enough to break even that you can lie about it.",
+ "The pack shrugged. You shrugged. Kyle shrugged.",
+ "Somewhere between a Charizard and a Caterpie. Mostly Caterpie.",
+ "Emily says you're the human version of this pack: fine.",
+ "Kyle gave this a 6/10. Johnny gave it an 8/10. Johnny is wrong.",
+ "You didn't lose much. You didn't win anything. This is your villain origin story.",
+ "That's a beige pack. A khaki pack. A Johnny-at-a-barbecue pack.",
+ "The house wins a little. The house is Kyle. Kyle wins a little.",
+ "Emily just said \"cool\" without looking up.",
+ "This pack has the energy of a Tuesday afternoon meeting.",
+ "Johnny is calling this \"basically profit.\" Johnny failed math.",
+ "Kyle checked: you're exactly as broke as you were before. Plus tax.",
+ "Not a disaster. Johnny has been demoted to second-most average.",
+ "That pack was the cinematic equivalent of a Hallmark movie.",
+ "Emily would describe this pack as \"a choice.\"",
+ "You lost a little. Emily lost a little respect. Even trade.",
+ "Kyle can't roast this one. It's too boring to roast.",
+ "This is the pack equivalent of plain toast. Johnny loves plain toast.",
+ "If this pack were a person it would say \"no worries\" and mean it.",
+ "Emily asked if this is going to be on the test. It is not.",
+ "Your ROI is giving \"participation trophy.\"",
+ "Kyle just yawned so hard his jaw clicked.",
+ "Johnny says this is how it starts. The comeback. It's not the comeback.",
+ "A slightly sad pack for a slightly sad person.",
+ "You're one Pikachu away from greatness. You're always one Pikachu away.",
+ "Emily said \"we'll talk about this later.\" Ominous.",
+ "The pack is fine. You're fine. Everything is fine. Kyle is suspicious.",
+ "Johnny wants you to know he relates to this pack on a spiritual level.",
+ "That pack went to community college and is doing okay.",
+ "Kyle says \"keep ripping.\" Kyle profits when you keep ripping.",
+ "Emily calls this \"Johnny luck.\" It's not a compliment.",
+ "Medium rare. Like Kyle's steak. And Johnny's personality.",
+ "Your binder said \"thanks, I guess.\"",
+ "Not great, not terrible. Kyle has set this pack as your phone wallpaper anyway.",
+ "Emily asked how much you've spent this week. Don't answer that.",
+ "Johnny just took notes on how to be this average."];
+ROAST.good=[
+ "Okay, green pack. Emily is pretending she's not impressed.",
+ "Kyle checked the code twice. It's legit. He's mad about it.",
+ "Johnny saw this and quietly closed the app.",
+ "Profit! Emily says you can finally pay her back for Chipotle.",
+ "Look at you, making fake money like a real adult.",
+ "Kyle just whispered \"no way\" and then refused to elaborate.",
+ "That's a W. Johnny is taking it personally.",
+ "Emily said \"nice\" and she actually meant it. Mark the calendar.",
+ "Green pack. Screenshot it before Kyle nerfs the odds.",
+ "Johnny tried to pull this exact card for 3 months. You did it in one pack.",
+ "Kyle is making a note to raise prices. Thanks for that.",
+ "Somebody is cooking, and for once it isn't Emily's air fryer.",
+ "That's a profit. Johnny would like to see the receipts.",
+ "Emily just changed your contact name to \"The Lucky One.\"",
+ "Kyle respects this. Kyle also resents this. Both can be true.",
+ "Okay, okay. Don't let it go to your head. It already went to your head.",
+ "Johnny says he's happy for you. His eye is twitching.",
+ "You pulled better than Kyle's entire last week.",
+ "Emily asked if this means you'll finally stop ripping. LOL. No.",
+ "That's what we call a win. Johnny calls it \"rigged.\"",
+ "Kyle has added you to his list of people to watch closely.",
+ "Green numbers! Your banker is confused. Your banker is Kyle.",
+ "Johnny wants to trade. Don't. It's Johnny.",
+ "Emily said \"see, you CAN do things right.\"",
+ "Kyle checked: this pack paid for itself and a Frosty.",
+ "Look who finally read the instructions.",
+ "Johnny is googling \"how to get luck back.\"",
+ "Emily would like a cut. Emily always wants a cut.",
+ "This pack slaps. Kyle approves. Johnny disapproves. Perfect balance.",
+ "You're up. Leave now. You won't, but you should.",
+ "Kyle is checking if you're hacking. You're not smart enough to hack. You're just lucky.",
+ "Johnny just said \"must be nice\" four times in a row.",
+ "Emily asked if that means dinner's on you tonight. It's fake money, Emily.",
+ "Hot pack! Someone open a window.",
+ "Kyle calls this \"statistically annoying.\"",
+ "Johnny's jealousy is so loud we can hear it from here.",
+ "Not bad! Emily is updating your rank from \"embarrassing\" to \"tolerable.\"",
+ "That pack had main character energy.",
+ "Kyle would like you to know he could have pulled that too. He didn't, but he could have.",
+ "Johnny just restarted his app hoping it's contagious.",
+ "Emily's new hobby: watching you win and pretending not to care.",
+ "Profit secured. Kyle has been notified. Kyle is not thrilled.",
+ "That card is going straight into the \"keep forever\" binder. Or until rent.",
+ "Johnny says his next pack will be better than this. It won't.",
+ "Emily said \"you're lucky I love you\" and then took your Frosty.",
+ "The odds blinked first.",
+ "Kyle is now 4% more scared of you.",
+ "Johnny called his mom to complain.",
+ "Emily wants to know if this counts as an investment. Kinda, yeah.",
+ "You beat the house. The house is upset. The house is Kyle.",
+ "Johnny tried to steal this pack's energy by touching your phone.",
+ "That's a holo with your name on it. Metaphorically. Kyle is working on actual names.",
+ "Emily is calling this \"a little treat.\"",
+ "Kyle checked and yes, you can brag in the group chat.",
+ "That pack is the reason Johnny keeps playing. Not for him. For you.",
+ "Emily asked if you're going to sell it. Never. Not unless it's for a pizza.",
+ "Look at that profit. Kyle needs to sit down.",
+ "Johnny says you're due for a bad one. He's praying for it.",
+ "Somebody give this person a raise. Fake raise. Fake money. Real ego.",
+ "Emily just called you \"kinda cool.\" Highest honor available."];
+ROAST.huge=[
+ "SOMEBODY CALL KYLE. Actually don't. He's crying.",
+ "EMILY. EMILY COME LOOK. Okay she looked. She's screaming.",
+ "Johnny has left the group chat.",
+ "Kyle is reviewing the code for bugs. There are no bugs. You are the bug.",
+ "That pack paid for Emily's wedding. Fake wedding. Fake money. Real tears.",
+ "Johnny has requested a recount.",
+ "Kyle is drafting an apology letter to the economy.",
+ "Frame it. Insure it. Never let Johnny breathe near it.",
+ "Emily just said \"marry me\" to the pack.",
+ "That's the kind of pull Johnny tells his therapist about.",
+ "Kyle is lowering the odds as we speak. Kidding. Maybe.",
+ "The RNG gods have chosen you. Johnny is filing a complaint.",
+ "Emily is calling her mom to tell her about this.",
+ "Kyle has never been more proud and more jealous at the same time.",
+ "Johnny just whispered \"I hate it here.\"",
+ "That pack is worth more than Johnny's car. And Johnny's car is a 2008 Corolla.",
+ "Emily is planning how to spend your fake money.",
+ "Kyle says this is the best pull since he built the game. He's lying, he pulled better. Probably.",
+ "You broke the game. Kyle is very excited and very sad.",
+ "Johnny wants to know if you'll adopt him.",
+ "Emily took a screenshot and set it as her lock screen.",
+ "Kyle is adding a Hall of Fame just so you can be in it.",
+ "That's not luck, that's witchcraft. Emily is calling the church.",
+ "Johnny just threw his phone. Gently. Onto a couch. Still dramatic.",
+ "Somebody call Wendy's and tell them you won't be applying.",
+ "Kyle is going to need you to stop.",
+ "Emily said \"I always believed in you.\" She did not.",
+ "Johnny says it's rigged. Johnny is correct this time. It's rigged for you.",
+ "Retire. Retire right now. Go out on top. You won't.",
+ "Kyle has added a new achievement: \"Made Kyle Cry.\"",
+ "Emily is pretending to be cool about this. She is not cool about this.",
+ "Johnny has decided to take up a new hobby. Like knitting.",
+ "That pack is legally a down payment.",
+ "Kyle is checking your phone for a cheat code. There isn't one. He's still checking.",
+ "Emily will be telling this story at Thanksgiving.",
+ "Johnny's crying in a Wendy's parking lot.",
+ "BIG. HUGE. MASSIVE. Kyle needs a minute.",
+ "This pull has been reported to the Pokémon Company. They're jealous too.",
+ "Emily said this is the most attractive thing you've ever done.",
+ "Johnny would like to be your intern."];
+ROAST.grailMiss=["Missed. Johnny saw it and smiled for the first time all week.","The Grail laughed. Emily laughed. Kyle laughed. You did not laugh.","So close. Kyle says the needle moved. Kyle lies.","Missed again. Emily is starting a GoFundMe for your hope.","The Grail ghosted you. Johnny knows that feeling.","Next time. Probably. Kyle refuses to commit."];
+ROAST.grailWin=["GRAIL ACQUIRED. Johnny is in shambles. Emily is proud. Kyle is suspicious.","YOU GOT IT. Kyle is printing a certificate.","The Grail is yours. Emily wants to hold it. Do not let Johnny hold it.","Destiny. Pure destiny. Johnny says it's RNG. Johnny is bitter."];
+LIFE_BAD.push(
+ {id:'emily-clean',icon:'🧹',title:'Emily cleaned your room',body:c=>`She found ${c.name} "just lying there" and put it in a drawer with loose batteries. It's Played now. She's not sorry.`,need:'raw',mult:.5,cond:'Battery-adjacent'},
+ {id:'johnny-sneeze',icon:'🤧',title:'Johnny sneezed on your binder',body:c=>`He said "bless me" and kept going. ${c.name} is now slightly crispy.`,need:'raw',mult:.55,cond:'Johnny-sneezed'},
+ {id:'kyle-coaster',icon:'☕',title:'Kyle used one of your cards as a coaster',body:c=>`${c.name} has a coffee ring on it. Kyle says it "adds character." It does not.`,need:'raw',mult:.4,cond:'Coffee ring'},
+ {id:'emily-tax',icon:'💅',title:'Emily charged you a "listening fee"',body:(c,amt)=>`You talked about Pokémon cards for 45 minutes straight. She billed you ${money(amt)}. Fair, honestly.`,need:'rich'},
+ {id:'johnny-trade',icon:'🙃',title:'Johnny "traded" with you while you slept',body:c=>`He took ${c.name} and left a note that says "IOU 1 cool card." The note is worth more than his cards.`,need:'bulk'},
+ {id:'kyle-tax',icon:'🧾',title:'Kyle introduced a "server fee"',body:(c,amt)=>`Kyle says the servers are expensive. They are free. He took ${money(amt)} anyway.`,need:'rich'});
+LIFE_GOOD.push(
+ {id:'emily-cash',cash:true,icon:'💸',title:'Emily found your cash in the laundry',body:amt=>`${money(amt)} survived the wash. She kept 10% as a "finder's fee" and gave you the rest.`},
+ {id:'johnny-pity',cash:true,icon:'🥺',title:'Johnny felt bad for you',body:amt=>`He Venmo'd you ${money(amt)} with the memo "for emotional damages." Fake money, real pity.`},
+ {id:'kyle-bug',icon:'🐛',title:'Kyle found a bug in your favor',body:c=>`He was going to fix it, but it made ${c.name} worth 1.5x, so he's calling it a feature.`});
+
 /* ---------- game state ---------- */
 const fresh=()=>({v:4,cash:START,given:START,spent:0,xp:0,level:1,opened:0,tickets:1,owned:[],history:[],kyle:0,slabsWon:0,sold:0,grabSpent:0,lastSpin:'',vouchers:{},trophies:{},sets:{},dex:{},best:null,godPacks:0,seen:{},cold:0,hot:0,shared:null,masterPaid:{},binders:[],stones:{},eeveeBadges:{},grailLog:[],rival:null,vaultMax:30,vaultBought:0,sealed:[],borrowed:null,lastEvent:'',disasters:0,grading:[],gradeLog:{},grail:null,grailsWon:0,miles:{},prestige:0,beat:false,bailouts:0,bailDay:'',bailToday:0,savedAt:0,owner:null});
 const slim=c=>({id:c.id,name:c.name,value:c.value,img:c.img,slab:!!c.slab,grade:c.grade,first:!!c.first,setId:c.setId,setName:c.setName,num:c.num,rarity:c.rarity,raw:c.raw,est:c.est});
@@ -1183,7 +1434,7 @@ function normalize(d){if(d.xp==null)d.xp=r2((d.spent||0)+(d.grabSpent||0));if(d.
  if(!d.best){let b=null;for(const c of[...d.owned,...d.history.flatMap(h=>h.cards)])if(!b||c.value>b.value)b=c;d.best=b?{value:b.value,name:fullName(b)}:{value:0,name:''}}
  return d}
 function load(){const d=LS.get(SAVE_KEY);if(d&&(d.v===3||d.v===4)&&typeof d.cash==='number')return normalize(d);return fresh()}
-function save(){levelCheck();milestoneCheck();trophy2Check();eeveeBadgeCheck();eeveeDoneCheck();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
+function save(){cstatsUpdate();prestigeScan();levelCheck();milestoneCheck();trophy2Check();eeveeBadgeCheck();eeveeDoneCheck();game.showcase=vaultCards().sort((a,b)=>b.value-a.value).map(c=>({name:c.name,value:c.value,img:c.img,grade:c.grade,first:!!c.first,setName:c.setName,slab:!!c.slab}));game.history.length=Math.min(game.history.length,150);game.savedAt=Date.now();
  if(!LS.set(SAVE_KEY,game)){game.history.length=Math.min(game.history.length,40);pruneSetCache();LS.set(SAVE_KEY,game)}Cloud.queue();render()}
 const boxDef=id=>SEALED.find(b=>b.id===id);
 const boxValue=b=>{const d=boxDef(b.box);if(!d)return 0;const days=(Date.now()-b.at)/864e5;return r2(Math.min(b.cost*BOX_CAP,b.cost*Math.pow(1+d.rate,days)))};
@@ -1252,13 +1503,13 @@ async function submitGrading(c){if(!c||c.slab||c.grading)return;if(gradingCards(
  const ev=c.value*(isVintage(c.setId)?2.73:1.18)-fee,ins=r2(Math.max(1,c.value*.1)),risk=Math.round(DISASTER_ODDS(networth())*100);
  const v=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,stack:true,html:`${money(fee)} to grade (bigger cards cost more), back in 10 minutes. Most cards come back a 7 or 8. About 1 in 5 is a 9, and 9% are a 10. A tiny few come back <b style="color:var(--text)">Black Label</b>.<br><br>Raw value ${money(c.value)}. ${c.value<20?'Honestly? Grading this is a terrible idea. Kyle loves it.':ev>0?'On average this one is worth grading.':'On average you lose money on this. Do it for the story.'}<br><small>${risk}% of submissions never come back (fires, floods, raccoons). Insurance pays the raw value if disaster strikes.</small>`,buttons:[{label:`Send + insure · ${moneyS(fee+ins)}`,primary:true,value:'ins'},{label:`Send it uninsured · ${moneyS(fee)}`,value:'raw'},{label:'Never mind',value:null}]});
  if(!v||!game.owned.includes(c)||c.grading)return;const cost=fee+(v==='ins'?ins:0);if(game.cash+1e-9<cost){toast(`You need ${money(cost)} for that.`);return}
- spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v==='ins';save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
+ spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v==='ins';if(charmOn()&&game.charm.grade){c.charmed=true;game.charm.grade=false;setTimeout(()=>toast('🍀 Lucky Charm used on this one. +20% toward a 9 or 10.',3000),3300)}save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
 async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||spinning)return;
  for(const c of ready){const raw=c.value,insured=c.insured;delete c.grading;delete c.insured;
-  if(Math.random()<DISASTER_ODDS(networth())){const i=game.owned.indexOf(c);if(i>=0)game.owned.splice(i,1);game.disasters=(game.disasters||0)+1;if(insured)game.cash=r2(game.cash+raw);save();
+  if(!c.vault&&Math.random()<DISASTER_ODDS(networth())){const i=game.owned.indexOf(c);if(i>=0)game.owned.splice(i,1);game.disasters=(game.disasters||0)+1;if(insured)game.cash=r2(game.cash+raw);save();
    Sound.init();Sound.tone(196,.9,'sine',.06,0,98);Sound.tone(147,1.2,'sine',.05,.35,73);buzz([200,100,300]);
    await modal({icon:'🕯️',title:pick(DISASTER_TITLES),html:`${animHTML('chomp')}<b style="color:var(--text)">${esc(c.name)}</b><br><span class="muted">${money(raw)} · gone</span><p style="margin-top:10px">${esc(pick(DISASTERS))}</p>${insured?`<p style="color:var(--green)">Insurance paid out <b>${money(raw)}</b>. Smart.</p>`:'<p class="roast bad">It was not insured. Sucks to suck.</p>'}`,buttons:[{label:insured?'Thank god for insurance':'🕯️ Pay respects',primary:true}]});continue}
-  const g=SUBMIT_GRADES[wIndex(SUBMIT_GRADES.map(x=>x[1]))][0];c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(g===10&&Math.random()<BLACK_FROM_GRADING)blackify(c);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;if(c.black)game.gradeLog.black=(game.gradeLog.black||0)+1;
+  const g=SUBMIT_GRADES[wIndex(charmGradeWeights(c))][0];delete c.charmed;c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(g===10&&Math.random()<BLACK_FROM_GRADING)blackify(c);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;if(c.black)game.gradeLog.black=(game.gradeLog.black||0)+1;
   collect([c]);checkProgress([c]);save();Feed.post([c]);celebrate(c.black?5:g===10?5:g===9?4:g===8?2:0);if(c.black){flash(.9);FX.burst(260,['#000000','#f5c451','#ffffff'])}if(g===7){Sound.init();Sound.tone(220,.5,'sawtooth',.05,0,90)}
   await modal({icon:c.black?'🖤':g===10?'💎':g===9?'🔥':g===8?'👍':'🤦',title:c.black?'BLACK LABEL!!':`It came back a ${g}!`,html:`<div class="m-card">${slabHTML(c,true)}</div><b style="color:var(--text)">${esc(c.name)}</b><br>${money(raw)} raw → <b style="color:${c.value>=raw?'var(--green)':'var(--red)'}">${money(c.value)}</b><div class="roast${g<=7?' bad':''}">${esc(c.black?pick(['BLACK LABEL. Kyle has never seen one. Kyle is shaking.','Black Label. The grader called his mom.','This slab needs its own bodyguard.']):pick(ROAST.grade[g]))}</div>`,buttons:[{label:'Next',primary:true}]})}
  render()}
@@ -1268,8 +1519,8 @@ function lifeEvent(){if(game.lastEvent===today()||rip||spinning)return;const nw=
  const raws=game.owned.filter(c=>!c.vault&&!c.slab&&!c.grading&&!c.cond&&c.value>=5),bulk=game.owned.filter(c=>!c.vault&&!c.slab&&!c.grading&&c.value<5),nice=game.owned.filter(c=>!c.vault&&!c.grading&&c.value>=20);
  const good=Math.random()<.35;let html='',icon,title,an='';
  if(good){const e=pick(LIFE_GOOD);icon=e.icon;title=e.title;
-  an=['cash','shoebox','tix'].includes(e.id)?'money':'';
-  if(e.id==='cash'){const amt=r2(Math.min(2000,20+game.level*15+Math.random()*80));game.cash=r2(game.cash+amt);html=e.body(amt)}
+  an=['cash','shoebox','tix'].includes(e.id)||e.cash?'money':'';
+  if(e.id==='cash'||e.cash){const amt=r2(Math.min(2000,20+game.level*15+Math.random()*80));game.cash=r2(game.cash+amt);html=e.body(amt)}
   else if(e.id==='mom'){grant({mystery:1});html=e.body()}else if(e.id==='tix'){grant({tickets:5});html=e.body()}
   else if(e.id==='shoebox'){const amt=r2(Math.min(5000,50+game.level*40+Math.random()*200));game.cash=r2(game.cash+amt);html=e.body(amt)}
   else if(e.id==='collector'){const c=pick(raws);if(!c)return;gradeIt(c,[[9,1]]);c.from='Mystery Collector';html=e.body(c)}
@@ -1292,7 +1543,7 @@ const vaultSlotPrice=()=>10;
 function ticketShop(){const rows=TICKET_SHOP.map(([cost,key,label],i)=>{const price=key==='vault'?vaultSlotPrice():cost,can=game.tickets>=price;return `<button class="tshop${can?'':' off'}" data-ti="${i}" ${can?'':'disabled'}><b>${esc(key==='vault'?`${label} (now ${vaultMax()})`:label)}</b><span>🎟 ${price}</span></button>`}).join('');
  modal({icon:'🎟',title:`Ticket Shop · ${game.tickets} 🎟`,html:`<p>Trade your tickets for packs, spins and upgrades. Earn more by selling any card worth $50+.</p><div class="tshops">${rows}</div>`,buttons:[{label:'Done',value:null},{label:'Go to Slab Grab',primary:true,value:'grab'}]}).then(v=>{if(v==='grab'){grabMode='std';go('grab')}});
  setTimeout(()=>$$('.tshops [data-ti]').forEach(b=>b.addEventListener('click',()=>buyTicketItem(+b.dataset.ti))),30)}
-function buyTicketItem(i){const[cost,key,label]=TICKET_SHOP[i],price=key==='vault'?vaultSlotPrice():cost;if(game.tickets<price)return;game.tickets-=price;
+function buyTicketItem(i){if(TICKET_SHOP[i][1]==='charm'){modalClose&&modalClose(null);setTimeout(buyCharm,80);return}const[cost,key,label]=TICKET_SHOP[i],price=key==='vault'?vaultSlotPrice():cost;if(game.tickets<price)return;game.tickets-=price;
  if(key==='vault'){game.vaultMax=vaultMax()+1;game.vaultBought=(game.vaultBought||0)+1}
  else if(key.startsWith('box:')){const d=boxDef(key.slice(4));game.sealed.push({uid:uid(),box:d.id,cost:d.price,at:Date.now()})}
  else grant({[key]:1});
@@ -1361,7 +1612,7 @@ function bountyCheck(cards){const B=game.bounty;if(!B||B.week!==today())return;f
 function hotSet(){const ids=[...selected].sort();if(!ids.length)return null;const d=today();let h=0;for(const ch of d)h=(h*31+ch.charCodeAt(0))>>>0;return ids[h%ids.length]}
 const HOT_WEIGHT=2;
 let pullGid=null; // set while ripping from a set page: missing cards show up 3x as often
-const hotW=c=>(c.setId===hotSet()?HOT_WEIGHT:1)*(pullGid&&!inDex(c.id)?3:1);
+const hotW=c=>(c.setId===hotSet()?HOT_WEIGHT:1)*(pullGid&&!inDex(c.id)?3*charmMissing():1);
 function bandPick(pool,bands,used){const idx=wIndex(luckW(bands)),order=[idx];
  for(let d=1;d<bands.length;d++){if(idx-d>=0)order.push(idx-d);if(idx+d<bands.length)order.push(idx+d)}
  for(const k of order){const[mn,mx]=bands[k],c=pool.filter(x=>x.value>=mn&&x.value<mx&&!used.has(x.name));if(c.length)return mx>=1e9?c[wIndex(c.map(x=>mn/x.value*hotW(x)))]:c[wIndex(c.map(hotW))]}
@@ -1380,7 +1631,7 @@ function generate(t,pool){const used=new Set(),out=[],take=c=>{used.add(c.name);
  if(t.kind==='evo'){const L=pick(evoLines());for(const st of L.stages)out.push(slabOf(pick(st),10,0,false));out.forEach((x,i)=>{const src=L.stages[i].find(c=>c.id===x.id)||x;x.raw=src.value;x.value=r2(src.value*GRADE_MULT[eraOf(x)][10])});return out}
  if(t.id==='booster'&&Math.random()<GOD_ODDS){for(let i=0;i<5;i++)take(bandPick(pool,GOD_BANDS,used));out.god=true;return out}
  if(t.kind==='pack'){const cap=t.first?8:t.vintage?3:1.5;for(let i=0;i<t.bulk;i++)take(Math.random()<KYLE_CARD_ODDS?KYLE_CARD():pickBulk(pool,used,cap));for(const s of t.slots){const x=take(bandPick(pool,SLOTS[s],used));if(t.slabRare&&Math.random()<t.slabRare)gradeIt(x,t.vintage?VINT_GRADES:PACK_GRADES)}}
- else{const x=take(bandPick(pool,t.bands,used));if(Math.random()<t.slab)gradeIt(x,PACK_GRADES)}
+ else{const x=take(bandPick(pool,t.id==='slab'&&pullGid?setSlabBands(pullGid,pool):t.bands,used));if(Math.random()<t.slab)gradeIt(x,PACK_GRADES)}
  return out}
 function mysteryPull(){const m=MYSTERY[wIndex(MYSTERY.map(x=>x.w))],holo=vintagePool().filter(x=>/rare/i.test(x.rarity)),none=new Set();let c;
  if(m.src==='cz')c=gradeIt(inst(bandPick(groupCards('cz').filter(x=>x.value>=3),[[3,12,55],[12,40,32],[40,1e9,13]],none)),[[8,30],[9,45],[10,25]]);
@@ -1401,14 +1652,30 @@ function bandEV(pool,bands,f=x=>x.value){const bk=bands.map(([mn,mx])=>pool.filt
  let ev=0;bands.forEach((_,k)=>{let m=null;for(let d=0;d<bands.length&&m==null;d++)for(const j of d?[k-d,k+d]:[k])if(m==null&&j>=0&&j<bands.length)m=mean(bk[j],bands[j][0],bands[j][1]);ev+=w[k]/tot*(m||0)});return ev}
 function evoLines(){return cached('evo',()=>{const out=[];for(const sid in catalog.data){const cards=catalog.data[sid];for(const line of EVO_LINES){const stages=line.map(n=>cards.filter(c=>c.name===n||c.name.startsWith(n+' ')||c.name.startsWith(n+'-')).sort((a,b)=>b.value-a.value).slice(0,3));if(stages.every(s=>s.length))out.push({setId:sid,line,stages})}}return out})}
 const nice=(v,step,floor)=>Math.max(floor,Math.round(v/step)*step);
-function calibrate(){if(!catalog.ready)return;cached('cal',()=>{const gp=gradedPool('all');if(gp.length<50)return 0;
- for(const t of TIERS)if(t.kind==='whale'){let ev;if(t.black){let v=0;const N=240;for(let i=0;i<N;i++){const used=new Set();for(let k=0;k<t.n;k++){const x={...bandPick(gp,t.bands,used)};used.add(x.name);if(Math.random()<t.black)blackify(x);v+=x.value}}ev=v/N/t.n}else ev=bandEV(gp,t.bands);t.price=nice(ev*t.n/RETURN_WHALE,t.id==='leviathan'?10000:t.id==='megawhale'?2500:500,t.id==='leviathan'?100000:t.id==='megawhale'?15000:3000)}
+function calibrate(){simMode=true;try{return calibrate0()}finally{simMode=false}}
+function calibrate0(){if(!catalog.ready)return;cached('cal',()=>{const gp=gradedPool('all');if(gp.length<50)return 0;
+ for(const t of TIERS)if(WHALE_FIXED[t.id]){t.price=WHALE_FIXED[t.id];tuneWhale(t,gp)}else if(t.kind==='whale'){let ev;if(t.black){let v=0;const N=240;for(let i=0;i<N;i++){const used=new Set();for(let k=0;k<t.n;k++){const x={...bandPick(gp,t.bands,used)};used.add(x.name);if(Math.random()<t.black)blackify(x);v+=x.value}}ev=v/N/t.n}else ev=bandEV(gp,t.bands);t.price=nice(ev*t.n/RETURN_WHALE,t.id==='leviathan'?10000:t.id==='megawhale'?2500:500,t.id==='leviathan'?100000:t.id==='megawhale'?15000:3000)}
  {const L=evoLines(),et=tierById('evo');if(L.length&&et){const ev=sum(L.map(l=>sum(l.stages.map(st=>sum(st.map(c=>c.value*GRADE_MULT[eraOf(c)][10]))/st.length))))/L.length;et.price=nice(ev/.92,50,100)}}
  const crate=SEALED.find(d=>d.id==='crate'),wt=tierById('whale');if(crate&&wt)crate.price=wt.price*9;
  const m=MODES.asc,tv=TROPHIES.filter(t=>t.card).map(t=>trophyCard(t).value),avgT=tv.length?sum(tv)/tv.length:0;
  const base=bandEV(gp,m.bands),blk=bandEV(gp,m.bands,x=>x.raw*GRADE_MULT[eraOf(x)][10]*BLACK_MULT);
  m.cost=nice((m.trophy*avgT+(1-m.trophy)*((1-m.black)*base+m.black*blk))/RETURN_ASC,1000,10000);return 1})}
 const buyPrice=c=>r2(Math.max(1,c.value*BUY_MARKUP));
+
+/* Set-page pricing: a pack's price follows what that set can actually give you. */
+function setSlabBands(gid,pool){return cached('sb:'+gid,()=>{const v=pool.map(c=>c.value).filter(x=>x>=2).sort((a,b)=>a-b);if(v.length<8)return SLAB_BANDS;const q=p=>v[Math.min(v.length-1,Math.floor(p*v.length))];
+ const a=Math.max(2,q(.35)),b=Math.max(a+.01,q(.75)),c=Math.max(b+.01,q(.93)),d=Math.max(c+.01,q(.985));return[[a,b,71],[b,c,22],[c,d,6],[d,1e9,1]]})}
+function simEV(t,gid,n=500){const pool=packPool(t,gid),keep=pullGid;let v=0;pullGid=gid;simMode=true;try{for(let i=0;i<n;i++)v+=sum(generate(t,pool).map(c=>c.value))}finally{pullGid=keep;simMode=false}return v/n}
+function packPrice(t,gid){if(!gid||!['pack','single'].includes(t.kind)||!poolReady(t,gid)||!poolReady(t,null))return t.price;
+ return cached('px:'+t.id+':'+gid,()=>{const base=simEV(t,null),mine=simEV(t,gid);if(!base||!mine)return t.price;const p=mine*t.price/base,step=p<100?5:p<1000?25:100;return Math.max(5,Math.round(p/step)*step)})}
+
+/* Whale + Mega Whale: fixed prices, and the odds are tuned so you get back about 95% on average with more mid-size hits. */
+const WHALE_FIXED={whale:16500,megawhale:50000},WHALE_RETURN=.95;
+function tuneWhale(t,gp){const w0=(t.bands0||(t.bands0=t.bands.map(b=>b.slice()))).map(b=>b[2]);let w=w0.slice();
+ const ev=w=>bandEV(gp,t.bands0.map((b,i)=>[b[0],b[1],w[i]]))*t.n,target=t.price*WHALE_RETURN;
+ for(let k=0;k<60&&ev(w)<target&&w[0]>4;k++){const m=Math.min(2,w[0]-4);w[0]-=m;w[1]+=m*.55;w[2]+=m*.35;w[3]+=m*.1}
+ for(let k=0;k<60&&ev(w)>t.price*1.02&&w[3]>1;k++){const m=Math.min(1,w[3]-1);w[3]-=m;w[1]+=m}
+ t.bands=t.bands0.map((b,i)=>[b[0],b[1],Math.round(w[i]*10)/10]);t.ret=ev(w)/t.price}
 
 /* ---------- image helpers ---------- */
 function imgTag(c,hi=false,eager=false){const lo=c.img||'';return `<img src="${esc(hi?large(lo):lo)}" data-lo="${esc(lo)}" alt="${esc(c.name)}" ${eager?'':'loading="lazy"'} decoding="async" referrerpolicy="no-referrer" draggable="false" onerror="imgFail(this)">`}
@@ -1439,7 +1706,7 @@ const qtySegHTML=()=>[1,5,10,15].map(n=>`<button data-action="qty" data-n="${n}"
 function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!catalog.offline;
  $('#shopStats').innerHTML=statHTML([['Cash',money(game.cash),'Virtual bankroll'],['Binder',money(collectionValue()),`${game.owned.length} card${game.owned.length===1?'':'s'}`],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,'Net worth vs. bankroll'],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,'The end goal']]);
  $('#guest').innerHTML=Cloud.on&&!Cloud.s?`<div class="daily guest"><div><b>👻 You're playing as a guest</b><span>${game.opened?`${game.opened} pack${game.opened===1?'':'s'} ripped and none of it is backed up.`:'Make an account so your pulls are saved.'} Takes 10 seconds, no email.</span></div><button class="primary" data-action="account">Save my run</button></div>`:'';
- $('#petBox').innerHTML=petHTML();renderHot();renderRival();renderDaily();renderRewards();renderGrades();$('#grailBox').innerHTML=grailHTML();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
+ $('#petBox').innerHTML=petHTML()+tradePortalHTML();renderTradeBadge();Trade.sync();renderHot();renderRival();renderDaily();renderRewards();renderGrades();$('#grailBox').innerHTML=grailHTML();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
  const isVault=t=>t.vintage||t.kind==='mystery'||t.kind==='evo',mod=TIERS.filter(t=>!isVault(t)&&t.kind!=='whale'),vin=TIERS.filter(isVault),wh=TIERS.filter(t=>t.kind==='whale'),next=TIERS.filter(t=>!unlocked(t)).sort((a,b)=>a.lvl-b.lvl)[0];
  $('#packs').innerHTML=mod.filter(unlocked).map(t=>packCard(t)).join('');
  $('#vault').innerHTML=vin.filter(unlocked).map(t=>packCard(t)).join('');
@@ -1447,7 +1714,7 @@ function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!cat
  $('#whales').innerHTML=wh.filter(unlocked).map(t=>packCard(t)).join('');renderSealed();
  $('#nextUnlock').innerHTML=next?`<button class="daily nextup" data-action="levels"><div><b>🔒 Next unlock: ${esc(next.name)} at LV ${next.lvl}</b><span>${moneyS(Math.max(0,XP_AT[next.lvl]-game.xp))} more spent to get there. Tap to see every reward.</span></div><span class="chev">›</span></button>`:'';
  renderFeed();renderRotation()}
-function ripLabel(t,gid,named){const lock=!unlocked(t),ready=poolReady(t,gid),cost=t.price*ripQty,afford=game.cash+1e-9>=cost;
+function ripLabel(t,gid,named){const lock=!unlocked(t),ready=poolReady(t,gid),cost=packPrice(t,gid)*ripQty,afford=game.cash+1e-9>=cost;
  const label=lock?`🔒 Unlocks at LV ${t.lvl}`:!ready?(catalog.offline&&(t.vintage||gid)?'Offline right now':catalog.ready||t.vintage||gid?'Loading cards…':'Loading cards…'):!afford?`Need ${money(cost-game.cash)} more`:named?`Rip ${ripQty>1?ripQty+' ':''}${t.name}${ripQty>1?'s':''} · ${money(cost)}`:`Rip ${ripQty>1?'×'+ripQty+' · ':'it · '}${money(cost)}`;
  return{label,dis:lock||!ready||!afford||!!rip}}
 const miniArt=t=>{const a=tierArt(t),st=t.stamp||tierStamp(t);return `<div class="mini-art${t.kind==='single'?' single':''}" style="--ar:${a.ar};--tint:${(t.tint||tierTint(t))}"><img src="${a.src}" alt="" draggable="false">${st?`<span class="pk-stamp${st==='?'?' q':''}">${st}</span>`:''}</div>`};
@@ -1471,10 +1738,10 @@ function renderHot(){const el=$('#hotSet');if(!el)return;const h=hotSet();el.inn
 function renderRival(){const el=$('#rivalBox');if(!el)return;const r=game.rival;if(!r||!Cloud.on){el.innerHTML='';return}Rival.load();const d=Rival.data;
  if(!d){el.innerHTML=`<div class="daily rival"><div><b>⚔️ Rival: ${esc(r)}</b><span>Checking the scoreboard…</span></div></div>`;return}
  const gap=networth()-(d.networth||0),line=gap>=0?pick2(['Rub it in.','Kyle is impressed. Briefly.','Do a lap.','They should be ashamed.'],r):pick2(['Embarrassing.','Kyle is disappointed in you.','Pathetic, honestly.','Are you even trying?'],r);
- el.innerHTML=`<button class="daily rival${gap>=0?' ahead':''}" data-action="player" data-u="${esc(r)}"><div><b>⚔️ ${gap>=0?`You're ${moneyS(gap)} ahead of ${esc(r)}`:`You're ${moneyS(-gap)} behind ${esc(r)}`}</b><span>${line} LV ${d.level||1} · 🏆 ${d.trophies||0}</span></div><span class="chev">›</span></button>`}
+ el.innerHTML=`<button class="daily rival${gap>=0?' ahead':''}" data-action="player" data-u="${esc(r)}"><div><b>⚔️ ${gap>=0?`You're ${moneyS(gap)} ahead of ${esc(r)}`:`You're ${moneyS(-gap)} behind ${esc(r)}`}</b><span>${line} LV ${d.level||1} · 🏆 ${d.trophies||0}</span>${rivalStats(d)}</div><span class="chev">›</span></button>`}
 const pick2=(a,seed)=>{let h=new Date().getHours();for(const ch of seed)h+=ch.charCodeAt(0);return a[h%a.length]};
 const Rival={data:null,at:0,who:null,async load(){const r=game.rival;if(!r||!Cloud.on)return;if(this.who===r&&Date.now()-this.at<60000)return;this.who=r;this.at=Date.now();
- try{const rows=await Cloud.req(`/rest/v1/saves?username=eq.${encodeURIComponent(r)}&select=username,networth,level,trophies`,{},false);this.data=(rows&&rows[0])||null;if(currentView==='shop')renderRival()}catch(e){}}};
+ try{const rows=await Cloud.req(`/rest/v1/saves?username=eq.${encodeURIComponent(r)}&select=username,networth,level,trophies,cs:data->cstats`,{},false);this.data=(rows&&rows[0])||null;if(currentView==='shop')renderRival()}catch(e){}}};
 function renderDaily(){const el=$('#daily');if(!el)return;el.innerHTML=spinReady()?`<div class="daily ready"><div><b>🎰 Daily free slab spin is ready</b><span>One free Slab Grab spin every day. Resets at midnight.</span></div><button class="primary" data-action="daily-go">Spin it</button></div>`:`<div class="daily"><div><b>🎰 Free spin used</b><span>Next free spin in ${untilMidnight()}</span></div></div>`}
 function renderRewards(){const v=game.vouchers,keys=[...TIERS.map(t=>t.id),'god','asc'].filter(k=>v[k]>0);
  $('#rewards').innerHTML=keys.length?`<div class="rewards"><b>🎁 Rewards</b>${keys.map(k=>{const n=v[k];if(k==='god'||k==='asc')return `<span class="rw">${n}× ${vName(k)}<button data-action="god-go" data-m="${k}">Spin</button></span>`;const q=Math.min(n,ripQty);return `<span class="rw">${n}× ${esc(vName(k))}<button data-action="open-voucher" data-tier="${k}" ${rip?'disabled':''}>Open${q>1?' '+q:''}</button></span>`}).join('')}</div>`:''}
@@ -1484,7 +1751,7 @@ function renderRotation(){const pool=activePool(),nl=[...selected].filter(id=>ca
  if(pool.length){let mn=Infinity,mx=0;for(const c of pool){if(c.value<mn)mn=c.value;if(c.value>mx)mx=c.value}$('#rotRange').textContent=`Card values ${money(mn)} to ${money(mx)}`}else $('#rotRange').textContent='';
  const sel=$('#setPicker');if(document.activeElement!==sel){const groups=new Map();for(const s of catalog.sets){if(selected.has(s.id))continue;const g=s.series||'Other';if(!groups.has(g))groups.set(g,[]);groups.get(g).push(s)}
   sel.disabled=catalog.offline;sel.innerHTML='<option value="">Add a Pokémon set…</option>'+[...groups].map(([g,ss])=>`<optgroup label="${esc(g)}">${ss.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.releaseDate?` (${esc(String(s.releaseDate).slice(0,4))})`:''}</option>`).join('')}</optgroup>`).join('')}}
-function binderList(){const cb=binderById(openBinder);let a=cb?binderCards(cb):game.owned.slice();if(binderFilter==='hits')a=a.filter(c=>c.value>=10);if(binderFilter==='slabs')a=a.filter(c=>c.slab);if(binderFilter==='vintage')a=a.filter(c=>isVintage(c.setId));if(binderFilter==='vault')a=a.filter(c=>c.vault);const s=$('#binderSort').value;if(s==='value')a.sort((x,y)=>y.value-x.value);else if(s==='name')a.sort((x,y)=>x.name.localeCompare(y.name));else a.sort((x,y)=>(y.at||0)-(x.at||0));return a}
+function binderList(){const cb=binderById(openBinder);let a=cb?binderCards(cb):game.owned.slice();if(binderFilter==='hits')a=a.filter(c=>c.value>=10);if(binderFilter==='slabs')a=a.filter(c=>c.slab);if(binderFilter==='raw')a=a.filter(c=>!c.slab);if(binderFilter==='vintage')a=a.filter(c=>isVintage(c.setId));if(binderFilter==='vault')a=a.filter(c=>c.vault);const s=$('#binderSort').value;if(s==='value')a.sort((x,y)=>y.value-x.value);else if(s==='name')a.sort((x,y)=>x.name.localeCompare(y.name));else a.sort((x,y)=>(y.at||0)-(x.at||0));return a}
 function tile(c,i,action='view-card'){const lvl=vt(c.value),tag=c.black?'BLACK LABEL':c.slab?`${c.first?'1ST ED · ':''}GRADED ${c.grade}`:c.first?'1ST EDITION':lvl>=3?'HIT':'';
  return `<button class="tile lvl${lvl}${c.vault?' vaulted':''}" data-action="${action}" data-i="${i}" style="--glow:${GLOW[lvl]}"><div class="tile-img${c.slab?' is-slab':''}">${c.vault?'<span class="tile-cnt">★</span>':''}${tag?`<span class="tile-tag">${tag}</span>`:''}${imgTag(c)}</div><div class="tile-name">${esc(c.name)}</div><div class="tile-foot"><span>${esc(c.setName||'')}</span><b>${money(c.value)}</b></div></button>`}
 const pagerHTML=(act,p,n)=>`<div class="pager"><button class="smallbtn" data-action="${act}" data-d="-1" ${p?'':'disabled'}>‹ Prev</button><span>Page ${p+1} / ${n}</span><button class="smallbtn" data-action="${act}" data-d="1" ${p<n-1?'':'disabled'}>Next ›</button></div>`;
@@ -1508,7 +1775,7 @@ function trophyTile(t,i){const got=game.trophies[t.id];
 function setRow(gid){const d=groupDef(gid),p=progress(gid),done=game.sets[gid]?.done,loading=d.sets.some(s=>catalog.loading.has(s));
  return `<button class="srow" data-action="open-set" data-g="${esc(gid)}"><span><b>${esc(d.name)}</b><small>${p?`${p.have} / ${p.total}`:loading?'Loading…':catalog.offline?'Offline':'Tap to load'}${done?' · ✅ Complete':''}</small></span><span class="prog"><i style="width:${p?p.pct:0}%"></i></span><span class="chev">›</span></button>`}
 function trophy2Tile(t,i){const got=(game.trophies2||{})[t.id];return `<button class="tile troph ${got?'got':'off'}" data-action="trophy2" data-i="${i}"><div class="tile-img">${got?'<span class="tile-tag">🏆 EARNED</span>':''}${t.img?`<img src="${esc(t.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:`<div class="t2icon">${t.icon}</div>`}</div><div class="tile-name">${esc(t.name)}</div><div class="tile-foot"><span>${got?'Earned':'Locked'}</span><b>${t.icon}</b></div></button>`}
-function renderCollectMain(){$('#grailBox2').innerHTML=grailHTML();$('#trophy2Head').textContent=`${TROPHIES2.filter(t=>(game.trophies2||{})[t.id]).length} / ${TROPHIES2.length}`;$('#trophy2Grid').innerHTML=TROPHIES2.map(trophy2Tile).join('');$('#trophyHead').textContent=`${trophyCount()} / ${TROPHIES.length}`;
+function renderCollectMain(){$('#grailBox2').innerHTML=grailHTML();$('#prestigeBox').innerHTML=prestigeHTML();renderWall();$('#trophy2Head').textContent=`${TROPHIES2.filter(t=>(game.trophies2||{})[t.id]).length} / ${TROPHIES2.length}`;$('#trophy2Grid').innerHTML=TROPHIES2.map(trophy2Tile).join('');$('#trophyHead').textContent=`${trophyCount()} / ${TROPHIES.length}`;
  $('#trophyGrid').innerHTML=TROPHIES.map(trophyTile).join('');
  $('#featSets').innerHTML=MASTER.map(m=>{const p=progress(m.id),done=game.sets[m.id]?.done;return `<div class="panel feat"><div class="feat-top"><div><div class="eyebrow">Featured master set</div><b>${esc(m.name)}</b></div><span class="muted">${p?`${p.have} / ${p.total} cards`:'Loading…'}</span></div><div class="prog"><i style="width:${p?p.pct:0}%"></i></div><div class="muted" style="font-size:12px">${esc(m.note)}. Reward: ${rewardText(m.reward)} plus a trophy${done?' · ✅ Claimed':''}</div><div class="feat-actions"><button class="primary" data-action="open-set" data-g="${m.id}">Open set</button></div></div>`}).join('');
  $('#vintSets').innerHTML=VINTAGE_SETS.map(setRow).join('');
@@ -1571,12 +1838,12 @@ function renderStats(){const nw=networth(),pl=nw-game.given,pk=paidPacks(),cost=
  $('#bestPulls').innerHTML=statsBest.length?statsBest.map((c,i)=>tile(c,i,'view-best')).join(''):'<div class="empty" style="grid-column:1/-1">Your best pulls will show up here.</div>';
  $('#recentRips').innerHTML=game.history.length?game.history.slice(0,5).map(histRow).join(''):'<div class="empty">Rip a pack and your pulls will show up here.</div>';
  $('#settings').innerHTML=`${Cloud.on?`<button class="smallbtn" data-action="account">${Cloud.s?`👤 ${esc(Cloud.name)} · Account`:'👤 Log in to save'}</button>`:''}<button class="smallbtn" data-action="guide">📖 How to play</button><button class="smallbtn" data-action="sound">${Sound.on?'🔊 Sound on':'🔇 Sound off'}</button>${game.beat?'<button class="smallbtn" data-action="prestige" style="color:var(--gold)">⭐ Prestige</button>':''}<button class="smallbtn" data-action="bailout">💸 I need more money</button>`;
- $('#boardWrap').hidden=!Cloud.on;if(Cloud.on){$('#boardSeg').innerHTML=[['nw','💰 Net worth'],['best','🔥 Best pull'],['shame','🤡 Hall of Shame']].map(([k,l])=>`<button data-action="board-tab" data-t="${k}" class="${boardTab===k?'on':''}">${l}</button>`).join('');loadBoard()}}
+ $('#boardWrap').hidden=!Cloud.on;if(Cloud.on){$('#boardSeg').innerHTML=[['nw','💰 Net worth'],...CS_TABS,['best','🔥 Best pull'],['shame','🤡 Shame']].map(([k,l])=>`<button data-action="board-tab" data-t="${k}" class="${boardTab===k?'on':''}">${l}</button>`).join('');loadBoard()}}
 let boardTab='nw';
 async function loadBoard(force){const el=$('#board'),t=boardTab;if(!el)return;Cloud.lb=Cloud.lb||{};Cloud.lbAt=Cloud.lbAt||{};const have=Cloud.lb[t];el.innerHTML=have?boardHTML(have,t):'<div class="empty">Loading…</div>';
  if(!force&&have&&Date.now()-(Cloud.lbAt[t]||0)<30000)return;Cloud.lbAt[t]=Date.now();
  try{Feed.loadKing();const rows=await Cloud.board(t);Cloud.lb[t]=rows;if(currentView==='stats'&&boardTab===t)$('#board').innerHTML=boardHTML(rows,t)}catch(e){if(!have&&boardTab===t)$('#board').innerHTML='<div class="empty">Couldn\'t load the leaderboard.</div>'}}
-function boardHTML(rows,t){if(!rows.length)return `<div class="empty">${t==='shame'?'Nobody has begged for money yet. Give it time.':'No one on the board yet. Log in to claim the top spot.'}</div>`;
+function boardHTML(rows,t){if(CS_TABS.some(x=>x[0]===t))return csRowsHTML(rows,t);if(!rows.length)return `<div class="empty">${t==='shame'?'Nobody has begged for money yet. Give it time.':'No one on the board yet. Log in to claim the top spot.'}</div>`;
  return rows.map((r,i)=>{const clown=t==='nw'&&rows.length>=3&&i===rows.length-1,king=Feed.king&&r.username===Feed.king,medal=t==='shame'?(i===0?'🤡':i+1):(i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1);
   const sub=t==='best'?esc(r.best_name||'Nothing yet'):t==='shame'?`${r.shame} bailout${r.shame===1?'':'s'} · LV ${r.level||1}`:`LV ${r.level||1} · 🏆 ${r.trophies||0}`;
   const val=t==='best'?moneyS(r.best_value||0):t==='shame'?`${moneyS((r.shame||0)*START)} begged`:moneyS(r.networth||0);
@@ -1607,10 +1874,10 @@ const multi=t=>t.kind==='eevee'||t.kind==='pack'||t.kind==='whale'||t.kind==='ev
 function startRip(id,o={}){if(rip||spinning)return;const t=tierById(id);if(!t)return;const qty=Math.max(1,o.qty||1),voucher=!!o.voucher,free=!!o.free,gid=o.group||null;
  if(voucher){if((game.vouchers[id]||0)<qty){toast('No more of those to open.');return}}
  else if(!free&&!unlocked(t)){toast(`${t.name} unlocks at level ${t.lvl}.`);return}
- const cost=voucher||free?0:t.price*qty;if(game.cash+1e-9<cost){toast('Not enough cash for that.');return}
+ const cost=voucher||free?0:packPrice(t,gid)*qty;if(game.cash+1e-9<cost){toast('Not enough cash for that.');return}
  if(!poolReady(t,gid)){toast(catalog.offline?'Those cards are offline right now.':'Still loading those cards. Try again in a sec.');return}
  Sound.init();const pool=packPool(t,gid),now=Date.now(),all=[],from=t.name+(gid?` · ${groupDef(gid).name}`:'');let gods=0;
- pullGid=gid;try{for(let i=0;i<qty;i++){const cards=generate(t,pool);if(cards.god)gods++;if(sum(cards.map(c=>c.value))>=t.price){game.hot++;game.cold=0}else{game.cold++;game.hot=0}cards.forEach(c=>{c.uid=uid();c.at=now;c.from=cards.god?'GOD PACK':from});all.push(...cards);game.history.unshift(histEntry(t.id,voucher||free?0:t.price,cards))}}finally{pullGid=null}
+ pullGid=gid;try{for(let i=0;i<qty;i++){const cards=generate(t,pool);if(cards.god)gods++;if(sum(cards.map(c=>c.value))>=cost/qty){game.hot++;game.cold=0}else{game.cold++;game.hot=0}cards.forEach(c=>{c.uid=uid();c.at=now;c.from=cards.god?'GOD PACK':from});all.push(...cards);game.history.unshift(histEntry(t.id,voucher||free?0:t.price,cards))}}finally{pullGid=null}
  game.godPacks=(game.godPacks||0)+gods;const stoneDrops=t.kind==='eevee'?Array.from({length:qty},dropStone).filter(Boolean):[];
  if(voucher)game.vouchers[id]-=qty;else if(!free){spend(cost);game.spent=r2(game.spent+cost);grailFill(cost)}
  game.opened+=qty;game.owned.push(...all);
@@ -1661,17 +1928,18 @@ function ripSummary(){if(rip.phase!=='summary'&&rip.stones&&rip.stones.length){c
 function ripEndActions(){const L=lastRip,t=tierById(L.id);let again='';
  if(L.free)again='';
  else if(L.voucher){const n=game.vouchers[L.id]||0;if(n)again=`<button class="primary" data-action="rip-again">Open ${Math.min(n,L.qty)} more</button>`}
- else{const cost=t.price*L.qty,pending=rip?sum(rip.cards.filter(c=>rip.sell.has(c.uid)).map(c=>c.value)):0;again=`<button class="primary" data-action="rip-again" ${game.cash+pending+1e-9>=cost?'':'disabled'}>Rip again · ${money(cost)}</button>`}
+ else{const cost=packPrice(t,L.gid)*L.qty,pending=rip?sum(rip.cards.filter(c=>rip.sell.has(c.uid)).map(c=>c.value)):0;again=`<button class="primary" data-action="rip-again" ${game.cash+pending+1e-9>=cost?'':'disabled'}>Rip again · ${money(cost)}</button>`}
  $('#ripActions').innerHTML=`<button class="secondary" data-action="rip-done">Done</button>${again}`}
-function quickSell(test){if(!rip)return;rip.cards.forEach(c=>{if(test(c))rip.sell.add(c.uid)});ripSummary()}
-function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}const all=n>1&&n===rip.cards.length&&Math.max(...rip.cards.map(c=>c.value))>=10;rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}${all?' Paper hands 🧻':''}`)}
+function quickSell(test){if(!rip)return;rip.cards.forEach(c=>{if(test(c)&&!c.grading&&!c.vault)rip.sell.add(c.uid)});ripSummary()}
+function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const c of rip.cards)if(c.grading||c.vault)rip.sell.delete(c.uid);for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}const all=n>1&&n===rip.cards.length&&Math.max(...rip.cards.map(c=>c.value))>=10;rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}${all?' Paper hands 🧻':''}`)}
 function singleChoose(sell){if(!rip||rip.phase!=='revealed')return;const c=rip.cards[0];if(sell)rip.sell.add(c.uid);finalizeRip();
  $('#ripInfo').insertAdjacentHTML('beforeend',`<div class="ri-done">${sell?`Sold for ${money(c.value)}`:'Added to your binder'}</div>`);ripEndActions()}
 let nudged=false;
-function ripDone(){const best=lastCards.length?Math.max(...lastCards.map(c=>c.value)):0;finalizeRip();hideOverlay('rip');eeBuddy(false);if(reopenHouse){reopenHouse=false;setTimeout(openHouse,250)}checkBroke();lifeEvent();flushNotes();if(Cloud.on&&!Cloud.s&&!nudged&&(best>=25||game.opened>=5)){nudged=true;setTimeout(()=>toast(best>=25?`Nice pull. Shame if your browser deleted it. Tap 💾 Save up top.`:'Your run is not backed up. Tap 💾 Save up top.',4500),900)}}
-function ripAgain(){finalizeRip();const L=lastRip,t=tierById(L.id);
+function ripDone(){if(rip&&rip.phase!=='summary'&&rip.phase!=='revealed')return;const best=lastCards.length?Math.max(...lastCards.map(c=>c.value)):0;finalizeRip();hideOverlay('rip');eeBuddy(false);if(reopenHouse){reopenHouse=false;setTimeout(openHouse,250)}checkBroke();lifeEvent();flushNotes();if(Cloud.on&&!Cloud.s&&!nudged&&(best>=25||game.opened>=5)){nudged=true;setTimeout(()=>toast(best>=25?`Nice pull. Shame if your browser deleted it. Tap 💾 Save up top.`:'Your run is not backed up. Tap 💾 Save up top.',4500),900)}}
+let ripBusy=0;
+function ripAgain(){if((rip&&rip.phase!=='summary')||Date.now()-ripBusy<700)return;ripBusy=Date.now();finalizeRip();const L=lastRip,t=tierById(L.id);
  if(L.voucher){const n=game.vouchers[L.id]||0;if(!n){hideOverlay('rip');return}startRip(L.id,{qty:Math.min(n,L.qty),voucher:true,group:L.gid});return}
- if(game.cash+1e-9<t.price*L.qty){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(L.id,{qty:L.qty,group:L.gid})}
+ if(game.cash+1e-9<packPrice(t,L.gid)*L.qty){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(L.id,{qty:L.qty,group:L.gid})}
 let swallowTap=false;const swallow=()=>{swallowTap=true;setTimeout(()=>{swallowTap=false},450)};
 function ripTap(){if(!rip)return;if(swallowTap){swallowTap=false;return}if(rip.phase==='sealed')autoTear();else if(rip.phase==='facedown')ripFlip();else if(rip.phase==='revealed')ripAdvance()}
 
@@ -1798,7 +2066,7 @@ const Cloud={on:!!(SUPA_URL&&SUPA_KEY),s:LS.get(SESSION_KEY),timer:null,busy:fal
   const send=()=>this.req('/rest/v1/saves?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(row)});
   try{try{await send()}catch(e){if(!this.lite&&/column|best_|shame|schema/i.test(e.message)){this.lite=true;delete row.best_value;delete row.best_name;delete row.shame;await send()}else throw e}this.err=false}
   catch(e){this.err=true;console.warn('Cloud save failed',e)}finally{this.busy=false;if(was!==this.err)renderHeader();if(this.again){this.again=false;this.queue()}}},
- async board(t='nw'){const base='username,networth,level,trophies,prestige';
+ async board(t='nw'){if(CS_TABS.some(x=>x[0]===t))return await csBoard(t);const base='username,networth,level,trophies,prestige';
   if(t==='best')return await this.req(`/rest/v1/saves?select=${base},best_value,best_name&order=best_value.desc.nullslast&limit=25`,{},false)||[];
   if(t==='shame')return await this.req(`/rest/v1/saves?select=${base},shame&shame=gt.0&order=shame.desc&limit=25`,{},false)||[];
   return await this.req(`/rest/v1/saves?select=${base}&order=networth.desc&limit=25`,{},false)||[]}};
@@ -1936,12 +2204,14 @@ async function sharedEdit(){const b=Shared.b;if(!b)return;
  const v=await modal({icon:'✏️',title:'Edit shared binder',html:`<input class="inp" id="sbName" value="${esc(b.name)}" maxlength="40"><select class="sel" id="sbTarget" style="width:100%;margin-bottom:10px">${targetOptions(b.target)}</select><p class="muted" style="font-size:12px">Invite code: <b style="color:var(--text);letter-spacing:.15em">${esc(b.code)}</b></p>`,buttons:[{label:'Leave binder',value:'leave'},{label:'Save',primary:true,value:'save'}]});
  if(v==='save'){const name=($('#sbName')?.value||'').trim()||b.name,target=$('#sbTarget')?.value||null;try{await Cloud.req(`/rest/v1/shared_binders?id=eq.${b.id}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({name,target})});b.name=name;b.target=target;renderShared();toast('Saved.')}catch(e){toast(`Couldn't save (${e.message}).`)}}
  if(v==='leave'){const mine=Shared.cards.filter(r=>r.user_id===Cloud.user).length;const ok=await modal({icon:'🚪',title:'Leave the shared binder?',html:`You'll stop seeing it here. Cards stay in the binder${mine?`, including your ${mine}. Take them back first if you want them`:''}.`,buttons:[{label:'Stay',value:false},{label:'Leave',primary:true,danger:true,value:true}]});if(ok){game.shared=null;Shared.b=null;Shared.cards=[];save()}}}
-async function sendToShared(c){if(!Shared.b||!c||c.vault||c.grading||!game.owned.includes(c))return;
- const ok=await modal({icon:'🤝',title:`Send to ${esc(sharedName())}?`,html:`${esc(c.name)} (${money(c.value)}) moves out of your binder into the shared one. You can take back cards you added anytime.`,buttons:[{label:'Cancel',value:false},{label:'Send it',primary:true,value:true}]});if(!ok)return;
+async function sendToShared(c){if(!Shared.b||!c||c.vault||c.grading||!game.owned.includes(c))return;await Shared.load(true);
+ const same=Shared.cards.filter(r=>r.card.id===c.id),best=same.length?Math.max(...same.map(r=>r.card.slab?r.card.grade:0)):-1,mine=c.slab?c.grade:0;
+ const dupe=same.length?`<div class="dupwarn">⚠️ The binder already has ${same.length>1?same.length+' copies':'this card'} (best: ${best?'Graded '+best:'raw'}).${mine>best?` Yours would upgrade it to ${mine?'Graded '+mine:'raw'}.`:' Yours is not an upgrade.'}</div>`:'';
+ const ok=await modal({icon:same.length?'⚠️':'🤝',title:same.length?'Already in the binder':`Send to ${esc(sharedName())}?`,html:`${dupe}${esc(c.name)} (${money(c.value)}) moves out of your binder into the shared one. You can take back cards you added anytime.`,buttons:[{label:'Cancel',value:false},{label:same.length?'Send anyway':'Send it',primary:true,value:true}]});if(!ok)return;
  try{const{fv,fest,...card}=c;await Cloud.req('/rest/v1/shared_cards',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({binder_id:Shared.b.id,user_id:Cloud.user,username:Cloud.name,card})});
   const i=game.owned.indexOf(c);if(i>=0)game.owned.splice(i,1);save();await Shared.load(true);toast(`${c.name} is in ${sharedName()}.`);V&&dropFromViewer()}
  catch(e){toast(`Couldn't send it (${e.message}).`,4000)}}
-async function sharedCardModal(i){const r=Shared.cards[i];if(!r)return;const c=r.card,mine=r.user_id===Cloud.user;
+async function sharedCardModal(i){const r=(Shared.view||Shared.cards)[i];if(!r)return;const c=r.card,mine=r.user_id===Cloud.user;
  const v=await modal({title:esc(c.name),html:`<div class="m-card">${c.slab?slabHTML(c,true):imgTag(c,true,true)}</div>${metaLine(c)}<br>Worth <b style="color:var(--gold)">${money(c.value)}</b><br><span class="muted">Added by ${esc(r.username)} ${ago(Date.parse(r.created_at)||Date.now())}</span>`,buttons:mine?[{label:'Take it back',value:'back'},{label:'Close',primary:true}]:[{label:'Close',primary:true}]});
  if(v!=='back')return;try{await Cloud.req(`/rest/v1/shared_cards?id=eq.${r.id}`,{method:'DELETE',headers:{Prefer:'return=minimal'}});c.uid=c.uid||uid();game.owned.push(c);save();await Shared.load(true);toast(`${c.name} is back in your binder.`)}catch(e){toast(`Couldn't take it back (${e.message}).`)}}
 let sharedPage=0,sharedOpen=false;
@@ -1950,7 +2220,7 @@ function renderShared(){const el=$('#sharedBox');if(!el)return;
  if(!Cloud.s){el.innerHTML=`<div class="daily"><div><b>🤝 Shared binder</b><span>Log in to build a binder with a buddy.</span></div><button class="smallbtn" data-action="account">Log in</button></div>`;return}
  if(!game.shared){el.innerHTML=`<div class="daily"><div><b>🤝 Shared binder</b><span>Team up with a buddy on one binder, like a full graded 10 master set.</span></div><span class="boxbtns"><button class="smallbtn" data-action="sb-join">Join</button><button class="smallbtn" data-action="sb-create" style="color:var(--gold)">Start one</button></span></div>`;return}
  Shared.load();const b=Shared.b;if(!b){el.innerHTML=`<div class="daily"><div><b>🤝 Shared binder</b><span>Loading…</span></div></div>`;return}
- const rows=Shared.cards,val=sum(rows.map(r=>r.card.value)),who=[b.a_name,b.b_name].filter(Boolean).join(' + ');
+ const rows=b.target?Shared.cards.slice().sort((x,y)=>(x.card.setId||'').localeCompare(y.card.setId||'')||(parseInt(x.card.num)||999)-(parseInt(y.card.num)||999)||String(x.card.num).localeCompare(String(y.card.num))||(y.card.grade||0)-(x.card.grade||0)):Shared.cards;Shared.view=rows;const val=sum(rows.map(r=>r.card.value)),who=[b.a_name,b.b_name].filter(Boolean).join(' + ');
  let prog='';if(b.target&&groupLoaded(b.target)){const ids=new Set(groupCards(b.target).map(c=>c.id)),have=new Set(rows.filter(r=>ids.has(r.card.id)).map(r=>r.card.id)),tens=new Set(rows.filter(r=>ids.has(r.card.id)&&r.card.slab&&r.card.grade===10).map(r=>r.card.id));
   if(ids.size&&tens.size===ids.size)masterCheck(b);prog=`<div class="muted" style="font-size:12px;margin-top:6px">${esc(groupDef(b.target).name)}: ${have.size} / ${ids.size} cards · ${tens.size} graded 10</div><span class="prog" style="margin-top:4px"><i style="width:${ids.size?tens.size/ids.size*100:0}%"></i></span>`}
  else if(b.target)ensureGroup(b.target);
@@ -2132,8 +2402,169 @@ function eeveeDexDone(){game.eeveeDexDone=Date.now();game.cash=r2(game.cash+EEVE
  setTimeout(()=>{pawBurst(80,true);const fx=document.createElement('div');fx.className='confetti';fx.innerHTML=Array.from({length:70},()=>`<i style="left:${Math.random()*100}%;animation-delay:${Math.random()*1.5}s;animation-duration:${2.5+Math.random()*2}s;background:${pick(['#ff9ecf','#ffd6ec','#fff','#ffd34d','#b98bff'])}"></i>`).join('');document.body.appendChild(fx);
   modal({icon:'👑',title:'THE WHOLE EEVEE DEX.',html:`<div class="eh-flipbig"></div><div class="mastertxt" style="color:#ff9ecf;text-shadow:0 0 18px #ff9ecf">Every. Single. Eevee.</div><p>You own every Eevee and Eeveelution card ever printed. That's absurd and we love you for it.</p><p><b style="color:var(--gold)">${money(EEVEE_DEX_PAY)}</b> plus a <b>BLACK LABEL</b> ${esc(x.name)} slab, worth ${money(x.value)}.</p>`,buttons:[{label:'💗 Eevee forever',primary:true}]}).then(()=>{fx.remove();render()})},400)}
 
+/* ================= Chunk 5: Lucky Charm, Prestige, Collection stats, Trading Post ================= */
+
+/* ---------- Lucky Charm ---------- */
+const CHARM_COST=150,CHARM_MS=5*60*1000;
+var simMode=false;
+const charmOn=()=>!!(game.charm&&game.charm.until>Date.now());
+const charmMissingMode=()=>charmOn()&&pullGid&&groupLoaded(pullGid)&&!(game.sets[pullGid]&&game.sets[pullGid].done);
+function charmLuck(){return simMode||!charmOn()||charmMissingMode()?0:.2}
+function charmMissing(){return !simMode&&charmMissingMode()?2:1}
+async function buyCharm(){if(charmOn()){toast('Your Lucky Charm is already glowing.');return}
+ if(game.tickets<CHARM_COST){modal({icon:'🍀',title:'Lucky Charm',html:`Costs ${CHARM_COST} 🎟. You have ${game.tickets}. Johnny suggests ripping more packs. Emily suggests therapy.`,buttons:[{label:'Fine',primary:true}]});return}
+ const ok=await modal({icon:'🍀',title:`Lucky Charm · ${CHARM_COST} 🎟`,html:`<p>For <b>5 minutes</b>, every pack and pull gets <b>+20% luck</b>. If you're ripping a set you haven't finished, the luck goes into <b>pulling cards you're missing</b> instead.</p><p>It also gives <b>one</b> grading submission +20% luck toward a 9 or 10.</p><p class="muted" style="font-size:12px">Kyle says it's science. Emily says it's a rabbit's foot with extra steps.</p>`,buttons:[{label:'Not now',value:false},{label:'Activate',primary:true,value:true}]});
+ if(!ok||game.tickets<CHARM_COST)return;game.tickets-=CHARM_COST;game.charm={until:Date.now()+CHARM_MS,grade:true};save();pawBurst&&pawBurst(16,true);toast('🍀 Lucky Charm is on. 5 minutes. Go go go.',3000);render();charmTick()}
+let charmTimer=null;
+function charmTick(){clearInterval(charmTimer);const el=()=>$('#charmPill');const draw=()=>{let p=el();if(!charmOn()){p&&p.remove();clearInterval(charmTimer);return}
+  if(!p){p=document.createElement('button');p.id='charmPill';p.dataset.action='charm';document.body.appendChild(p)}const s=Math.max(0,Math.ceil((game.charm.until-Date.now())/1000));p.textContent=`🍀 ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}${game.charm.grade?' · 🔬':''}`};draw();charmTimer=setInterval(draw,1000)}
+function charmGradeWeights(c){if(!c.charmed)return SUBMIT_GRADES.map(x=>x[1]);const w=SUBMIT_GRADES.map(x=>x[1]),move=(w[0]+w[1])*.2;w[0]*=.8;w[1]*=.8;w[2]+=move*.65;w[3]+=move*.35;return w}
+
+/* ---------- Prestige: finish a completed set again, all graded 9 or 10 ---------- */
+const PRESTIGE_REWARD={cash:50000,tickets:15};
+function bestGrades(){const m=new Map();for(const c of game.owned)if(c.slab&&!c.grading){const g=c.grade||0;if(g>(m.get(c.id)||0))m.set(c.id,g)}return m}
+function prestigeProgress(gid,bg){const cards=groupCards(gid);return{have:cards.filter(c=>(bg.get(c.id)||0)>=9).length,total:cards.length}}
+let prestigeAt=0;
+function prestigeScan(force){if(!force&&Date.now()-prestigeAt<4000)return;prestigeAt=Date.now();const done=Object.keys(game.sets||{}).filter(g=>game.sets[g].done&&groupLoaded(g));if(!done.length)return;
+ const bg=bestGrades();game.prestiged=game.prestiged||{};
+ for(const g of done){if(game.prestiged[g])continue;const p=prestigeProgress(g,bg);if(p.total>=5&&p.have===p.total){game.prestiged[g]=Date.now();game.prestige=Object.keys(game.prestiged).length;game.cash=r2(game.cash+PRESTIGE_REWARD.cash);game.tickets+=PRESTIGE_REWARD.tickets;
+  const d=groupDef(g);note({icon:'⭐',fx:5,title:`${esc(d.name)} PRESTIGED`,html:`Every card in ${esc(d.name)} is graded 9 or 10. That's ${p.total} slabs. Kyle is speechless. Johnny is googling "how to grade cards."<br><br>Reward: <b style="color:var(--gold)">${money(PRESTIGE_REWARD.cash)} + ${PRESTIGE_REWARD.tickets} 🎟</b> and a ⭐ next to your name.`,buttons:[{label:'⭐ Bow',primary:true}]})}}}
+function prestigeHTML(){const done=Object.keys(game.sets||{}).filter(g=>game.sets[g].done);if(!done.length)return '';const bg=bestGrades();
+ const rows=done.map(g=>{if(!groupLoaded(g))return `<div class="prow"><span><b>${esc(groupDef(g).name)}</b><small>Open this set once to load it</small></span></div>`;const p=prestigeProgress(g,bg),star=game.prestiged&&game.prestiged[g];
+  return `<div class="prow${star?' star':''}"><span><b>${star?'⭐ ':''}${esc(groupDef(g).name)}</b><small>${star?'Prestiged. Every card graded 9+.':`${p.have} / ${p.total} graded 9 or 10`}</small><span class="prog"><i style="width:${p.total?p.have/p.total*100:0}%"></i></span></span></div>`}).join('');
+ return `<div class="section-head"><h2>⭐ Prestige</h2><span class="muted">${Object.keys(game.prestiged||{}).length} / ${done.length}</span></div><p class="muted" style="font-size:12px;margin:-4px 0 8px">Finished a set? Now own every card in it as a 9 or 10 slab. Reward: ${money(PRESTIGE_REWARD.cash)} + ${PRESTIGE_REWARD.tickets} 🎟.</p><div class="panel prestige">${rows}</div>`}
+
+/* ---------- Collection stats (score, 10s, Black Labels, sets) ---------- */
+function collectionStats(){const tens=game.owned.filter(c=>c.slab&&c.grade===10&&!c.black).length,blacks=game.owned.filter(c=>c.black).length,sets=Object.values(game.sets||{}).filter(s=>s.done).length,uniq=Object.keys(game.dex||{}).length,pr=Object.keys(game.prestiged||{}).length;
+ const bl=game.owned.filter(c=>c.black).sort((a,b)=>b.value-a.value).slice(0,24).map(c=>({id:c.id,name:c.name,img:c.img,setName:c.setName,value:c.value,first:!!c.first}));
+ return{tens,blacks,sets,prestige:pr,uniq,score:uniq+tens*10+blacks*100+sets*50+pr*500,bl}}
+let csAt=0;function cstatsUpdate(){if(Date.now()-csAt<3000)return;csAt=Date.now();game.cstats=collectionStats()}
+const CS_TABS=[['score','🏅 Collection'],['tens','💎 10s'],['blacks','🖤 Black Labels'],['sets','📚 Sets']];
+async function csBoard(t){const rows=await Cloud.req(`/rest/v1/saves?select=username,networth,level,trophies,prestige,cs:data->cstats&limit=200`,{},false)||[];return rows.filter(r=>r.cs).sort((a,b)=>(b.cs[t]||0)-(a.cs[t]||0)).slice(0,25)}
+function csRowsHTML(rows,t){if(!rows.length)return '<div class="empty">Nobody has stats yet. Rip a pack to get on the board.</div>';
+ return rows.map((r,i)=>{const cs=r.cs||{},medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1,v=cs[t]||0;
+  return `<button class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}" data-action="player" data-u="${esc(r.username)}"><b>${medal}</b><span><b>${esc(r.username)}</b>${r.prestige?' ⭐'+r.prestige:''}<br><small>💎 ${cs.tens||0} · 🖤 ${cs.blacks||0} · 📚 ${cs.sets||0} · ${(cs.uniq||0).toLocaleString()} unique</small></span><b>${t==='score'?(v).toLocaleString()+' pts':v}</b></button>`}).join('')}
+
+/* ---------- Black Label Wall ---------- */
+let wallData=null,wallAt=0;
+async function loadWall(){if(!Cloud.on)return;if(Date.now()-wallAt<60000&&wallData)return;wallAt=Date.now();
+ try{const rows=await Cloud.req(`/rest/v1/saves?select=username,cs:data->cstats&limit=200`,{},false)||[];const all=[];for(const r of rows)for(const c of (r.cs&&r.cs.bl)||[])all.push({...c,owner:r.username});wallData=all.sort((a,b)=>b.value-a.value);if(currentView==='collect'&&!collectSet)renderWall()}catch(e){}}
+function renderWall(){const el=$('#wallBox');if(!el)return;const mine=game.owned.filter(c=>c.black);let list=wallData;
+ if(!Cloud.on||!list)list=mine.map(c=>({...c,owner:Cloud.s?Cloud.name:'You'}));if(Cloud.on)loadWall();
+ el.innerHTML=`<div class="section-head"><h2>🖤 Black Label Wall</h2><span class="muted">${list.length}</span></div><p class="muted" style="font-size:12px;margin:-4px 0 8px">Every Black Label in POKÉ RIP, yours and your friends'. The rarest thing in the game.</p>${list.length?`<div class="wall">${list.slice(0,30).map(c=>{const n=list.filter(x=>x.id===c.id).length;return `<div class="wcard"><div class="wimg">${imgTag(c)}</div><b>${esc(c.name)}</b><small>${esc(c.owner)} · ${moneyS(c.value)}</small>${n===1?'<span class="wone">1 of 1</span>':`<span class="wone">1 of ${n}</span>`}</div>`}).join('')}</div>`:'<div class="empty">No Black Labels yet. Kyle has one in his dreams.</div>'}`}
+
+/* ---------- Trading Post ---------- */
+// Supabase table: trades. Cards in an open trade are held by the trade (out of your binder) until it settles.
+const FAIR_GAP=.25,KYLE_TAX=.15;
+const giftTix=v=>Math.min(150,Math.max(1,Math.ceil(v/100)));
+const TRADE_LINES={
+ robbery:["Daylight robbery. Kyle is calling the cops. The cops are also Kyle.","You absolutely fleeced them. Johnny is taking notes.","Emily says this is the most ruthless thing you've ever done. She's into it.","That wasn't a trade, that was a heist.","They're going to remember this at Thanksgiving."],
+ win:["Solid W. Johnny is pretending he doesn't care.","You came out ahead. Emily approves of your business sense.","Kyle says nice trade. Through gritted teeth.","Up on the deal. Don't make it weird."],
+ fair:["Fair and square. Boring, but fair.","Even trade. Kyle is disappointed nobody got scammed.","A perfectly balanced trade. Emily is bored.","Fair trade. Johnny wanted drama."],
+ loss:["Oof. You took an L. Emily is shaking her head.","Kyle says you got played. Gently, but played.","Johnny would have made that trade too. That's not a compliment.","Not your finest hour."],
+ fleeced:["You got FLEECED. Johnny did better than this. Johnny.","Kyle is framing this trade as a warning to others.","Emily says she's ending things with you. Over a card.","That is the worst trade in POKÉ RIP history. Congrats, you made history."]};
+const tradeVerdict=(got,gave)=>{const r=(got||.01)/(gave||.01);return r>=3?'robbery':r>=1.25?'win':r>=.8?'fair':r>=.33?'loss':'fleeced'};
+const VERDICT_ICON={robbery:'🦹',win:'😎',fair:'🤝',loss:'😬',fleeced:'🤡'};
+const Trade={list:[],at:0,busy:false,friends:null,
+ async sync(force){if(!Cloud.on||!Cloud.s)return;if(this.busy||(!force&&Date.now()-this.at<25000))return;this.busy=true;this.at=Date.now();
+  try{this.list=await Cloud.req(`/rest/v1/trades?or=(from_user.eq.${Cloud.user},to_user.eq.${Cloud.user})&order=created_at.desc&limit=60`)||[];await this.settle();renderTradeBadge();if(tpOpen)renderPost()}
+  catch(e){console.warn('Trades',e)}finally{this.busy=false}},
+ // Sender side: collect what came back from trades that finished while you were away.
+ async settle(){for(const t of this.list){if(t.from_user!==Cloud.user||t.from_done)continue;
+  if(t.status==='done'){const c=t.kind==='mystery'?t.back:t.want;if(c){const x={...c,uid:uid(),at:Date.now(),from:`Traded from ${t.to_name}`};delete x.vault;game.owned.push(x);collect([x])}
+   await this.patch(t.id,{from_done:true});t.from_done=true;save();
+   if(t.kind==='mystery')revealMystery(t,true);else if(t.kind!=='gift')toast(`🔁 ${t.to_name} accepted your trade. ${c?esc(c.name)+' is in your binder.':''}`,3500)}
+  else if(t.status==='declined'){this.refund(t);await this.patch(t.id,{from_done:true});t.from_done=true;toast(`${t.to_name} declined your ${t.kind==='gift'?'gift':'trade'}. ${t.give.name} came back.${t.kind==='gift'?' Ouch.':''}`,3500)}}},
+ refund(t){const x={...t.give,uid:uid(),at:Date.now()};game.owned.push(x);if(t.tax_from)game.cash=r2(game.cash+t.tax_from);if(t.gift_tix)game.tickets+=t.gift_tix;save()},
+ patch(id,b){return Cloud.req(`/rest/v1/trades?id=eq.${id}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)})},
+ async friendsList(){if(this.friends&&Date.now()-this.fAt<120000)return this.friends;const rows=await Cloud.req(`/rest/v1/saves?select=user_id,username&order=updated_at.desc&limit=100`,{},false)||[];this.fAt=Date.now();return this.friends=rows.filter(r=>r.user_id&&r.user_id!==Cloud.user)},
+ incoming(){return this.list.filter(t=>t.to_user===Cloud.user&&t.status==='open')}};
+const cleanCard=c=>{const{fv,fest,grading,vault,insured,charmed,...x}=c;return x};
+const tradeable=c=>!c.vault&&!c.grading;
+function renderTradeBadge(){const n=Trade.incoming().length,b=$('#tpBadge');if(b){b.textContent=n;b.hidden=!n}}
+function tradePortalHTML(){if(!Cloud.on)return '';return `<button class="tp-portal" data-action="tp-open"><span class="tp-ic">🔁</span><span><b>Trading Post</b><small>${Cloud.s?'Fair trades, lopsided trades, gifts and Mystery Swaps':'Log in to trade with friends'}</small></span><span class="tp-badge" id="tpBadge" hidden>0</span><span class="chev">›</span></button>`}
+let tpOpen=false;
+function openPost(){if(!Cloud.s){accountModal();return}let h=$('#tpost');if(!h){h=document.createElement('div');h.id='tpost';document.body.appendChild(h)}h.hidden=false;h.classList.add('show');if(!tpOpen){tpOpen=true;lock()}renderPost();Trade.sync(true)}
+function closePost(){const h=$('#tpost');if(h){h.hidden=true;h.classList.remove('show')}if(tpOpen){tpOpen=false;unlock()}render()}
+function tcardHTML(c,hidden){return hidden?`<div class="tcard back"><span>?</span></div>`:`<div class="tcard"><div class="timg">${c.slab?`<span class="tile-tag">${c.black?'BLACK LABEL':'GRADED '+c.grade}</span>`:''}${imgTag(c)}</div><b>${esc(c.name)}</b><small>${moneyS(c.value)}</small></div>`}
+function tradeRow(t){const me=t.from_user===Cloud.user,other=me?t.to_name:t.from_name,K={fair:'🤝 Fair trade',lopsided:'⚖️ Lopsided trade',gift:'🎁 Gift',mystery:'🎲 Mystery Swap'}[t.kind]||t.kind;
+ const st=t.status==='open'?(me?'Waiting on them':'Your move'):t.status==='done'?'Done':t.status;
+ let cards='';if(t.kind==='gift')cards=tcardHTML(t.give,false);else if(t.kind==='mystery')cards=`${tcardHTML(t.give,!me&&t.status==='open')}<span class="tx">⇄</span>${t.status==='done'?tcardHTML(t.back,false):tcardHTML(null,true)}`;else cards=`${tcardHTML(t.give)}<span class="tx">⇄</span>${tcardHTML(t.want)}`;
+ let acts='';if(t.status==='open'){if(me)acts=`<button class="smallbtn" data-action="tp-cancel" data-id="${t.id}">Cancel</button>`;else acts=t.kind==='mystery'?`<button class="smallbtn" data-action="tp-decline" data-id="${t.id}">Nope</button><button class="primary smallbtn" data-action="tp-mystery" data-id="${t.id}">🎲 Pick my card</button>`:`<button class="smallbtn" data-action="tp-decline" data-id="${t.id}">Decline</button><button class="primary smallbtn" data-action="tp-accept" data-id="${t.id}">${t.kind==='gift'?'🎁 Open gift':'Accept'}${!me&&t.tax_to?` · ${moneyS(t.tax_to)} Kyle tax`:''}</button>`}
+ else if(t.status==='done'&&t.kind==='mystery')acts=`<button class="smallbtn" data-action="tp-replay" data-id="${t.id}">🎬 Replay reveal</button>`;
+ return `<div class="trow ${t.status}"><div class="trow-h"><b>${K} ${me?'to':'from'} ${esc(other)}</b><small>${st}</small></div><div class="tcards">${cards}</div>${t.msg?`<p class="tmsg">"${esc(t.msg)}"</p>`:''}${acts?`<div class="tacts">${acts}</div>`:''}</div>`}
+function renderPost(){const h=$('#tpost');if(!h)return;const L=Trade.list,inc=L.filter(t=>t.to_user===Cloud.user&&t.status==='open'),out=L.filter(t=>t.from_user===Cloud.user&&t.status==='open'),past=L.filter(t=>t.status!=='open').slice(0,15);
+ h.innerHTML=`<div class="eh-top tp-top"><b>🔁 Trading Post</b><button class="eh-x" data-action="tp-close" aria-label="Close">✕</button></div><div class="eh-body">
+ <div class="tp-new"><button class="tp-kind" data-action="tp-new" data-k="trade"><span>🤝</span><b>Trade</b><small>Swap cards. Fair is free. Lopsided pays the Kyle tax.</small></button><button class="tp-kind" data-action="tp-new" data-k="gift"><span>🎁</span><b>Gift</b><small>Send a card. Costs tickets.</small></button><button class="tp-kind myst" data-action="tp-new" data-k="mystery"><span>🎲</span><b>Mystery Swap</b><small>Both cards face down. No take-backs.</small></button></div>
+ ${inc.length?`<div class="section-head"><h2>📬 For you</h2><span class="muted">${inc.length}</span></div>${inc.map(tradeRow).join('')}`:''}
+ ${out.length?`<div class="section-head"><h2>📤 Waiting on them</h2></div>${out.map(tradeRow).join('')}`:''}
+ ${past.length?`<div class="section-head"><h2>📜 History</h2></div>${past.map(tradeRow).join('')}`:''}
+ ${!L.length?'<div class="empty">No trades yet. Send Johnny a Mystery Swap. What could go wrong.</div>':''}
+ <p class="muted" style="font-size:12px;margin-top:14px">Fair trade: values within 25%. Lopsided: whoever gets the better card pays Kyle 15% of the difference. Gifts cost 1 🎟 per $100 (max 150). Vault cards can't be traded.</p></div>`}
+async function pickCard(title,list,sub=''){if(!list.length){toast('No cards to pick from.');return null}let q='',sort='value';
+ const draw=()=>{const f=list.filter(c=>!q||c.name.toLowerCase().includes(q)).sort((a,b)=>sort==='value'?b.value-a.value:a.name.localeCompare(b.name)).slice(0,60);return f.map(c=>`<button class="pk" data-pk="${esc(c.uid)}">${tcardHTML(c)}</button>`).join('')||'<div class="empty">Nothing matches.</div>'};
+ const p=modal({icon:'🃏',title,html:`${sub}<input class="inp" id="pkq" placeholder="Search by name" autocomplete="off"><div class="pkgrid" id="pkgrid">${draw()}</div>`,buttons:[{label:'Cancel',value:null}]});
+ setTimeout(()=>{const i=$('#pkq');if(i)i.addEventListener('input',()=>{q=i.value.trim().toLowerCase();$('#pkgrid').innerHTML=draw()})},30);
+ const pickedP=new Promise(res=>{const h=e=>{const b=e.target.closest('#pkgrid [data-pk]');if(!b)return;document.removeEventListener('click',h,true);e.stopPropagation();res(list.find(c=>c.uid===b.dataset.pk));modalClose&&modalClose('picked')};document.addEventListener('click',h,true);p.then(()=>setTimeout(()=>{document.removeEventListener('click',h,true);res(null)},50))});
+ return pickedP}
+async function pickFriend(){let fr=[];try{fr=await Trade.friendsList()}catch(e){}if(!fr.length){toast('No friends found. Tell Johnny to make an account.');return null}
+ return await modal({icon:'👥',title:'Trade with who?',html:`<div class="tshops">${fr.map(f=>`<button class="tshop" data-m-value="${esc(f.user_id)}"><b>${esc(f.username)}</b><span>›</span></button>`).join('')}</div>`,buttons:[{label:'Cancel',value:null}]}).then(id=>fr.find(f=>f.user_id===id)||null)}
+async function friendCards(f){const r=(await Cloud.req(`/rest/v1/saves?user_id=eq.${f.user_id}&select=owned:data->owned`,{},false)||[])[0];return((r&&r.owned)||[]).filter(tradeable)}
+async function newTrade(kind){if(!Cloud.s){accountModal();return}const f=await pickFriend();if(!f)return;
+ const mine=game.owned.filter(tradeable);
+ if(kind==='gift'){const c=await pickCard(`Gift a card to ${esc(f.username)}`,mine,'<p class="muted" style="font-size:12px">Gifts cost 1 🎟 per $100 of value (max 150).</p>');if(!c)return;const tix=giftTix(c.value);
+  if(game.tickets<tix){toast(`That gift costs ${tix} 🎟. You have ${game.tickets}. Generosity is expensive.`);return}
+  const msg=await askMsg(`Gift ${esc(c.name)} to ${esc(f.username)} for ${tix} 🎟?`,'Add a note (optional)');if(msg===null)return;
+  await sendTrade({kind:'gift',to:f,give:c,gift_tix:tix,msg});return}
+ if(kind==='mystery'){const c=await pickCard(`Mystery Swap with ${esc(f.username)}`,mine,'<p class="muted" style="font-size:12px">Pick the card you\'re putting in. They won\'t see it. They\'ll pick one of theirs blind. Then both flip at once. No take-backs.</p>');if(!c)return;
+  const msg=await askMsg(`Send ${esc(c.name)} face down?`,'Trash talk (optional)');if(msg===null)return;await sendTrade({kind:'mystery',to:f,give:c,msg});return}
+ // regular trade
+ let theirs=[];try{theirs=await friendCards(f)}catch(e){}if(!theirs.length){toast(`Couldn't load ${f.username}'s binder.`);return}
+ const want=await pickCard(`Pick a card from ${esc(f.username)}'s binder`,theirs);if(!want)return;
+ const give=await pickCard(`What are you offering for ${esc(want.name)}?`,mine,`<p class="muted" style="font-size:12px">They have ${esc(want.name)} (${money(want.value)}). Within ${Math.round(FAIR_GAP*100)}% is a fair trade. Otherwise whoever gets the better card pays Kyle 15% of the difference.</p>`);if(!give)return;
+ const gap=Math.abs(want.value-give.value),fair=gap<=Math.max(want.value,give.value)*FAIR_GAP,tax=fair?0:r2(gap*KYLE_TAX),tax_from=!fair&&want.value>give.value?tax:0,tax_to=!fair&&give.value>want.value?tax:0;
+ if(tax_from&&game.cash<tax_from){toast(`You need ${money(tax_from)} for the Kyle tax.`);return}
+ const msg=await askMsg(`${fair?'🤝 Fair trade':'⚖️ Lopsided trade'}: your ${esc(give.name)} (${moneyS(give.value)}) for their ${esc(want.name)} (${moneyS(want.value)})${tax_from?`<br>You pay Kyle ${money(tax_from)} because you're getting the better card.`:tax_to?`<br>${esc(f.username)} pays Kyle ${money(tax_to)} if they accept.`:''}`,'Add a note (optional)');if(msg===null)return;
+ await sendTrade({kind:fair?'fair':'lopsided',to:f,give,want,tax_from,tax_to,msg})}
+async function askMsg(html,ph){const v=await modal({icon:'✍️',title:'Send it?',html:`<p>${html}</p><input class="inp" id="tmsg" placeholder="${ph}" maxlength="80">`,buttons:[{label:'Cancel',value:null},{label:'Send',primary:true,value:'go'}]});return v?($('#tmsg')?.value||'').trim():null}
+async function sendTrade({kind,to,give,want=null,tax_from=0,tax_to=0,gift_tix=0,msg=''}){if(!game.owned.includes(give)||!tradeable(give)){toast('That card is not available anymore.');return}
+ try{await Cloud.req('/rest/v1/trades',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({from_user:Cloud.user,from_name:Cloud.name,to_user:to.user_id,to_name:to.username,kind,give:cleanCard(give),want:want?cleanCard(want):null,tax_from,tax_to,gift_tix,msg,status:'open'})});
+  game.owned.splice(game.owned.indexOf(give),1);if(tax_from)game.cash=r2(game.cash-tax_from);if(gift_tix)game.tickets-=gift_tix;save();
+  toast(kind==='mystery'?`🎲 Face down and sent. ${to.username} has no idea what's coming.`:kind==='gift'?`🎁 Gift sent to ${to.username}. Emily says that's sweet. Johnny says that's suspicious.`:`🔁 Offer sent to ${to.username}.`,3500);await Trade.sync(true)}
+ catch(e){toast(`Couldn't send it (${e.message}). Did the Supabase SQL get run?`,5000)}}
+const tradeById=id=>Trade.list.find(t=>String(t.id)===String(id));
+async function acceptTrade(id){const t=tradeById(id);if(!t||t.status!=='open')return;
+ if(t.kind==='gift'){await Trade.patch(t.id,{status:'done'});const x={...t.give,uid:uid(),at:Date.now(),from:`🎁 Gift from ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);save();
+  pawBurst&&pawBurst(24,true);modal({icon:'🎁',title:`A gift from ${esc(t.from_name)}!`,html:`<div class="m-card">${x.slab?slabHTML(x,true):imgTag(x,true,true)}</div><b style="color:var(--text)">${esc(x.name)}</b> · ${money(x.value)}${t.msg?`<p class="tmsg">"${esc(t.msg)}"</p>`:''}<p class="muted">${x.value>=500?'That is an absurdly nice gift. Johnny is jealous.':x.value<1?'They spent tickets to send you bulk. That is commitment to the bit.':'Emily says send a thank-you note. Kyle says no.'}</p>`,buttons:[{label:'💗 Thanks',primary:true}]});await Trade.sync(true);return}
+ const mine=game.owned.find(c=>c.id===t.want.id&&c.uid===t.want.uid)||game.owned.find(c=>c.id===t.want.id&&!!c.slab===!!t.want.slab&&(c.grade||0)===(t.want.grade||0));
+ if(!mine||!tradeable(mine)){toast(`You don't have ${t.want.name} anymore (or it's vaulted). Decline it or unvault it.`,4000);return}
+ if(t.tax_to&&game.cash<t.tax_to){toast(`You need ${money(t.tax_to)} for the Kyle tax.`);return}
+ await Trade.patch(t.id,{status:'done',want:cleanCard(mine)});game.owned.splice(game.owned.indexOf(mine),1);if(t.tax_to)game.cash=r2(game.cash-t.tax_to);
+ const x={...t.give,uid:uid(),at:Date.now(),from:`Traded from ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);save();
+ const v=tradeVerdict(x.value,mine.value);modal({icon:VERDICT_ICON[v],title:'Trade done',html:`<div class="tcards big">${tcardHTML(mine)}<span class="tx">→</span>${tcardHTML(x)}</div><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p>`,buttons:[{label:'Nice',primary:true}]});await Trade.sync(true)}
+async function declineTrade(id){const t=tradeById(id);if(!t||t.status!=='open')return;await Trade.patch(t.id,{status:'declined'});toast(t.kind==='gift'?'Gift declined. Cold.':'Declined. Kyle respects the hustle.');Trade.sync(true)}
+async function cancelTrade(id){const t=tradeById(id);if(!t||t.status!=='open'||t.from_user!==Cloud.user)return;await Trade.patch(t.id,{status:'cancelled',from_done:true});Trade.refund(t);toast(`Cancelled. ${t.give.name} is back.`);Trade.sync(true)}
+async function mysteryRespond(id){const t=tradeById(id);if(!t||t.status!=='open')return;
+ const c=await pickCard(`${esc(t.from_name)} sent a Mystery Swap`,game.owned.filter(tradeable),`<p class="muted" style="font-size:12px">Their card is face down. Pick one of yours to put in. Both flip at once. No take-backs. ${t.msg?`<br>They said: "${esc(t.msg)}"`:''}</p>`);if(!c)return;
+ const fresh=(await Cloud.req(`/rest/v1/trades?id=eq.${t.id}&select=status`)||[])[0];if(!fresh||fresh.status!=='open'){toast('Too late, that swap is gone.');Trade.sync(true);return}
+ await Trade.patch(t.id,{status:'done',back:cleanCard(c)});game.owned.splice(game.owned.indexOf(c),1);const x={...t.give,uid:uid(),at:Date.now(),from:`🎲 Mystery Swap with ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);save();
+ t.back=cleanCard(c);t.status='done';revealMystery(t,false);Trade.sync(true)}
+async function revealMystery(t,asSender){const mine=asSender?t.give:t.back,theirs=asSender?t.back:t.give,other=asSender?t.to_name:t.from_name;if(!mine||!theirs)return;const v=tradeVerdict(theirs.value,mine.value);
+ await modal({icon:'🎲',title:'Mystery Swap reveal',html:`<div class="mreveal"><div class="mside"><small>You gave</small><div class="mflip"><div class="mf back"><span>?</span></div><div class="mf front">${tcardHTML(mine)}</div></div></div><div class="mside"><small>${esc(other)} gave</small><div class="mflip d2"><div class="mf back"><span>?</span></div><div class="mf front">${tcardHTML(theirs)}</div></div></div></div><div class="mverdict"><span>${VERDICT_ICON[v]}</span><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p></div>`,buttons:[{label:v==='robbery'||v==='win'?'HAHA':v==='fair'?'Fair enough':'I want a rematch',primary:true}]});
+ if(v==='robbery')pawBurst&&pawBurst(30,true)}
+
+const EXTRA_ACTIONS2={
+ charm:()=>buyCharm(),'tp-open':()=>openPost(),'tp-close':()=>closePost(),
+ 'tp-new':el=>newTrade(el.dataset.k),'tp-accept':el=>acceptTrade(el.dataset.id),'tp-decline':el=>declineTrade(el.dataset.id),
+ 'tp-cancel':el=>cancelTrade(el.dataset.id),'tp-mystery':el=>mysteryRespond(el.dataset.id),'tp-replay':el=>{const t=tradeById(el.dataset.id);if(t)revealMystery(t,t.from_user===Cloud.user)},
+ 'cs-tab':el=>{csTab=el.dataset.t;renderStats()}};
+let csTab=null;
+function rivalStats(d){const a=game.cstats||collectionStats(),b=d.cs||{},cell=(ic,x,y)=>`<span class="${x>y?'pos':x<y?'neg':''}">${ic} ${x} vs ${y}</span>`;return `<span class="rstats">${cell('💎',a.tens||0,b.tens||0)}${cell('🖤',a.blacks||0,b.blacks||0)}${cell('📚',a.sets||0,b.sets||0)}</span>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-m-value]');if(b&&modalClose)modalClose(b.dataset.mValue)});
+setTimeout(()=>{if(charmOn())charmTick()},500);
+
 /* ---------- events ---------- */
-const ACTIONS={...EXTRA_ACTIONS,
+const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,
  nav:el=>go(el.dataset.view),
  buy:el=>startRip(el.dataset.tier,{qty:ripQty,group:el.dataset.g||null}),
  odds:el=>showOdds(el.dataset.tier),
