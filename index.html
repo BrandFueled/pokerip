@@ -1728,9 +1728,13 @@ const buyPrice=c=>r2(Math.max(1,c.value*BUY_MARKUP*wealthMult()));
 function setSlabBands(gid,pool){return cached('sb:'+gid,()=>{const v=pool.map(c=>c.value).filter(x=>x>=2).sort((a,b)=>a-b);if(v.length<8)return SLAB_BANDS;const q=p=>v[Math.min(v.length-1,Math.floor(p*v.length))];
  const a=Math.max(2,q(.35)),b=Math.max(a+.01,q(.75)),c=Math.max(b+.01,q(.93)),d=Math.max(c+.01,q(.985));return[[a,b,71],[b,c,22],[c,d,6],[d,1e9,1]]})}
 function simEV(t,gid,n=500){const pool=packPool(t,gid),keep=pullGid;let v=0;pullGid=gid;simMode=true;try{for(let i=0;i<n;i++)v+=sum(generate(t,pool).map(c=>c.value))}finally{pullGid=keep;simMode=false}return v/n}
-function packPrice(t,gid){return r2(packBase(t,gid)*wealthMult())}
-function packBase(t,gid){if(!gid||!['pack','single'].includes(t.kind)||!poolReady(t,gid)||!poolReady(t,null))return t.price;
- return cached('px:'+t.id+':'+gid,()=>{const base=simEV(t,null),mine=simEV(t,gid);if(!base||!mine)return t.price;const p=mine*t.price/base,step=p<100?5:p<1000?25:100;return Math.max(5,Math.round(p/step)*step)})}
+function packPrice(t,gid,sync){return r2(packBase(t,gid,sync)*wealthMult())}
+// Set prices are simulated in the background so pages open instantly. Until one is ready, the base price shows.
+var pxStore=new Map(),pxQueue=[],pxBusy=false;
+function pxKey(t,gid){return t.id+':'+gid}
+function pxCompute(t,gid){const k=pxKey(t,gid);if(pxStore.has(k))return pxStore.get(k);const bk='base:'+t.id;let base=pxStore.get(bk);if(base==null){base=simEV(t,null,250);pxStore.set(bk,base)}const mine=simEV(t,gid,250);let v=t.price;if(base&&mine){const p=mine*t.price/base,step=p<100?5:p<1000?25:100;v=Math.max(5,Math.round(p/step)*step)}pxStore.set(k,v);return v}
+function pxPump(){if(pxBusy||!pxQueue.length)return;pxBusy=true;setTimeout(()=>{const[t,gid]=pxQueue.shift();try{pxCompute(t,gid)}catch(e){}pxBusy=false;if(pxQueue.length)pxPump();else if(currentView==='collect'&&collectSet)render()},30)}
+function packBase(t,gid,sync){if(!gid||!['pack','single'].includes(t.kind)||!poolReady(t,gid)||!poolReady(t,null))return t.price;const k=pxKey(t,gid);if(pxStore.has(k))return pxStore.get(k);if(sync)return pxCompute(t,gid);if(!pxQueue.some(([a,b])=>a===t&&b===gid)){pxQueue.push([t,gid]);pxPump()}return t.price}
 
 /* Whale + Mega Whale: fixed prices, and the odds are tuned so you get back about 95% on average with more mid-size hits. */
 const WHALE_FIXED={whale:16500,megawhale:50000},WHALE_RETURN=.95;
@@ -1940,7 +1944,7 @@ const multi=t=>t.kind==='eevee'||t.kind==='pack'||t.kind==='whale'||t.kind==='ev
 function startRip(id,o={}){if(rip||spinning)return;const t=tierById(id);if(!t)return;const qty=Math.max(1,o.qty||1),voucher=!!o.voucher,free=!!o.free,gid=o.group||null;
  if(voucher){if((game.vouchers[id]||0)<qty){toast('No more of those to open.');return}}
  else if(!free&&!unlocked(t)){toast(`${t.name} unlocks at level ${t.lvl}.`);return}
- const cost=voucher||free?0:packPrice(t,gid)*qty;if(game.cash+1e-9<cost){toast('Not enough cash for that.');return}
+ const cost=voucher||free?0:packPrice(t,gid,true)*qty;if(game.cash+1e-9<cost){toast('Not enough cash for that.');return}
  if(!poolReady(t,gid)){toast(catalog.offline?'Those cards are offline right now.':'Still loading those cards. Try again in a sec.');return}
  Sound.init();const pool=packPool(t,gid),now=Date.now(),all=[],from=t.name+(gid?` · ${groupDef(gid).name}`:'');let gods=0;
  pullGid=gid;try{for(let i=0;i<qty;i++){const cards=generate(t,pool);if(cards.god)gods++;if(sum(cards.map(c=>c.value))>=cost/qty){game.hot++;game.cold=0}else{game.cold++;game.hot=0}cards.forEach(c=>{c.uid=uid();c.at=now;c.from=cards.god?'GOD PACK':from});all.push(...cards);game.history.unshift(histEntry(t.id,voucher||free?0:t.price,cards))}}finally{pullGid=null}
@@ -1994,7 +1998,7 @@ function ripSummary(){if(rip.phase!=='summary'&&rip.stones&&rip.stones.length){c
 function ripEndActions(){const L=lastRip,t=tierById(L.id);let again='';
  if(L.free)again='';
  else if(L.voucher){const n=game.vouchers[L.id]||0;if(n)again=`<button class="primary" data-action="rip-again">Open ${Math.min(n,L.qty)} more</button>`}
- else{const cost=packPrice(t,L.gid)*L.qty,pending=rip?sum(rip.cards.filter(c=>rip.sell.has(c.uid)).map(c=>c.value)):0;again=`<button class="primary" data-action="rip-again" ${game.cash+pending+1e-9>=cost?'':'disabled'}>Rip again · ${money(cost)}</button>`}
+ else{const cost=packPrice(t,L.gid,true)*L.qty,pending=rip?sum(rip.cards.filter(c=>rip.sell.has(c.uid)).map(c=>c.value)):0;again=`<button class="primary" data-action="rip-again" ${game.cash+pending+1e-9>=cost?'':'disabled'}>Rip again · ${money(cost)}</button>`}
  $('#ripActions').innerHTML=`<button class="secondary" data-action="rip-done">Done</button>${again}`}
 function quickSell(test){if(!rip)return;rip.cards.forEach(c=>{if(test(c)&&!c.grading&&!safeCard(c))rip.sell.add(c.uid)});ripSummary()}
 function finalizeRip(){if(!rip)return;let n=0,cash=0,tix=0;for(const c of rip.cards)if(c.grading||safeCard(c))rip.sell.delete(c.uid);for(const u of rip.sell){const r=sellCard(u);if(r){n++;cash+=r.value;if(r.ticket)tix++}}const all=n>1&&n===rip.cards.length&&Math.max(...rip.cards.map(c=>c.value))>=10;rip=null;save();if(n)toast(`Sold ${n} card${n>1?'s':''} for ${money(cash)}${tix?` · 🎟 +${tix} Slab Grab ticket${tix>1?'s':''}!`:''}${all?' Paper hands 🧻':''}`)}
@@ -2005,7 +2009,7 @@ function ripDone(){if(rip&&rip.phase!=='summary'&&rip.phase!=='revealed')return;
 let ripBusy=0;
 function ripAgain(){if((rip&&rip.phase!=='summary')||Date.now()-ripBusy<700)return;ripBusy=Date.now();finalizeRip();const L=lastRip,t=tierById(L.id);
  if(L.voucher){const n=game.vouchers[L.id]||0;if(!n){hideOverlay('rip');return}startRip(L.id,{qty:Math.min(n,L.qty),voucher:true,group:L.gid});return}
- if(game.cash+1e-9<packPrice(t,L.gid)*L.qty){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(L.id,{qty:L.qty,group:L.gid})}
+ if(game.cash+1e-9<packPrice(t,L.gid,true)*L.qty){hideOverlay('rip');toast('Not enough cash for another one.');checkBroke();return}startRip(L.id,{qty:L.qty,group:L.gid})}
 let swallowTap=false;const swallow=()=>{swallowTap=true;setTimeout(()=>{swallowTap=false},450)};
 function ripTap(){if(!rip)return;if(swallowTap){swallowTap=false;return}if(rip.phase==='sealed')autoTear();else if(rip.phase==='facedown')ripFlip();else if(rip.phase==='revealed')ripAdvance()}
 
@@ -2989,6 +2993,12 @@ async function runAudit2(){try{if(!Cloud.s||(Cloud.name||'').toLowerCase()!==AUD
 
 const EXTRA_ACTIONS5={'goal-gyms':()=>gymsOpen(),'gym-close':()=>gymsClose(),'gym-fight':el=>gymFight(el.dataset.g)};
 
+/* ---------- One-time gift for Johnny: a free Ascended spin ---------- */
+const GIFT_KID={id:'gift-kid-2026-11',user:'yonnydepp'};
+async function runGiftKid(){try{if(!Cloud.s||(Cloud.name||'').toLowerCase()!==GIFT_KID.user)return;game.audits=game.audits||{};if(game.audits[GIFT_KID.id]||!game.audits[AUDIT3.id])return;
+ game.audits[GIFT_KID.id]=Date.now();game.vouchers.asc=(game.vouchers.asc||0)+1;save();try{Cloud.push()}catch(e){}
+ await modal({icon:'👶',title:'Kyle heard the news',html:`<p><b>You had a kid.</b> Kyle will cut you some slack.</p><p>Here's a free <b>Ascended spin</b> on the Slab Grab. Don't spend it all in one place. You literally can't, it's one spin.</p><p class="muted">Congrats, Johnny. Now go to sleep.</p>`,buttons:[{label:'🍼 Thanks Kyle',primary:true}]});render()}catch(e){console.warn('gift',e)}}
+
 /* ---------- events ---------- */
 const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,...EXTRA_ACTIONS3,...EXTRA_ACTIONS4,...EXTRA_ACTIONS5,
  nav:el=>go(el.dataset.view),
@@ -3121,7 +3131,7 @@ window.__booted=true;
 setTimeout(()=>{try{streakCheck()}catch(e){}hustleClaim();loadAllArtists()},2500);
 setTimeout(runAudit,5000);setInterval(runAudit,60000);
 loadLegends();setTimeout(()=>{raffleSync();gymSync()},7000);setInterval(()=>{raffleSync();gymSync()},300000);
-const a2=()=>{if($('#modal').hidden)runAudit2()};setTimeout(a2,9000);setInterval(a2,30000);
+const a2=()=>{if(!$('#modal').hidden)return;if(!(game.audits||{})[AUDIT3.id])runAudit2();else runGiftKid()};setTimeout(a2,9000);setInterval(a2,30000);
 initCatalog().then(async()=>{checkBroke();await loadExtras();for(const id of[...selected].filter(id=>catalog.failed.has(id))){catalog.failed.delete(id);try{await loadSet(id)}catch(e){}}invalidatePool();render()});
 </script>
 </body>
