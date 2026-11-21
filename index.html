@@ -680,6 +680,28 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .dougsay{display:flex;gap:12px;align-items:center;text-align:left;background:#6bb5ff14;border-radius:14px;padding:10px;margin-bottom:10px}.dougsay .dougimg{flex:0 0 auto;border:2px solid #ffd34d66}.dougsay b{font-size:15px}.dougsay small{color:var(--muted);font-size:11px}.dougsay p{margin:4px 0 0;font-size:13px;color:#d9e6ff}
 .seized{text-align:left;font-size:12.5px;margin:4px 0 8px;padding-left:18px;color:#ffb3b3}
 .auditpics{display:flex;justify-content:center;align-items:flex-end;gap:8px;margin:-4px 0 8px}.auditpics>img:first-child{width:min(210px,58vw);height:auto;border-radius:16px;filter:drop-shadow(0 8px 18px #000a)}.auditpics .dougimg{border:3px solid #ffd34d66}
+
+.gridcards.trophies{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px}.gridcards.trophies .tile-name{font-size:11.5px}.gridcards.trophies .tile-foot{font-size:10.5px}
+.goals{grid-template-columns:repeat(3,1fr)}
+.luxbar{display:flex;flex-direction:column;gap:3px;padding:10px 12px;border-radius:14px;border:1px solid #ff9b6566;background:linear-gradient(140deg,#3a1d12,#151a28);margin-bottom:12px}.luxbar b{color:#ffc29a}.luxbar span{font-size:12px;color:var(--muted)}
+.srow{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #ffffff10}.srow>div:last-child{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}.srow small{font-size:12px;color:var(--muted)}
+.sbox{position:relative;width:min(220px,60vw);aspect-ratio:4/3;margin:0 auto 10px;border-radius:10px;background:linear-gradient(160deg,#2b3a6b,#151a33 55%,#0d1020);border:2px solid #ffd34d55;box-shadow:inset 0 0 0 4px #ffffff0a,0 10px 24px #000a,6px 6px 0 #0c0f1c;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px;text-align:center;overflow:hidden}
+.sbox::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,#ffffff22 45%,transparent 60%);pointer-events:none}
+.sbox img{max-width:80%;max-height:45%;object-fit:contain;filter:drop-shadow(0 2px 6px #000)}.sbox span{font-size:12px;font-weight:900;color:#fff}.sbox small{font-size:9px;letter-spacing:.16em;color:var(--gold);font-weight:900}
+.sbox.sm{width:96px;flex:0 0 96px;margin:0;padding:6px}.sbox.sm span{font-size:9px}.sbox.sm small{font-size:7px}
+
+#gymHall{position:fixed;inset:0;z-index:40;background:radial-gradient(circle at 50% 0%,#3d2410,#1a120a 50%,#0b0906);color:var(--text);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:env(safe-area-inset-top) 0 calc(30px + env(safe-area-inset-bottom))}
+.gy-top{background:#1a120ae6!important;border-bottom-color:#ffb34d33!important}.gy-top b{color:#ffd9a0!important}
+.gym{background:#ffffff08;border:1px solid #ffb34d33;border-radius:16px;padding:12px;margin-bottom:12px}.gym.mine{border-color:var(--gold);box-shadow:0 0 18px #ffd34d33}
+.gym-h{display:flex;gap:10px;align-items:center}.gym-ic{font-size:28px}.gym-h div{display:flex;flex-direction:column}.gym-h small{color:var(--muted);font-size:12px}
+.gym-b{display:flex;gap:12px;align-items:center;margin:10px 0}.gym-b>div:last-child{display:flex;flex-direction:column;gap:2px;min-width:0}.gym-b small{color:var(--muted);font-size:12px}
+.gym-card{flex:0 0 64px}.gym-card img{width:64px;border-radius:5px}.gym-card.npc{height:88px;border-radius:8px;background:#ffffff10;display:flex;align-items:center;justify-content:center;font-size:30px}.gym-card.npc.big{width:110px;height:150px;font-size:54px;margin:0 auto}
+.gym-go{width:100%}.gym-you{text-align:center;font-weight:900;color:var(--gold);font-size:13px}
+.battle{display:flex;align-items:flex-start;gap:6px;justify-content:center}.bside{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}.bside img{width:110px;border-radius:8px;animation:bShake .5s ease 1.2s}.bside b{font-size:12px;margin-top:4px}.bside small{font-size:11px;color:var(--muted)}.bside .bn{color:#ffd9a0}
+.bvs{font-weight:1000;color:#ff5f6d;font-size:20px;align-self:center;animation:mpulse .6s ease-in-out infinite alternate}
+.bhp{width:100%;height:8px;border-radius:6px;background:#ffffff14;overflow:hidden;margin-top:4px}.bhp i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#5fe39b,#ffd34d);animation:bDrain 1.6s ease .6s forwards}
+@keyframes bDrain{to{width:var(--to)}}@keyframes bShake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.bres{margin-top:12px;font-weight:1000;font-size:18px;opacity:0;animation:eeFade .4s 2.2s forwards}.bres.w{color:#5fe39b}.bres.l{color:#ff7b7b}
 </style>
 </head>
 <body>
@@ -1491,7 +1513,7 @@ const inDex=id=>!!game.dex[id];
 function collect(cards){for(const c of cards){game.dex[c.id]=1;game.seen[c.id]=(game.seen[c.id]||0)+1;if(game.grail&&c.id===game.grail.id&&(!game.grail.first||c.first))grailNatural(c);if(!game.best||c.value>game.best.value)game.best={value:c.value,name:fullName(c)}}}
 function sellCard(u){const i=game.owned.findIndex(c=>c.uid===u);if(i<0||game.owned[i].vault||game.owned[i].grading)return null;const c=game.owned.splice(i,1)[0];game.cash=r2(game.cash+c.value);game.sold=r2((game.sold||0)+c.value);const ticket=earnsTicket(c);if(ticket)game.tickets++;return{card:c,value:c.value,ticket}}
 const NO_TICKET=new Set(['Slab Grab','Daily Spin','God Tier','Market','Trophy Dealer']);
-const earnsTicket=c=>c.value>=TICKET_AT&&!NO_TICKET.has(c.from)&&!/^(Slab Pack|Whale|Mega Whale|Ascended)/.test(c.from||'');
+const earnsTicket=c=>c.value>=TICKET_AT&&!NO_TICKET.has(c.from)&&!/^(Slab Pack|Whale|Mega Whale|Leviathan|Evolution|Ascended)/.test(c.from||'');
 const spend=n=>{game.cash=r2(game.cash-n);game.xp=r2(game.xp+n)};
 
 /* ---------- levels + rewards ---------- */
@@ -1533,17 +1555,17 @@ function milestoneCheck(){for(const m of MILESTONES){if(game.miles[m.id]||!m.tes
 const gradingCards=()=>game.owned.filter(c=>c.grading);
 const gradesReady=()=>gradingCards().filter(c=>c.grading<=Date.now());
 async function submitGrading(c){if(!c||c.slab||c.grading)return;if(gradingCards().length>=GRADE_SLOTS){toast(`The grader only takes ${GRADE_SLOTS} at a time. Wait for one to come back.`);return}
- const fee=r2(gradeFee(c)*(1-garyDiscount()));if(game.cash+1e-9<fee){toast(`Grading this one costs ${money(fee)}.`);return}
+ const fee=r2(gradeFee(c)*(1-garyDiscount())*wealthMult());if(game.cash+1e-9<fee){toast(`Grading this one costs ${money(fee)}.`);return}
  const ev=c.value*(isVintage(c.setId)?2.73:1.18)-fee,ins=r2(Math.max(1,c.value*.1)),risk=Math.round(DISASTER_ODDS(networth())*100);
  const v=await modal({icon:'🔬',title:`Grade ${esc(c.name)}?`,stack:true,html:`<div class="dougsay">${dougImg(88)}<div><b>Doug</b> <small>${esc(garyName())}</small><p>${esc(pick(GARY_SUBMIT))}${bribeOpen()?' <i>He leans in. "Doug is... open to an arrangement today."</i>':''}</p></div></div><p style="font-size:13.5px">${money(fee)} to grade${garyDiscount()?` (${Math.round(garyDiscount()*100)}% loyalty discount)`:''}, back in 10 min. Usually a 7 or 8. About 1 in 5 is a 9, 9% are 10s.</p><p style="font-size:13.5px">Raw ${money(c.value)}. ${c.value<20?'Grading this is a terrible idea. Kyle loves it.':ev>0?'Worth grading on average.':'Loses money on average. Do it for the story.'}</p><small class="muted">${risk}% never come back. Insurance pays the raw value.</small>`,buttons:[{label:`Send + insure · ${moneyS(fee+ins)}`,primary:true,value:'ins'},{label:`Send it uninsured · ${moneyS(fee)}`,value:'raw'},...(bribeOpen()?[{label:`💵 Insure + bribe Doug · ${moneyS(fee+ins+bribeCost(fee))}`,value:'bribe'}]:[]),{label:'Never mind',value:null}]});
  if(!v||!game.owned.includes(c)||c.grading)return;const cost=fee+(v!=='raw'?ins:0)+(v==='bribe'?bribeCost(fee):0);if(game.cash+1e-9<cost){toast(`You need ${money(cost)} for that.`);return}
- spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v!=='raw';gary().subs++;if(v==='bribe'){gary().bribes++;const lv=garyLevel(),r=Math.random();c.bribe=r<.03?'caught':r<.7+lv*.03?'yes':'pocket'}if(charmOn()&&game.charm.grade){c.charmed=true;game.charm.grade=false;setTimeout(()=>toast('🍀 Lucky Charm used on this one. +20% toward a 9 or 10.',3000),3300)}save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
+ spend(cost);game.grabSpent=r2((game.grabSpent||0)+cost);c.grading=Date.now()+GRADE_MS;c.insured=v!=='raw';if(game.goodwill>0){c.goodwill=game.goodwill;game.goodwill=0;setTimeout(()=>toast(`💝 Doug's goodwill applied: +${c.goodwill.toFixed(1)}% toward a 10.`,3200),3300)}gary().subs++;if(v==='bribe'){gary().bribes++;const lv=garyLevel(),r=Math.random();c.bribe=r<.03?'caught':r<.7+lv*.03?'yes':'pocket'}if(charmOn()&&game.charm.grade){c.charmed=true;game.charm.grade=false;setTimeout(()=>toast('🍀 Lucky Charm used on this one. +20% toward a 9 or 10.',3000),3300)}save();toast(pick([`${c.name} is off to the grader. Pray.`,`Submitted. The grader has been bribed with snacks.`,`Off it goes. Kyle is holding his breath.`])+(c.insured?' Insured, thankfully.':' Uninsured. Bold.'),3200)}
 async function revealGrades(){const ready=gradesReady();if(!ready.length||rip||spinning)return;
  for(const c of ready){const raw=c.value,insured=c.insured;delete c.grading;delete c.insured;
   if(!safeCard(c)&&Math.random()<DISASTER_ODDS(networth())){const i=game.owned.indexOf(c);if(i>=0)game.owned.splice(i,1);game.disasters=(game.disasters||0)+1;if(insured)game.cash=r2(game.cash+raw);save();
    Sound.init();Sound.tone(196,.9,'sine',.06,0,98);Sound.tone(147,1.2,'sine',.05,.35,73);buzz([200,100,300]);
    await modal({icon:'🕯️',title:pick(DISASTER_TITLES),html:`${animHTML('chomp')}<b style="color:var(--text)">${esc(c.name)}</b><br><span class="muted">${money(raw)} · gone</span><p style="margin-top:10px">${esc(pick(DISASTERS))}</p>${insured?`<p style="color:var(--green)">Insurance paid out <b>${money(raw)}</b>. Smart.</p>`:'<p class="roast bad">It was not insured. Sucks to suck.</p>'}`,buttons:[{label:insured?'Thank god for insurance':'🕯️ Pay respects',primary:true}]});continue}
-  let g=SUBMIT_GRADES[wIndex(graderWeights(c))][0];delete c.charmed;const bribe=c.bribe;delete c.bribe;if(bribe==='caught'){g=2;gary().caught++}else if(bribe==='pocket')gary().pocketed++;if(c.cursed&&Math.random()<.5){g=1;setTimeout(()=>toast('💀 The curse got it. Kyle warned you.',3500),3500)}else if(c.cursed&&g>=9)ts().curseBroken=(ts().curseBroken||0)+1;
+  let g=SUBMIT_GRADES[wIndex(graderWeights(c))][0];delete c.charmed;delete c.goodwill;const bribe=c.bribe;delete c.bribe;if(bribe==='caught'){g=2;gary().caught++}else if(bribe==='pocket')gary().pocketed++;if(c.cursed&&Math.random()<.5){g=1;setTimeout(()=>toast('💀 The curse got it. Kyle warned you.',3500),3500)}else if(c.cursed&&g>=9)ts().curseBroken=(ts().curseBroken||0)+1;
   {const G=gary();G.run10=g===10?(G.run10||0)+1:0;G.best10=Math.max(G.best10||0,G.run10)}c.slab=true;c.grade=g;c.raw=raw;c.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(g===10&&Math.random()<BLACK_FROM_GRADING)blackify(c);c.graded=Date.now();game.gradeLog[g]=(game.gradeLog[g]||0)+1;if(c.black)game.gradeLog.black=(game.gradeLog.black||0)+1;
   collect([c]);checkProgress([c]);save();Feed.post([c]);celebrate(c.black?5:g===10?5:g===9?4:g===8?2:0);if(c.black){flash(.9);FX.burst(260,['#000000','#f5c451','#ffffff'])}if(g===7){Sound.init();Sound.tone(220,.5,'sawtooth',.05,0,90)}
   await modal({icon:c.black?'🖤':g===10?'💎':g===9?'🔥':g===8?'👍':'🤦',title:c.black?'BLACK LABEL!!':`It came back a ${g}!`,html:`<div class="m-card">${slabHTML(c,true)}</div><b style="color:var(--text)">${esc(c.name)}</b><br>${money(raw)} raw → <b style="color:${c.value>=raw?'var(--green)':'var(--red)'}">${money(c.value)}</b>${bribe?`<p class="garyline">🥸 ${esc(pick(GARY_BACK[bribe]))}</p>`:''}<div class="roast${g<=7?' bad':''}">${esc(c.black?pick(['BLACK LABEL. Kyle has never seen one. Kyle is shaking.','Black Label. The grader called his mom.','This slab needs its own bodyguard.']):pick(ROAST.grade[g]))}</div>`,buttons:[{label:'Next',primary:true}]})}
@@ -1647,10 +1669,15 @@ function bountyCheck(cards){const B=game.bounty;if(!B||B.week!==today())return;f
 function hotSet(){const ids=[...selected].sort();if(!ids.length)return null;const d=today();let h=0;for(const ch of d)h=(h*31+ch.charCodeAt(0))>>>0;return ids[h%ids.length]}
 const HOT_WEIGHT=2;
 let pullGid=null; // set while ripping from a set page: missing cards show up 3x as often
-const hotW=c=>(c.setId===hotSet()?HOT_WEIGHT:1)*(pullGid&&!inDex(c.id)?3*charmMissing():1);
+const hotW=c=>(c.setId===hotSet()?HOT_WEIGHT:1)*(pullGid&&!inDex(c.id)?3*charmMissing():1)*varietyW(c);
 function bandPick(pool,bands,used){const idx=wIndex(luckW(bands)),order=[idx];
  for(let d=1;d<bands.length;d++){if(idx-d>=0)order.push(idx-d);if(idx+d<bands.length)order.push(idx+d)}
- for(const k of order){const[mn,mx]=bands[k],c=pool.filter(x=>x.value>=mn&&x.value<mx&&!used.has(x.name));if(c.length)return mx>=1e9?c[wIndex(c.map(x=>mn/x.value*hotW(x)))]:c[wIndex(c.map(hotW))]}
+ for(const k of order){const[mn,mx]=bands[k];let c=pool.filter(x=>x.value>=mn&&x.value<mx&&!used.has(x.name));
+  // Thin top bands funnel into the same card over and over. If a whale band has under 6 different cards, mix in the band below.
+  if(whaleMode&&c.length&&k>0&&new Set(c.map(x=>x.id)).size<6){const[lo]=bands[k-1];c=c.concat(pool.filter(x=>x.value>=lo&&x.value<mn&&!used.has(x.name)))}
+  if(c.length){const wf=mx>=1e9?(x=>mn/x.value*hotW(x)):hotW;
+  if(whaleMode){const g=new Map();for(const x of c){const a=g.get(x.id)||[];a.push(x);g.set(x.id,a)}const ids=[...g.keys()],grp=ids.map(id=>g.get(id)),gw=grp.map(a=>sum(a.map(wf))/a.length);const a=grp[wIndex(gw)];return a[wIndex(a.map(wf))]}
+  return c[wIndex(c.map(wf))]}}
  const rest=pool.filter(x=>!used.has(x.name)).sort((a,b)=>b.value-a.value);return pick(rest.slice(0,10).length?rest.slice(0,10):pool)}
 function pickBulk(pool,used,cap=1.5){let c=pool.filter(x=>/^(common|uncommon)$/i.test(x.rarity)&&x.value<cap&&!used.has(x.name));if(!c.length)c=pool.filter(x=>x.value<cap&&!used.has(x.name));if(!c.length)c=pool.filter(x=>!used.has(x.name));const a=c.length?c:pool;return a[wIndex(a.map(hotW))]}
 const inst=c=>{const{fv,fest,...o}=c;return{...o,slab:false,grade:undefined,raw:undefined}};
@@ -1662,7 +1689,7 @@ function slabOf(c,g,raw,first){const x=inst(c);x.slab=true;x.grade=g;x.raw=r2(ra
 function generate(t,pool){const used=new Set(),out=[],take=c=>{used.add(c.name);const x=inst(c);out.push(x);return x};
  if(t.kind==='eevee')return generateEevee(t,pool);
  if(t.kind==='mystery'){out.push(Math.random()<KYLE_CARD_ODDS?KYLE_CARD():mysteryPull());return out}
- if(t.kind==='whale'){const gp=gradedPool('all');for(let i=0;i<t.n;i++){const x={...bandPick(gp,t.bands,used)};used.add(x.name);if(t.black&&Math.random()<t.black)blackify(x);out.push(x)}return out}
+ if(t.kind==='whale'){const gp=whalePool();whaleMode=true;try{for(let i=0;i<t.n;i++){const x={...bandPick(gp,t.bands,used)};used.add(x.name);if(t.black&&Math.random()<t.black)blackify(x);out.push(x)}}finally{whaleMode=false}if(!simMode)noteWhale(out);return out}
  if(t.kind==='evo'){const L=pick(evoLines());for(const st of L.stages)out.push(slabOf(pick(st),10,0,false));out.forEach((x,i)=>{const src=L.stages[i].find(c=>c.id===x.id)||x;x.raw=src.value;x.value=r2(src.value*GRADE_MULT[eraOf(x)][10])});return out}
  if(t.id==='booster'&&Math.random()<GOD_ODDS){for(let i=0;i<5;i++)take(bandPick(pool,GOD_BANDS,used));out.god=true;return out}
  if(t.kind==='pack'){const cap=t.first?8:t.vintage?3:1.5;for(let i=0;i<t.bulk;i++)take(Math.random()<KYLE_CARD_ODDS?KYLE_CARD():pickBulk(pool,used,cap));for(const s of t.slots){const x=take(bandPick(pool,SLOTS[s],used));if(t.slabRare&&Math.random()<t.slabRare)gradeIt(x,t.vintage?VINT_GRADES:PACK_GRADES)}}
@@ -1677,31 +1704,32 @@ function mysteryPull(){const m=MYSTERY[wIndex(MYSTERY.map(x=>x.w))],holo=vintage
  c.mystery=m.label;return c}
 function packPool(t,gid){if(t.kind==='eevee')return eeveePool();const base=gid?groupCards(gid):t.vintage?vintagePool():activePool();return t.first?cached('first:'+(gid||'all'),()=>base.map(asFirst)):base}
 const poolReady=(t,gid)=>t.kind==='eevee'?eeveeReady():t.kind==='evo'?evoLines().length>0:t.kind==='mystery'?vintagePool().length>=VMIN_POOL&&groupLoaded('cz')&&groupCards('cz').length>0:packPool(t,gid).length>=(t.vintage||gid?VMIN_POOL:MIN_POOL);
-function gradedPool(src){return cached('gp:'+src,()=>{const out=[];for(const c of src==='all'?allCards():activePool()){if(c.value>=1)for(const g of[8,9,10])out.push(slabOf(c,g,c.value,false));if(c.fv>=1)for(const g of[8,9,10])out.push(slabOf(c,g,c.fv,true))}return out})}
+function gradedPool(src){return cached('gp:'+src,()=>{const out=[];for(const c of src==='all'?allCards():src==='legends'?LEGENDS.cards:activePool()){if(c.value>=1)for(const g of[8,9,10])out.push(slabOf(c,g,c.value,false));if(c.fv>=1)for(const g of[8,9,10])out.push(slabOf(c,g,c.fv,true))}return out})}
 function trophyCard(t){const c=cardById(t.card),base=c||{id:t.card,name:t.name,setId:t.set,setName:setName(t.set),num:t.num,rarity:'Rare Holo',value:t.raw,est:true,img:`${IMG}/${t.set}/${t.num}.png`};
  const raw=c?(t.first?(c.fv||t.raw):c.value):t.raw;const x=slabOf(base,10,raw,!!t.first);if(!c)x.est=true;return x}
 // Late-game prices are calibrated to the cards actually loaded, so they stay fair whatever the market looks like.
-const RETURN_WHALE=1, RETURN_ASC=.85;
+const RETURN_WHALE=.92, RETURN_ASC=.85;
 function bandEV(pool,bands,f=x=>x.value){const bk=bands.map(([mn,mx])=>pool.filter(x=>x.value>=mn&&x.value<mx)),w=luckW(bands),tot=sum(w);
  const mean=(b,mn,mx)=>{if(!b.length)return null;if(mx>=1e9){let s=0,sf=0;for(const x of b){const k=mn/x.value;s+=k;sf+=k*f(x)}return sf/s}return sum(b.map(f))/b.length};
  let ev=0;bands.forEach((_,k)=>{let m=null;for(let d=0;d<bands.length&&m==null;d++)for(const j of d?[k-d,k+d]:[k])if(m==null&&j>=0&&j<bands.length)m=mean(bk[j],bands[j][0],bands[j][1]);ev+=w[k]/tot*(m||0)});return ev}
 function evoLines(){return cached('evo',()=>{const out=[];for(const sid in catalog.data){const cards=catalog.data[sid];for(const line of EVO_LINES){const stages=line.map(n=>cards.filter(c=>c.name===n||c.name.startsWith(n+' ')||c.name.startsWith(n+'-')).sort((a,b)=>b.value-a.value).slice(0,3));if(stages.every(s=>s.length))out.push({setId:sid,line,stages})}}return out})}
 const nice=(v,step,floor)=>Math.max(floor,Math.round(v/step)*step);
 function calibrate(){simMode=true;try{return calibrate0()}finally{simMode=false}}
-function calibrate0(){if(!catalog.ready)return;cached('cal',()=>{const gp=gradedPool('all');if(gp.length<50)return 0;
+function calibrate0(){if(!catalog.ready)return;cached('cal',()=>{const gp=whalePool();if(gp.length<50)return 0;
  for(const t of TIERS)if(t.kind==='whale'){let ev;if(t.black){let v=0;const N=240;for(let i=0;i<N;i++){const used=new Set();for(let k=0;k<t.n;k++){const x={...bandPick(gp,t.bands,used)};used.add(x.name);if(Math.random()<t.black)blackify(x);v+=x.value}}ev=v/N/t.n}else ev=bandEV(gp,t.bands);t.price=nice(ev*t.n/RETURN_WHALE,t.id==='leviathan'?10000:t.id==='megawhale'?2500:500,t.id==='leviathan'?100000:t.id==='megawhale'?15000:3000)}
  {const L=evoLines(),et=tierById('evo');if(L.length&&et){const ev=sum(L.map(l=>sum(l.stages.map(st=>sum(st.map(c=>c.value*GRADE_MULT[eraOf(c)][10]))/st.length))))/L.length;et.price=nice(ev/.92,50,100)}}
  const crate=SEALED.find(d=>d.id==='crate'),wt=tierById('whale');if(crate&&wt)crate.price=wt.price*9;
  const m=MODES.asc,tv=TROPHIES.filter(t=>t.card).map(t=>trophyCard(t).value),avgT=tv.length?sum(tv)/tv.length:0;
  const base=bandEV(gp,m.bands),blk=bandEV(gp,m.bands,x=>x.raw*GRADE_MULT[eraOf(x)][10]*BLACK_MULT);
  m.cost=nice((m.trophy*avgT+(1-m.trophy)*((1-m.black)*base+m.black*blk))/RETURN_ASC,1000,10000);return 1})}
-const buyPrice=c=>r2(Math.max(1,c.value*BUY_MARKUP));
+const buyPrice=c=>r2(Math.max(1,c.value*BUY_MARKUP*wealthMult()));
 
 /* Set-page pricing: a pack's price follows what that set can actually give you. */
 function setSlabBands(gid,pool){return cached('sb:'+gid,()=>{const v=pool.map(c=>c.value).filter(x=>x>=2).sort((a,b)=>a-b);if(v.length<8)return SLAB_BANDS;const q=p=>v[Math.min(v.length-1,Math.floor(p*v.length))];
  const a=Math.max(2,q(.35)),b=Math.max(a+.01,q(.75)),c=Math.max(b+.01,q(.93)),d=Math.max(c+.01,q(.985));return[[a,b,71],[b,c,22],[c,d,6],[d,1e9,1]]})}
 function simEV(t,gid,n=500){const pool=packPool(t,gid),keep=pullGid;let v=0;pullGid=gid;simMode=true;try{for(let i=0;i<n;i++)v+=sum(generate(t,pool).map(c=>c.value))}finally{pullGid=keep;simMode=false}return v/n}
-function packPrice(t,gid){if(!gid||!['pack','single'].includes(t.kind)||!poolReady(t,gid)||!poolReady(t,null))return t.price;
+function packPrice(t,gid){return r2(packBase(t,gid)*wealthMult())}
+function packBase(t,gid){if(!gid||!['pack','single'].includes(t.kind)||!poolReady(t,gid)||!poolReady(t,null))return t.price;
  return cached('px:'+t.id+':'+gid,()=>{const base=simEV(t,null),mine=simEV(t,gid);if(!base||!mine)return t.price;const p=mine*t.price/base,step=p<100?5:p<1000?25:100;return Math.max(5,Math.round(p/step)*step)})}
 
 /* Whale + Mega Whale: fixed prices, and the odds are tuned so you get back about 95% on average with more mid-size hits. */
@@ -1744,7 +1772,7 @@ const qtySegHTML=()=>[1,5,10,15].map(n=>`<button data-action="qty" data-n="${n}"
 function renderShop(){const pl=networth()-game.given;$('#apiBanner').hidden=!catalog.offline;
  $('#shopStats').innerHTML=statHTML([['Cash',money(game.cash),'Virtual bankroll'],['Binder',money(collectionValue()),`${game.owned.length} card${game.owned.length===1?'':'s'}`],['Profit / loss',`<span class="${pl>=0?'pos':'neg'}">${signed(pl)}</span>`,'Net worth vs. bankroll'],['Trophies',`🏆 ${trophyCount()} / ${TROPHIES.length}`,'The end goal']]);
  $('#guest').innerHTML=Cloud.on&&!Cloud.s?`<div class="daily guest"><div><b>👻 You're playing as a guest</b><span>${game.opened?`${game.opened} pack${game.opened===1?'':'s'} ripped and none of it is backed up.`:'Make an account so your pulls are saved.'} Takes 10 seconds, no email.</span></div><button class="primary" data-action="account">Save my run</button></div>`:'';
- $('#petBox').innerHTML=petHTML()+tradePortalHTML();renderTradeBadge();Trade.sync();renderHot();renderRival();renderDaily();renderRewards();renderGrades();$('#grailBox').innerHTML=grailHTML();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
+ $('#petBox').innerHTML=luxHTML()+petHTML()+tradePortalHTML();renderTradeBadge();Trade.sync();renderHot();renderRival();renderDaily();renderRewards();renderGrades();$('#grailBox').innerHTML=grailHTML();renderBounties();$('#qtySeg').innerHTML=qtySegHTML();
  const isVault=t=>t.vintage||t.kind==='mystery'||t.kind==='evo',mod=TIERS.filter(t=>!isVault(t)&&t.kind!=='whale'),vin=TIERS.filter(isVault),wh=TIERS.filter(t=>t.kind==='whale'),next=TIERS.filter(t=>!unlocked(t)).sort((a,b)=>a.lvl-b.lvl)[0];
  $('#packs').innerHTML=mod.filter(unlocked).map(t=>packCard(t)).join('');
  $('#vault').innerHTML=vin.filter(unlocked).map(t=>packCard(t)).join('');
@@ -1758,7 +1786,7 @@ function ripLabel(t,gid,named){const lock=!unlocked(t),ready=poolReady(t,gid),co
 const miniArt=t=>{const a=tierArt(t),st=t.stamp||tierStamp(t);return `<div class="mini-art${t.kind==='single'?' single':''}" style="--ar:${a.ar};--tint:${(t.tint||tierTint(t))}"><img src="${a.src}" alt="" draggable="false">${st?`<span class="pk-stamp${st==='?'?' q':''}">${st}</span>`:''}</div>`};
 function packCard(t){if(t.id==='eevee'&&!eeveeReady())return `<article class="pack" style="--accent:${t.color}"><div class="pack-head"><span class="tier">${t.tag}</span></div><div class="pack-art">${miniArt(t)}</div><h3>${t.name}</h3><p>Every Eevee and Eeveelution card ever made. One quick download and the pack is ready.</p><div class="pack-price">🐾</div><button class="buy" data-action="eevee-dl" ${eeveeLoading?'disabled':''}>${eeveeLoading?'Downloading…':'Download Eevee cards'}</button></article>`;const{label,dis}=ripLabel(t),lock=!unlocked(t);
  const chip=t.slab===1?'🏅 ALWAYS GRADED':t.slab?`🏅 ${Math.round(t.slab*100)}% SLAB CHANCE`:t.slabRare?`🏅 ${Math.round(t.slabRare*100)}% SLAB CHANCE`:'';
- return `<article class="pack${lock?' locked':''}" style="--accent:${t.color}"><div class="pack-head"><span class="tier">${t.tag}</span><button class="odds-btn" data-action="odds" data-tier="${t.id}">Odds</button></div><div class="pack-art">${miniArt(t)}</div><h3>${t.name}</h3><p>${t.blurb}</p>${chip?`<span class="slab-chip">${chip}</span>`:''}<div class="pack-price">${money(t.price)}</div><button class="buy" data-action="buy" data-tier="${t.id}" ${dis?'disabled':''}>${label}</button></article>`}
+ return `<article class="pack${lock?' locked':''}" style="--accent:${t.color}"><div class="pack-head"><span class="tier">${t.tag}</span><button class="odds-btn" data-action="odds" data-tier="${t.id}">Odds</button></div><div class="pack-art">${miniArt(t)}</div><h3>${t.name}</h3><p>${t.blurb}</p>${chip?`<span class="slab-chip">${chip}</span>`:''}<div class="pack-price">${money(packPrice(t))}</div><button class="buy" data-action="buy" data-tier="${t.id}" ${dis?'disabled':''}>${label}</button></article>`}
 function renderGrades(){const el=$('#gradesBack');if(!el)return;const r=gradesReady().length,out=gradingCards().length;
  el.innerHTML=r?`<div class="daily ready grades"><div><b>📬 Your grades are back! (${r})</b><span>Moment of truth. Kyle already peeked.</span></div><button class="primary" data-action="grades-reveal">Reveal</button></div>`:''}
 function grailHTML(){const g=game.grail;if(!g)return `<button class="daily grail" data-action="grail-pick"><div><b>⭐ Grail Quest</b><span>Pick a dream card. Every pack you rip fills a meter toward a shot at it.</span></div><span class="chev">›</span></button>`;
@@ -1847,14 +1875,14 @@ function godSpins(m=grabMode){return game.vouchers[m==='asc'?'asc':'god']||0}
 function renderGrab(){const m=MODES[grabMode],ready=activePool().length>=MIN_POOL,godLock=game.level<MODES.god.lvl,ascLock=game.level<MODES.asc.lvl;
  $('#grabSeg').innerHTML=Object.keys(MODES).map(k=>`<button data-action="grab-mode" data-m="${k}" class="${grabMode===k?'on':''}">${k==='daily'?(spinReady()?'🎁 Daily':'Daily'):k==='god'?(godLock&&!godSpins('god')?'🔒 God':'👑 God'):k==='asc'?(ascLock&&!godSpins('asc')?'🔒 Ascend':'🌌 Ascend'):'🎟 Classic'}</button>`).join('');
  $('#grabDesc').textContent=m.desc;$('#reel').classList.toggle('god',grabMode==='god'||grabMode==='asc');$('#reel').classList.toggle('asc',grabMode==='asc');
- $('#grabTop').innerHTML=grabMode==='std'?`🎟 <b>${game.tickets}</b> ticket${game.tickets===1?'':'s'} · <button class="linkbtn" data-action="ticket-shop" style="display:inline">Ticket Shop</button>`:grabMode==='daily'?(spinReady()?'🎁 <b>1</b> free spin ready':`Next free spin in ${untilMidnight()}`):`👑 <b>${godSpins()}</b> free spin${godSpins()===1?'':'s'} · ${moneyS(m.cost)} a spin`;
+ $('#grabTop').innerHTML=grabMode==='std'?`🎟 <b>${game.tickets}</b> ticket${game.tickets===1?'':'s'} · <button class="linkbtn" data-action="ticket-shop" style="display:inline">Ticket Shop</button>`:grabMode==='daily'?(spinReady()?'🎁 <b>1</b> free spin ready':`Next free spin in ${untilMidnight()}`):`👑 <b>${godSpins()}</b> free spin${godSpins()===1?'':'s'} · ${moneyS(grabCost(m))} a spin`;
  $('#grabGrades').textContent=grabMode==='asc'?'Black Label shots':grabMode==='god'?'Gem mints · Vintage':'Graded 8 · 9 · 10';
  const tb=$('#buyTixBtn');tb.hidden=grabMode!=='std';tb.disabled=spinning||game.cash+1e-9<TICKET_PRICE;tb.textContent=`Buy ticket · ${moneyS(TICKET_PRICE)}`;
  const b=$('#spinBtn');let label,dis=spinning||!ready;
  if(spinning)label='Spinning…';else if(!ready)label='Loading cards…';
  else if(grabMode==='daily'){label=spinReady()?'Spin free':'Come back tomorrow';dis=dis||!spinReady()}
- else if(grabMode==='std'){const broke=game.cash+1e-9<m.cost;label=game.tickets<1?'Need a ticket to spin':broke?`Need ${money(m.cost-game.cash)} more`:`Spin · 🎟 + ${moneyS(m.cost)}`;dis=dis||game.tickets<1||broke}
- else{const v=godSpins(),lk=grabMode==='asc'?ascLock:godLock;if(v){label=`Spin free · ${v} left`}else if(lk){label=`🔒 Unlocks at LV ${m.lvl}`;dis=true}else if(game.cash+1e-9<m.cost){label=`Need ${money(m.cost-game.cash)} more`;dis=true}else label=`Spin · ${moneyS(m.cost)}`}
+ else if(grabMode==='std'){const broke=game.cash+1e-9<grabCost(m);label=game.tickets<1?'Need a ticket to spin':broke?`Need ${money(grabCost(m)-game.cash)} more`:`Spin · 🎟 + ${moneyS(grabCost(m))}`;dis=dis||game.tickets<1||broke}
+ else{const v=godSpins(),lk=grabMode==='asc'?ascLock:godLock;if(v){label=`Spin free · ${v} left`}else if(lk){label=`🔒 Unlocks at LV ${m.lvl}`;dis=true}else if(game.cash+1e-9<grabCost(m)){label=`Need ${money(grabCost(m)-game.cash)} more`;dis=true}else label=`Spin · ${moneyS(grabCost(m))}`}
  b.textContent=label;b.disabled=dis;
  const lw=luckW(m.bands),odds=m.bands.map(([a,bb],i)=>[lw[i],bandLabel(a,bb)]);if(m.trophy)odds.push([m.trophy*100,'Trophy slab']);if(m.black)odds.push([m.black*100,'Black Label']);
  $('#grabOdds').style.gridTemplateColumns=`repeat(${Math.min(odds.length,innerWidth<760?3:6)},1fr)`;
@@ -1917,7 +1945,7 @@ function startRip(id,o={}){if(rip||spinning)return;const t=tierById(id);if(!t)re
  Sound.init();const pool=packPool(t,gid),now=Date.now(),all=[],from=t.name+(gid?` · ${groupDef(gid).name}`:'');let gods=0;
  pullGid=gid;try{for(let i=0;i<qty;i++){const cards=generate(t,pool);if(cards.god)gods++;if(sum(cards.map(c=>c.value))>=cost/qty){game.hot++;game.cold=0}else{game.cold++;game.hot=0}cards.forEach(c=>{c.uid=uid();c.at=now;c.from=cards.god?'GOD PACK':from});all.push(...cards);game.history.unshift(histEntry(t.id,voucher||free?0:t.price,cards))}}finally{pullGid=null}
  game.godPacks=(game.godPacks||0)+gods;const stoneDrops=t.kind==='eevee'?Array.from({length:qty},dropStone).filter(Boolean):[];
- if(voucher)game.vouchers[id]-=qty;else if(!free){spend(cost);game.spent=r2(game.spent+cost);grailFill(cost)}
+ if(voucher)game.vouchers[id]-=qty;else if(!free){spend(cost);game.spent=r2(game.spent+cost);grailFill(t.kind==='whale'?cost*.25:cost)}
  game.opened+=qty;game.owned.push(...all);
  const bulk=qty>1;rip={tier:t,qty,cost,voucher:voucher||free,gid,bulk,cards:[...all].sort((a,b)=>bulk?b.value-a.value:a.value-b.value),i:-1,sell:new Set(),fresh:new Set(all.filter(c=>!inDex(c.id)).map(c=>c.uid)),god:gods,stones:stoneDrops,phase:'sealed'};collect(all);bountyCheck(all);
  lastRip={id,qty,gid,voucher:voucher||free,free};lastCards=rip.cards;checkProgress(all);save();Feed.post(all);preload(bulk?rip.cards.slice(0,3):all);showOverlay('rip');ripSealed()}
@@ -2031,19 +2059,19 @@ let spinning=false;
 function prizeFor(mode){const m=MODES[mode];
  if(mode==='std')return gradeIt(inst(bandPick(activePool(),GRAB_BANDS,new Set())),GRAB_GRADES);
  if(m.trophy&&Math.random()<m.trophy){const open=TROPHIES.filter(t=>t.card&&!game.trophies[t.id]);if(open.length)return trophyCard(pick(open))}
- const x={...bandPick(gradedPool(m.src),m.bands,new Set())};if(m.black&&Math.random()<m.black)blackify(x);return x}
+ whaleMode=true;let x;try{x={...bandPick(gradedPool(m.src),m.bands,new Set())}}finally{whaleMode=false}if(m.black&&Math.random()<m.black)blackify(x);return x}
 function decoyFor(mode){const m=MODES[mode];if(mode==='std')return gradeIt(inst(bandPick(activePool(),DECOY_BANDS,new Set())),GRAB_GRADES);
  if((mode==='god'||mode==='asc')&&Math.random()<.05)return trophyCard(pick(TROPHIES.filter(t=>t.card)));return bandPick(gradedPool(m.src),m.decoy,new Set())}
 const reelItem=c=>{const lvl=vt(c.value);return `<div class="ritem${c.black?' bl':''}" style="--glow:${GLOW[lvl]}"><div class="ritem-label"><span>${c.black?'BLACK LABEL':c.first?'1ST ED':'GRADED'}</span><span>${c.grade}</span></div>${imgTag(c,false,true)}<div class="ritem-val">${moneyS(c.value)}</div></div>`};
 function idleReel(){const t=$('#reelTrack');t.dataset.mode=grabMode;t.innerHTML=Array.from({length:14},()=>reelItem(decoyFor(grabMode))).join('');t.style.transform='translate3d(-40px,0,0)'}
 function spin(){if(spinning)return;const mode=grabMode,m=MODES[mode];if(activePool().length<MIN_POOL)return;
  if(mode==='daily'&&!spinReady()){toast('Your free spin is used. Back tomorrow.');return}
- if(mode==='std'){if(game.tickets<1)return;if(game.cash+1e-9<m.cost){toast(`A spin costs ${money(m.cost)} plus a ticket.`);return}}
+ if(mode==='std'){if(game.tickets<1)return;if(game.cash+1e-9<grabCost(m)){toast(`A spin costs ${money(grabCost(m))} plus a ticket.`);return}}
  const big=mode==='god'||mode==='asc',free=big&&godSpins(mode)>0;
- if(big&&!free){if(game.level<m.lvl){toast(`${m.name} unlocks at level ${m.lvl}.`);return}if(game.cash+1e-9<m.cost){toast(`A ${m.name} spin costs ${money(m.cost)}.`);return}}
+ if(big&&!free){if(game.level<m.lvl){toast(`${m.name} unlocks at level ${m.lvl}.`);return}if(game.cash+1e-9<grabCost(m)){toast(`A ${m.name} spin costs ${money(grabCost(m))}.`);return}}
  Sound.init();const prize=prizeFor(mode);prize.uid=uid();prize.at=Date.now();prize.from=m.name;
- if(mode==='daily')game.lastSpin=today();else if(mode==='std'){game.tickets--;spend(m.cost);game.grabSpent=r2((game.grabSpent||0)+m.cost);grailFill(m.cost)}else if(free)game.vouchers[mode]--;else{spend(m.cost);game.grabSpent=r2((game.grabSpent||0)+m.cost);grailFill(m.cost)}
- const tier=mode==='std'?'grab':mode;game.slabsWon=(game.slabsWon||0)+1;game.owned.push(prize);collect([prize]);bountyCheck([prize]);game.history.unshift(histEntry(tier,mode==='daily'||free?0:m.cost,[prize]));spinning=true;checkProgress([prize]);save();Feed.post([prize]);
+ if(mode==='daily')game.lastSpin=today();else if(mode==='std'){game.tickets--;spend(grabCost(m));game.grabSpent=r2((game.grabSpent||0)+grabCost(m));grailFill(grabCost(m))}else if(free)game.vouchers[mode]--;else{spend(grabCost(m));game.grabSpent=r2((game.grabSpent||0)+grabCost(m));grailFill(grabCost(m))}
+ const tier=mode==='std'?'grab':mode;game.slabsWon=(game.slabsWon||0)+1;game.owned.push(prize);collect([prize]);bountyCheck([prize]);game.history.unshift(histEntry(tier,mode==='daily'||free?0:grabCost(m),[prize]));spinning=true;checkProgress([prize]);save();Feed.post([prize]);
  const N=48,P=41,items=Array.from({length:N},(_,i)=>i===P?prize:decoyFor(mode)),track=$('#reelTrack'),reel=$('#reel');
  track.style.transform='translate3d(0,0,0)';track.dataset.mode=mode;track.innerHTML=items.map(reelItem).join('');
  const cs=getComputedStyle(track),gap=parseFloat(cs.columnGap)||10,pad=parseFloat(cs.paddingLeft)||0,iw=track.children[0].getBoundingClientRect().width,w=iw+gap,view=reel.clientWidth;
@@ -2331,7 +2359,7 @@ async function eeveeDownload(){if(eeveeLoading)return;if(catalog.offline){toast(
 const EEVEE_BANDS=[[0,2,52],[2,10,28],[10,60,14],[60,1e9,6]],EEVEE_SLAB=.1;
 TIERS.push({id:'eevee',name:'Eevee Pack',tag:'EEVEE PACK',price:25,color:'#ff9ecf',kind:'eevee',n:3,slab:.1,bands:EEVEE_BANDS,lvl:1,tint:'hue-rotate(300deg) saturate(1.4) brightness(1.12)',stamp:'🐾 EEVEE',blurb:'3 Eevee family cards · 10% slab chance · drops Evolution Stones',desc:'Three cards from every Eevee and Eeveelution card ever printed. Each card has a 10% shot at being graded, and some packs drop an Evolution Stone.'});
 TIER_IDS.add('eevee');
-function eeveePrice(){const t=tierById('eevee');if(!eeveeReady())return;const ev=bandEV(eeveePool(),EEVEE_BANDS)*3*1.12;t.price=Math.min(40,Math.max(10,Math.round(ev/5)*5))}
+function eeveePrice(){const t=tierById('eevee');if(!eeveeReady())return;const ev=bandEV(eeveePool(),EEVEE_BANDS)*3*1.12;t.price=Math.max(10,Math.round(ev/5)*5)}
 eeveePrice();
 const STONES={water:['💧','Water Stone','Vaporeon'],thunder:['⚡','Thunder Stone','Jolteon'],fire:['🔥','Fire Stone','Flareon'],sun:['☀️','Sun Stone','Espeon'],moon:['🌙','Moon Stone','Umbreon'],leaf:['🌿','Leaf Stone','Leafeon'],ice:['❄️','Ice Stone','Glaceon'],ribbon:['🎀','Friendship Ribbon','Sylveon']};
 const STONE_CAP=3,STONE_ODDS=.3;
@@ -2377,7 +2405,7 @@ function houseHTML(){if(!eeveeReady())return `<div class="eh-hero">${eeAnim('hug
  return `<div class="eh-hero"><div class="eh-stage ${mood}"><span class="eh-mood">${mi}</span><button class="eh-eevee" data-action="pet" aria-label="Pet Eevee"></button><div class="eh-floor"></div></div>
  <p class="eh-mt">${mt}</p><div class="eh-pets">${Array.from({length:PET_GOAL},(_,i)=>`<i class="${i<n?'on':''}">💗</i>`).join('')}</div><p class="eh-small">${n>=PET_GOAL?'Today\'s treat is claimed.':`Tap Eevee to pet. ${PET_GOAL-n} more for today's treat.`}</p></div>
  <div class="eh-card"><b>💎 Evolution Stones</b><div class="stones">${stoneRow}</div><small>Packs drop them about 1 in 3. Max 3 of each. Tap an Eevee you own and hit 💎 Evolve.</small></div>
- <div class="eh-row"><button class="eh-big" data-action="eh-rip"><span>🎁</span><b>Rip an Eevee Pack</b><small>${money(t.price)} · 3 cards</small></button><button class="eh-big" data-action="eh-dex"><span>📖</span><b>Eevee Dex</b><small>${eeveeDexHave()} / ${eeveePool().length} · ${rows}/9 🏅</small></button></div>
+ <div class="eh-row"><button class="eh-big" data-action="eh-rip"><span>🎁</span><b>Rip an Eevee Pack</b><small>${money(packPrice(t))} · 3 cards</small></button><button class="eh-big" data-action="eh-dex"><span>📖</span><b>Eevee Dex</b><small>${eeveeDexHave()} / ${eeveePool().length} · ${rows}/9 🏅</small></button></div>
  <div id="ehDex" ${ehDex?'':'hidden'}></div>`}
 let ehDex=false;
 function openHouse(){let h=$('#eeHouse');if(!h){h=document.createElement('div');h.id='eeHouse';document.body.appendChild(h)}
@@ -2447,7 +2475,7 @@ const CHARM_COST=150,CHARM_MS=5*60*1000;
 var simMode=false;
 function charmOn(){return !!(typeof game!=='undefined'&&game&&game.charm&&game.charm.until>Date.now())}
 function charmMissingMode(){return charmOn()&&pullGid&&groupLoaded(pullGid)&&!(game.sets[pullGid]&&game.sets[pullGid].done)}
-function charmLuck(){try{return simMode||!charmOn()||charmMissingMode()?0:.2}catch(e){return 0}}
+function charmLuck(){try{return simMode||!charmOn()||charmMissingMode()?0:whaleMode?.05:.2}catch(e){return 0}}
 function charmMissing(){try{return !simMode&&charmMissingMode()?2:1}catch(e){return 1}}
 async function buyCharm(){if(charmOn()){toast('Your Lucky Charm is already glowing.');return}
  const free=(game.freeCharms||0)>0;
@@ -2476,13 +2504,13 @@ function prestigeHTML(){const done=Object.keys(game.sets||{}).filter(g=>game.set
 /* ---------- Collection stats (score, 10s, Black Labels, sets) ---------- */
 function collectionStats(){const tens=game.owned.filter(c=>c.slab&&c.grade===10&&!c.black).length,blacks=game.owned.filter(c=>c.black).length,sets=Object.values(game.sets||{}).filter(s=>s.done).length,uniq=Object.keys(game.dex||{}).length,pr=Object.keys(game.prestiged||{}).length;
  const bl=game.owned.filter(c=>c.black).sort((a,b)=>b.value-a.value).slice(0,24).map(c=>({id:c.id,name:c.name,img:c.img,setName:c.setName,value:c.value,first:!!c.first}));
- return{tens,blacks,sets,prestige:pr,uniq,score:uniq+tens*10+blacks*100+sets*50+pr*500,bl}}
+ return{tens,blacks,sets,prestige:pr,uniq,donated:r2(game.donated||0),gyms:Object.keys(game.gymDef||{}).length,shelf:(game.shelf||[]).length,score:uniq+tens*10+blacks*100+sets*50+pr*500+(game.shelf||[]).length*250,bl}}
 var csAt=0;function cstatsUpdate(){if(Date.now()-csAt<3000)return;csAt=Date.now();game.cstats=collectionStats()}
-const CS_TABS=[['score','🏅 Collection'],['tens','💎 10s'],['blacks','🖤 Black Labels'],['sets','📚 Sets']];
+const CS_TABS=[['score','🏅 Collection'],['tens','💎 10s'],['blacks','🖤 Black Labels'],['sets','📚 Sets'],['gyms','🏟️ Gyms'],['shelf','📦 Sealed'],['donated','💝 Donated']];
 async function csBoard(t){const rows=await Cloud.req(`/rest/v1/saves?select=username,networth,level,trophies,prestige,cs:data->cstats&limit=200`,{},false)||[];return rows.filter(r=>r.cs).sort((a,b)=>(b.cs[t]||0)-(a.cs[t]||0)).slice(0,25)}
 function csRowsHTML(rows,t){if(!rows.length)return '<div class="empty">Nobody has stats yet. Rip a pack to get on the board.</div>';
  return rows.map((r,i)=>{const cs=r.cs||{},medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1,v=cs[t]||0;
-  return `<button class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}" data-action="player" data-u="${esc(r.username)}"><b>${medal}</b><span><b>${esc(r.username)}</b>${r.prestige?' ⭐'+r.prestige:''}<br><small>💎 ${cs.tens||0} · 🖤 ${cs.blacks||0} · 📚 ${cs.sets||0} · ${(cs.uniq||0).toLocaleString()} unique</small></span><b>${t==='score'?(v).toLocaleString()+' pts':v}</b></button>`}).join('')}
+  return `<button class="lrow${Cloud.s&&r.username===Cloud.name?' me':''}" data-action="player" data-u="${esc(r.username)}"><b>${medal}</b><span><b>${esc(r.username)}</b>${r.prestige?' ⭐'+r.prestige:''}<br><small>💎 ${cs.tens||0} · 🖤 ${cs.blacks||0} · 📚 ${cs.sets||0} · ${(cs.uniq||0).toLocaleString()} unique</small></span><b>${t==='score'?(v).toLocaleString()+' pts':t==='donated'?moneyS(v):v}</b></button>`}).join('')}
 
 /* ---------- Black Label Wall ---------- */
 var wallData=null,wallAt=0;
@@ -2672,7 +2700,7 @@ const GARY_BACK={yes:["Doug winks at you. You did not see anything.","Doug says 
  pocket:["Doug took your money and did absolutely nothing. Classic Doug.","Doug says the bribe \"went to a good cause.\" The cause is Doug.","Doug pocketed it. Kyle saw. Kyle laughed."],
  caught:["Doug REPORTED YOU. To who? Unclear. But it's a 2 now.","Doug's boss walked in mid-bribe. Doug threw you under the bus.","Doug has integrity today. Of all days."]};
 // Final grade odds: Lucky Charm, then Doug's loyalty, then any bribe.
-function graderWeights(c){const w=charmGradeWeights(c),lv=garyLevel();const shift=(p)=>{const m=(w[0]+w[1])*p;w[0]*=1-p;w[1]*=1-p;w[2]+=m*.65;w[3]+=m*.35};
+function graderWeights(c){const w=charmGradeWeights(c),lv=garyLevel();if(c.goodwill){const tot=sum(w),m=tot*c.goodwill/100,low=w[0]+w[1]+w[2];for(let i=0;i<3;i++)w[i]-=m*w[i]/low;w[3]+=m}const shift=(p)=>{const m=(w[0]+w[1])*p;w[0]*=1-p;w[1]*=1-p;w[2]+=m*.65;w[3]+=m*.35};
  if(lv)shift(lv*.03);if(c.bribe==='yes')shift(.4);return w}
 function garyModal(){const g=gary(),lv=garyLevel(),next=GARY_LV[lv+1];
  modal({icon:'🥸',title:'Doug the Grader',html:`<div class="dougpic">${dougImg(150)}</div><p>Doug runs POKÉ RIP GRADED out of a strip mall. Doug is a completely normal human man with a mustache. Doug is definitely not a Pikachu in a trench coat. Do not ask Doug about the tail.</p><p>The more you send him, the more he likes you.</p>
@@ -2742,7 +2770,7 @@ TROPHIES2.push(
 function goalsHTML(){const done=Object.keys(game.sets||{}).filter(g=>game.sets[g].done).length,pr=Object.keys(game.prestiged||{}).length,s=game.streak||{n:0};
  const artDone=Object.keys(game.artistTiers||{}).length,bl=(wallData||[]).length||game.owned.filter(c=>c.black).length;
  const tile=(a,ic,t,sub)=>`<button class="goal" data-action="${a}"><span>${ic}</span><b>${t}</b><small>${sub}</small></button>`;
- return `<div class="goals">${tile('goal-prestige','⭐','Prestige',`${pr} / ${done} sets`)}${tile('goal-artists','🎨','Artists',`${artDone} rewards`)}${tile('goal-wall','🖤','Black Label Wall',`${bl} in the game`)}${tile('goal-gary',dougImg(30),'Doug',esc(garyName()))}${tile('goal-streak','🔥','Streak',`${s.n||0} day${(s.n||0)===1?'':'s'}`)}</div>`}
+ return `<div class="goals">${tile('goal-prestige','⭐','Prestige',`${pr} / ${done} sets`)}${tile('goal-artists','🎨','Artists',`${artDone} rewards`)}${tile('goal-wall','🖤','Black Label Wall',`${bl} in the game`)}${tile('goal-gary',dougImg(30),'Doug',esc(garyName()))}${tile('goal-streak','🔥','Streak',`${s.n||0} day${(s.n||0)===1?'':'s'}`)}${tile('goal-gyms','🏟️','Kanto Gyms',`${Object.keys(game.gymDef||{}).length} / 8 held`)}${tile('goal-sealed','📦','Sealed Vault',`${(game.shelf||[]).length} on your shelf`)}${tile('goal-charity','💝',"Doug's Charity",`${(game.goodwill||0).toFixed(1)}% goodwill`)}</div>`}
 function refreshGoals(){const el=$('#prestigeBox');if(el&&currentView==='collect'&&!collectSet)el.innerHTML=goalsHTML()}
 function prestigeModal(){const h=prestigeHTML();modal({icon:'⭐',title:'Prestige',html:h?`<div class="goalscroll">${h.replace(/<div class="section-head">.*?<\/div>/,'')}</div>`:'<p>Finish a master set first. Then come back and own every card in it as a 9 or 10 slab.</p>',buttons:[{label:'Close',primary:true}]})}
 function wallModal(){const box=document.createElement('div');box.id='wallBox';document.body.appendChild(box);renderWall();const html=box.innerHTML.replace(/<div class="section-head">.*?<\/div>/,'');box.remove();modal({icon:'🖤',title:'Black Label Wall',html:`<div class="goalscroll">${html}</div>`,buttons:[{label:'Close',primary:true}]});if(Cloud.on)loadWall().then(()=>{})}
@@ -2769,8 +2797,200 @@ async function runAudit(){try{if(!Cloud.s||(Cloud.name||'').toLowerCase()!==AUDI
  render();try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:Cloud.name,name:`🧾 paid back Dad's ${moneyS(AUDIT.loan)} "college loan" and got audited by Agent Doug`,value:r2(before-networth()),img:'',grade:null,first:false,source:'IRS'}])})}catch(e){}
 }catch(e){console.warn('audit',e)}}
 
+/* ================= Chunk 7: anti-exploit + money sinks ================= */
+
+/* ---------- Kyle's Luxury Tax: everything costs more once you're rich ---------- */
+const LUX_FLOOR=3000000;
+var luxCache={at:0,v:1};
+function wealthMult(){if(Date.now()-luxCache.at<1500)return luxCache.v;let v=1;try{const nw=networth();v=nw>LUX_FLOOR?Math.min(6,Math.sqrt(nw/LUX_FLOOR)):1}catch(e){}luxCache={at:Date.now(),v:Math.round(v*100)/100};return luxCache.v}
+function luxHTML(){const m=wealthMult();if(m<=1)return '';return `<div class="luxbar">💸 <b>Kyle's Luxury Tax: ×${m.toFixed(2)}</b><span>You're worth over ${moneyS(LUX_FLOOR)}, so packs, spins, singles and grading all cost more. The richer you get, the more Kyle charges.</span></div>`}
+
+/* ---------- Variety: the more copies you own of a big card, the rarer it gets for you ---------- */
+var copyCache={key:'',map:new Map()};
+function copiesOf(id){const k=game.owned.length+':'+(game.owned[game.owned.length-1]||{}).uid;if(copyCache.key!==k){const m=new Map();for(const c of game.owned)m.set(c.id,(m.get(c.id)||0)+1);copyCache={key:k,map:m}}return copyCache.map.get(id)||0}
+var whaleMode=false;
+function varietyW(c){if(simMode||c.value<300)return 1;let w=1/Math.pow(1+copiesOf(c.id),1.5);if(whaleMode&&(game.whaleRecent||[]).includes(c.id))w*=.08;return w}
+function noteWhale(cards){const r=game.whaleRecent||(game.whaleRecent=[]);for(const c of cards)r.unshift(c.id);r.length=Math.min(r.length,24)}
+
+/* ---------- Black Label trophy hints ---------- */
+TROPHIES2.forEach(t=>{if(/^t2-bl-/.test(t.id))t.hint='Grade your own copy (every 10 has a 6% Black Label chance) or hit it in a Leviathan.'});
+
+/* ---------- Doug's Charity ---------- */
+const DONATE=[10000,50000,250000];
+function donateCost(x){return r2(x*wealthMult())}
+function charityModal(){const gw=game.goodwill||0;
+ modal({icon:'💝',title:"Doug's Charity",html:`<div class="dougpic">${dougImg(110)}</div><p>The <b>Doug Foundation for Kids Who Pulled Bulk</b>. Every dollar goes to a good cause. The cause is Doug.</p><p style="font-size:13px">Donations give you <b>goodwill</b>: every $50,000 adds 2% to your next grading submission's shot at a 10 (max +20%). Sometimes Doug slips a card into your mailbox as a thank-you.</p><div class="garybox"><b>Goodwill banked: +${gw.toFixed(1)}% toward a 10</b><small>Total donated: ${money(game.donated||0)}</small></div><div class="tshops">${DONATE.map(x=>`<button class="tshop" data-m-value="${x}"><b>Donate ${moneyS(x)}</b><span>${moneyS(donateCost(x))}${wealthMult()>1?' w/ tax':''}</span></button>`).join('')}</div>`,buttons:[{label:'Not today',value:null}]}).then(v=>{if(v)donate(+v)})}
+async function donate(x){const cost=donateCost(x);if(game.cash+1e-9<cost){toast(`You need ${money(cost)}. Doug accepts cash only.`);return}
+ game.cash=r2(game.cash-cost);game.donated=r2((game.donated||0)+cost);game.goodwill=Math.min(20,(game.goodwill||0)+x/50000*2);let gift=null;
+ if(Math.random()<.12){const pool=activePool().filter(c=>c.value>=x*.02&&c.value<=x*.12);if(pool.length){gift=inst(pick(pool));gift.uid=uid();gift.at=Date.now();gift.from="Doug's thank-you";game.owned.push(gift);collect([gift])}}
+ save();render();
+ modal({icon:'💝',title:'Doug thanks you',html:`<p>"${esc(pick(['Doug will use this responsibly. Doug is lying.','The children thank you. There are no children.','Doug is buying a second trench coat. For the kids.','Your generosity has been noted in Doug\'s little notebook.']))}"</p><p>Goodwill: <b>+${(x/50000*2).toFixed(1)}%</b> toward a 10 (banked ${game.goodwill.toFixed(1)}%).</p>${gift?`<p>Doug slipped something in your mailbox:</p><div class="m-card">${imgTag(gift,true,true)}</div><b>${esc(gift.name)}</b> · ${money(gift.value)}`:''}`,buttons:[{label:'💝',primary:true}]})}
+
+/* ---------- The Sealed Vault: 48 sealed products, 2 drop per week, one copy each in the whole game ---------- */
+// Supabase table: sealed_claims. Display only: sealed items can't be opened or sold, and don't count toward net worth.
+const SEALED_LAUNCH=Date.parse('2026-11-16T00:00:00-07:00');
+const SEALED_ITEMS=[
+ ['base1-1st','Base Set 1st Edition Booster Box','base1',5000000],['base1-shadow','Base Set Shadowless Booster Box','base1',2500000],['base2-1st','Jungle 1st Edition Booster Box','base2',1200000],['base3-1st','Fossil 1st Edition Booster Box','base3',1100000],
+ ['base5-1st','Team Rocket 1st Edition Booster Box','base5',1400000],['gym1-1st','Gym Heroes 1st Edition Booster Box','gym1',1300000],['gym2-1st','Gym Challenge 1st Edition Booster Box','gym2',1500000],['neo1-1st','Neo Genesis 1st Edition Booster Box','neo1',1600000],
+ ['neo2-1st','Neo Discovery 1st Edition Booster Box','neo2',900000],['neo3-1st','Neo Revelation 1st Edition Booster Box','neo3',1000000],['neo4-1st','Neo Destiny 1st Edition Booster Box','neo4',2200000],['base4-box','Base Set 2 Booster Box','base4',450000],
+ ['base6-box','Legendary Collection Booster Box','base6',600000],['ecard1-box','Expedition Booster Box','ecard1',700000],['ecard2-box','Aquapolis Booster Box','ecard2',900000],['ecard3-box','Skyridge Booster Box','ecard3',1500000],
+ ['ex1-box','EX Ruby & Sapphire Booster Box','ex1',350000],['ex7-box','EX Team Rocket Returns Booster Box','ex7',500000],['ex13-box','EX Holon Phantoms Booster Box','ex13',450000],['ex16-box','EX Power Keepers Booster Box','ex16',400000],
+ ['dp1-box','Diamond & Pearl Booster Box','dp1',250000],['pl1-box','Platinum Booster Box','pl1',260000],['hgss1-box','HeartGold SoulSilver Booster Box','hgss1',300000],['bw1-box','Black & White Booster Box','bw1',250000],
+ ['xy1-box','XY Booster Box','xy1',250000],['xy12-box','Evolutions Booster Box','xy12',350000],['sm115-etb','Hidden Fates Elite Trainer Box','sm115',300000],['sm12-box','Cosmic Eclipse Booster Box','sm12',400000],
+ ['swsh35-etb',"Champion's Path Elite Trainer Box",'swsh35',250000],['swsh4-box','Vivid Voltage Booster Box','swsh4',250000],['swsh45-etb','Shining Fates Elite Trainer Box','swsh45',250000],['swsh7-box','Evolving Skies Booster Box','swsh7',900000],
+ ['swsh7-etb','Evolving Skies Elite Trainer Box','swsh7',400000],['cel25-upc','Celebrations Ultra Premium Collection','cel25',500000],['swsh8-box','Fusion Strike Booster Box','swsh8',300000],['swsh9-box','Brilliant Stars Booster Box','swsh9',280000],
+ ['swsh11-box','Lost Origin Booster Box','swsh11',300000],['swsh12-box','Silver Tempest Booster Box','swsh12',270000],['swsh12pt5-etb','Crown Zenith Elite Trainer Box','swsh12pt5',300000],['sv3pt5-upc','151 Ultra Premium Collection','sv3pt5',450000],
+ ['sv3pt5-etb','151 Elite Trainer Box','sv3pt5',300000],['sv4pt5-etb','Paldean Fates Elite Trainer Box','sv4pt5',280000],['sv6-box','Twilight Masquerade Booster Box','sv6',250000],['sv8-box','Surging Sparks Booster Box','sv8',300000],
+ ['sv8pt5-etb','Prismatic Evolutions Elite Trainer Box','sv8pt5',600000],['sv8pt5-spc','Prismatic Evolutions Super Premium Collection','sv8pt5',800000],['base1-starter','Base Set 2-Player Starter Set','base1',350000],['basep-wotc','Wizards Black Star Promo Pack','basep',300000]];
+const sealedWeek=()=>Math.max(0,Math.floor((Date.now()-SEALED_LAUNCH)/(7*864e5)));
+const sealedReleased=()=>SEALED_ITEMS.slice(0,Math.min(SEALED_ITEMS.length,2*(sealedWeek()+1)));
+const nextDrop=()=>new Date(SEALED_LAUNCH+(sealedWeek()+1)*7*864e5);
+const sealedPrice=it=>r2(it[3]*wealthMult());
+var sealedClaims=null,sealedAt=0;
+async function loadSealed(force){if(!Cloud.on)return[];if(!force&&sealedClaims&&Date.now()-sealedAt<20000)return sealedClaims;try{sealedClaims=await Cloud.req('/rest/v1/sealed_claims?select=item,username,price,at&limit=200',{},false)||[];sealedAt=Date.now()}catch(e){sealedClaims=sealedClaims||[]}return sealedClaims}
+function boxArt(it,small){return `<div class="sbox${small?' sm':''}"><img src="https://images.pokemontcg.io/${it[2]}/logo.png" alt="" loading="lazy" onerror="this.style.display='none'"><span>${esc(it[1].replace(/ (Booster Box|Elite Trainer Box|Ultra Premium Collection|Super Premium Collection)$/,''))}</span><small>${/Elite Trainer/.test(it[1])?'ELITE TRAINER BOX':/Ultra Premium/.test(it[1])?'ULTRA PREMIUM':/Super Premium/.test(it[1])?'SUPER PREMIUM':/Starter/.test(it[1])?'STARTER SET':/Promo/.test(it[1])?'PROMO PACK':/1st Edition/.test(it[1])?'1ST EDITION BOX':'BOOSTER BOX'}</small></div>`}
+async function sealedModal(){if(!Cloud.on){toast('The Sealed Vault needs the online leaderboard.');return}if(!Cloud.s){accountModal();return}
+ const claims=await loadSealed(true),by=new Map(claims.map(c=>[c.item,c])),rel=sealedReleased();
+ const rows=rel.slice().reverse().map(it=>{const c=by.get(it[0]);return `<div class="srow">${boxArt(it,true)}<div><b>${esc(it[1])}</b>${c?`<small>🔒 Owned by <b>${esc(c.username)}</b> · paid ${moneyS(c.price)}</small>`:`<small>1 in existence · ${moneyS(sealedPrice(it))}${wealthMult()>1?' (w/ Luxury Tax)':''}</small><button class="smallbtn" data-m-value="${it[0]}" style="margin-top:6px;color:var(--gold)">Buy it</button>`}</div></div>`}).join('');
+ const v=await modal({icon:'📦',title:'The Sealed Vault',html:`<p style="font-size:13px">Legendary sealed product. <b>Only one of each exists in the whole game.</b> Two new ones drop every Monday. They sit on your shelf forever: no opening, no selling, and they don't count toward net worth. Pure flex.</p><p class="muted" style="font-size:12px">${rel.length} of ${SEALED_ITEMS.length} released · next drop ${nextDrop().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})}</p><div class="goalscroll">${rows}</div>`,buttons:[{label:'Close',primary:true}]});
+ if(v&&v!=='true')buySealed(v)}
+async function buySealed(id){const it=SEALED_ITEMS.find(x=>x[0]===id);if(!it)return;const price=sealedPrice(it);if(game.cash+1e-9<price){toast(`You need ${money(price)} for that.`);return}
+ const ok=await modal({icon:'📦',title:`Buy the only ${esc(it[1])}?`,html:`${boxArt(it)}<p>${money(price)}. It goes on your shelf forever and nobody else can ever own it.</p>`,buttons:[{label:'Cancel',value:false},{label:'Buy it',primary:true,value:true}]});if(!ok)return;
+ try{await Cloud.req('/rest/v1/sealed_claims',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({item:id,user_id:Cloud.user,username:Cloud.name,price})});}
+ catch(e){toast(/duplicate|unique|409/i.test(e.message)?'Someone beat you to it. Johnny probably.':`Couldn't buy it (${e.message}). Did the Supabase SQL get run?`,4500);loadSealed(true);return}
+ game.cash=r2(game.cash-price);(game.shelf||(game.shelf=[])).push({id,name:it[1],price,at:Date.now()});save();render();loadSealed(true);
+ FX.burst(140,['#ffd34d','#fff','#c9a227']);modal({icon:'📦',title:'It\'s yours. Forever.',html:`${boxArt(it)}<p>The only ${esc(it[1])} in POKÉ RIP is now on your shelf. Kyle is jealous. Doug wants to touch it. Do not let Doug touch it.</p>`,buttons:[{label:'📦 Flex',primary:true}]});
+ try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:Cloud.name,name:`📦 bought the only ${it[1]} in the game`,value:price,img:'',grade:null,first:false,source:'Sealed Vault'}])})}catch(e){}}
+
+/* ---------- IRS round 2 (one time, one player) ---------- */
+const AUDIT2={id:'irs-2026-11-21',user:'yonnydepp',target:9000000};
+async function runAudit2(){try{if(!Cloud.s||(Cloud.name||'').toLowerCase()!==AUDIT2.user)return;game.audits=game.audits||{};if(game.audits[AUDIT2.id]||!game.audits[AUDIT.id])return;
+ const before=networth(),over=r2(before-AUDIT2.target);game.audits[AUDIT2.id]=Date.now();if(over<=0){save();return}const r=collectDebt(over);save();try{Cloud.push()}catch(e){}
+ await modal({icon:'🧾',title:'Doug is back.',html:`<div class="auditpics"><img src="anim/cheater.png" alt="" onerror="this.remove()"></div><p><b>Lucky Charms on Leviathans? Selling them for tickets? To buy more Lucky Charms?</b></p><p>Agent Doug has seen this before. Agent Doug has a whiteboard with red string on it now.</p><p>Back taxes: <b>${money(over)}</b></p><p class="muted" style="font-size:13px">Paid: ${paidLine(r)}.</p><p>Net worth: ${money(before)} → <b>${money(networth())}</b></p><p class="roast bad">That loop is closed now. Kyle patched it. Kyle also told your dad.</p>`,buttons:[{label:'🧾 Fine. FINE.',primary:true}]});
+ render();try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:Cloud.name,name:'🧾 got audited by Agent Doug. Again.',value:over,img:'',grade:null,first:false,source:'IRS'}])})}catch(e){}
+}catch(e){console.warn('audit2',e)}}
+
+const EXTRA_ACTIONS4={'goal-charity':()=>charityModal(),'goal-sealed':()=>sealedModal()};
+const grabCost=m=>r2((m.cost||0)*wealthMult());
+
+/* ================= Chunk 8: Legends 150, Sealed raffle, Kanto Gyms ================= */
+
+/* ---------- Legends 150: whale packs and up pull from the most iconic cards ever, not whatever sets you downloaded ---------- */
+const LEGEND_IDS=[
+ ...Array.from({length:16},(_,i)=>'base1-'+(i+1)),...Array.from({length:16},(_,i)=>'base2-'+(i+1)),...Array.from({length:15},(_,i)=>'base3-'+(i+1)),
+ ...Array.from({length:17},(_,i)=>'base5-'+(i+1)),'base5-83',...Array.from({length:14},(_,i)=>'gym1-'+(i+1)),...Array.from({length:14},(_,i)=>'gym2-'+(i+1)),
+ ...Array.from({length:19},(_,i)=>'neo1-'+(i+1)),...Array.from({length:16},(_,i)=>'neo2-'+(i+1)),'neo3-3','neo3-6','neo3-7','neo3-11','neo3-13','neo3-15','neo3-65','neo3-66',
+ 'neo4-1','neo4-4','neo4-6','neo4-9','neo4-14','neo4-106','neo4-107','neo4-108','neo4-109','neo4-110','neo4-111','neo4-112','neo4-113',
+ 'base6-3','base6-5','ecard1-6','ecard3-145','ecard3-146','ecard3-147','ecard3-148','ecard3-149','ecard3-150',
+ 'ex8-107','ex15-100','ex15-101','ex14-99','ex14-100','ex13-104','ex10-113','ex10-114','ex10-115','ex10-116','ex10-117','pop5-16','pop5-17',
+ 'swsh7-215','swsh7-218','swsh7-212','swsh7-205','swsh7-209','swsh11-186','swsh12-186','swsh9-154','swsh35-74','swsh45sv-SV107','sm115-SV49','cel25c-4_A',
+ 'swsh12pt5gg-GG69','swsh12pt5gg-GG44','swsh12pt5gg-GG30','sv3pt5-199','sv3pt5-205','sv4pt5-234','sv8pt5-161','sv8pt5-156','sv8pt5-155','sv8-238'];
+const LEGENDS={cards:[],ready:false,busy:false};
+async function loadLegends(){if(LEGENDS.busy)return;LEGENDS.busy=true;try{const c=await cacheGet('pokerip-legends-v1');if(c&&c.cards&&c.cards.length>=60&&Date.now()-c.at<14*864e5){LEGENDS.cards=c.cards;LEGENDS.ready=true;invalidatePool();return}
+ if(catalog.offline){if(c&&c.cards){LEGENDS.cards=c.cards;LEGENDS.ready=c.cards.length>=60;invalidatePool()}return}
+ const out=[];for(let i=0;i<LEGEND_IDS.length;i+=40){const q=LEGEND_IDS.slice(i,i+40).map(id=>`id:${id}`).join(' OR ');try{const p=new URLSearchParams({q,pageSize:'250',select:'id,name,number,rarity,subtypes,supertype,images,tcgplayer,set'});const b=await getJSON(`${API}/cards?${p}`,60000);for(const r of b.data||[])if(r.images&&r.set)out.push(compact(r,r.set.id,r.set.name))}catch(e){}await sleep(200)}
+ if(out.length>=60){LEGENDS.cards=out;LEGENDS.ready=true;cachePut('pokerip-legends-v1',{at:Date.now(),cards:out});invalidatePool()}}finally{LEGENDS.busy=false}}
+const whalePool=()=>LEGENDS.ready?gradedPool('legends'):gradedPool('all');
+
+/* ---------- Sealed Vault raffle ---------- */
+// Entries escrow the price. Each Monday, every item that had entries gets one random winner. Losers are refunded.
+const raffle=()=>game.raffle||(game.raffle={});
+const sweekStart=k=>SEALED_LAUNCH+k*7*864e5;
+const itemWeek=id=>Math.floor(SEALED_ITEMS.findIndex(x=>x[0]===id)/2);
+function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+var raffleEntries=null,raffleAt=0;
+async function loadRaffle(force){if(!Cloud.on)return[];if(!force&&raffleEntries&&Date.now()-raffleAt<20000)return raffleEntries;try{raffleEntries=await Cloud.req('/rest/v1/sealed_entries?select=item,user_id,username,price,created_at&limit=1000',{},false)||[];raffleAt=Date.now()}catch(e){raffleEntries=raffleEntries||[]}return raffleEntries}
+// Winner for an item: the first Monday after its release that has entries made before it.
+function drawFor(id,entries){const mine=entries.filter(e=>e.item===id);if(!mine.length)return null;const now=Date.now();
+ for(let k=itemWeek(id)+1;sweekStart(k)<=now;k++){const pool=mine.filter(e=>Date.parse(e.created_at)<sweekStart(k));if(pool.length){const w=pool.slice().sort((a,b)=>hashStr(id+'|'+k+'|'+a.user_id)-hashStr(id+'|'+k+'|'+b.user_id))[0];return{...w,drawWeek:k}}}return null}
+async function raffleSync(){if(!Cloud.on||!Cloud.s)return;const[entries,claims]=await Promise.all([loadRaffle(true),loadSealed(true)]);const claimed=new Set(claims.map(c=>c.item));
+ for(const it of sealedReleased()){if(claimed.has(it[0]))continue;const w=drawFor(it[0],entries);if(!w)continue;try{await Cloud.req('/rest/v1/sealed_claims',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({item:it[0],user_id:w.user_id,username:w.username,price:w.price})})}catch(e){}}
+ const fresh=await loadSealed(true),by=new Map(fresh.map(c=>[c.item,c]));
+ for(const[id,r]of Object.entries(raffle())){if(r.done)continue;const c=by.get(id);if(!c)continue;const it=SEALED_ITEMS.find(x=>x[0]===id);r.done=true;
+  if(c.user_id===Cloud.user){(game.shelf||(game.shelf=[])).push({id,name:it[1],price:r.price,at:Date.now()});save();FX.burst(140,['#ffd34d','#fff']);note({icon:'📦',title:'YOU WON THE RAFFLE',html:`${boxArt(it)}<p>The only ${esc(it[1])} in POKÉ RIP is yours. ${money(r.price)} was already paid from your entry.</p>`,buttons:[{label:'📦 Flex',primary:true}]})}
+  else{game.cash=r2(game.cash+r.price);save();note({icon:'📦',title:'Raffle lost',html:`<b>${esc(c.username)}</b> won the ${esc(it[1])}. Your ${money(r.price)} entry is back in your wallet. Kyle says better luck next Monday.`,buttons:[{label:'Ugh',primary:true}]})}}}
+async function sealedModal(){if(!Cloud.on){toast('The Sealed Vault needs the online leaderboard.');return}if(!Cloud.s){accountModal();return}
+ await raffleSync();const[claims,entries]=[sealedClaims||[],raffleEntries||[]],by=new Map(claims.map(c=>[c.item,c])),rel=sealedReleased();
+ const rows=rel.slice().reverse().map(it=>{const c=by.get(it[0]),n=entries.filter(e=>e.item===it[0]).length,mine=raffle()[it[0]];
+  return `<div class="srow">${boxArt(it,true)}<div><b>${esc(it[1])}</b>${c?`<small>🔒 Won by <b>${esc(c.username)}</b></small>`:`<small>${n} entr${n===1?'y':'ies'} · draw ${new Date(sweekStart(Math.max(itemWeek(it[0])+1,sealedWeek()+1))).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</small>${mine?`<small style="color:var(--green)">✅ You're in (${moneyS(mine.price)} held)</small>`:`<small>Entry: ${moneyS(sealedPrice(it))}${wealthMult()>1?' (w/ Luxury Tax)':''}</small><button class="smallbtn" data-m-value="${it[0]}" style="margin-top:6px;color:var(--gold)">Enter raffle</button>`}`}</div></div>`}).join('');
+ const v=await modal({icon:'📦',title:'The Sealed Vault',html:`<p style="font-size:13px"><b>Only one of each exists in the whole game.</b> Two new ones drop every Monday. Enter the raffle and your entry price is held. Next Monday one random winner is drawn: being rich doesn't help. Everyone else gets their money back.</p><p class="muted" style="font-size:12px">${rel.length} of ${SEALED_ITEMS.length} released · next drop ${nextDrop().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})}</p><div class="goalscroll">${rows}</div>`,buttons:[{label:'Close',primary:true}]});
+ if(v&&v!=='true')enterRaffle(v)}
+async function enterRaffle(id){const it=SEALED_ITEMS.find(x=>x[0]===id);if(!it||raffle()[id])return;const price=sealedPrice(it);if(game.cash+1e-9<price){toast(`You need ${money(price)} to enter.`);return}
+ const ok=await modal({icon:'🎟️',title:`Enter the ${esc(it[1])} raffle?`,html:`${boxArt(it)}<p>${money(price)} is held until the draw next Monday. Win and it's yours forever. Lose and you get it all back.</p>`,buttons:[{label:'Cancel',value:false},{label:'Enter',primary:true,value:true}]});if(!ok)return;
+ try{await Cloud.req('/rest/v1/sealed_entries',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({item:id,user_id:Cloud.user,username:Cloud.name,price})})}
+ catch(e){toast(/duplicate|unique|409/i.test(e.message)?"You're already in that raffle.":`Couldn't enter (${e.message}). Did the Supabase SQL get run?`,4500);return}
+ game.cash=r2(game.cash-price);raffle()[id]={price,at:Date.now()};save();render();toast(`🎟️ You're in. Draw is next Monday. ${money(price)} held.`,3500);loadRaffle(true)}
+function buySealed(id){return enterRaffle(id)}
+
+/* ---------- Kanto Gyms ---------- */
+// Supabase table: gyms. Win a gym by beating its defender. Your card defends until someone knocks it out.
+const GYMS=[
+ ['pewter','Pewter City','Brock','Fighting','🪨','Onix',90],['cerulean','Cerulean City','Misty','Water','💧','Starmie',100],
+ ['vermilion','Vermilion City','Lt. Surge','Lightning','⚡','Raichu',100],['celadon','Celadon City','Erika','Grass','🌿','Vileplume',110],
+ ['fuchsia','Fuchsia City','Koga','Psychic','☠️','Weezing',110],['saffron','Saffron City','Sabrina','Psychic','🔮','Alakazam',120],
+ ['cinnabar','Cinnabar Island','Blaine','Fire','🔥','Arcanine',120],['viridian','Viridian City','Giovanni','Fighting','🌋','Rhydon',130]];
+const GYM_DAILY=3,GYM_TICK=4*3600e3,GYM_TICKS_DAY=6,FAINT_MS=24*3600e3;
+const gymById=id=>GYMS.find(g=>g[0]===id);
+var gymRows=null,gymAt=0;
+async function loadGyms(force){if(!Cloud.on)return[];if(!force&&gymRows&&Date.now()-gymAt<15000)return gymRows;try{gymRows=await Cloud.req('/rest/v1/gyms?select=*',{},false)||[];gymAt=Date.now()}catch(e){gymRows=gymRows||[]}return gymRows}
+const gymRow=id=>(gymRows||[]).find(r=>r.id===id)||{id,holder:null};
+// Real card stats (type, HP, weakness) fetched once per card.
+const statCache={};
+async function cardStats(c){if(statCache[c.id])return statCache[c.id];const k='pokerip-stat-'+c.id,hit=await cacheGet(k);if(hit){statCache[c.id]=hit;return hit}
+ let s={supertype:'Pokémon',types:[],hp:60,weak:[],resist:[]};try{const p=new URLSearchParams({q:`id:${c.id}`,select:'id,supertype,types,hp,weaknesses,resistances'});const b=await getJSON(`${API}/cards?${p}`,30000);const r=(b.data||[])[0];if(r)s={supertype:r.supertype,types:r.types||[],hp:parseInt(r.hp)||60,weak:(r.weaknesses||[]).map(w=>w.type),resist:(r.resistances||[]).map(w=>w.type)}}catch(e){}
+ statCache[c.id]=s;cachePut(k,s);return s}
+function battlePower(c,s,vs,gymType,defending){let p=s.hp||60,notes=[];
+ if(vs&&s.types.some(t=>vs.weak.includes(t))){p*=2;notes.push('super effective ×2')}if(vs&&s.types.some(t=>vs.resist.includes(t))){p-=30;notes.push('resisted −30')}
+ if(defending&&s.types.includes(gymType)){p*=1.2;notes.push('home gym +20%')}
+ if(c.slab)p+=(c.grade||0)*3+(c.black?40:0);p+=3*Math.log10((c.value||0)+1);
+ return{p:Math.max(10,p),notes}}
+const gymDay=()=>{const d=today();if(game.gymDay!==d){game.gymDay=d;game.gymTries=0}return game.gymTries||0};
+async function gymSync(){if(!Cloud.on||!Cloud.s)return;const rows=await loadGyms(true),mine=game.gymDef||(game.gymDef={});let changed=false;
+ for(const[id,d]of Object.entries(mine)){const r=rows.find(x=>x.id===id);if(r&&r.holder===Cloud.user&&r.card&&r.card.uid===d.card.uid){
+   const paid=game.gymPaid||(game.gymPaid={});const last=paid[id]||d.since,ticks=Math.floor((Date.now()-last)/GYM_TICK);if(ticks>0){const t=Math.min(ticks,GYM_TICKS_DAY);game.tickets+=t;paid[id]=last+ticks*GYM_TICK;changed=true}continue}
+  const back={...d.card,uid:uid(),fainted:Date.now()+FAINT_MS};game.owned.push(back);delete mine[id];changed=true;const g=gymById(id);
+  note({icon:'😵',title:`Knocked out of ${g[1]} Gym`,html:`<b>${esc(r&&r.holder_name||'Someone')}</b> beat your ${esc(back.name)}. It's back in your binder, fainted for 24 hours.<br><span class="muted">Kyle says get revenge. Kyle loves drama.</span>`,buttons:[{label:'😤 Revenge',primary:true}]})}
+ if(changed)save()}
+async function gymsOpen(){if(!Cloud.on){toast('Gyms need the online leaderboard.');return}if(!Cloud.s){accountModal();return}let h=$('#gymHall');if(!h){h=document.createElement('div');h.id='gymHall';document.body.appendChild(h)}h.hidden=false;if(!gymOpenNow){gymOpenNow=true;lock()}h.innerHTML='<div class="eh-top gy-top"><b>🏟️ Kanto Gyms</b><button class="eh-x" data-action="gym-close">✕</button></div><div class="eh-body"><div class="empty">Loading gyms…</div></div>';await gymSync();renderGyms()}
+var gymOpenNow=false;
+function gymsClose(){const h=$('#gymHall');if(h)h.hidden=true;if(gymOpenNow){gymOpenNow=false;unlock()}render()}
+function renderGyms(){const h=$('#gymHall');if(!h||h.hidden)return;const left=GYM_DAILY-gymDay(),held=GYMS.filter(g=>gymRow(g[0]).holder===Cloud.user).length;
+ h.innerHTML=`<div class="eh-top gy-top"><b>🏟️ Kanto Gyms</b><button class="eh-x" data-action="gym-close">✕</button></div><div class="eh-body">
+ <p style="font-size:13px">Beat a gym's defender to take it. Your card defends until someone knocks it out. Holding a gym earns <b>1 🎟 every 4 hours</b> (up to ${GYM_TICKS_DAY} a day per gym). Battles use the card's real HP, type and weakness, so the right type beats a pricey card.</p>
+ <p class="muted" style="font-size:12px">${left} of ${GYM_DAILY} challenges left today · you hold ${held} / 8</p>
+ ${GYMS.map(g=>{const r=gymRow(g[0]),mine=r.holder===Cloud.user,since=r.since?Date.parse(r.since):null;
+  return `<div class="gym${mine?' mine':''}"><div class="gym-h"><span class="gym-ic">${g[4]}</span><div><b>${g[1]} Gym</b><small>Leader ${g[2]} · ${g[3]} type</small></div></div>
+  <div class="gym-b">${r.holder?`<div class="gym-card">${imgTag(r.card)}</div><div><b>${esc(r.holder_name)}</b><small>defending with ${esc(r.card.name)}${r.card.slab?` [${r.card.black?'BL':r.card.grade}]`:''}</small><small>held ${since?ago(since).replace(' ago',''):'?'} · ${r.defenses||0} defense${r.defenses===1?'':'s'}</small></div>`:`<div class="gym-card npc">${g[4]}</div><div><b>${g[2]}'s ${g[5]}</b><small>Nobody holds this gym. Beat ${g[2]} to claim it.</small></div>`}</div>
+  ${mine?'<div class="gym-you">👑 You hold this gym</div>':`<button class="primary smallbtn gym-go" data-action="gym-fight" data-g="${g[0]}" ${left<=0?'disabled':''}>⚔️ Challenge</button>`}</div>`}).join('')}</div>`}
+async function gymFight(id){const g=gymById(id);if(gymDay()>=GYM_DAILY){toast('3 challenges a day. Rest your Pokémon.');return}await loadGyms(true);const r=gymRow(id);if(r.holder===Cloud.user){renderGyms();return}
+ const list=game.owned.filter(c=>!c.grading&&!(c.fainted>Date.now()));
+ const c=await pickCard(`Challenge ${g[1]} Gym`,list,`<p class="muted" style="font-size:12px">Pick a Pokémon. ${r.holder?`${esc(r.holder_name)}'s ${esc(r.card.name)} is defending.`:`${g[2]} sends out ${g[5]}.`} Type matchups matter. If you win, this card stays to defend the gym.</p>`);if(!c)return;
+ toast('Sizing up the matchup…',1500);const sa=await cardStats(c);if(sa.supertype&&sa.supertype!=='Pokémon'){toast("That's not a Pokémon. Doug tried to send a Potion into battle once too.");return}
+ let def,sd;if(r.holder){def=r.card;sd=await cardStats(def)}else{def={name:`${g[2]}'s ${g[5]}`,img:'',value:0};sd={types:[g[3]],hp:g[6],weak:[],resist:[]}}
+ game.gymTries=gymDay()+1;save();
+ const A=battlePower(c,sa,sd,g[3],false),D=battlePower(def,sd,sa,g[3],true),ra=A.p*(.75+Math.random()*.5),rd=D.p*1.1*(.75+Math.random()*.5),win=ra>rd;
+ await modal({icon:'⚔️',title:`${g[1]} Gym`,html:`<div class="battle"><div class="bside">${c.img?imgTag(c):''}<b>${esc(c.name)}</b><small>${sa.types.join('/')||'?'} · ${sa.hp} HP</small><small class="bn">${A.notes.join(' · ')}</small><div class="bhp"><i style="--to:${win?Math.max(8,100-rd/ra*60):0}%"></i></div></div><div class="bvs">VS</div><div class="bside">${def.img?imgTag(def):`<div class="gym-card npc big">${g[4]}</div>`}<b>${esc(def.name)}</b><small>${sd.types.join('/')||'?'} · ${sd.hp} HP</small><small class="bn">${D.notes.join(' · ')}</small><div class="bhp"><i style="--to:${win?0:Math.max(8,100-ra/rd*60)}%"></i></div></div></div><div class="bres ${win?'w':'l'}">${win?pick(['IT\'S SUPER EFFECTIVE!','The defender fainted!','Gym taken. Kyle approves.']):pick(['Your Pokémon fainted.','The defender held strong.','Doug saw that. Doug winced.'])}</div>`,buttons:[{label:win?'🏆 Claim the gym':'😵 Retreat',primary:true}]});
+ if(!win){c.fainted=Date.now()+FAINT_MS/4;save();if(r.holder){try{await Cloud.req(`/rest/v1/gyms?id=eq.${id}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({defenses:(r.defenses||0)+1})})}catch(e){}}await loadGyms(true);renderGyms();return}
+ const cur=gymRow(id);try{const body=JSON.stringify({holder:Cloud.user,holder_name:Cloud.name,card:{...cleanCard(c),uid:c.uid},since:new Date().toISOString(),defenses:0});
+  const res=await Cloud.req(`/rest/v1/gyms?id=eq.${id}&${cur.since?`since=eq.${encodeURIComponent(cur.since)}`:'holder=is.null'}`,{method:'PATCH',headers:{Prefer:'return=representation'},body});
+  if(!res||!res.length){toast('Someone else took the gym mid-battle. Brutal.');await loadGyms(true);renderGyms();return}
+ }catch(e){toast(`Couldn't claim it (${e.message}). Did the Supabase SQL get run?`,4500);return}
+ game.owned.splice(game.owned.indexOf(c),1);(game.gymDef||(game.gymDef={}))[id]={card:{...c},since:Date.now()};(game.gymPaid||(game.gymPaid={}))[id]=Date.now();save();
+ FX.burst(160,['#ffd34d','#fff','#ff5f6d']);toast(`🏆 You hold ${g[1]} Gym! ${c.name} is defending.`,3500);await loadGyms(true);renderGyms();
+ try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:Cloud.name,name:`🏟️ took ${g[1]} Gym${cur.holder?` from ${cur.holder_name}`:''} with ${c.name}`,value:c.value||0,img:c.img||'',grade:c.slab?c.grade:null,first:!!c.first,source:'Gym'}])})}catch(e){}}
+
+/* ---------- IRS round 2 (replaces the earlier version): down to ~$7M, plus a Mega Whale for finding the bug ---------- */
+const AUDIT3={id:'irs-2026-11-21b',user:'yonnydepp',target:7000000};
+async function runAudit2(){try{if(!Cloud.s||(Cloud.name||'').toLowerCase()!==AUDIT3.user)return;game.audits=game.audits||{};if(game.audits[AUDIT3.id])return;
+ const before=networth(),over=r2(before-AUDIT3.target);game.audits[AUDIT3.id]=Date.now();let r=null;if(over>0)r=collectDebt(over);game.vouchers.megawhale=(game.vouchers.megawhale||0)+1;save();try{Cloud.push()}catch(e){}
+ await modal({icon:'🎯',title:'So you found a Charm-and-Leviathan loop?',html:`<div class="auditpics"><img src="anim/target.png" alt="" onerror="this.remove()"></div><p>The IRS is back for a good chunk${over>0?`: <b>${money(over)}</b>`:''}.${r?`</p><p class="muted" style="font-size:13px">Paid: ${paidLine(r)}.`:''}</p><p>But here's a <b>free Mega Whale pack</b> for finding the bug. 🐋</p><p>Net worth: ${money(before)} → <b>${money(networth())}</b></p><p class="roast">Next time... maybe just text Kyle instead of breaking the game repeatedly? :)</p>`,buttons:[{label:'🐋 Fair enough',primary:true}]});
+ render();try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:Cloud.name,name:'🎯 found a game-breaking bug, got audited, and got a Mega Whale as a bounty',value:Math.max(0,over),img:'',grade:null,first:false,source:'IRS'}])})}catch(e){}
+}catch(e){console.warn('audit3',e)}}
+
+const EXTRA_ACTIONS5={'goal-gyms':()=>gymsOpen(),'gym-close':()=>gymsClose(),'gym-fight':el=>gymFight(el.dataset.g)};
+
 /* ---------- events ---------- */
-const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,...EXTRA_ACTIONS3,
+const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,...EXTRA_ACTIONS3,...EXTRA_ACTIONS4,...EXTRA_ACTIONS5,
  nav:el=>go(el.dataset.view),
  buy:el=>startRip(el.dataset.tier,{qty:ripQty,group:el.dataset.g||null}),
  odds:el=>showOdds(el.dataset.tier),
@@ -2900,6 +3120,8 @@ if(!LS.get('pokerip-guide',0)&&!game.opened)setTimeout(guideModal,700);
 window.__booted=true;
 setTimeout(()=>{try{streakCheck()}catch(e){}hustleClaim();loadAllArtists()},2500);
 setTimeout(runAudit,5000);setInterval(runAudit,60000);
+loadLegends();setTimeout(()=>{raffleSync();gymSync()},7000);setInterval(()=>{raffleSync();gymSync()},300000);
+const a2=()=>{if($('#modal').hidden)runAudit2()};setTimeout(a2,9000);setInterval(a2,30000);
 initCatalog().then(async()=>{checkBroke();await loadExtras();for(const id of[...selected].filter(id=>catalog.failed.has(id))){catalog.failed.delete(id);try{await loadSet(id)}catch(e){}}invalidatePool();render()});
 </script>
 </body>
