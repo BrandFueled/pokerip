@@ -678,6 +678,8 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .t2hint{font-size:10.5px;color:var(--muted);line-height:1.25;padding:0 4px 4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .dougimg{vertical-align:middle;border-radius:50%;object-fit:cover}.dougpic{display:flex;justify-content:center;margin:-4px 0 6px}.dougpic .dougimg{border:3px solid #ffd34d66;box-shadow:0 0 18px #ffd34d44}
 .dougsay{display:flex;gap:12px;align-items:center;text-align:left;background:#6bb5ff14;border-radius:14px;padding:10px;margin-bottom:10px}.dougsay .dougimg{flex:0 0 auto;border:2px solid #ffd34d66}.dougsay b{font-size:15px}.dougsay small{color:var(--muted);font-size:11px}.dougsay p{margin:4px 0 0;font-size:13px;color:#d9e6ff}
+.seized{text-align:left;font-size:12.5px;margin:4px 0 8px;padding-left:18px;color:#ffb3b3}
+.auditpics{display:flex;justify-content:center;align-items:flex-end;gap:8px;margin:-4px 0 8px}.auditpics>img:first-child{width:min(210px,58vw);height:auto;border-radius:16px;filter:drop-shadow(0 8px 18px #000a)}.auditpics .dougimg{border:3px solid #ffd34d66}
 </style>
 </head>
 <body>
@@ -2751,6 +2753,22 @@ const EXTRA_ACTIONS3={'goal-prestige':()=>prestigeModal(),'goal-artists':()=>art
 const dougImg=(px=40)=>`<img class="dougimg" src="anim/doug.png" width="${px}" height="${px}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'dougemoji',textContent:'🥸',style:'font-size:${Math.round(px*.8)}px'}))">`;
 const bribeOpen=()=>((gary().subs||0)+1)%5===0;
 
+/* ---------- The Great Whale Crash: Dad's loan + IRS (one time, one player) ---------- */
+// Takes money, not trophies: cash first, then mid-value cards (his top cards are left alone if possible).
+const AUDIT={id:'whale-crash-2026-11',user:'yonnydepp',loan:10000000,target:9000000,keepTop:15};
+function collectDebt(amount){let left=amount;const fromCash=Math.min(Math.max(0,game.cash),left);game.cash=r2(game.cash-fromCash);left-=fromCash;const taken=[];
+ if(left>0){const sorted=game.owned.filter(c=>!c.grading).sort((a,b)=>b.value-a.value),mid=sorted.slice(AUDIT.keepTop),top=sorted.slice(0,AUDIT.keepTop).reverse();
+  for(const c of[...mid,...top]){if(left<=0)break;if(left<c.value*.5&&mid.includes(c))continue;const k=game.owned.indexOf(c);if(k<0)continue;game.owned.splice(k,1);left-=c.value;taken.push(c)}}
+ return{cash:fromCash,cards:taken,cardVal:sum(taken.map(c=>c.value))}}
+const paidLine=r=>`${money(r.cash)} from cash${r.cards.length?` and ${r.cards.length} card${r.cards.length>1?'s':''} worth ${money(r.cardVal)}`:''}`;
+async function runAudit(){try{if(!Cloud.s||(Cloud.name||'').toLowerCase()!==AUDIT.user)return;game.audits=game.audits||{};if(game.audits[AUDIT.id])return;game.audits[AUDIT.id]=Date.now();
+ const before=networth();const dad=collectDebt(AUDIT.loan);save();
+ await modal({icon:'👨',title:'Dad called.',html:`<div class="auditpics"><img src="anim/dad.png" alt="" onerror="this.remove()">${dougImg(110)}</div><p>Doug collects <b>${money(AUDIT.loan)}</b> for Dad's "college loan."</p><p class="muted" style="font-size:13px">Paid: ${paidLine(dad)}.</p><p class="roast bad">Dad says he's proud of you. Dad is lying.</p>`,buttons:[{label:'😭 Sorry Dad',primary:true}]});
+ const over=r2(networth()-AUDIT.target);let irs=null;if(over>0)irs=collectDebt(over);save();try{Cloud.push()}catch(e){}
+ if(irs)await modal({icon:'🧾',title:'Thought you got away with that?',html:`<div class="auditpics"><img src="anim/cheater.png" alt="" onerror="this.remove()"></div><p><b>The IRS saw you...</b></p><p>Agent Doug, Internal Rip Service. Doug is not a Pikachu. Doug is a federal agent. All those Whale Packs during a known pricing error? Doug has receipts.</p><p>Back taxes: <b>${money(over)}</b></p><p class="muted" style="font-size:13px">Paid: ${paidLine(irs)}.</p><p>Net worth: ${money(before)} → <b>${money(networth())}</b></p><p class="roast bad">Kyle still loves you. Kyle just loves a balanced economy more.</p>`,buttons:[{label:'🧾 I deserve this',primary:true}]});
+ render();try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:Cloud.name,name:`🧾 paid back Dad's ${moneyS(AUDIT.loan)} "college loan" and got audited by Agent Doug`,value:r2(before-networth()),img:'',grade:null,first:false,source:'IRS'}])})}catch(e){}
+}catch(e){console.warn('audit',e)}}
+
 /* ---------- events ---------- */
 const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,...EXTRA_ACTIONS3,
  nav:el=>go(el.dataset.view),
@@ -2881,6 +2899,7 @@ cloudRefresh();
 if(!LS.get('pokerip-guide',0)&&!game.opened)setTimeout(guideModal,700);
 window.__booted=true;
 setTimeout(()=>{try{streakCheck()}catch(e){}hustleClaim();loadAllArtists()},2500);
+setTimeout(runAudit,5000);setInterval(runAudit,60000);
 initCatalog().then(async()=>{checkBroke();await loadExtras();for(const id of[...selected].filter(id=>catalog.failed.has(id))){catalog.failed.delete(id);try{await loadSet(id)}catch(e){}}invalidatePool();render()});
 </script>
 </body>
