@@ -3114,8 +3114,15 @@ async function offerSettle(){for(const t of Trade.list){if(t.kind!=='offer'||t.t
 const CHAMP_REWARD={cash:25000,tickets:50};
 function setTops(){return cached('tops',()=>{const out={};for(const[sid,cards]of Object.entries(catalog.data)){if(sid==='eevee'||!cards||cards.length<20)continue;out[sid]=cards.slice().sort((a,b)=>b.value-a.value).slice(0,2).filter(c=>c.value>=5)}return out})}
 var champAt=0;
+// Only 10s made in the last 30 min count, so old slabs (or newly downloaded sets) never pay out in bulk.
+const champFresh=(c,t)=>t-(c.graded||c.at||0)<18e5;
+// One-time fix: take back Set Champion rewards paid for 10s someone already owned when the feature launched.
+function champFix(){if(game.champFix1)return;game.champFix1=1;const got=game.champs||{};let n=0;
+ for(const id of Object.keys(got)){const cs=game.owned.filter(c=>c.id===id&&c.slab&&c.grade===10&&c.from!=='Market');if(!cs.length||cs.some(c=>champFresh(c,got[id])))continue;delete got[id];n++}
+ if(!n)return;const tk=Math.min(game.tickets,n*CHAMP_REWARD.tickets),cash=Math.min(Math.max(0,game.cash),n*CHAMP_REWARD.cash);game.tickets-=tk;game.cash=r2(game.cash-cash);
+ note({icon:'🧾',title:'Kyle Found a Bug',html:`Set Champions paid you for <b>${n}</b> Gem Mint 10s you already owned before it launched. That was Kyle's fault, but it's your money he's taking back.<br><br>Returned: <b>${tk} 🎟</b> and <b>${money(cash)}</b>.<br><br>New 10s you pull and grade from now on still count.`,buttons:[{label:'😤 Fine',primary:true}]})}
 function champCheck(){if(Date.now()-champAt<5000)return;champAt=Date.now();const tops=setTops(),got=game.champs||(game.champs={});const want=new Map();for(const l of Object.values(tops))for(const c of l)want.set(c.id,c);
- for(const c of game.owned){if(!c.slab||c.grade!==10||c.from==='Market'||got[c.id]||!want.has(c.id))continue;got[c.id]=Date.now();grant(CHAMP_REWARD);
+ champFix();for(const c of game.owned){if(!c.slab||c.grade!==10||c.from==='Market'||got[c.id]||!want.has(c.id)||!champFresh(c,Date.now()))continue;got[c.id]=Date.now();grant(CHAMP_REWARD);
   note({icon:'🏆',title:'Set Champion!',html:`A Gem Mint 10 <b>${esc(c.name)}</b>, one of the two best cards in ${esc(c.setName)}. Kyle is putting it in the Trophy Vault.<br><br>Reward: <b style="color:var(--gold)">${rewardText(CHAMP_REWARD)}</b>`,buttons:[{label:'🏆 Champion',primary:true}]})}}
 function champsModal(){const tops=setTops(),got=game.champs||{},ids=Object.keys(tops),done=Object.keys(got).length,total=ids.reduce((n,s)=>n+tops[s].length,0);
  modal({icon:'🏆',title:'Set Champions',html:`<p style="font-size:13px">Pull and grade a <b>Gem Mint 10</b> of either of the two best cards in a set: <b>${rewardText(CHAMP_REWARD)}</b> each. Cards bought from the Market don't count. Only downloaded sets show here.</p><p class="muted" style="font-size:12px">${done} of ${total} earned</p><div class="goalscroll">${ids.map(s=>`<div class="champset"><b>${esc((tops[s][0]||{}).setName||s)}</b><div class="champrow">${tops[s].map(c=>`<div class="champ${got[c.id]?' won':''}">${imgTag(c)}<small>${got[c.id]?'🏆 Champion':esc(c.name)}</small></div>`).join('')}</div></div>`).join('')}</div>`,buttons:[{label:'Close',primary:true}]})}
