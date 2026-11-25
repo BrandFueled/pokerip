@@ -770,26 +770,27 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .skc.pop{animation:skpop .15s ease-out}@keyframes skpop{0%{transform:scale(.8) rotateY(90deg);opacity:.2}100%{transform:none;opacity:1}}
 .patnote{margin-top:6px;font-size:12px;color:#b8f5cf;opacity:.85}
 .slotm{background:linear-gradient(160deg,#2a1020,#141a2a);border:2px solid #ffd35a88;border-radius:18px;padding:12px}
-.reels{display:flex;gap:8px;justify-content:center}.reel{width:30%;aspect-ratio:1;background:#0b0e18;border-radius:12px;border:1px solid #ffffff22;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden}
-.reel img{width:86%;height:86%;object-fit:contain}.reel.spin img{filter:blur(2px);transform:translateY(2px)}.reel.land{animation:reelland .2s ease-out}@keyframes reelland{0%{transform:translateY(-18px)}100%{transform:none}}
+.slreels{display:flex;gap:8px;justify-content:center}.slreel{width:30%;aspect-ratio:1;background:#0b0e18;border-radius:12px;border:1px solid #ffffff22;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden}
+.slreel img{width:86%;height:86%;object-fit:contain}.slreel.spin img{filter:blur(2px);transform:translateY(2px)}.slreel.land{animation:reelland .2s ease-out}@keyframes reelland{0%{transform:translateY(-18px)}100%{transform:none}}
 .slotmsg{text-align:center;margin-top:10px;min-height:44px;font-weight:700}
 .paytab div{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid #ffffff10;font-size:12.5px}.paytab b{color:var(--gold);text-align:right}
 .cab{background:linear-gradient(180deg,#8a1020,#5a0a16 55%,#3a0610);border:3px solid #ffd35a;border-radius:20px;padding:10px 10px 12px;box-shadow:0 0 0 3px #00000055 inset,0 8px 24px #0008}
 .marq{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px}.marq b{font-size:16px;letter-spacing:.14em;color:#ffe9a0;text-shadow:0 0 10px #ffb000,0 0 2px #fff}
 .bulbs{flex:1;height:8px;background:radial-gradient(circle,#ffe9a0 0 3px,transparent 4px) 0 50%/14px 8px repeat-x;animation:bulbs 1s steps(2) infinite}.cab.run .bulbs{animation-duration:.25s}
 @keyframes bulbs{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
-.cabrow{display:flex;align-items:center;gap:8px}.win{flex:1;background:linear-gradient(180deg,#d9d9e6,#8f8fa3);border-radius:14px;padding:6px;box-shadow:0 0 0 2px #000a inset}
-.reels{display:flex;gap:6px}.reel{flex:1;aspect-ratio:1;background:linear-gradient(180deg,#e9e6f7,#fff 40%,#e9e6f7);border-radius:8px;overflow:hidden;position:relative;box-shadow:0 0 8px #0006 inset}
-.reel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0005,transparent 25%,transparent 75%,#0005);pointer-events:none}
-.strip{width:100%}.cell{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:40px}.cell img{width:88%;height:88%;object-fit:contain}
-.strip.spinning{animation:rscroll .26s linear infinite;filter:blur(1.5px)}@keyframes rscroll{to{transform:translateY(-50%)}}
-.strip.land{animation:rland .28s cubic-bezier(.2,1.5,.4,1)}@keyframes rland{0%{transform:translateY(-70%)}100%{transform:none}}
+.cabrow{display:flex;align-items:center;gap:8px}.slwin{flex:1;background:linear-gradient(180deg,#d9d9e6,#8f8fa3);border-radius:14px;padding:6px;box-shadow:0 0 0 2px #000a inset}
+.slreels{display:flex;gap:6px}.slreel{flex:1;aspect-ratio:1;background:linear-gradient(180deg,#e9e6f7,#fff 40%,#e9e6f7);border-radius:8px;overflow:hidden;position:relative;box-shadow:0 0 8px #0006 inset}
+.slreel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0005,transparent 25%,transparent 75%,#0005);pointer-events:none}
+.slstrip{width:100%}.slcell{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:40px}.slcell img{width:88%;height:88%;object-fit:contain}
+.slstrip.spinning{animation:rscroll .26s linear infinite;filter:blur(1.5px)}@keyframes rscroll{to{transform:translateY(-50%)}}
+.slstrip.land{animation:rland .28s cubic-bezier(.2,1.5,.4,1)}@keyframes rland{0%{transform:translateY(-70%)}100%{transform:none}}
 .lever{width:22px;height:90px;position:relative}.lever i{position:absolute;left:8px;top:6px;width:6px;height:70px;background:#c8c8d6;border-radius:3px;transform-origin:50% 100%;transition:transform .15s}
 .lever i::before{content:"";position:absolute;left:-7px;top:-12px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff7a7a,#b00020)}
 .cab.pulled .lever i{transform:scaleY(.45)}.cab .lever i{transition:transform .12s}
-.cab .win{min-width:0}.cab .reels{display:flex;gap:6px;width:100%}.cab .reel{width:auto;flex:1 1 0;min-width:0;font-size:inherit;display:block}.cab .reel img{width:88%;height:88%;object-fit:contain}.cab .cell{font-size:34px}
-.cab .reels{align-items:flex-start}.cab .reel{aspect-ratio:1/1;height:auto;position:relative}.cab .strip{position:absolute;left:0;right:0;top:0}
-.cab .reel{background:linear-gradient(180deg,#e4e0f4,#fff 45%,#e4e0f4);border:0;box-shadow:none;padding:0;display:block}.cab .reel::before{display:none}
+.cab .slwin{min-width:0}.cab .slreels{display:flex;gap:6px;width:100%}.cab .slreel{width:auto;flex:1 1 0;min-width:0;font-size:inherit;display:block}.cab .slreel img{width:88%;height:88%;object-fit:contain}.cab .slcell{font-size:34px}
+.cab .slreels{align-items:flex-start}.cab .slreel{aspect-ratio:1/1;height:auto;position:relative}.cab .slstrip{position:absolute;left:0;right:0;top:0}
+.cab .slreel{background:linear-gradient(180deg,#e4e0f4,#fff 45%,#e4e0f4);border:0;box-shadow:none;padding:0;display:block}.cab .slreel::before{display:none}
+.m-actions.tvgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.m-actions.tvgrid button{white-space:normal;min-width:0;padding:12px 8px}
 </style>
 </head>
 <body>
@@ -3403,7 +3404,7 @@ renderDaily=function(){_renderDaily0();const el=$('#daily');if(el)el.insertAdjac
 async function triviaGo(){if(triviaDone()){toast('You already did today\'s trivia. Come back tomorrow.');return}
  const plan=triviaPlan();game.triviaDay=today();game.triviaScore=0;save();let score=0,asked=0;
  for(let i=0;i<plan.length;i++){const p=plan[i],dots=plan.map((_,k)=>k<i?'●':k===i?'◉':'○').join(' ');
-  const v=await modal({icon:'🧠',title:`Question ${i+1} of 3`,html:`<p class="muted" style="letter-spacing:.2em;margin:0 0 6px">${dots}</p><p class="trq">${esc(p.q)}</p>`,buttons:p.o.map((o,k)=>({label:o.t,value:k}))});
+  const mp=modal({icon:'🧠',title:`Question ${i+1} of 3`,html:`<p class="muted" style="letter-spacing:.2em;margin:0 0 6px">${dots}</p><p class="trq">${esc(p.q)}</p>`,buttons:p.o.map((o,k)=>({label:o.t,value:k}))});const ma=document.querySelector('#modalBox .m-actions');if(ma)ma.classList.add('tvgrid');const v=await mp;
   if(v===null||v===undefined)break;asked++;const ok=p.o[v]&&p.o[v].ok;if(ok){score++;try{Sound.tone(880,.08)}catch(e){}}else buzz(30);
   await modal({icon:ok?'✅':'❌',title:ok?'Correct!':'Nope.',html:`<p>${ok?'Nice one.':'The answer was'} <b style="color:var(--gold)">${esc(p.right)}</b></p><p class="muted">${score} right so far</p>`,buttons:[{label:i<plan.length-1?'Next':'Results',primary:true}]})}
  game.triviaScore=score;tv('right',score);tv('played');if(score===0)tv('zero');
@@ -3465,7 +3466,7 @@ const slotImg=k=>{const m=SLOT.sym[k];return `<img src="anim/slot_${m.n.toLowerC
 const slotDoug=(k,px)=>dimg('doug_slots_'+k,px||120,k==='jackpot'?'🤑':k==='win'?'😏':k==='lose'?'🤷':'🎰');
 function slotsHTML(){const bet=slotBet(),wm=wealthMult(),st=game.slots||{};
  return `<div class="dougpic" id="slotDoug">${slotDoug('idle',110)}</div><p class="muted" style="font-size:13px;margin:0 0 8px">${esc(garyName())} used to work a casino. He still has the machine.</p>
- <div class="cab" id="cab"><div class="marq"><span class="bulbs"></span><b>DOUG'S SLOTS</b><span class="bulbs"></span></div><div class="cabrow"><div class="win"><div class="reels">${['M','B','C'].map((k,i)=>`<div class="reel" id="reel${i}"><div class="strip"><div class="cell">${slotImg(k)}</div></div></div>`).join('')}</div></div><div class="lever" id="lever"><i></i></div></div><div id="slotMsg" class="slotmsg">Pull the lever.</div></div>
+ <div class="cab" id="cab"><div class="marq"><span class="bulbs"></span><b>DOUG'S SLOTS</b><span class="bulbs"></span></div><div class="cabrow"><div class="slwin"><div class="slreels">${['M','B','C'].map((k,i)=>`<div class="slreel" id="slreel${i}"><div class="slstrip"><div class="slcell">${slotImg(k)}</div></div></div>`).join('')}</div></div><div class="lever" id="lever"><i></i></div></div><div id="slotMsg" class="slotmsg">Pull the lever.</div></div>
  <button class="primary" id="slotBtn" data-action="slot-pull" style="width:100%;margin:8px 0">🎰 Pull · ${money(bet)}</button>
  <details class="dg-more"><summary>Payouts</summary><div class="paytab">${SLOT.table.map(t=>`<div><span>${t[3]}</span><b>${money(t[2]*wm)}${t[0]==='jack'?' + a graded 10 Pikachu':''}</b></div>`).join('')}<div><span>Anything else</span><b>$0</b></div></div><p class="muted" style="font-size:11.5px">About half of pulls pay something. The house keeps an edge. Doug is a businessman.</p></details>
  <p class="muted" style="font-size:12px;text-align:center" id="slotStat">${st.pulls?`${st.pulls} pulls · won ${money(st.paid||0)} · spent ${money(st.spent||0)}`:'No pulls yet.'}</p>`}
@@ -3479,10 +3480,10 @@ async function slotPull(){if(slotBusy)return;const bet=slotBet();if(game.cash+1e
  if(k==='jack'){tv('slotjack');const pp=activePool().filter(c=>/^pikachu\b/i.test(c.name)&&c.value>=3),src=pp.length?pick(pp):pick(activePool());slab=gradeIt(inst(src),[[10,100]]);slab.uid=uid();slab.at=Date.now();slab.from="Doug's Slots";game.owned.push(slab);collect([slab]);checkProgress([slab])}
  if(k==='trio')tv('slottrio');
  save();render();
- const reels=[0,1,2].map(i=>$('#reel'+i)),msg=$('#slotMsg');if(msg)msg.textContent='...';{const sd0=$('#slotDoug');if(sd0)sd0.innerHTML=slotDoug('idle',110)}
+ const reels=[0,1,2].map(i=>$('#slreel'+i)),msg=$('#slotMsg');if(msg)msg.textContent='...';{const sd0=$('#slotDoug');if(sd0)sd0.innerHTML=slotDoug('idle',110)}
  const keys=['B','C','S','P','M'],cab=$('#cab');if(cab){cab.classList.add('run','pulled');setTimeout(()=>cab.classList.remove('pulled'),450)}
- const timers=[];reels.forEach(el=>{if(!el)return;const L=slotShuf(keys.concat(['P','B','C'])).slice(0,6).map(k=>`<div class="cell">${slotImg(k)}</div>`).join('');el.innerHTML=`<div class="strip spinning">${L}${L}</div>`});
- const stop=async(i,ms)=>{await new Promise(r=>setTimeout(r,ms));clearInterval(timers[i]);const el=reels[i];if(el){el.innerHTML=`<div class="strip land"><div class="cell">${slotImg(tri[i])}</div></div>`}try{Sound.tone(300+i*120,.07)}catch(e){}buzz(12)};
+ const timers=[];reels.forEach(el=>{if(!el)return;const L=slotShuf(keys.concat(['P','B','C'])).slice(0,6).map(k=>`<div class="slcell">${slotImg(k)}</div>`).join('');el.innerHTML=`<div class="slstrip spinning">${L}${L}</div>`});
+ const stop=async(i,ms)=>{await new Promise(r=>setTimeout(r,ms));clearInterval(timers[i]);const el=reels[i];if(el){el.innerHTML=`<div class="slstrip land"><div class="slcell">${slotImg(tri[i])}</div></div>`}try{Sound.tone(300+i*120,.07)}catch(e){}buzz(12)};
  const tease=tri[0]==='P'&&tri[1]==='P';
  await stop(0,650);await stop(1,550);await stop(2,tease?1300:550);
  const sd=$('#slotDoug');if(sd)sd.innerHTML=slotDoug(k==='jack'?'jackpot':prize>0?'win':'lose',110);
