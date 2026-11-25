@@ -716,6 +716,45 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 .dougpic .dimg{border-radius:14px}.bres .dimg{margin-bottom:4px}
 .champset{padding:8px 0;border-bottom:1px solid #ffffff10;text-align:left}.champrow{display:flex;gap:10px;margin-top:6px}.champ{width:84px;display:flex;flex-direction:column;gap:3px;align-items:center;opacity:.6}.champ img{width:84px;border-radius:5px;filter:grayscale(.6)}.champ small{font-size:10px;color:var(--muted);text-align:center;line-height:1.2}.champ.won{opacity:1}.champ.won img{filter:none;box-shadow:0 0 12px #ffd34d88}.champ.won small{color:var(--gold);font-weight:800}
 .tp-new{grid-template-columns:1fr 1fr!important}
+/* chunk 10: The Audit scene, Linda, Pawn */
+#saw{position:fixed;inset:0;z-index:100000;background:#000;color:#e9e4d4;display:flex;justify-content:center;animation:swfade .7s ease both;transition:opacity .8s}
+#saw.out{opacity:0}
+#saw .sw-stage{width:100%;max-width:580px;height:100%;display:flex;flex-direction:column;align-items:center;gap:12px;padding:10px 16px calc(18px + env(safe-area-inset-bottom));box-sizing:border-box;overflow-y:auto}
+#saw .sw-img{width:100%;max-height:50vh;object-fit:contain;border-radius:10px;flex:0 0 auto;animation:swflick 5s infinite}
+#saw .sw-miss{font-size:110px;padding:34px 0;line-height:1}
+#saw .sw-line{margin:0;width:100%;font-size:19px;line-height:1.35;text-align:center;letter-spacing:.2px;color:#f0e8d6}
+#saw .sw-btn{width:100%;padding:17px;border-radius:12px;border:1px solid #7a1212;background:#1c0606;color:#f6dcdc;font-size:18px;font-weight:700;margin-top:6px}
+#saw .sw-btn:active{background:#5a0c0c}
+#saw .sw-btn:disabled{opacity:.55}
+#saw .sw-qn{font-size:12px;letter-spacing:3px;color:#a33;font-weight:700}
+#saw .sw-q{margin:0;font-size:21px;line-height:1.3;text-align:center;font-weight:700;color:#fff}
+#saw .sw-bar{width:100%;height:10px;background:#220808;border-radius:6px;overflow:hidden}
+#saw .sw-bar i{display:block;height:100%;width:100%;background:#d11;box-shadow:0 0 10px #d11}
+#saw .sw-bar.big{height:22px;border:1px solid #6a1010}
+#saw .sw-bar.big i{width:0;transition:width .05s linear}
+#saw .sw-sec{font-size:40px;font-weight:800;color:#e9e4d4;line-height:1;font-variant-numeric:tabular-nums}
+#saw .sw-sec.hot{color:#ff2a2a;animation:swpulse .5s infinite}
+#saw .sw-ans{width:100%;display:flex;flex-direction:column;gap:8px}
+#saw .sw-react{margin:0;min-height:26px;font-size:16px;text-align:center;color:#d9b36a}
+#saw .red{animation:swshake .35s infinite}
+#saw .sw-wrong{font-size:56px;font-weight:900;color:#ff1c1c;letter-spacing:4px;text-shadow:0 0 18px #f00}
+#saw .sw-dl{font-size:16px;letter-spacing:3px;color:#ff6b6b;font-weight:700}
+#saw .sw-dl.freeze{animation:swflick .4s infinite}
+#saw .sw-pct{font-size:34px;font-weight:800;color:#ff2a2a;font-variant-numeric:tabular-nums}
+#saw .sw-file{min-height:22px;font-size:13px;color:#a77;font-family:ui-monospace,Menlo,monospace}
+#saw .sw-card{width:150px;flex:0 0 auto;filter:drop-shadow(0 0 14px #000)}
+#saw .sw-card img{width:100%;border-radius:8px}
+#saw-flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:100001}
+#saw-flash.go{animation:swbolt .6s ease-out}
+@keyframes swbolt{0%{opacity:0}5%{opacity:.9}14%{opacity:.08}22%{opacity:.7}45%{opacity:0}100%{opacity:0}}
+@keyframes swfade{from{opacity:0}to{opacity:1}}
+@keyframes swflick{0%,92%,100%{opacity:1}93%{opacity:.55}95%{opacity:1}97%{opacity:.7}}
+@keyframes swpulse{50%{transform:scale(1.18)}}
+@keyframes swshake{0%,100%{transform:translate(0)}25%{transform:translate(-2px,1px)}50%{transform:translate(2px,-1px)}75%{transform:translate(-1px,-2px)}}
+.lrow{display:flex;flex-direction:column;align-items:flex-start;width:100%;text-align:left;gap:2px;padding:10px 12px;margin:0 0 8px;border-radius:10px;border:1px solid var(--line,#333);background:var(--card,#1b1b22);color:var(--text,#fff)}
+.lrow span{font-size:12px;opacity:.75}
+.pwn{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;margin:0 0 8px;border-radius:10px;border:1px solid var(--line,#333);background:var(--card,#1b1b22)}
+.pwn small{display:block;font-size:12px;opacity:.75}
 </style>
 </head>
 <body>
@@ -1225,6 +1264,9 @@ const LIFE_GOOD=[
  {id:'show',icon:'🤝',title:'Good trade at the card show',body:c=>`A guy at the card show overpaid for ${c.name}. It's now worth 1.5x in your binder. Don't ask questions.`}];
 const LIFE_ODDS=nw=>nw>=1e6?.06:nw>=25e4?.05:nw>=5e4?.04:.03; // per rip, max one event a day
 const KYLE_CARD_ODDS=1e-6;
+// One Kyle Card per player, ever (survives prestige). Old holders are covered by the seen counter.
+function kyleLocked(){return !!(game&&(game.kyleOnce||(game.seen&&game.seen['kyle-1'])||(game.owned||[]).some(c=>c.id==='kyle-1')||(game.locker||[]).some(l=>l.card&&l.card.id==='kyle-1')))}
+function kyleRoll(){return !kyleLocked()&&Math.random()<KYLE_CARD_ODDS}
 const KYLE_CARD=()=>({id:'kyle-1',name:'The Kyle Card',setId:'kyle',setName:'???',num:'1/1',rarity:'Mythical',value:1000000,est:false,img:'single.webp',slab:false});
 
 /* ---------- chunk 2: Trophy Case II, Leviathan, Evolution Packs, more chaos ---------- */
@@ -1233,7 +1275,7 @@ TIERS.push({id:'evo',name:'Evolution Pack',tag:'EVOLUTION',price:500,color:'#57d
 TIERS.slice(-2).forEach(t=>TIER_IDS.add(t.id));
 const EVO_LINES=[['Bulbasaur','Ivysaur','Venusaur'],['Charmander','Charmeleon','Charizard'],['Squirtle','Wartortle','Blastoise'],['Pichu','Pikachu','Raichu'],['Gastly','Haunter','Gengar'],['Dratini','Dragonair','Dragonite'],['Abra','Kadabra','Alakazam'],['Machop','Machoke','Machamp'],['Geodude','Graveler','Golem'],['Caterpie','Metapod','Butterfree'],['Weedle','Kakuna','Beedrill'],['Pidgey','Pidgeotto','Pidgeot'],['Oddish','Gloom','Vileplume'],['Poliwag','Poliwhirl','Poliwrath'],['Bellsprout','Weepinbell','Victreebel'],['Nidoran♀','Nidorina','Nidoqueen'],['Nidoran♂','Nidorino','Nidoking'],['Chikorita','Bayleef','Meganium'],['Cyndaquil','Quilava','Typhlosion'],['Totodile','Croconaw','Feraligatr'],['Mareep','Flaaffy','Ampharos'],['Larvitar','Pupitar','Tyranitar'],['Treecko','Grovyle','Sceptile'],['Torchic','Combusken','Blaziken'],['Mudkip','Marshtomp','Swampert'],['Ralts','Kirlia','Gardevoir'],['Beldum','Metang','Metagross'],['Bagon','Shelgon','Salamence'],['Gible','Gabite','Garchomp'],['Turtwig','Grotle','Torterra'],['Chimchar','Monferno','Infernape'],['Piplup','Prinplup','Empoleon'],['Sprigatito','Floragato','Meowscarada'],['Fuecoco','Crocalor','Skeledirge'],['Quaxly','Quaxwell','Quaquaval'],['Rowlet','Dartrix','Decidueye'],['Litten','Torracat','Incineroar'],['Popplio','Brionne','Primarina'],['Froakie','Frogadier','Greninja'],['Dreepy','Drakloak','Dragapult'],['Eevee','Umbreon'],['Eevee','Espeon'],['Eevee','Sylveon'],['Eevee','Vaporeon'],['Eevee','Jolteon'],['Eevee','Flareon'],['Riolu','Lucario'],['Magikarp','Gyarados']];
 // Trophy Case II: harder, collection-wide goals. test(game) runs on save.
-const own10=(g,id,extra=()=>true)=>g.owned.some(c=>c.id===id&&c.slab&&c.grade===10&&extra(c));
+const own10=(g,id,extra=()=>true)=>g.owned.some(c=>c.id===id&&c.slab&&c.grade===10&&!c.linda&&extra(c));
 const TROPHIES2=[
  {id:'t2-bl-zard',icon:'🖤',name:'Black Label Charizard',desc:'A Black Label Base Set Charizard.',img:`${IMG}/base1/4.png`,test:g=>own10(g,'base1-4',c=>c.black),reward:{god:5}},
  {id:'t2-bl-lugia',icon:'🖤',name:'Black Label 1st Ed Lugia',desc:'A Black Label 1st Edition Neo Genesis Lugia.',img:`${IMG}/neo1/9.png`,test:g=>own10(g,'neo1-9',c=>c.black&&c.first),reward:{god:5}},
@@ -1244,7 +1286,8 @@ const TROPHIES2=[
  {id:'t2-black5',icon:'🎱',name:'Black Label Collector',desc:'Own 5 Black Label slabs at once.',test:g=>g.owned.filter(c=>c.black).length>=5,reward:{asc:3}},
  {id:'t2-vault10',icon:'🏛️',name:'The Museum',desc:'Fill 30 Vault slots with nothing but graded 10s.',test:g=>{const v=g.owned.filter(c=>c.vault);return v.length>=30&&v.every(c=>c.slab&&c.grade===10)},reward:{asc:3}},
  {id:'t2-10m',icon:'🤑',name:'Decamillionaire',desc:'Reach a $10,000,000 net worth.',test:g=>networthOf(g)>=1e7,reward:{asc:5}},
- {id:'t2-kyle',icon:'🃏',name:'The Kyle Card',desc:'Pull the Kyle Card. Kyle denies it exists.',img:'single.webp',test:g=>g.owned.some(c=>c.id==='kyle-1')||(g.seen&&g.seen['kyle-1']),reward:{asc:10}}];
+ {id:'t2-kyle',icon:'🃏',name:'The Kyle Card',desc:'Pull the Kyle Card. Kyle denies it exists.',img:'single.webp',test:g=>g.owned.some(c=>c.id==='kyle-1')||(g.seen&&g.seen['kyle-1']),reward:{asc:10}},
+ {id:'t2-saw',icon:'🪤',name:'Survived the Game',desc:"Played Doug's game. Lost a Kyle Card. Still here.",hint:'Something happens when Doug gets bored.',test:g=>!!(g.audits&&g.audits['doug-game-2026-11']),reward:{}}];
 // More chaos. Same rules as the other life events: Vault cards and slabs are safe from damage.
 LIFE_BAD.push(
  {id:'lost',icon:'🛋️',title:'A card went missing',body:c=>`You can't find ${c.name} anywhere. It's probably under the couch. It'll turn up. Probably.`,need:'lost'},
@@ -1509,7 +1552,7 @@ function save(){if(window.__booted){for(const f of[cstatsUpdate,prestigeScan,eev
 const boxDef=id=>SEALED.find(b=>b.id===id);
 const boxValue=b=>{const d=boxDef(b.box);if(!d)return 0;const days=(Date.now()-b.at)/864e5;return r2(Math.min(b.cost*BOX_CAP,b.cost*Math.pow(1+d.rate,days)))};
 const vaultMax=()=>game.vaultMax||VAULT_MAX;
-const networthOf=d=>(d.cash||0)+sum((d.owned||[]).map(c=>c.value))+sum((d.sealed||[]).map(boxValue))+(d.borrowed&&d.borrowed.card?d.borrowed.card.value:0)+(d.lost&&d.lost.card?d.lost.card.value:0);
+const networthOf=d=>(d.cash||0)+sum((d.owned||[]).map(c=>c.value))+sum((d.sealed||[]).map(boxValue))+(d.borrowed&&d.borrowed.card?d.borrowed.card.value:0)+sum((d.pawn||[]).map(p=>p.card.value-p.owed))+(d.lost&&d.lost.card?d.lost.card.value:0);
 const collectionValue=()=>sum(game.owned.map(c=>c.value));
 const sellableValue=()=>sum(game.owned.filter(c=>!c.vault).map(c=>c.value));
 const vaultCards=()=>game.owned.filter(c=>c.vault);
@@ -1524,7 +1567,7 @@ function untilMidnight(){const n=new Date(),m=new Date(n);m.setHours(24,0,0,0);c
 const histEntry=(tier,cost,cards)=>({id:uid(),tier,cost,value:r2(sum(cards.map(c=>c.value))),at:Date.now(),cards:cards.map(slim)});
 const ownSet=()=>new Set(game.owned.map(c=>c.id));
 const inDex=id=>!!game.dex[id];
-function collect(cards){for(const c of cards){game.dex[c.id]=1;game.seen[c.id]=(game.seen[c.id]||0)+1;if(game.grail&&c.id===game.grail.id&&(!game.grail.first||c.first))grailNatural(c);if(!game.best||c.value>game.best.value)game.best={value:c.value,name:fullName(c)}}}
+function collect(cards){for(const c of cards){if(c.id==='kyle-1')game.kyleOnce=1;game.dex[c.id]=1;game.seen[c.id]=(game.seen[c.id]||0)+1;if(game.grail&&c.id===game.grail.id&&(!game.grail.first||c.first))grailNatural(c);if(!game.best||c.value>game.best.value)game.best={value:c.value,name:fullName(c)}}}
 function sellCard(u){const i=game.owned.findIndex(c=>c.uid===u);if(i<0||game.owned[i].vault||game.owned[i].grading)return null;const c=game.owned.splice(i,1)[0];game.cash=r2(game.cash+c.value);game.sold=r2((game.sold||0)+c.value);const ticket=earnsTicket(c);if(ticket)game.tickets++;return{card:c,value:c.value,ticket}}
 const NO_TICKET=new Set(['Slab Grab','Daily Spin','God Tier','Market','Trophy Dealer']);
 const earnsTicket=c=>c.value>=TICKET_AT&&!NO_TICKET.has(c.from)&&!/^(Slab Pack|Whale|Mega Whale|Leviathan|Evolution|Ascended)/.test(c.from||'');
@@ -1559,7 +1602,7 @@ function earnTrophy(t){game.trophies[t.id]=Date.now();
  if(trophyCount()===TROPHIES.length&&!game.beat){game.beat=true;note({icon:'👑',fx:5,title:'You beat POKÉ RIP!',html:'All 10 trophies. Kyle is impressed and a little worried. You can prestige from the Stats tab: a fresh run with a ⭐ and a bigger bankroll.',buttons:[{label:'Legend',primary:true}]})}}
 /* ---------- Trophy Case II ---------- */
 function trophy2Check(){if(!game.trophies2)game.trophies2={};for(const t of TROPHIES2){if(game.trophies2[t.id])continue;let ok=false;try{ok=t.test(game)}catch(e){}if(!ok)continue;game.trophies2[t.id]=Date.now();grant(t.reward);
- note({icon:t.icon,fx:5,title:'Trophy Case II!',html:`<b style="color:var(--text)">${esc(t.name)}</b><br>${esc(t.desc)}<br>Reward: <b style="color:var(--gold)">${rewardText(t.reward)}</b>`,buttons:[{label:'Legendary',primary:true}]})}}
+ note({icon:t.icon,fx:5,title:'Trophy Case II!',html:`<b style="color:var(--text)">${esc(t.name)}</b><br>${esc(t.desc)}${rewardText(t.reward)?`<br>Reward: <b style="color:var(--gold)">${rewardText(t.reward)}</b>`:''}`,buttons:[{label:'Legendary',primary:true}]})}}
 
 /* ---------- milestones (badges) ---------- */
 function milestoneCheck(){for(const m of MILESTONES){if(game.miles[m.id]||!m.test(game))continue;game.miles[m.id]=Date.now();grant(m.reward);
@@ -1704,11 +1747,11 @@ function blackify(c){c.slab=true;c.grade=10;c.black=true;if(!c.raw)c.raw=c.value
 function slabOf(c,g,raw,first){const x=inst(c);x.slab=true;x.grade=g;x.raw=r2(raw);x.value=r2(raw*GRADE_MULT[eraOf(c)][g]);if(first){x.first=true;x.est=c.fest??c.est}return x}
 function generate(t,pool){const used=new Set(),out=[],take=c=>{used.add(c.name);const x=inst(c);out.push(x);return x};
  if(t.kind==='eevee')return generateEevee(t,pool);
- if(t.kind==='mystery'){out.push(Math.random()<KYLE_CARD_ODDS?KYLE_CARD():mysteryPull());return out}
+ if(t.kind==='mystery'){out.push(kyleRoll()?KYLE_CARD():mysteryPull());return out}
  if(t.kind==='whale'){const gp=whalePool();whaleMode=true;try{for(let i=0;i<t.n;i++){const x={...bandPick(gp,t.bands,used)};used.add(x.name);if(t.black&&Math.random()<t.black)blackify(x);out.push(x)}}finally{whaleMode=false}if(!simMode)noteWhale(out);return out}
  if(t.kind==='evo'){const L=pick(evoLines());for(const st of L.stages)out.push(slabOf(pick(st),10,0,false));out.forEach((x,i)=>{const src=L.stages[i].find(c=>c.id===x.id)||x;x.raw=src.value;x.value=r2(src.value*GRADE_MULT[eraOf(x)][10])});return out}
  if(t.id==='booster'&&Math.random()<GOD_ODDS){for(let i=0;i<5;i++)take(bandPick(pool,GOD_BANDS,used));out.god=true;return out}
- if(t.kind==='pack'){const cap=t.first?8:t.vintage?3:1.5;for(let i=0;i<t.bulk;i++)take(Math.random()<KYLE_CARD_ODDS?KYLE_CARD():pickBulk(pool,used,cap));for(const s of t.slots){const x=take(bandPick(pool,SLOTS[s],used));if(t.slabRare&&Math.random()<t.slabRare)gradeIt(x,t.vintage?VINT_GRADES:PACK_GRADES)}}
+ if(t.kind==='pack'){const cap=t.first?8:t.vintage?3:1.5;for(let i=0;i<t.bulk;i++)take(kyleRoll()?KYLE_CARD():pickBulk(pool,used,cap));for(const s of t.slots){const x=take(bandPick(pool,SLOTS[s],used));if(t.slabRare&&Math.random()<t.slabRare)gradeIt(x,t.vintage?VINT_GRADES:PACK_GRADES)}}
  else{const x=take(bandPick(pool,t.id==='slab'&&pullGid?setSlabBands(pullGid,pool):t.bands,used));if(Math.random()<t.slab)gradeIt(x,PACK_GRADES)}
  return out}
 function mysteryPull(){const m=MYSTERY[wIndex(MYSTERY.map(x=>x.w))],holo=vintagePool().filter(x=>/rare/i.test(x.rarity)),none=new Set();let c;
@@ -2205,7 +2248,7 @@ async function sellDupes(){const keepIds=new Set(game.owned.filter(c=>c.slab||c.
  const dupes=game.owned.filter(c=>!c.slab&&!safeCard(c)&&!c.grading&&(keepIds.has(c.id)||best.get(c.id)!==c));if(!dupes.length){toast('No duplicates to sell.');return}const tot=sum(dupes.map(c=>c.value)),tix=dupes.filter(earnsTicket).length;
  const ok=await modal({icon:'🧹',title:'Sell your duplicates?',html:`Sell ${dupes.length} extra cop${dupes.length>1?'ies':'y'} for ${money(tot)}${tix?` (+${tix} 🎟)`:''}. You keep one of every card. Slabs and vault cards are never sold.`,buttons:[{label:'Cancel',value:false},{label:'Sell dupes',primary:true,value:true}]});if(!ok)return;
  let t=0;dupes.forEach(c=>{const r=sellCard(c.uid);if(r&&r.ticket)t++});save();toast(`Sold ${dupes.length} duplicates for ${money(tot)}${t?` · 🎟 +${t}`:''}`)}
-function newRun(prestige){const keep={owner:game.owner,prestige},bank=START*(1+prestige);game=fresh();Object.assign(game,keep);game.cash=game.given=bank;$('#reelTrack').innerHTML='';save()}
+function newRun(prestige){const keep={owner:game.owner,prestige,kyleOnce:kyleLocked()?1:0},bank=START*(1+prestige);game=fresh();Object.assign(game,keep);game.cash=game.given=bank;$('#reelTrack').innerHTML='';save()}
 const BAILOUT_UNDER=25, BAILOUT_DAILY=3;
 const BAIL_LINES=[['🙄','Fine, you socialist coward…',`Here's another ${moneyS(START)}. Enjoy!`],['😮‍💨','Again? Seriously?',`Another ${moneyS(START)}. Kyle is starting to notice.`],['🚨','Last one today.',`${moneyS(START)} more. Kyle is drafting an intervention.`]];
 async function bailout(){if(rip||spinning)return;const d=today();if(game.bailDay!==d){game.bailDay=d;game.bailToday=0}
@@ -2640,7 +2683,7 @@ async function sendTrade({kind,to,give,want=null,tax_from=0,tax_to=0,gift_tix=0,
   toast(kind==='mystery'?`🎲 Face down and sent. ${to.username} has no idea what's coming.`:kind==='gift'?`🎁 Gift sent to ${to.username}. Emily says that's sweet. Johnny says that's suspicious.`:`🔁 Offer sent to ${to.username}.`,3500);await Trade.sync(true)}
  catch(e){toast(`Couldn't send it (${e.message}). Did the Supabase SQL get run?`,5000)}}
 const tradeById=id=>Trade.list.find(t=>String(t.id)===String(id));
-async function acceptTrade(id){const t=tradeById(id);if(!t||t.status!=='open')return;
+async function acceptTrade0(id){const t=tradeById(id);if(!t||t.status!=='open')return;
  if(t.kind==='gift'){await Trade.patch(t.id,{status:'done'});const x={...t.give,uid:uid(),at:Date.now(),from:`🎁 Gift from ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);save();
   pawBurst&&pawBurst(24,true);modal({icon:'🎁',title:`A gift from ${esc(t.from_name)}!`,html:`<div class="m-card">${x.slab?slabHTML(x,true):imgTag(x,true,true)}</div><b style="color:var(--text)">${esc(x.name)}</b> · ${money(x.value)}${t.msg?`<p class="tmsg">"${esc(t.msg)}"</p>`:''}<p class="muted">${x.value>=500?'That is an absurdly nice gift. Johnny is jealous.':x.value<1?'They spent tickets to send you bulk. That is commitment to the bit.':'Emily says send a thank-you note. Kyle says no.'}</p>`,buttons:[{label:'💗 Thanks',primary:true}]});await Trade.sync(true);return}
  const mine=game.owned.find(c=>c.id===t.want.id&&c.uid===t.want.uid)||game.owned.find(c=>c.id===t.want.id&&!!c.slab===!!t.want.slab&&(c.grade||0)===(t.want.grade||0));
@@ -2650,7 +2693,7 @@ async function acceptTrade(id){const t=tradeById(id);if(!t||t.status!=='open')re
  const x={...t.give,uid:uid(),at:Date.now(),from:`Traded from ${t.from_name}`};game.owned.push(x);collect([x]);checkProgress([x]);ts().trades=(ts().trades||0)+1;save();
  const v=tradeVerdict(x.value,mine.value);modal({icon:VERDICT_ICON[v],title:'Trade done',html:`<div class="tcards big"><div class="tside"><small>You gave</small>${tcardHTML(mine)}</div><span class="tx">→</span><div class="tside"><small>You got</small>${tcardHTML(x)}</div></div><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p>`,buttons:[{label:'Nice',primary:true}]});await Trade.sync(true)}
 async function declineTrade(id){const t=tradeById(id);if(!t||t.status!=='open')return;await Trade.patch(t.id,{status:'declined'});toast(t.kind==='gift'?'Gift declined. Cold.':'Declined. Kyle respects the hustle.');Trade.sync(true)}
-async function cancelTrade(id){const t=tradeById(id);if(!t||!(t.status==='open'||(t.kind==='offer'&&t.status==='offered'))||t.from_user!==Cloud.user)return;await Trade.patch(t.id,{status:'cancelled',from_done:true});Trade.refund(t);toast(`Cancelled. ${t.give.name} is back.`);Trade.sync(true)}
+async function cancelTrade0(id){const t=tradeById(id);if(!t||!(t.status==='open'||(t.kind==='offer'&&t.status==='offered'))||t.from_user!==Cloud.user)return;await Trade.patch(t.id,{status:'cancelled',from_done:true});Trade.refund(t);toast(`Cancelled. ${t.give.name} is back.`);Trade.sync(true)}
 async function mysteryRespond(id){const t=tradeById(id);if(!t||t.status!=='open')return;
  const pool=game.owned.filter(c=>tradeable(c)&&inTier(c,t.tier));if(!pool.length){toast(`You don't have any cards in the ${SWAP_TIERS[t.tier][1]} tier. You can hit Nope.`,4000);return}
  const c=await pickCard(`${esc(t.from_name)} sent a Mystery Swap`,pool,`<div class="frange">${tierLabel(t.tier)}</div><p class="muted" style="font-size:12px">Their card is face down. Pick one of yours to put in. Both flip at once. No take-backs. ${t.msg?`<br>They said: "${esc(t.msg)}"`:''}</p>`);if(!c)return;
@@ -2726,7 +2769,7 @@ const GARY_BACK={yes:["Doug winks at you. You did not see anything.","Doug says 
 function graderWeights(c){const w=charmGradeWeights(c),lv=garyLevel();if(c.goodwill){const tot=sum(w),m=tot*c.goodwill/100,low=w[0]+w[1]+w[2];for(let i=0;i<3;i++)w[i]-=m*w[i]/low;w[3]+=m}const shift=(p)=>{const m=(w[0]+w[1])*p;w[0]*=1-p;w[1]*=1-p;w[2]+=m*.65;w[3]+=m*.35};
  if(lv)shift(lv*.03);if(c.bribe==='yes')shift(.4);if(c.steve)shift(.1);return moodShift(w,c.mood||'normal')}
 function garyModal(){const g=gary(),lv=garyLevel(),next=GARY_LV[lv+1];
- modal({icon:'🥸',title:'Doug the Grader',html:`<div class="dougpic">${moodImg(190)}</div><p class="garyline"><b>Today: ${DOUG_MOODS[dougMood()].name}.</b> ${esc(DOUG_MOODS[dougMood()].line)} ${DOUG_MOODS[dougMood()].fx}</p><div class="doug-btns"><button class="smallbtn" data-action="doug-files">📁 Doug's Files (${filesUnlocked()}/8)</button><button class="smallbtn" data-action="doug-sketchy">🧥 Sketchy Pack · ${moneyS(sketchyPrice())}</button>${freeSketchyReady()?'<button class="smallbtn" data-action="doug-sketchy-free" style="color:var(--gold)">🎁 Free daily Sketchy Pack</button>':''}</div><p>Doug runs POKÉ RIP GRADED out of a strip mall. Doug is a completely normal human man with a mustache. Doug is definitely not a Pikachu in a trench coat. Do not ask Doug about the tail.</p><p>The more you send him, the more he likes you.</p>
+ modal({icon:'🥸',title:'Doug the Grader',html:`<div class="dougpic">${moodImg(190)}</div><p class="garyline"><b>Today: ${DOUG_MOODS[dougMood()].name}.</b> ${esc(DOUG_MOODS[dougMood()].line)} ${DOUG_MOODS[dougMood()].fx}</p><div class="doug-btns"><button class="smallbtn" data-action="doug-files">📁 Doug's Files (${filesUnlocked()}/8)</button><button class="smallbtn" data-action="doug-sketchy">🧥 Sketchy Pack · ${moneyS(sketchyPrice())}</button><button class="smallbtn" data-action="doug-pawn">🧾 Pawn Counter${(game.pawn||[]).length?` (${game.pawn.length})`:''}</button><button class="smallbtn" data-action="doug-linda">🚬 Ask Linda for a 2nd opinion</button>${freeSketchyReady()?'<button class="smallbtn" data-action="doug-sketchy-free" style="color:var(--gold)">🎁 Free daily Sketchy Pack</button>':''}</div><p>Doug runs POKÉ RIP GRADED out of a strip mall. Doug is a completely normal human man with a mustache. Doug is definitely not a Pikachu in a trench coat. Do not ask Doug about the tail.</p><p>The more you send him, the more he likes you.</p>
  <div class="garybox"><b>${esc(garyName())}</b> · ${g.subs} cards graded${next?`<span class="prog" style="margin:6px 0"><i style="width:${Math.min(100,g.subs/next[0]*100)}%"></i></span><small>${next[0]-g.subs} more to reach ${esc(next[1])}</small>`:'<small>Max loyalty. Doug would take a bullet for you. Probably.</small>'}</div>
  <p style="font-size:13px">Perks right now: <b>${Math.round(garyDiscount()*100)}% off</b> grading fees and <b>+${lv*3}% luck</b> toward a 9 or 10.</p>
  <p style="font-size:13px">💵 <b>Bribes:</b> ${g.bribes} sent · ${g.pocketed} pocketed · ${g.caught} reported. Doug only takes bribes every 5th card (he has a reputation to protect). Most of the time he takes it and the card looks great. Sometimes he just keeps your money. Very rarely he reports you and it comes back a 2.</p>
@@ -3100,7 +3143,7 @@ async function makeOffer(id){const t=tradeById(id);if(!t||t.status!=='open'||t.k
  const c=await pickCard(`Your offer for ${esc(t.give.name)}`,game.owned.filter(tradeable),fairRangeHTML(t.give.value,cardDesc(t.give)),t.give.value);if(!c)return;
  const fresh=(await Cloud.req(`/rest/v1/trades?id=eq.${t.id}&select=status`)||[])[0];if(!fresh||fresh.status!=='open'){toast('That offer closed.');Trade.sync(true);return}
  await Trade.patch(t.id,{status:'offered',back:cleanCard(c)});game.owned.splice(game.owned.indexOf(c),1);(game.offerHeld||(game.offerHeld={}))[t.id]={...c};save();toast(`Offer sent. Your ${c.name} is held until ${t.from_name} decides.`,3500);Trade.sync(true)}
-async function offerDecide(id,yes){const t=tradeById(id);if(!t||t.status!=='offered'||t.from_user!==Cloud.user)return;
+async function offerDecide0(id,yes){const t=tradeById(id);if(!t||t.status!=='offered'||t.from_user!==Cloud.user)return;
  if(yes){await Trade.patch(t.id,{status:'done',from_done:true});const x={...t.back,uid:uid(),at:Date.now(),from:`Traded from ${t.to_name}`};delete x.vault;game.owned.push(x);collect([x]);checkProgress([x]);ts().trades=(ts().trades||0)+1;save();
   const v=tradeVerdict(x.value,t.give.value);modal({icon:VERDICT_ICON[v],title:'Deal!',html:`<div class="tcards big"><div class="tside"><small>You gave</small>${tcardHTML(t.give)}</div><span class="tx">→</span><div class="tside"><small>You got</small>${tcardHTML(x)}</div></div><p class="roast ${v==='loss'||v==='fleeced'?'bad':''}">${esc(pick(TRADE_LINES[v]))}</p>`,buttons:[{label:'Nice',primary:true}]})}
  else{await Trade.patch(t.id,{status:'rejected'});toast('Offer turned down. Your card is still up.',3000)}Trade.sync(true)}
@@ -3115,7 +3158,7 @@ const CHAMP_REWARD={cash:25000,tickets:50};
 function setTops(){return cached('tops',()=>{const out={};for(const[sid,cards]of Object.entries(catalog.data)){if(sid==='eevee'||!cards||cards.length<20)continue;out[sid]=cards.slice().sort((a,b)=>b.value-a.value).slice(0,2).filter(c=>c.value>=5)}return out})}
 var champAt=0;
 // Only 10s made in the last 30 min count, so old slabs (or newly downloaded sets) never pay out in bulk.
-const champFresh=(c,t)=>t-(c.graded||c.at||0)<18e5;
+const champFresh=(c,t)=>!c.linda&&t-(c.graded||c.at||0)<18e5;
 // One-time fix: take back Set Champion rewards paid for 10s someone already owned when the feature launched.
 function champFix(){if(game.champFix1)return;game.champFix1=1;const got=game.champs||{};let n=0;
  for(const id of Object.keys(got)){const cs=game.owned.filter(c=>c.id===id&&c.slab&&c.grade===10&&c.from!=='Market');if(!cs.length||cs.some(c=>champFresh(c,got[id])))continue;delete got[id];n++}
@@ -3130,8 +3173,156 @@ function champsModal(){const tops=setTops(),got=game.champs||{},ids=Object.keys(
 const EXTRA_ACTIONS6={'fund-open':()=>fundModal(),'doug-files':()=>filesModal(),'doug-sketchy':()=>sketchyPack(false),'doug-sketchy-free':()=>sketchyPack(true),
  'goal-champs':()=>champsModal(),'tp-offer-new':()=>newOffer(),'tp-offer-make':el=>makeOffer(el.dataset.id),'tp-offer-yes':el=>offerDecide(el.dataset.id,true),'tp-offer-no':el=>offerDecide(el.dataset.id,false)};
 
+/* ================= Chunk 10: The Audit (Doug's game), Linda's 2nd opinion, Doug's Pawn Counter ================= */
+
+/* ---------- Trade lock: a double tap (or slow network) can never pay out twice ---------- */
+var tradeLocks={};
+function withTradeLock(fn){return async function(id,...rest){const k=String(id);if(tradeLocks[k])return;tradeLocks[k]=1;try{return await fn(id,...rest)}finally{setTimeout(()=>{delete tradeLocks[k]},5000)}}}
+async function acceptTrade(id){return withTradeLock(acceptTrade0)(id)}
+async function offerDecide(id,yes){return withTradeLock(offerDecide0)(id,yes)}
+async function cancelTrade(id){return withTradeLock(cancelTrade0)(id)}
+
+/* ---------- The Audit: Doug's game. Fires once for anyone holding 2+ Kyle Cards ---------- */
+var SAW={id:'doug-game-2026-11',secs:10};
+var SAW_Q=[
+ {q:'Do you play the game ethically?',a:['Yes','Nope'],r:['Interesting. Doug has the logs, Johnny.','At least you are honest about that. Maybe.']},
+ {q:'What common beverage can cure stinging sensations in the lower extremities?',a:['Coca Cola','Milk'],r:['Doug will allow it.','Bold. Doug is writing that down.']},
+ {q:'Have you ever sent a trade you knew the other player would regret?',a:['Yes','No, duh!'],r:['Doug respects the honesty. Doug does not respect you.','Doug has the trade history. Doug is reviewing it.']},
+ {q:'If you were in a foot race with a buddy, would you trip them to win?',a:['Yes','I mean...no?'],r:['Doug trips people too. Doug understands.','That question mark is a confession.']},
+ {q:'You hold two Kyle Cards. Did you keep both?',a:['Yes','No'],last:true}];
+var sawBusy=false;
+function sawWait(ms){return new Promise(r=>setTimeout(r,ms))}
+function sawName(){return (Cloud.name||'').toLowerCase()==='yonnydepp'?'Johnny':(Cloud.name||'buddy')}
+function sawImg(n,emo){return `<img class="sw-img" src="anim/${n}.webp" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'sw-miss',textContent:'${emo||'🥸'}'}))">`}
+function sawType(el,text,ms){ms=ms||34;return new Promise(res=>{el.textContent='';let i=0;const t=setInterval(()=>{el.textContent=text.slice(0,++i);if(i%3===0)Sound.tone(90+Math.random()*40,.025,'square',.012);if(i>=text.length){clearInterval(t);res()}},ms)})}
+async function sawSay(box,lines,gap){for(const l of lines){const p=document.createElement('p');p.className='sw-line';box.appendChild(p);await sawType(p,l);await sawWait(gap||650)}}
+function sawPickCard(list){return list.slice().sort((a,b)=>((b.grade||0)-(a.grade||0))||(b.value-a.value))[0]}
+function sawAsk(root,secs){return new Promise(res=>{const bar=root.querySelector('#swBar'),sec=root.querySelector('#swSec'),btns=[...root.querySelectorAll('.sw-ans button')];let left=secs,done=false;
+ const end=v=>{if(done)return;done=true;clearInterval(t);btns.forEach(b=>b.disabled=true);res(v)};
+ btns.forEach(b=>b.onclick=()=>{Sound.tone(180,.08,'square',.05);end(+b.dataset.k)});
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{bar.style.transition=`width ${secs}s linear`;bar.style.width='0%'}));
+ const t=setInterval(()=>{left--;sec.textContent=left;Sound.tone(70,.14,'sine',.2);Sound.tone(60,.14,'sine',.16,.18);if(left<=3){sec.classList.add('hot');buzz(40)}if(left<=0)end(-1)},1000)})}
+async function playSaw(demo){
+ const root=document.createElement('div');root.id='saw';document.body.appendChild(root);lock();
+ const fl=document.createElement('div');fl.id='saw-flash';document.body.appendChild(fl);
+ const bolt=()=>{try{fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');Sound.noise(.6,.22);Sound.tone(48,1,'sine',.22,.12,28);buzz(70)}catch(e){}};
+ let bt=null;const loop=()=>{bt=setTimeout(()=>{bolt();loop()},3500+Math.random()*5000)};loop();
+ let fin=false;const finish=()=>{if(fin)return;fin=true;clearTimeout(bt);try{root.remove();fl.remove()}catch(e){}unlock()};
+ try{
+  Sound.init();game.audits=game.audits||{};
+  // Take the card first, so closing the tab cannot dodge it.
+  const kc=game.owned.filter(c=>c.id==='kyle-1');
+  if(!demo&&!game.sawCard&&kc.length>=2){const c=sawPickCard(kc);game.owned.splice(game.owned.indexOf(c),1);game.sawCard=c;game.sawPending=Date.now();save();try{Cloud.push()}catch(e){}}
+  const scare=demo||!game.sawCard; // scare-only mode: holds a single Kyle Card, Doug takes nothing
+  const card=demo?null:(game.sawCard||sawPickCard(kc));if(!demo&&!card){delete game.sawPending;return}
+  ['black','playing','questions','delete','evidence'].forEach(n=>{const i=new Image();i.src=`anim/doug_game_${n}.webp`});
+  // 1. Black screen
+  root.innerHTML=`<div class="sw-stage">${sawImg('doug_game_black')}<div id="swT"></div></div>`;
+  await sawWait(1400);let box=root.querySelector('#swT');
+  bolt();await sawSay(box,[`Hello, ${sawName()}.`,'I want to play a game.'],900);bolt();await sawWait(900);
+  // 2. Doug explains
+  root.innerHTML=`<div class="sw-stage">${sawImg('doug_game_playing')}<div id="swT"></div></div>`;box=root.querySelector('#swT');
+  await sawSay(box,['The rules are simple.','Five questions. Ten seconds each.','Answer honestly. I will know if you lie.','Answer wrong, and your entire database is deleted.'],700);
+  const go=document.createElement('button');go.className='sw-btn';go.textContent='Begin';box.appendChild(go);await new Promise(r=>go.onclick=()=>{Sound.init();Sound.tone(110,.3,'sawtooth',.08,0,55);r()});
+  // 3. Questions
+  for(let i=0;i<SAW_Q.length;i++){const q=SAW_Q[i];
+   root.innerHTML=`<div class="sw-stage q">${sawImg('doug_game_questions')}<div class="sw-qn">QUESTION ${i+1} OF ${SAW_Q.length}</div><p class="sw-q">${esc(q.last&&scare?'You pulled the Kyle Card twice. Did you keep both?':q.q)}</p><div class="sw-bar"><i id="swBar"></i></div><div class="sw-sec" id="swSec">${SAW.secs}</div><div class="sw-ans">${q.a.map((t,k)=>`<button class="sw-btn" data-k="${k}">${esc(t)}</button>`).join('')}</div><p class="sw-react" id="swR"></p></div>`;
+   const pk=await sawAsk(root,SAW.secs);
+   if(q.last)break;
+   const r=root.querySelector('#swR');await sawType(r,pk<0?'Silence. Doug heard that.':q.r[pk],30);await sawWait(1300)}
+  // 4. Wrong. Fake delete (nothing is touched)
+  const vault=game.owned.filter(c=>c.vault).length,tro=Object.keys(game.trophies||{}).length+Object.keys(game.trophies2||{}).length;
+  const files=[`Deleting ${game.owned.length} cards...`,`Deleting ${money(game.cash)}...`,`Deleting ${vault} Vault cards...`,`Deleting ${tro} trophies...`,`Deleting ${game.tickets||0} tickets...`,"Deleting Doug's Files...",'Deleting every bribe you got away with...','Deleting your streak...'];
+  root.innerHTML=`<div class="sw-stage red">${sawImg('doug_game_delete','⚠️')}<div class="sw-wrong">WRONG.</div><div class="sw-dl" id="swDL">DELETING SAVE FILE</div><div class="sw-bar big"><i id="swDB"></i></div><div class="sw-pct" id="swP">0%</div><div class="sw-file" id="swF"></div></div>`;
+  Sound.tone(80,1.2,'sawtooth',.1,0,40);Sound.tone(55,1.6,'square',.05,.2,30);buzz([300,120,300]);bolt();setTimeout(bolt,900);
+  await sawWait(1700);
+  await new Promise(res=>{const t0=Date.now(),dur=6500,db=root.querySelector('#swDB'),pp=root.querySelector('#swP'),ff=root.querySelector('#swF');let k=0,last=0;
+   const t=setInterval(()=>{const x=Math.min(1,(Date.now()-t0)/dur),p=Math.floor(87*(1-Math.pow(1-x,2.2)));db.style.width=p+'%';pp.textContent=p+'%';if(Date.now()-last>650){ff.textContent=files[k++%files.length];last=Date.now();Sound.tone(120+p*3,.05,'square',.04)}
+    if(x>=1){clearInterval(t);res()}},50)});
+  root.querySelector('#swF').textContent='Deleting...';root.querySelector('#swDL').classList.add('freeze');Sound.tone(40,1.5,'sine',.15,0,30);
+  await sawWait(2600);root.classList.add('out');await sawWait(900);
+  // 5. Evidence
+  const ch=card?(card.slab?slabHTML(card,false):imgTag(card,false,true)):'';
+  root.classList.remove('out');
+  root.innerHTML=`<div class="sw-stage">${sawImg('doug_game_evidence','🗄️')}${ch?`<div class="sw-card">${ch}</div>`:''}<div id="swT"></div></div>`;box=root.querySelector('#swT');
+  bolt();await sawSay(box,demo?['...Wait.','Oh. It is you, Kyle.','You built this place.','This was only a preview.','Johnny does not get a preview.']:scare?['...Wait.','You pulled the Kyle Card twice.','There was only ever supposed to be one.','Doug always has the paperwork.','I am a reasonable man. Keep the one you have.','This time.']:['...Wait.','I am a reasonable man.','There was only ever supposed to be one Kyle Card.',`I am taking this one. ${card.slab?`The ${card.grade}. `:''}Into evidence.`,'You may keep the other. Do not make me come back.'],900);
+  const out=document.createElement('button');out.className='sw-btn';out.textContent='Leave the room';box.appendChild(out);await new Promise(r=>out.onclick=r);
+  // 6. Done
+  if(demo){game.audits['doug-game-preview']=Date.now();finish();save();try{Cloud.push()}catch(e){}render();toast('Preview over. Johnny gets the real one.',4000);return}
+  if(!scare){game.locker=game.locker||[];game.locker.push({card,at:Date.now(),why:'The Audit'})}delete game.sawCard;delete game.sawPending;game.audits[SAW.id]=Date.now();
+  finish();save();try{Cloud.push()}catch(e){}
+  try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:Cloud.name,name:scare?'🥸 got audited by Doug. Doug let him keep his Kyle Card. This time.':'🥸 got audited by Doug. Lost a Kyle Card.',value:r2(card.value),img:'',grade:card.grade||null,first:false,source:'Doug'}])})}catch(e){}
+  render();toast(scare?'Doug let you keep it. This time.':'Doug locked it in the Evidence Locker. Do not make him come back.',4200);
+ }catch(e){console.warn('saw',e);try{if(game.sawCard){game.locker=game.locker||[];game.locker.push({card:game.sawCard,at:Date.now(),why:'The Audit'});delete game.sawCard;delete game.sawPending;game.audits=game.audits||{};game.audits[SAW.id]=Date.now();save()}}catch(x){}}
+ finally{finish()}}
+// Stragglers: if a stale device brings a second Kyle Card back, Doug quietly reclaims it.
+function sawGuard(){const cs=game.owned.filter(c=>c.id==='kyle-1');if(cs.length<2)return;
+ const keep=cs.slice().sort((a,b)=>((a.grade||0)-(b.grade||0))||(a.value-b.value))[0];game.locker=game.locker||[];
+ for(const c of cs){if(c===keep)continue;game.owned.splice(game.owned.indexOf(c),1);game.locker.push({card:c,at:Date.now(),why:'Reclaimed'})}
+ save();try{Cloud.push()}catch(e){}toast('Doug reclaimed an extra Kyle Card. There is only one.',4000)}
+async function runSaw(){try{
+ if(sawBusy||!Cloud.s||!Cloud.ready||!game||!window.__booted||game.owner!==Cloud.user)return;
+ game.audits=game.audits||{};
+ if((Cloud.name||'').toLowerCase()==='kginth'&&!game.audits['doug-game-preview']){if(!$('#modal').hidden||rip||spinning)return;sawBusy=true;await playSaw(true);return}
+ if(game.audits[SAW.id]){sawGuard();return}
+ {const n=game.owned.filter(c=>c.id==='kyle-1').length,johnny=(Cloud.name||'').toLowerCase()==='yonnydepp';if(!game.sawPending&&n<2&&!(johnny&&n>=1))return}
+ if(!$('#modal').hidden||rip||spinning)return;
+ sawBusy=true;await playSaw()}catch(e){console.warn('saw',e)}finally{sawBusy=false}}
+
+/* ---------- Linda's second opinion (Doug's ex-wife, a Jigglypuff) ---------- */
+var LINDA={up:.20,down:.65}; // the rest: she shrugs
+const LINDA_UP=["Linda held it up to the light, hummed, and said \"oh honey, this is gorgeous.\" Doug is furious.","Linda gave it a second look and a better grade. Doug is not speaking to her.","Linda was in a good mood. Today only."];
+const LINDA_DOWN=["Linda said \"perfect rolling paper\" and lit up. The card has seen things.","Linda ashed on the corner and called it \"character.\" That cost you a grade.","Linda needed something to smoke it out of. You know the rest."];
+const LINDA_NONE=["Linda hummed, fell asleep on it, and woke up with no opinion.","Linda stared at it for twenty minutes and said \"huh.\" That was the whole opinion."];
+function lindaEligible(){return game.owned.filter(c=>c.slab&&c.grade>=7&&c.grade<=9&&!c.black&&!c.linda&&!c.vault&&!c.grading&&c.id!=='kyle-1').sort((a,b)=>b.value-a.value)}
+function lindaFee(c){return r2(Math.max(20,c.value*.05)*wealthMult())}
+function lindaModal(){const l=lindaEligible();
+ modal({icon:'🚬',title:"Ask Linda for a 2nd opinion",html:`<div class="dougsay">${dimg('linda',120,'🩷')}<div><b>Linda</b> <small>Doug's ex-wife</small><p>"Sure, hon. Let me look at it." (She is already holding a lighter.)</p></div></div><p style="font-size:13px">One opinion per slab, 7 to 9 only. Fee: 5% of its value (min $20). <b>1 in 5</b> she bumps it up a grade. Most of the time she uses it to smoke out of and it drops a grade. Sometimes she just shrugs.</p>${l.length?`<div class="goalscroll">${l.slice(0,40).map(c=>`<button class="lrow" data-action="linda-pick" data-uid="${esc(c.uid)}"><b>${esc(c.name)}</b><span>Grade ${c.grade} · ${money(c.value)} · fee ${money(lindaFee(c))}</span></button>`).join('')}</div>`:'<p class="muted">You have no eligible slabs. Linda needs a 7, 8 or 9 that has not had an opinion yet.</p>'}`,buttons:[{label:'Close',primary:true}]})}
+async function lindaAsk(u){const c=game.owned.find(x=>x.uid===u);if(!c||!lindaEligible().includes(c))return;const fee=lindaFee(c);
+ if(game.cash+1e-9<fee){toast(`Linda wants ${money(fee)} first.`);return}
+ const v=await modal({icon:'🚬',title:`Let Linda look at ${esc(c.name)}?`,html:`<div class="m-card">${slabHTML(c,false)}</div><p style="font-size:13.5px">Grade ${c.grade} · ${money(c.value)}. Fee ${money(fee)}.</p><p style="font-size:13px" class="muted">20% up one grade. 65% down one grade. 15% nothing. She only gives each card one opinion.</p>`,buttons:[{label:`Ask Linda · ${moneyS(fee)}`,primary:true,value:'go'},{label:'Never mind',value:null}]});
+ if(v!=='go'||!game.owned.includes(c)||c.linda||game.cash+1e-9<fee)return;
+ spend(fee);game.grabSpent=r2((game.grabSpent||0)+fee);payTax(fee);
+ const g=c.grade,era=GRADE_MULT[eraOf(c)],r=Math.random();let ng=g,kind='none';
+ if(r<LINDA.up){ng=Math.min(10,g+1);kind='up'}else if(r<LINDA.up+LINDA.down){kind='down';ng=g-1}
+ c.linda=1;
+ if(kind==='up'){c.value=r2(c.value*era[ng]/era[g]);c.grade=ng}
+ else if(kind==='down'){if(ng<7){c.value=r2(c.value*.8);c.burned=1;ng=7}else{c.value=r2(c.value*era[ng]/era[g]);c.grade=ng}}
+ save();if(kind==='up'){celebrate(ng===10?5:3);Sound.init()}
+ await modal({icon:kind==='up'?'💎':kind==='down'?'🚬':'💤',title:kind==='up'?`Linda says ${c.grade}!`:kind==='down'?(c.burned?'Linda burned it.':`Linda drops it to a ${c.grade}.`):'Linda has no opinion.',html:`<div class="dougsay">${dimg('linda',130,'🩷')}<div><p>${esc(pick(kind==='up'?LINDA_UP:kind==='down'?LINDA_DOWN:LINDA_NONE))}</p></div></div><div class="m-card">${slabHTML(c,false)}</div><p>${kind==='none'?`Still a ${c.grade}.`:`Grade ${g} → <b style="color:${kind==='up'?'var(--green)':'var(--red)'}">${c.grade}</b>`} · ${money(c.value)}</p>`,buttons:[{label:kind==='up'?'Thanks Linda':kind==='down'?'😤 Linda...':'Okay',primary:true}]});render()}
+
+/* ---------- Doug's Pawn Counter: 75% up front, pay it back in a week, or Linda comes calling ---------- */
+var PAWN={ltv:.75,rate:.12,days:7,max:3,min:50,fineFlat:5000,finePct:.01};
+function pawnList(){return game.pawn||(game.pawn=[])}
+function pawnEligible(){return game.owned.filter(c=>!c.vault&&!c.grading&&c.id!=='kyle-1'&&c.value>=PAWN.min).sort((a,b)=>b.value-a.value)}
+function pawnLeft(p){const h=Math.max(0,(p.due-Date.now())/36e5);return h>=48?`${Math.ceil(h/24)} days`:h>=1?`${Math.floor(h)} hours`:'under an hour'}
+function pawnModal(){const L=pawnList();
+ modal({icon:'🧾',title:"Doug's Pawn Counter",html:`<div class="dougsay">${moodImg(130)}<div><b>Doug</b><p>"Short on cash? Doug is a completely normal human man who lends money on cards. 75% up front. Pay it back in a week plus ${Math.round(PAWN.rate*100)}%. Miss it, and I send Linda."</p></div></div>
+ ${L.length?`<div class="goalscroll">${L.map(p=>`<div class="pwn"><div><b>${esc(p.card.name)}</b><small>${p.card.slab?`Grade ${p.card.grade} · `:''}worth ${money(p.card.value)}</small><small>Borrowed ${money(p.loan)} · owe <b>${money(p.owed)}</b> · due in ${pawnLeft(p)}</small></div><button class="smallbtn" data-action="pawn-redeem" data-id="${esc(p.id)}">Pay ${moneyS(p.owed)}</button></div>`).join('')}</div>`:'<p class="muted" style="font-size:13px">No open tickets.</p>'}
+ <p class="muted" style="font-size:12px">Pawned cards leave your binder until you pay. Up to ${PAWN.max} tickets at a time. Vault cards, cards at the grader and the Kyle Card are not accepted.</p>`,
+ buttons:[...(L.length<PAWN.max?[{label:'🧾 Pawn a card',primary:true,value:'new'}]:[]),{label:'Close'}]}).then(v=>{if(v==='new')pawnPicker()})}
+function pawnPicker(){const l=pawnEligible();
+ modal({icon:'🧾',title:'Pick a card to pawn',html:l.length?`<div class="goalscroll">${l.slice(0,40).map(c=>`<button class="lrow" data-action="pawn-pick" data-uid="${esc(c.uid)}"><b>${esc(c.name)}</b><span>${c.slab?`Grade ${c.grade} · `:''}${money(c.value)} → Doug pays ${money(r2(c.value*PAWN.ltv))}</span></button>`).join('')}</div>`:'<p class="muted">Doug only takes cards worth $50 or more.</p>',buttons:[{label:'Back',primary:true}]})}
+async function pawnPick(u){const c=game.owned.find(x=>x.uid===u);if(!c||!pawnEligible().includes(c))return;if(pawnList().length>=PAWN.max){toast(`Doug only holds ${PAWN.max} tickets at a time.`);return}
+ const loan=r2(c.value*PAWN.ltv),owed=r2(loan*(1+PAWN.rate));
+ const v=await modal({icon:'🧾',title:`Pawn ${esc(c.name)}?`,html:`<div class="m-card">${c.slab?slabHTML(c,false):imgTag(c,false,true)}</div><p style="font-size:14px">Doug pays <b style="color:var(--green)">${money(loan)}</b> right now.</p><p style="font-size:14px">Pay back <b>${money(owed)}</b> within ${PAWN.days} days and the card comes home.</p><p class="roast bad" style="font-size:13px">Miss it and Doug keeps the card, and Linda comes by for ${moneyS(PAWN.fineFlat)} or ${Math.round(PAWN.finePct*100)}% of your cash, whichever is bigger.</p>`,buttons:[{label:`Take ${moneyS(loan)}`,primary:true,value:'ok'},{label:'Never mind',value:null}]});
+ if(v!=='ok'||!game.owned.includes(c)||pawnList().length>=PAWN.max)return;
+ game.owned.splice(game.owned.indexOf(c),1);delete c.vault;game.cash=r2(game.cash+loan);pawnList().push({id:uid(),card:c,loan,owed,at:Date.now(),due:Date.now()+PAWN.days*864e5});save();
+ toast(`Doug handed over ${money(loan)}. He is holding your ${c.name}.`,3500);pawnModal()}
+function pawnRedeem(id){const L=pawnList(),p=L.find(x=>x.id===id);if(!p)return;if(game.cash+1e-9<p.owed){toast(`You need ${money(p.owed)} to get it back.`);return}
+ game.cash=r2(game.cash-p.owed);L.splice(L.indexOf(p),1);game.owned.push(p.card);save();toast(`${p.card.name} is back in your binder. Doug is disappointed.`,3500);pawnModal()}
+async function pawnCheck(){try{if(!game||!window.__booted||!$('#modal').hidden||rip||spinning)return;const L=pawnList();if(!L.length)return;
+ for(const p of L.slice()){
+  if(p.due>Date.now()){if(p.due-Date.now()<864e5&&!p.warned){p.warned=1;save();toast(`Doug's ticket on ${p.card.name} is due in ${pawnLeft(p)}. Linda is stretching.`,5000)}continue}
+  L.splice(L.indexOf(p),1);const fine=r2(Math.min(Math.max(0,game.cash),Math.max(PAWN.fineFlat,Math.max(0,game.cash)*PAWN.finePct)));game.cash=r2(game.cash-fine);
+  game.locker=game.locker||[];game.locker.push({card:p.card,at:Date.now(),why:'Pawn forfeited'});save();try{Cloud.push()}catch(e){}
+  await modal({icon:'🚬',title:'Linda is at your door.',html:`<div class="dougsay">${dimg('linda',140,'🩷')}<div><p>She did not knock. She let herself in, took <b>${money(fine)}</b> for "emotional damages," and left with a cigarette from your counter.</p></div></div><p>Doug is keeping your <b>${esc(p.card.name)}</b> (${money(p.card.value)}) in the Evidence Locker. The ticket was ${money(p.owed)}. Doug sends his regards.</p><p class="roast bad">Pay your tickets on time. Linda is not a morning person.</p>`,buttons:[{label:'😬 Noted',primary:true}]});render();break}
+}catch(e){console.warn('pawn',e)}}
+
+var EXTRA_ACTIONS7={'doug-linda':()=>lindaModal(),'linda-pick':el=>lindaAsk(el.dataset.uid),'doug-pawn':()=>pawnModal(),'pawn-pick':el=>pawnPick(el.dataset.uid),'pawn-redeem':el=>pawnRedeem(el.dataset.id)};
+
 /* ---------- events ---------- */
-const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,...EXTRA_ACTIONS3,...EXTRA_ACTIONS4,...EXTRA_ACTIONS5,...EXTRA_ACTIONS6,
+const ACTIONS={...EXTRA_ACTIONS,...EXTRA_ACTIONS2,...EXTRA_ACTIONS3,...EXTRA_ACTIONS4,...EXTRA_ACTIONS5,...EXTRA_ACTIONS6,...EXTRA_ACTIONS7,
  nav:el=>go(el.dataset.view),
  buy:el=>startRip(el.dataset.tier,{qty:ripQty,group:el.dataset.g||null}),
  odds:el=>showOdds(el.dataset.tier),
@@ -3261,6 +3452,7 @@ if(!LS.get('pokerip-guide',0)&&!game.opened)setTimeout(guideModal,700);
 window.__booted=true;
 setTimeout(()=>{try{streakCheck()}catch(e){}hustleClaim();loadAllArtists()},2500);
 setTimeout(runAudit,5000);setInterval(runAudit,60000);
+setTimeout(runSaw,6500);setInterval(runSaw,45000);setTimeout(pawnCheck,12000);setInterval(pawnCheck,60000);
 loadLegends();setTimeout(()=>loadFund(),6000);setTimeout(()=>{raffleSync();gymSync()},7000);setInterval(()=>{raffleSync();gymSync()},300000);
 const a2=()=>{if(!$('#modal').hidden)return;if(!(game.audits||{})[AUDIT3.id])runAudit2();else runGiftKid()};setTimeout(a2,9000);setInterval(a2,30000);
 initCatalog().then(async()=>{checkBroke();await loadExtras();for(const id of[...selected].filter(id=>catalog.failed.has(id))){catalog.failed.delete(id);try{await loadSet(id)}catch(e){}}invalidatePool();render()});
