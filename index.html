@@ -744,6 +744,7 @@ body.locked .toast{bottom:auto;top:calc(var(--st) + 64px)}
 #saw .sw-file{min-height:22px;font-size:13px;color:#a77;font-family:ui-monospace,Menlo,monospace}
 #saw .sw-card{width:150px;flex:0 0 auto;filter:drop-shadow(0 0 14px #000)}
 #saw .sw-card img{width:100%;border-radius:8px}
+#saw-ver{position:fixed;left:8px;bottom:6px;font-size:10px;color:#fff;opacity:.35;z-index:100002;pointer-events:none}
 #saw-flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:100001}
 #saw-flash.go{animation:swbolt .6s ease-out}
 @keyframes swbolt{0%{opacity:0}5%{opacity:.9}14%{opacity:.08}22%{opacity:.7}45%{opacity:0}100%{opacity:0}}
@@ -3183,7 +3184,8 @@ async function offerDecide(id,yes){return withTradeLock(offerDecide0)(id,yes)}
 async function cancelTrade(id){return withTradeLock(cancelTrade0)(id)}
 
 /* ---------- The Audit: Doug's game. Fires once for anyone holding 2+ Kyle Cards ---------- */
-var SAW={id:'doug-game-2026-11',secs:10};
+var SAW={id:'doug-game-2026-11',secs:10,live:false}; // live:false = hidden from Johnny, only the kginth preview runs
+var SAW_BUILD='nov24-c';
 var SAW_Q=[
  {q:'Do you play the game ethically?',a:['Yes','Nope'],r:['Interesting. Doug has the logs, Johnny.','At least you are honest about that. Maybe.']},
  {q:'What common beverage can cure stinging sensations in the lower extremities?',a:['Coca Cola','Milk'],r:['Doug will allow it.','Bold. Doug is writing that down.']},
@@ -3206,9 +3208,11 @@ async function playSaw(demo){
  if(document.getElementById('saw'))return;
  const root=document.createElement('div');root.id='saw';document.body.appendChild(root);lock();
  const fl=document.createElement('div');fl.id='saw-flash';document.body.appendChild(fl);
+ const vr=document.createElement('div');vr.id='saw-ver';vr.textContent='build '+SAW_BUILD;document.body.appendChild(vr);
+ if(demo){game.sawTries=(game.sawTries||0)+1;try{save()}catch(e){}}
  const bolt=()=>{try{fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');Sound.noise(.6,.22);Sound.tone(48,1,'sine',.22,.12,28);buzz(70)}catch(e){}};
  let bt=null;const loop=()=>{bt=setTimeout(()=>{bolt();loop()},3500+Math.random()*5000)};loop();
- let fin=false;const finish=()=>{if(fin)return;fin=true;clearTimeout(bt);try{root.remove();fl.remove()}catch(e){}unlock()};
+ let fin=false;const finish=()=>{if(fin)return;fin=true;clearTimeout(bt);try{root.remove();fl.remove();vr.remove()}catch(e){}unlock()};
  try{
   Sound.init();game.audits=game.audits||{};
   // Take the card first, so closing the tab cannot dodge it.
@@ -3254,7 +3258,7 @@ async function playSaw(demo){
   finish();save();try{Cloud.push()}catch(e){}
   try{await Cloud.req('/rest/v1/pulls',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify([{user_id:Cloud.user,username:Cloud.name,name:scare?'🥸 got audited by Doug. Doug let him keep his Kyle Card. This time.':'🥸 got audited by Doug. Lost a Kyle Card.',value:r2(card.value),img:'',grade:card.grade||null,first:false,source:'Doug'}])})}catch(e){}
   render();toast(scare?'Doug let you keep it. This time.':'Doug locked it in the Evidence Locker. Do not make him come back.',4200);
- }catch(e){console.warn('saw',e);try{if(game.sawCard){game.locker=game.locker||[];game.locker.push({card:game.sawCard,at:Date.now(),why:'The Audit'});delete game.sawCard;delete game.sawPending;game.audits=game.audits||{};game.audits[SAW.id]=Date.now();save()}}catch(x){}}
+ }catch(e){console.warn('saw',e);if(demo){try{game.audits=game.audits||{};game.audits['doug-game-preview']=Date.now();save()}catch(x){}}try{if(game.sawCard){game.locker=game.locker||[];game.locker.push({card:game.sawCard,at:Date.now(),why:'The Audit'});delete game.sawCard;delete game.sawPending;game.audits=game.audits||{};game.audits[SAW.id]=Date.now();save()}}catch(x){}}
  finally{finish()}}
 // Stragglers: if a stale device brings a second Kyle Card back, Doug quietly reclaims it.
 function sawGuard(){const cs=game.owned.filter(c=>c.id==='kyle-1');if(cs.length<2)return;
@@ -3264,7 +3268,8 @@ function sawGuard(){const cs=game.owned.filter(c=>c.id==='kyle-1');if(cs.length<
 async function runSaw(){let mine=false;try{
  if(sawBusy||!Cloud.s||!Cloud.ready||!game||!window.__booted||game.owner!==Cloud.user)return;
  game.audits=game.audits||{};
- if((Cloud.name||'').toLowerCase()==='kginth'&&!game.audits['doug-game-preview']){if(!$('#modal').hidden||rip||spinning)return;sawBusy=true;mine=true;await playSaw(true);return}
+ if((Cloud.name||'').toLowerCase()==='kginth'&&!game.audits['doug-game-preview']&&(game.sawTries||0)<3){if(!$('#modal').hidden||rip||spinning)return;sawBusy=true;mine=true;await playSaw(true);return}
+ if(!SAW.live)return;
  if(game.audits[SAW.id]){sawGuard();return}
  {const n=game.owned.filter(c=>c.id==='kyle-1').length,johnny=(Cloud.name||'').toLowerCase()==='yonnydepp';if(!game.sawPending&&n<2&&!(johnny&&n>=1))return}
  if(!$('#modal').hidden||rip||spinning)return;
