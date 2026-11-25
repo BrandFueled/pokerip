@@ -3184,8 +3184,8 @@ async function offerDecide(id,yes){return withTradeLock(offerDecide0)(id,yes)}
 async function cancelTrade(id){return withTradeLock(cancelTrade0)(id)}
 
 /* ---------- The Audit: Doug's game. Fires once for anyone holding 2+ Kyle Cards ---------- */
-var SAW={id:'doug-game-2026-11',secs:10,live:false}; // live:false = hidden from Johnny, only the kginth preview runs
-var SAW_BUILD='nov24-c';
+var SAW={id:'doug-game-2026-11',secs:0,live:false}; // live:false = hidden from Johnny, only the kginth preview runs
+var SAW_BUILD='nov24-d';
 var SAW_Q=[
  {q:'Do you play the game ethically?',a:['Yes','Nope'],r:['Interesting. Doug has the logs, Johnny.','At least you are honest about that. Maybe.']},
  {q:'What common beverage can cure stinging sensations in the lower extremities?',a:['Coca Cola','Milk'],r:['Doug will allow it.','Bold. Doug is writing that down.']},
@@ -3202,8 +3202,8 @@ function sawPickCard(list){return list.slice().sort((a,b)=>((b.grade||0)-(a.grad
 function sawAsk(root,secs){return new Promise(res=>{const bar=root.querySelector('#swBar'),sec=root.querySelector('#swSec'),btns=[...root.querySelectorAll('.sw-ans button')];let left=secs,done=false;
  const end=v=>{if(done)return;done=true;clearInterval(t);btns.forEach(b=>b.disabled=true);res(v)};
  btns.forEach(b=>b.onclick=()=>{Sound.tone(180,.08,'square',.05);end(+b.dataset.k)});
- requestAnimationFrame(()=>requestAnimationFrame(()=>{bar.style.transition=`width ${secs}s linear`;bar.style.width='0%'}));
- const t=setInterval(()=>{left--;sec.textContent=left;Sound.tone(70,.14,'sine',.2);Sound.tone(60,.14,'sine',.16,.18);if(left<=3){sec.classList.add('hot');buzz(40)}if(left<=0)end(-1)},1000)})}
+ if(bar)requestAnimationFrame(()=>requestAnimationFrame(()=>{bar.style.transition=`width ${secs}s linear`;bar.style.width='0%'}));
+ const t=setInterval(()=>{Sound.tone(70,.14,'sine',.2);Sound.tone(60,.14,'sine',.16,.18);if(secs){left--;if(sec)sec.textContent=left;if(left<=3&&sec){sec.classList.add('hot');buzz(40)}if(left<=0)end(-1)}},1000)})}
 async function playSaw(demo){
  if(document.getElementById('saw'))return;
  const root=document.createElement('div');root.id='saw';document.body.appendChild(root);lock();
@@ -3231,7 +3231,7 @@ async function playSaw(demo){
   const go=document.createElement('button');go.className='sw-btn';go.textContent='Begin';box.appendChild(go);await new Promise(r=>go.onclick=()=>{Sound.init();Sound.tone(110,.3,'sawtooth',.08,0,55);r()});
   // 3. Questions
   for(let i=0;i<SAW_Q.length;i++){const q=SAW_Q[i];
-   root.innerHTML=`<div class="sw-stage q">${sawImg('doug_game_questions')}<div class="sw-qn">QUESTION ${i+1} OF ${SAW_Q.length}</div><p class="sw-q">${esc(q.last&&scare?'You pulled the Kyle Card twice. Did you keep both?':q.q)}</p><div class="sw-bar"><i id="swBar"></i></div><div class="sw-sec" id="swSec">${SAW.secs}</div><div class="sw-ans">${q.a.map((t,k)=>`<button class="sw-btn" data-k="${k}">${esc(t)}</button>`).join('')}</div><p class="sw-react" id="swR"></p></div>`;
+   root.innerHTML=`<div class="sw-stage q">${sawImg('doug_game_questions')}<div class="sw-qn">QUESTION ${i+1} OF ${SAW_Q.length}</div><p class="sw-q">${esc(q.last&&scare?'You pulled the Kyle Card twice. Did you keep both?':q.q)}</p>${SAW.secs?`<div class="sw-bar"><i id="swBar"></i></div><div class="sw-sec" id="swSec">${SAW.secs}</div>`:''}<div class="sw-ans">${q.a.map((t,k)=>`<button class="sw-btn" data-k="${k}">${esc(t)}</button>`).join('')}</div><p class="sw-react" id="swR"></p></div>`;
    const pk=await sawAsk(root,SAW.secs);
    if(q.last)break;
    const r=root.querySelector('#swR');await sawType(r,pk<0?'Silence. Doug heard that.':q.r[pk],30);await sawWait(1300)}
