@@ -2250,7 +2250,7 @@ const Cloud={on:!!(SUPA_URL&&SUPA_KEY),s:LS.get(SESSION_KEY),timer:null,busy:fal
  out(){this.s=null;LS.del(SESSION_KEY);clearTimeout(this.timer)},
  async pull(){const r=await this.req(`/rest/v1/saves?user_id=eq.${this.user}&select=data,updated_at`);return(r&&r[0])||null},
  queue(){if(!this.on||!this.s||!this.ready||game.owner!==this.user)return;clearTimeout(this.timer);this.timer=setTimeout(()=>this.push(),1500)},
- async push(){if(!this.s)return;if(this.busy){this.again=true;return}this.busy=true;clearTimeout(this.timer);const was=this.err;
+ async push(){if(!this.s||!this.pulled)return;if(this.busy){this.again=true;return}this.busy=true;clearTimeout(this.timer);const was=this.err;
   const row={user_id:this.user,username:this.name,data:game,networth:r2(networth()),level:game.level,trophies:trophyCount(),prestige:game.prestige||0,updated_at:new Date().toISOString()};
   if(!this.lite)Object.assign(row,{best_value:r2(game.best?.value||0),best_name:game.best?.name||'',shame:(game.kyle||0)+(game.bailouts||0)});
   const send=()=>this.req('/rest/v1/saves?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(row)});
@@ -2272,7 +2272,7 @@ function renderFeed(){const w=$('#feedWrap');if(!w)return;Feed.load();const it=F
  $('#kingLine').textContent=Feed.kingPull?`👑 Week's best: ${Feed.kingPull.username} · ${moneyS(Feed.kingPull.value)}`:'';
  $('#feed').innerHTML=it.map(p=>`<div class="fitem${p.value>=1000?' big':''}"><span class="hthumb">${p.img?`<img src="${esc(p.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:''}</span><span><b>${esc(p.username)}${p.username===Feed.king?' 👑':''} · <i>${moneyS(p.value)}</i></b><small>${esc(p.name)}${p.source==='GOD PACK'?' · 🌈 GOD PACK':''} · ${ago(Date.parse(p.created_at)||Date.now())}</small></span></div>`).join('')}
 async function cloudRefresh(){if(!Cloud.on||!Cloud.s){Cloud.ready=true;return}if(rip||spinning)return;
- try{const r=await Cloud.pull();if(r&&r.data&&r.data.v&&(r.data.savedAt||0)>(game.savedAt||0)+1000&&!rip&&!spinning){game=normalize(r.data);game.owner=Cloud.user;LS.set(SAVE_KEY,game);render()}}catch(e){console.warn('Cloud pull failed',e)}
+ try{const r=await Cloud.pull();Cloud.pulled=true;if(r&&r.data&&r.data.v&&(r.data.savedAt||0)>(game.savedAt||0)+1000&&!rip&&!spinning){game=normalize(r.data);game.owner=Cloud.user;LS.set(SAVE_KEY,game);render()}}catch(e){console.warn('Cloud pull failed',e)}
  Cloud.ready=true}
 async function accountModal(err='',user=''){if(!Cloud.on)return;
  if(Cloud.s){const v=await modal({icon:'👤',title:esc(Cloud.name),html:`Your run is saved to the cloud${Cloud.err?', but the last sync failed. It will retry.':'.'}<br>Log in with the same username on any device.`,buttons:[{label:'Log out',value:'out'},{label:'Close',primary:true,value:0}]});
@@ -2287,9 +2287,9 @@ async function accountModal(err='',user=''){if(!Cloud.on)return;
 async function afterLogin(isNew){let cloud=null;try{cloud=await Cloud.pull()}catch(e){}
  if(cloud&&cloud.data&&cloud.data.v){const c=normalize(cloud.data);
   if(game.opened>0&&game.owner!==Cloud.user){const v=await modal({icon:'☁️',title:'Which run do you want?',html:`<p><b style="color:var(--text)">Cloud:</b> LV ${c.level} · ${moneyS(networthOf(c))} net worth · ${c.owned.length} cards</p><p><b style="color:var(--text)">This device:</b> LV ${game.level} · ${moneyS(networth())} net worth · ${game.owned.length} cards</p><p>The one you don't pick gets replaced.</p>`,buttons:[{label:'This device',value:'local'},{label:'Cloud run',primary:true,value:'cloud'}]});
-   if(v==='local'){game.owner=Cloud.user;Cloud.ready=true;save();await Cloud.push();toast(`Saved this run to ${Cloud.name}.`);return}}
-  game=c;game.owner=Cloud.user;LS.set(SAVE_KEY,game);Cloud.ready=true;$('#reelTrack').innerHTML='';render();toast(`Welcome back, ${Cloud.name}!`)}
- else{game.owner=Cloud.user;Cloud.ready=true;save();await Cloud.push();toast(isNew?`Account made. Your run now saves to the cloud.`:`Logged in. Your run now saves to the cloud.`,3500)}
+   if(v==='local'){game.owner=Cloud.user;Cloud.ready=true;Cloud.pulled=true;save();await Cloud.push();toast(`Saved this run to ${Cloud.name}.`);return}}
+  game=c;game.owner=Cloud.user;LS.set(SAVE_KEY,game);Cloud.ready=true;Cloud.pulled=true;$('#reelTrack').innerHTML='';render();toast(`Welcome back, ${Cloud.name}!`)}
+ else{game.owner=Cloud.user;Cloud.ready=true;Cloud.pulled=true;save();await Cloud.push();toast(isNew?`Account made. Your run now saves to the cloud.`:`Logged in. Your run now saves to the cloud.`,3500)}
  if(currentView==='stats')loadBoard(true)}
 
 /* ---------- money trouble, reset, prestige ---------- */
@@ -3539,7 +3539,7 @@ contextRoasts=function(kind,cards){const out=_ctx(kind,cards),n=(Cloud.s&&Cloud.
 
 /* ---------- Thanksgiving gift: one of every pack, once, from Kyle ---------- */
 const THANKS={id:'thanks-2026-11',until:Date.parse('2026-12-04T00:00:00-07:00'),tiers:['booster','hit','chase','grail','slab','mystery','vintage','first','evo','whale','megawhale','leviathan','eevee']};
-async function runThanks(){try{if(!game||Date.now()>THANKS.until)return;game.audits=game.audits||{};if(game.audits[THANKS.id])return;
+async function runThanks(){try{if(!game||Date.now()>THANKS.until)return;if(Cloud.s&&(!Cloud.pulled||game.owner!==Cloud.user))return;game.audits=game.audits||{};if(game.audits[THANKS.id])return;
  if(document.getElementById('saw')||sawBusy||document.querySelector('#modal:not([hidden])'))return;
  game.audits[THANKS.id]=Date.now();const list=THANKS.tiers.map(id=>TIERS.find(t=>t.id===id)).filter(Boolean);list.forEach(t=>{game.vouchers[t.id]=(game.vouchers[t.id]||0)+1});save();try{Cloud.push()}catch(e){}
  render();await modal({icon:'🦃',title:'A gift from Kyle',html:`<p><b>Happy Thanksgiving.</b></p><p>Kyle was too busy carving something to write a long message, so he did this instead: one of <b>every</b> kind of pack, on the house.</p><p class="muted" style="font-size:13px">${list.map(t=>esc(t.name)).join(' · ')}</p><p>Find them under <b>Rewards</b> on the Shop tab. Open them whenever you like.</p><p class="muted" style="font-size:12px">Kyle is thankful for all of you. Kyle is also thankful for pie.</p>`,buttons:[{label:'🥧 Thanks Kyle',primary:true}]})}catch(e){console.warn('thanks',e)}}
@@ -3548,9 +3548,9 @@ setTimeout(runThanks,9000);setInterval(runThanks,12000);
 /* ---------- One-time: Kyle likes you (free Mega Whale for everyone) ---------- */
 const KL={id:'kyle-likes-2026-11',until:Date.parse('2026-12-31T00:00:00-07:00')};
 let klBusy=false;
-async function runKyleLikes(){try{if(klBusy||!game||!Cloud.s||Date.now()>KL.until)return;game.audits=game.audits||{};if(game.audits[KL.id])return;
+async function runKyleLikes(){try{if(klBusy||!game||!Cloud.s||!window.__booted||!Cloud.ready||!Cloud.pulled||game.owner!==Cloud.user||Date.now()>KL.until)return;game.audits=game.audits||{};if(game.audits[KL.id])return;
  if(document.getElementById('saw')||sawBusy||rip||spinning||document.querySelector('#modal:not([hidden])'))return;
- klBusy=true;game.audits[KL.id]=Date.now();game.vouchers.megawhale=(game.vouchers.megawhale||0)+1;save();try{Cloud.push()}catch(e){}render();
+ klBusy=true;game.audits[KL.id]=Date.now();game.vouchers.megawhale=(game.vouchers.megawhale||0)+1;save();render();
  await modal({icon:'🦃',title:'Kyle likes you',html:`<p><b>Kyle likes you, Happy Thanksgiving.</b></p><p>Here's a free <b>Mega Whale pack</b>. Find it under <b>Rewards</b> on the Shop tab.</p>`,buttons:[{label:'🐋 Thanks Kyle',primary:true}]});
  klBusy=false}catch(e){klBusy=false;console.warn('kyle-likes',e)}}
 setTimeout(runKyleLikes,10000);setInterval(runKyleLikes,13000);
